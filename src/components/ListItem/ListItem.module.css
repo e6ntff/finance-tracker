@@ -1,0 +1,20 @@
+.item {
+	color: #fff;
+	list-style: none;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	display: flex;
+	justify-content: space-between;
+	padding-inline: 5%;
+	padding-block: 2.5%;
+}
+
+.date,
+.price {
+	inline-size: min-content;
+	block-size: 100%;
+	padding: 1%;
+	text-align: center;
+	border: 1px solid #fff;
+	border-radius: 3px;
+}

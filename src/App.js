@@ -8,29 +8,36 @@ import AddForm from './components/AddForm/AddForm'
 const App = () => {
   const [list, setList] = useState([
     {
-      id: Math.random(),
-      date: '1 Nov 2023',
-      title: 'Phone',
-      price: 999,
+      id: 1,
+      title: '1',
+      price: 1,
+      date: '1',
     },
     {
-      id: Math.random(),
-      date: '1 Nov 2023',
-      title: 'Phone',
-      price: 999,
+      id: 2,
+      title: '1',
+      price: 1,
+      date: '1',
     },
     {
-      id: Math.random(),
-      date: '1 Nov 2023',
-      title: 'Phone',
-      price: 999,
+      id: 3,
+      title: '1',
+      price: 1,
+      date: '1',
     },
   ])
+
+  const deleteItem = (id) => {
+    console.log(id)
+    console.log(list.filter((item) => item.id !== id))
+    const newList = list.filter((item) => item.id !== id)
+    setList(newList)
+  }
 
   return (
     <>
       <AddForm list={list} setList={setList} />
-      <List list={list} />
+      <List list={list} deleteItem={deleteItem} />
     </>
   )
 }

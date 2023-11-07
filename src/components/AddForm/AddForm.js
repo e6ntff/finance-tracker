@@ -11,12 +11,21 @@ const AddForm = (props) => {
   })
 
   const addNewItem = (event) => {
+		event.target.reset()
     event.preventDefault()
     props.setList([newItem, ...props.list])
     setNewItem({
-      ...newItem,
       id: Math.random(),
+      title: '',
+      date: '',
+      price: 0,
     })
+  }
+
+  const handleFormChange = (event, key) => {
+    const newItemCopy = newItem
+    newItemCopy[key] = event.target.value
+    setNewItem(newItemCopy)
   }
 
   return (
@@ -25,51 +34,41 @@ const AddForm = (props) => {
         Title
       </label>
       <input
+        required
         className={styles.input}
         type="text"
         name="title"
-        onChange={(event) =>
-          setNewItem({
-            ...newItem,
-            title: event.target.value,
-          })
-        }
+        onChange={(event) => handleFormChange(event, 'title')}
       />
       <label className={styles.label} htmlFor="price">
         Price
       </label>
       <input
+        required
         className={styles.input}
         type="number"
         min="1"
         step="1"
         name="price"
-        onChange={(event) =>
-          setNewItem({
-            ...newItem,
-            price: event.target.value,
-          })
-        }
+        onChange={(event) => handleFormChange(event, 'price')}
       />
       <label className={styles.label} htmlFor="date">
         Date
       </label>
       <input
+        required
         className={styles.input}
         type="date"
         name="date"
-        onChange={(event) =>
-          setNewItem({
-            ...newItem,
-            date: event.target.value,
-          })
-        }
+        onChange={(event) => handleFormChange(event, 'date')}
       />
       <div className={styles.buttons}>
         <button type="submit" className={styles.button}>
           Add
         </button>
-        <button className={styles.button}>Cancel</button>
+        <button type="button" className={styles.button}>
+          Cancel
+        </button>
       </div>
     </form>
   )

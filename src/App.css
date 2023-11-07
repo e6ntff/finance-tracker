@@ -1,31 +1,30 @@
 *,
 *::before,
 *::after {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-html {
-	min-block-size: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-	padding-inline: 10%;
-	inline-size: max(500px, 100vw);
-	block-size: 100%;
-	background: #000;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  padding-inline: 10%;
+  inline-size: max(500px, 100vw);
+  min-block-size: 100vh;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #root {
-	border: 3px solid #fff;
-	border-radius: 5px;
-	inline-size: 100%;
-	padding: 5%;
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
+  inline-size: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

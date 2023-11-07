@@ -1,28 +1,36 @@
 .item {
   color: #000;
-	background: #ddd;
+  background: #ddd;
   list-style: none;
   border: 1px solid #000;
   border-radius: 3px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-inline: 5%;
-  padding-block: 2.5%;
+  padding: 2.5%;
 }
 
 .date,
-.price {
-  inline-size: min-content;
+.price,
+.title {
   block-size: 100%;
   padding: 1%;
   text-align: center;
+  font-size: 1.5em;
+	background: #0000;
+	border: 0;
+}
+
+.title:focus {
+	border-block-end: 1px solid #000;
+}
+
+.price {
+  inline-size: 100%;
 }
 
 .title {
-  font-size: 1.5em;
-  text-align: center;
-  block-size: min-content;
+  inline-size: 30%;
   background: #0000;
   color: #000;
   border: none;
@@ -36,7 +44,21 @@
   font-size: 1.5em;
   background-color: #ddd;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 3px;
   transition: background-color 0.3s;
+}
+
+.other {
+  display: flex;
+	gap: 15px;
+  justify-content: center;
+  inline-size: 25%;
+}
+
+@media (width < 500px) {
+  .item {
+    flex-direction: column;
+    gap: 15px;
+  }
 }

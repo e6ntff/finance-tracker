@@ -1,41 +1,42 @@
 .item {
-	color: #000;
-	list-style: none;
-	border: 1px solid #000;
-	border-radius: 3px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-inline: 5%;
-	padding-block: 2.5%;
+  color: #000;
+	background: #ddd;
+  list-style: none;
+  border: 1px solid #000;
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 5%;
+  padding-block: 2.5%;
 }
 
 .date,
 .price {
-	inline-size: min-content;
-	block-size: 100%;
-	padding: 1%;
-	text-align: center;
+  inline-size: min-content;
+  block-size: 100%;
+  padding: 1%;
+  text-align: center;
 }
 
 .title {
-	font-size: 1.5em;
-	text-align: center;
-	block-size: min-content;
-	background: #0000;
-	color: #000;
-	border: none;
-	outline:  none;
+  font-size: 1.5em;
+  text-align: center;
+  block-size: min-content;
+  background: #0000;
+  color: #000;
+  border: none;
+  outline: none;
 }
 
 .button {
-	color: #000;
-	padding-inline: 2%;
-	font-weight: 600;
-	font-size: 1.5em;
-	background-color: #ddd;
+  color: #000;
+  padding-inline: 2%;
+  font-weight: 600;
+  font-size: 1.5em;
+  background-color: #ddd;
   cursor: pointer;
-	border: 1px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 3px;
   transition: background-color 0.3s;
 }

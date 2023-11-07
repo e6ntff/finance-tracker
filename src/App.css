@@ -8,7 +8,7 @@
 
 body {
   padding-inline: 10%;
-  inline-size: max(500px, 100vw);
+  inline-size: max(350px, 100vw);
   min-block-size: 100vh;
   background: #ddd;
   display: flex;

@@ -12,7 +12,8 @@ const List = (props) => {
           date={item.date}
           title={item.title}
           price={item.price}
-          deleteItem={props.deleteItem}
+          list={props.list}
+          setList={props.setList}
         />
       )}
     </ul>

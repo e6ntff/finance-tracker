@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import styles from './AddForm.module.css'
 
-import formatDate from '../../utils/date'
+import getTodayDate from '../../utils/date'
 
 const AddForm = (props) => {
   const [newItem, setNewItem] = useState({
@@ -26,9 +26,7 @@ const AddForm = (props) => {
 
   const handleFormChange = (event) => {
     const newItemCopy = newItem
-		console.log(event.target.min)
     newItemCopy[event.target.name] = event.target.value
-		newItemCopy.date = formatDate(newItemCopy.date).format
     setNewItem(newItemCopy)
   }
 
@@ -65,7 +63,7 @@ const AddForm = (props) => {
         type="date"
         name="date"
 				min='1970-01-01'
-				max={formatDate(new Date()).today}
+				max={getTodayDate(new Date())}
         onChange={handleFormChange}
       />
       <div className={styles.buttons}>

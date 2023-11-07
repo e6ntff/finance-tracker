@@ -1,30 +1,11 @@
-const formatDate = (date) => {
+const getTodayDate = (date) => {
   date = new Date(date)
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ]
 
-  const day = date.getDate()
-  const month = months[date.getMonth()]
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
   const year = date.getFullYear()
 
-  return {
-    format: `${day} ${month} ${year}`,
-    today: `${year}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day
-      .toString()
-      .padStart(2, '0')}`,
-  }
+  return `${year}-${month}-${day}`
 }
 
-export default formatDate
+export default getTodayDate

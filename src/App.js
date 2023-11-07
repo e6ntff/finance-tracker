@@ -11,30 +11,28 @@ const App = () => {
       id: 1,
       title: '1',
       price: 1,
-      date: '1',
+      date: '2023-07-01',
     },
     {
       id: 2,
       title: '1',
       price: 1,
-      date: '1',
+      date: '2023-07-01',
     },
     {
       id: 3,
       title: '1',
       price: 1,
-      date: '1',
+      date: '2023-07-01',
     },
   ])
 
-  const deleteItem = (id) => {
-    setList(list.filter((item) => item.id !== id))
-  }
+  console.log(list)
 
   return (
     <>
       <AddForm list={list} setList={setList} />
-      <List list={list} deleteItem={deleteItem} />
+      <List list={list} setList={setList} />
     </>
   )
 }

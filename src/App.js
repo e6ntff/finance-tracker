@@ -28,10 +28,7 @@ const App = () => {
   ])
 
   const deleteItem = (id) => {
-    console.log(id)
-    console.log(list.filter((item) => item.id !== id))
-    const newList = list.filter((item) => item.id !== id)
-    setList(newList)
+    setList(list.filter((item) => item.id !== id))
   }
 
   return (

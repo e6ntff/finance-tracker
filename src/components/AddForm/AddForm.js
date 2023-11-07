@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import styles from './AddForm.module.css'
 
+import formatDate from '../../utils/date'
+
 const AddForm = (props) => {
   const [newItem, setNewItem] = useState({
     id: Math.random(),
@@ -22,9 +24,11 @@ const AddForm = (props) => {
     })
   }
 
-  const handleFormChange = (event, key) => {
+  const handleFormChange = (event) => {
     const newItemCopy = newItem
-    newItemCopy[key] = event.target.value
+		console.log(event.target.min)
+    newItemCopy[event.target.name] = event.target.value
+		newItemCopy.date = formatDate(newItemCopy.date).format
     setNewItem(newItemCopy)
   }
 
@@ -38,7 +42,7 @@ const AddForm = (props) => {
         className={styles.input}
         type="text"
         name="title"
-        onChange={(event) => handleFormChange(event, 'title')}
+        onChange={handleFormChange}
       />
       <label className={styles.label} htmlFor="price">
         Price
@@ -50,7 +54,7 @@ const AddForm = (props) => {
         min="1"
         step="1"
         name="price"
-        onChange={(event) => handleFormChange(event, 'price')}
+        onChange={handleFormChange}
       />
       <label className={styles.label} htmlFor="date">
         Date
@@ -60,7 +64,9 @@ const AddForm = (props) => {
         className={styles.input}
         type="date"
         name="date"
-        onChange={(event) => handleFormChange(event, 'date')}
+				min='1970-01-01'
+				max={formatDate(new Date()).today}
+        onChange={handleFormChange}
       />
       <div className={styles.buttons}>
         <button type="submit" className={styles.button}>

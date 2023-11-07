@@ -8,6 +8,7 @@ const List = (props) => {
       {props.list.map(item =>
         <ListItem
           key={item.id}
+          id={item.id}
           date={item.date}
           title={item.title}
           price={item.price}

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import './App.css';
+import './App.css'
 
-import List from './components/List/List';
+import List from './components/List/List'
+import AddForm from './components/AddForm/AddForm'
 
 const App = () => {
   const [list, setList] = useState([
@@ -27,8 +28,11 @@ const App = () => {
   ])
 
   return (
-    <List list={list}/>
-  );
+    <>
+      <AddForm list={list} setList={setList} />
+      <List list={list} />
+    </>
+  )
 }
 
-export default App;
+export default App

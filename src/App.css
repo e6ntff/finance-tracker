@@ -7,12 +7,12 @@
 }
 
 html {
-	block-size: 100vh;
+	min-block-size: 100vh;
 }
 
 body {
 	padding-inline: 10%;
-	inline-size: max(700px, 100vw);
+	inline-size: max(500px, 100vw);
 	block-size: 100%;
 	background: #000;
 	display: flex;
@@ -22,6 +22,10 @@ body {
 
 #root {
 	border: 3px solid #fff;
+	border-radius: 5px;
 	inline-size: 100%;
 	padding: 5%;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
 }

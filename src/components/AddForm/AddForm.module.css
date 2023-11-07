@@ -1,0 +1,41 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.input {
+	inline-size: 50%;
+	background: #0000;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #fff;
+	padding: 1%;
+	font-size: 1.5em;
+}
+
+.input[name="date"]::-webkit-calendar-picker-indicator {
+	filter: invert(1);
+}
+
+.buttons {
+	inline-size: 50%;
+	display: flex;
+	gap: 15px;
+}
+
+.button {
+	background: #0000;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #fff;
+	padding: 1%;
+	font-size: 1.5em;
+	inline-size: 100%;
+}
+
+.label {
+	color: #fff;
+	font-size: 1.5em;
+	font-weight: 600;
+}

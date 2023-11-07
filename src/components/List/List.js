@@ -11,6 +11,9 @@ const List = (props) => {
           date={item.date}
           title={item.title}
           price={item.price}
+          changeDate={item.changeDate}
+          changeTitle={item.changeTitle}
+          changePrice={item.changePrice}
         />
       )}
     </ul>

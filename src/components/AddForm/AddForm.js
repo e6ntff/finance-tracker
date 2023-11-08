@@ -33,54 +33,80 @@ const AddForm = (props) => {
     }))
   }
 
+  const [formDisplay, setFormDisplay] = useState('none')
+
+  const toggleFormDisplay = (isVisible) => {
+    setFormDisplay(isVisible ? 'flex' : 'none')
+  }
+
   return (
-    <form className={styles.form} onSubmit={addNewItem}>
-      <label className={styles.label} htmlFor="title">
-        Title
-      </label>
-      <input
-        required
-        className={styles.input}
-        type="text"
-        name="title"
-        value={newItem.title}
-        onChange={handleFormChange}
-      />
-      <label className={styles.label} htmlFor="price">
-        Price
-      </label>
-      <input
-        required
-        className={styles.input}
-        type="number"
-        min="1"
-        step="1"
-        name="price"
-        value={newItem.price}
-        onChange={handleFormChange}
-      />
-      <label className={styles.label} htmlFor="date">
-        Date
-      </label>
-      <input
-        required
-        className={styles.input}
-        type="date"
-        name="date"
-        min="2020-01-01"
-        max={getTodayDate(new Date())}
-        value={newItem.date}
-        onChange={handleFormChange}
-      />
-      <div className={styles.buttons}>
-        <button type="submit" className={styles.button}>
-          Add
-        </button>
-        <button type="button" className={styles.button}>
-          Cancel
-        </button>
-      </div>
-    </form>
+    <>
+      <button
+        className={`${styles.button} ${styles.setButton}`}
+        onClick={() => toggleFormDisplay(true)}
+      >
+        Add new expense
+      </button>
+      <form
+        className={styles.form}
+        style={{ display: formDisplay }}
+        onSubmit={addNewItem}
+      >
+        <label className={styles.label} htmlFor="title">
+          Title
+        </label>
+        <input
+          required
+          className={styles.input}
+          type="text"
+          name="title"
+          value={newItem.title}
+          onChange={handleFormChange}
+        />
+        <label className={styles.label} htmlFor="price">
+          Price
+        </label>
+        <input
+          required
+          className={styles.input}
+          type="number"
+          min="1"
+          step="1"
+          name="price"
+          value={newItem.price}
+          onChange={handleFormChange}
+        />
+        <label className={styles.label} htmlFor="date">
+          Date
+        </label>
+        <input
+          required
+          className={styles.input}
+          type="date"
+          name="date"
+          min="2020-01-01"
+          max={getTodayDate(new Date())}
+          value={newItem.date}
+          onChange={handleFormChange}
+        />
+        <div className={styles.buttons}>
+          <button
+            type="submit"
+            className={styles.button}
+            onClick={() => toggleFormDisplay(false)}
+          >
+            Add
+          </button>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={() => toggleFormDisplay(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </>
   )
 }
 

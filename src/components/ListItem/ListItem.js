@@ -16,7 +16,7 @@ const ListItem = (props) => {
     title: title,
     price: price,
   })
-
+  
   const handleItemChange = (event) => {
     const { name, value } = event.target
 
@@ -36,7 +36,7 @@ const ListItem = (props) => {
     })
     props.setList(listCopy)
   }
-  
+
   return (
     <li className={styles.item}>
       <input

@@ -12,16 +12,19 @@ const AddForm = (props) => {
     price: '',
   })
 
-  const addNewItem = (event) => {
-    event.target.reset()
-    event.preventDefault()
-    props.setList((prevList) => [newItem, ...prevList])
+  const clearItem = () => {
     setNewItem({
       id: Math.random(),
       title: '',
       date: getTodayDate(new Date()),
       price: '',
     })
+  }
+
+  const addNewItem = (event) => {
+    event.preventDefault()
+    props.setList((prevList) => [newItem, ...prevList])
+    clearItem()
   }
 
   const handleFormChange = (event) => {
@@ -108,7 +111,10 @@ const AddForm = (props) => {
           <button
             type="button"
             className={styles.button}
-            onClick={() => toggleFormDisplay(false)}
+            onClick={() => {
+              toggleFormDisplay(false)
+              clearItem()
+            }}
           >
             Cancel
           </button>

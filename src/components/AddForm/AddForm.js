@@ -33,23 +33,31 @@ const AddForm = (props) => {
     }))
   }
 
-  const [formDisplay, setFormDisplay] = useState('none')
+  const [formAndButtonDisplay, setFormAndButtonDisplay] = useState({
+    button: 'block',
+    form: 'none',
+  })
 
   const toggleFormDisplay = (isVisible) => {
-    setFormDisplay(isVisible ? 'flex' : 'none')
+    setFormAndButtonDisplay(
+      isVisible
+        ? { button: 'none', form: 'flex' }
+        : { button: 'block', form: 'none' }
+    )
   }
 
   return (
     <>
       <button
         className={`${styles.button} ${styles.setButton}`}
+        style={{ display: formAndButtonDisplay.button }}
         onClick={() => toggleFormDisplay(true)}
       >
         Add new expense
       </button>
       <form
         className={styles.form}
-        style={{ display: formDisplay }}
+        style={{ display: formAndButtonDisplay.form }}
         onSubmit={addNewItem}
       >
         <label className={styles.label} htmlFor="title">

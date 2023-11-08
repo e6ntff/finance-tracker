@@ -15,11 +15,11 @@
   padding: 10px;
   border: 1px solid #000;
   border-radius: 4px;
-	transition: background-color 0.3s;
+  transition: background-color 0.3s;
 }
 
 .input:hover {
-	background: #ccc;
+  background: #ccc;
 }
 
 .buttons {
@@ -30,13 +30,13 @@
 
 .button {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	color: #000;
-	inline-size: 100%;
-	padding: 2.5%;
-	font-size: 1.5em;
-	background-color: #ddd;
+  color: #000;
+  inline-size: 100%;
+  padding: 2.5%;
+  font-size: 1.5em;
+  background-color: #ddd;
   cursor: pointer;
-	border: 1px solid #000;
+  border: 1px solid #000;
   border-radius: 3px;
   transition: background-color 0.3s;
 }
@@ -50,4 +50,16 @@
   color: #000;
   font-size: 1.5em;
   font-weight: 600;
+}
+
+.setButton {
+  inline-size: 50%;
+  padding: 1.25%;
+}
+
+@media (width < 600px) {
+  .form,
+  .setButton {
+    inline-size: 100%;
+  }
 }

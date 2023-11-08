@@ -28,3 +28,10 @@
   font-size: 1.5em;
   font-weight: 500;
 }
+
+@media (width < 600px) {
+  .label {
+    inline-size: 100%;
+  }
+}
+

@@ -67,9 +67,26 @@
   inline-size: 21%;
 }
 
-@media (width < 500px) {
+@media (width < 800px) {
   .item {
     flex-direction: column;
     gap: 15px;
+  }
+  .date,
+  .title {
+    inline-size: 50%;
+  }
+  .other {
+    inline-size: 35%;
+  }
+}
+
+@media (width < 500px) {
+  .date,
+  .title {
+    inline-size: 100%;
+  }
+  .other {
+    inline-size: 50%;
   }
 }

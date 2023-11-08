@@ -1,0 +1,28 @@
+.diagram {
+	align-self: center;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 1fr;
+  grid-gap: 10% 2.5%;
+  justify-content: space-between;
+  inline-size: 100%;
+  aspect-ratio: 1.5;
+  padding: 5%;
+  list-style: none;
+}
+
+@media (width < 800px) {
+  .diagram {
+		grid-gap: 10% 5%;
+		inline-size: 75%;
+		aspect-ratio: .75;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+@media (width < 600px) {
+  .diagram {
+		inline-size: 100%;
+  }
+}

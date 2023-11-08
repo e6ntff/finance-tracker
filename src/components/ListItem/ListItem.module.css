@@ -17,16 +17,26 @@
   padding: 1%;
   text-align: center;
   font-size: 1.5em;
-	background: #0000;
-	border: 0;
+  background: #0000;
+  border: 0;
 }
 
+.date:focus,
+.price:focus,
 .title:focus {
-	border-block-end: 1px solid #000;
+  outline: 1px solid #000;
 }
 
 .price {
   inline-size: 100%;
+  text-align: left;
+}
+
+.other::before {
+  padding: 1%;
+  font-size: 1.5em;
+  content: '$';
+  margin-inline-end: -15px;
 }
 
 .title {
@@ -51,9 +61,9 @@
 
 .other {
   display: flex;
-	gap: 15px;
+  gap: 15px;
   justify-content: center;
-  inline-size: 25%;
+  inline-size: 21%;
 }
 
 @media (width < 500px) {

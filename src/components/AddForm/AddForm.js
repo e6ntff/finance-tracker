@@ -8,26 +8,29 @@ const AddForm = (props) => {
   const [newItem, setNewItem] = useState({
     id: Math.random(),
     title: '',
-    date: '',
-    price: 0,
+    date: getTodayDate(new Date()),
+    price: '',
   })
 
   const addNewItem = (event) => {
-		event.target.reset()
+    event.target.reset()
     event.preventDefault()
     props.setList([newItem, ...props.list])
     setNewItem({
       id: Math.random(),
       title: '',
       date: '',
-      price: 0,
+      price: '',
     })
   }
 
   const handleFormChange = (event) => {
-    const newItemCopy = newItem
-    newItemCopy[event.target.name] = event.target.value
-    setNewItem(newItemCopy)
+    const { name, value } = event.target
+
+    setNewItem((prevItem) => ({
+      ...prevItem,
+      [name]: value,
+    }))
   }
 
   return (
@@ -40,6 +43,7 @@ const AddForm = (props) => {
         className={styles.input}
         type="text"
         name="title"
+        value={newItem.title}
         onChange={handleFormChange}
       />
       <label className={styles.label} htmlFor="price">
@@ -52,6 +56,7 @@ const AddForm = (props) => {
         min="1"
         step="1"
         name="price"
+        value={newItem.price}
         onChange={handleFormChange}
       />
       <label className={styles.label} htmlFor="date">
@@ -62,8 +67,9 @@ const AddForm = (props) => {
         className={styles.input}
         type="date"
         name="date"
-				min='1970-01-01'
-				max={getTodayDate(new Date())}
+        min="2020-01-01"
+        max={getTodayDate(new Date())}
+        value={newItem.date}
         onChange={handleFormChange}
       />
       <div className={styles.buttons}>

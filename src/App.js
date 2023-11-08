@@ -4,6 +4,7 @@ import './App.css'
 
 import List from './components/List/List'
 import AddForm from './components/AddForm/AddForm'
+import Select from './components/Select/Select'
 
 const App = () => {
   const [list, setList] = useState([
@@ -27,11 +28,10 @@ const App = () => {
     },
   ])
 
-  console.log(list)
-
   return (
     <>
       <AddForm list={list} setList={setList} />
+      <Select />
       <List list={list} setList={setList} />
     </>
   )

@@ -3,6 +3,7 @@ import ListItem from '../ListItem/ListItem';
 import styles from './List.module.css';
 
 const List = (props) => {
+  console.log(styles.list)
   return (
     <ul className={styles.list}>
       {props.list.map(item =>

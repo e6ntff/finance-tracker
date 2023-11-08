@@ -36,6 +36,7 @@ const ListItem = (props) => {
     })
     props.setList(listCopy)
   }
+  
   return (
     <li className={styles.item}>
       <input
@@ -43,7 +44,7 @@ const ListItem = (props) => {
         name="date"
         className={styles.date}
         value={item.date}
-        min="1970-01-01"
+        min="2020-01-01"
         max={getTodayDate(new Date())}
         onChange={handleItemChange}
       />

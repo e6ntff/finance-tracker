@@ -1,23 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './App.css'
 
 import List from './components/List/List'
 import AddForm from './components/AddForm/AddForm'
 
+import sortByDate from './utils/sortByDate'
+
 const App = () => {
-  const [list, setList] = useState([
+  const [list, setList] = useState(sortByDate([
     {
       id: 1,
       title: '1',
       price: 1,
-      date: '2021-07-01',
+      date: '2023-09-01',
     },
     {
       id: 2,
       title: '2',
       price: 1,
-      date: '2023-07-01',
+      date: '2023-11-01',
     },
     {
       id: 3,
@@ -37,7 +39,11 @@ const App = () => {
       price: 1,
       date: '2022-07-01',
     },
-  ])
+  ]))
+
+  useEffect(() => {
+    setList(sortByDate(list))
+  }, [list])
 
   return (
     <>

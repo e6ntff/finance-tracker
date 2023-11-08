@@ -6,6 +6,7 @@
 }
 
 .input {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   inline-size: 100%;
   background: #ddd;
   color: #000;
@@ -28,6 +29,7 @@
 }
 
 .button {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	color: #000;
 	inline-size: 100%;
 	padding: 2.5%;
@@ -44,6 +46,7 @@
 }
 
 .label {
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   color: #000;
   font-size: 1.5em;
   font-weight: 600;

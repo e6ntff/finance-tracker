@@ -15,11 +15,11 @@ const AddForm = (props) => {
   const addNewItem = (event) => {
     event.target.reset()
     event.preventDefault()
-    props.setList([newItem, ...props.list])
+    props.setList((prevList) => [newItem, ...prevList])
     setNewItem({
       id: Math.random(),
       title: '',
-      date: '',
+      date: getTodayDate(new Date()),
       price: '',
     })
   }

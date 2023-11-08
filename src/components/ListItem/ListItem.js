@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './ListItem.module.css'
 
 import getTodayDate from '../../utils/date'
@@ -10,32 +10,28 @@ const ListItem = (props) => {
 
   const { id, date, title, price } = props
 
-  const [item, updateItem] = useState({
+  const [item, setItem] = useState({
     id: id,
     date: date,
     title: title,
     price: price,
   })
-  
+
   const handleItemChange = (event) => {
     const { name, value } = event.target
 
-    updateItem((prevItem) => ({
+    setItem((prevItem) => ({
       ...prevItem,
       [name]: value,
     }))
-    updateList()
   }
 
   const updateList = () => {
-    const listCopy = props.list.map((el) => {
-      if (el.id === item.id) {
-        return item
-      }
-      return el
-    })
-    props.setList(listCopy)
+    props.setList(props.list.map((el) => (el.id === item.id ? item : el)))
   }
+  useEffect(() => {
+    updateList()
+  }, [item])
 
   return (
     <li className={styles.item}>

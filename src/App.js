@@ -9,6 +9,7 @@ import Diagram from './components/Diagram/Diagram'
 import sortByDate from './utils/sortByDate'
 
 const App = () => {
+  localStorage.setItem('list', JSON.stringify([]))
   const [list, setList] = useState(JSON.parse(localStorage.getItem('list')))
 
   const [year, setYear] = useState(2023)

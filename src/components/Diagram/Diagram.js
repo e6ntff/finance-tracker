@@ -5,6 +5,8 @@ import styles from './Diagram.module.css'
 import DiagramBar from './DiagramBar/DiagramBar'
 
 const Diagram = (props) => {
+
+  
   const months = [
     'Jan',
     'Feb',

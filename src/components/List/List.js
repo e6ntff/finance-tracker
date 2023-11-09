@@ -6,38 +6,26 @@ import Select from '../Select/Select'
 import NoExpenses from '../NoExpenses/NoExpenses'
 
 const List = (props) => {
-  const [year, setYear] = useState(2023)
-
   const handleYearChanging = (event) => {
-    setYear(Number(event.target.value))
-  }
-
-  const isTextVisible = () => {
-    return (
-      props.list.filter((item) => new Date(item.date).getFullYear() === year)
-        .length === 0
-    )
+    props.setYear(Number(event.target.value))
   }
 
   return (
     <>
       <Select handleYearChanging={handleYearChanging} />
-      <NoExpenses visible={isTextVisible()} />
+      {!props.filteredList.length && <NoExpenses />}
       <ul className={styles.list}>
-        {props.list.map((item) => {
-          if (new Date(item.date).getFullYear() === year)
-            return (
-              <ListItem
-                key={item.id}
-                id={item.id}
-                date={item.date}
-                title={item.title}
-                price={item.price}
-                list={props.list}
-                setList={props.setList}
-              />
-            )
-        })}
+        {props.filteredList.map((item) => (
+          <ListItem
+            key={item.id}
+            id={item.id}
+            date={item.date}
+            title={item.title}
+            price={item.price}
+            list={props.list}
+            setList={props.setList}
+          />
+        ))}
       </ul>
     </>
   )

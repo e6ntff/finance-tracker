@@ -15,7 +15,7 @@ const App = () => {
         id: 1,
         title: 'Phone',
         price: 1,
-        date: '2023-09-01',
+        date: '2021-09-01',
       },
       {
         id: 2,
@@ -44,15 +44,23 @@ const App = () => {
     ])
   )
 
+  const [year, setYear] = useState(2023)
+
+  const [filteredList, setFilteredList] = useState(list.filter((item) => new Date(item.date).getFullYear() === year))
+
   useEffect(() => {
     setList(sortByDate(list))
   }, [list])
 
+  useEffect(() => {
+    setFilteredList(list.filter((item) => new Date(item.date).getFullYear() === year))
+  }, [year])
+
   return (
     <>
       <AddForm list={list} setList={setList} />
-      <Diagram />
-      <List list={list} setList={setList} />
+      <Diagram filteredList={filteredList}/>
+      <List list={list} setList={setList} filteredList={filteredList} setYear={setYear}/>
     </>
   )
 }

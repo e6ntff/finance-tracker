@@ -5,17 +5,22 @@ import './App.scss'
 import List from './components/List/List'
 import AddForm from './components/AddForm/AddForm'
 import Diagram from './components/Diagram/Diagram'
+import getList from './api/getList'
 
 import sortByDate from './utils/sortByDate'
 
-const App = (props) => {
-  const [list, setList] = useState(props.initialExpenses || [])
+const App = () => {
+  const [list, setList] = useState([])
 
   const [year, setYear] = useState(2023)
 
   const [filteredList, setFilteredList] = useState(
     list.filter((item) => new Date(item.date).getFullYear() === year)
   )
+
+  useEffect(() => {
+    getList().then((data) => setList((prevList) => data))
+  }, [])
 
   useEffect(() => {
     setList(sortByDate(list))

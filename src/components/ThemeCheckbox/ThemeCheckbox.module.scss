@@ -12,11 +12,12 @@
 }
 
 .label {
-	font-size: 1.5em;
-	padding-block: .1%;
+  user-select: none;
+  font-size: 1.5em;
+  padding-block: 0.1%;
   align-self: start;
   position: relative;
-	color: #0000;
+  color: #0000;
   border: 1px solid var(--text-color);
   border-radius: 3px;
 }

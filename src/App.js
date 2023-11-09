@@ -5,12 +5,11 @@ import './App.scss'
 import List from './components/List/List'
 import AddForm from './components/AddForm/AddForm'
 import Diagram from './components/Diagram/Diagram'
-import getList from './api/getList'
 
 import sortByDate from './utils/sortByDate'
 
 const App = () => {
-  const [list, setList] = useState([])
+  const [list, setList] = useState(JSON.parse(localStorage.getItem('list')))
 
   const [year, setYear] = useState(2023)
 
@@ -19,11 +18,8 @@ const App = () => {
   )
 
   useEffect(() => {
-    getList().then((data) => setList((prevList) => data))
-  }, [])
-
-  useEffect(() => {
     setList(sortByDate(list))
+    localStorage.setItem('list', JSON.stringify(list))
   }, [list])
 
   useEffect(() => {

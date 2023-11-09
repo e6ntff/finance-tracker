@@ -12,7 +12,7 @@ const List = (props) => {
 
   return (
     <>
-      <Select handleYearChanging={handleYearChanging} />
+      <Select handleYearChanging={handleYearChanging} setList={props.setList} />
       {!props.filteredList.length && <NoExpenses />}
       <ul className={styles.list}>
         {props.filteredList.map((item) => (

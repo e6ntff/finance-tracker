@@ -1,10 +1,11 @@
 import React from 'react'
 
 import styles from './Select.module.scss'
+import RefreshButton from '../RefreshButton/RefreshButton'
 
 const Select = (props) => {
   return (
-    <label className={styles.label}>
+    <div className={styles.label}>
       <select
         name="yearSelect"
         className={styles.select}
@@ -15,8 +16,9 @@ const Select = (props) => {
         <option value="2021">2021</option>
         <option value="2020">2020</option>
       </select>
-			<span className={styles.text}>Filter by year</span>
-    </label>
+      <RefreshButton setList={props.setList}/>
+      <span className={styles.text}>Filter by year</span>
+    </div>
   )
 }
 

@@ -5,13 +5,21 @@
 }
 
 .column {
-  transition: .3s;
-	--value: 0%;
   border: 1px solid #000;
-	border-radius: 15px;
-  background: linear-gradient(0deg, #f007 var(--value), #0000 0);
   block-size: 100%;
   inline-size: 100%;
+  border-radius: 15px;
+  display: flex;
+  align-items: end;
+}
+
+.value {
+  transition: .3s;
+  --value: 0%;
+  background-color: #f00a;
+  inline-size: 100%;
+  block-size: var(--value);
+  border-radius: 15px;
 }
 
 .month {

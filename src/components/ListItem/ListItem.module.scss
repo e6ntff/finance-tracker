@@ -64,6 +64,9 @@
   border: 1px solid var(--text-color);
   border-radius: 3px;
   transition: background-color 0.3s;
+  &:hover {
+    background: var(--hover-color);
+  }
 }
 
 .other {

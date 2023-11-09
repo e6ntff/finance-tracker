@@ -1,6 +1,7 @@
 @import './vendor/variables.scss';
 
 #root {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 50px;

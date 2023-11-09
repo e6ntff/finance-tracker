@@ -5,7 +5,6 @@ import './App.scss'
 import List from './components/List/List'
 import AddForm from './components/AddForm/AddForm'
 import Diagram from './components/Diagram/Diagram'
-import ThemeCheckbox from './components/ThemeCheckbox/ThemeCheckbox'
 
 import sortByDate from './utils/sortByDate'
 
@@ -30,7 +29,6 @@ const App = (props) => {
 
   return (
     <>
-      <ThemeCheckbox />
       <AddForm list={list} setList={setList} />
       <Diagram filteredList={filteredList} />
       <List

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import styles from './AddForm.module.scss'
+import ThemeCheckbox from '../ThemeCheckbox/ThemeCheckbox'
 
 import getTodayDate from '../../utils/date'
 
@@ -46,23 +47,24 @@ const AddForm = (props) => {
     setFormAndButtonDisplay(
       isVisible
         ? { button: 'none', form: 'flex' }
-        : { button: 'block', form: 'none' }
+        : { button: 'flex', form: 'none' }
     )
   }
 
   return (
     <>
+      <ThemeCheckbox />
       <button
         className={`${styles.button} ${styles.setButton}`}
-        style={{ display: formAndButtonDisplay.button }}
         onClick={() => toggleFormDisplay(true)}
+        style={{ display: formAndButtonDisplay.button }}
       >
         Add new expense
       </button>
       <form
         className={styles.form}
-        style={{ display: formAndButtonDisplay.form }}
         onSubmit={addNewItem}
+        style={{ display: formAndButtonDisplay.form }}
       >
         <label className={styles.label} htmlFor="title">
           Title

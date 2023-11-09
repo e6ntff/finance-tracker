@@ -1,0 +1,45 @@
+@import '../../vendor/variables.scss';
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+}
+
+.label {
+	font-size: 1.5em;
+	padding-block: .1%;
+  align-self: start;
+  position: relative;
+	color: #0000;
+  border: 1px solid var(--text-color);
+  border-radius: 3px;
+}
+
+.pseudo {
+  position: absolute;
+  top: 5%;
+  left: 2.5%;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-inline-end: 50%;
+  block-size: 90%;
+  inline-size: 50%;
+  padding: 10%;
+  background: var(--accent-color);
+  transition: all 0.3s;
+  &:hover {
+    background: var(--hover-color);
+  }
+}
+
+.hidden:checked {
+  + .pseudo {
+    left: 47.5%;
+  }
+}

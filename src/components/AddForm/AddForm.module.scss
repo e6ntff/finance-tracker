@@ -19,10 +19,9 @@
   border: 1px solid var(--text-color);
   border-radius: 4px;
   transition: background-color 0.3s;
-}
-
-.input:hover {
-  background: var(--hover-color);
+  &:hover {
+    background: var(--hover-color);
+  }
 }
 
 .buttons {
@@ -43,10 +42,9 @@
   border: 1px solid var(--text-color);
   border-radius: 3px;
   transition: background-color 0.3s;
-}
-
-.button:hover {
-  background-color: var(--hover-color);
+  &:hover {
+    background-color: var(--hover-color);
+  }
 }
 
 .label {
@@ -67,3 +65,15 @@
     inline-size: 100%;
   }
 }
+
+.butcontainer {
+  inline-size: 100%;
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+// .formcontainer {
+//   display: flex;
+//   flex-direction: column;
+// }

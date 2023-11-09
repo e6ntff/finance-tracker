@@ -2,6 +2,7 @@
 @import '../../vendor/fonts.scss';
 
 .select {
+  cursor: pointer;
   box-shadow: var(--box-shadow);
   inline-size: 50%;
   background: var(--accent-color);

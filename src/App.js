@@ -8,41 +8,9 @@ import Diagram from './components/Diagram/Diagram'
 
 import sortByDate from './utils/sortByDate'
 
-const App = () => {
-  const [list, setList] = useState(
-    sortByDate([
-      {
-        id: 1,
-        title: 'Phone',
-        price: 1,
-        date: '2021-09-01',
-      },
-      {
-        id: 2,
-        title: '2',
-        price: 160,
-        date: '2023-11-01',
-      },
-      {
-        id: 3,
-        title: '3',
-        price: 85,
-        date: '2023-07-01',
-      },
-      {
-        id: 4,
-        title: '4',
-        price: 1,
-        date: '2022-07-01',
-      },
-      {
-        id: 5,
-        title: '5',
-        price: 1,
-        date: '2022-07-01',
-      },
-    ])
-  )
+const App = (props) => {
+  console.log('Updating...')
+  const [list, setList] = useState(Array.isArray(props.initialExpenses) ? props.initialExpenses : [])
 
   const [year, setYear] = useState(2023)
 

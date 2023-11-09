@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from './Diagram.module.css'
+import styles from './Diagram.module.scss'
 
 import DiagramBar from './DiagramBar/DiagramBar'
 

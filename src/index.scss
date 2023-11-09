@@ -1,3 +1,5 @@
+@import './vendor/variables.scss';
+
 *,
 *::before,
 *::after {
@@ -7,27 +9,14 @@
 }
 
 body {
-  margin: auto;
+  font-family: var(--main-font);
   padding-inline: 20px;
   padding-block: 10%;
   inline-size: clamp(300px, 100vw, 1000px);
   min-block-size: 100vh;
-  background: #ddd;
+  background: var(--accent-color);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-  inline-size: 100%;
-  margin: 0 auto;
-  padding: 5%;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

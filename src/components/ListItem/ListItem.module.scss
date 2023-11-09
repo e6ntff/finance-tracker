@@ -1,9 +1,12 @@
+@import '../../vendor/variables.scss';
+@import '../../vendor/fonts.scss';
+
 .item {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  color: #000;
-  background: #ddd;
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
+  background: var(--accent-color);
   list-style: none;
-  border: 1px solid #000;
+  border: 1px solid var(--text-color);
   border-radius: 3px;
   display: flex;
   justify-content: space-between;
@@ -14,9 +17,11 @@
 .date,
 .price,
 .title {
+  color: var(--text-color);
   block-size: 100%;
   padding: 1%;
   text-align: center;
+  font-family: var(--main-font);
   font-size: 1.5em;
   background: #0000;
   border: 0;
@@ -25,7 +30,7 @@
 .date:focus,
 .price:focus,
 .title:focus {
-  outline: 1px solid #000;
+  outline: 1px solid var(--text-color);
 }
 
 .price {
@@ -34,28 +39,29 @@
 }
 
 .other::before {
+  content: '$';
+  font-family: var(--main-font);
   padding: 1%;
   font-size: 1.5em;
-  content: '$';
   margin-inline-end: -15px;
 }
 
 .title {
   inline-size: 30%;
   background: #0000;
-  color: #000;
+  color: var(--text-color);
   border: none;
   outline: none;
 }
 
 .button {
-  color: #000;
+  color: var(--text-color);
   padding-inline: 2%;
   font-weight: 600;
   font-size: 1.5em;
-  background-color: #ddd;
+  background-color: var(--accent-color);
   cursor: pointer;
-  border: 1px solid #000;
+  border: 1px solid var(--text-color);
   border-radius: 3px;
   transition: background-color 0.3s;
 }

@@ -1,0 +1,14 @@
+@import './vendor/variables.scss';
+
+#root {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  inline-size: 100%;
+  margin: 0 auto;
+  padding: 5%;
+  font: var(--main-font);
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

@@ -1,3 +1,5 @@
+@import '../../vendor/variables.scss';
+
 .form {
   inline-size: 50%;
   display: flex;
@@ -6,20 +8,21 @@
 }
 
 .input {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: var(--main-font);
+  color: var(--text-color);
+  box-shadow: var(--box-shadow);
   inline-size: 100%;
-  background: #ddd;
-  color: #000;
+  background: var(--accent-color);
   padding: 1%;
   font-size: 1.5em;
   padding: 10px;
-  border: 1px solid #000;
+  border: 1px solid var(--text-color);
   border-radius: 4px;
   transition: background-color 0.3s;
 }
 
 .input:hover {
-  background: #ccc;
+  background: var(--hover-color);
 }
 
 .buttons {
@@ -29,27 +32,28 @@
 }
 
 .button {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  color: #000;
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
   inline-size: 100%;
   padding: 2.5%;
   font-size: 1.5em;
-  background-color: #ddd;
+  font-family: var(--main-font);
+  background-color: var(--accent-color);
   cursor: pointer;
-  border: 1px solid #000;
+  border: 1px solid var(--text-color);
   border-radius: 3px;
   transition: background-color 0.3s;
 }
 
 .button:hover {
-  background-color: #ccc;
+  background-color: var(--hover-color);
 }
 
 .label {
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  color: #000;
+  font-family: var(--main-font);
+  text-shadow: var(--box-shadow);
+  color: var(--text-color);
   font-size: 1.5em;
-  font-weight: 600;
 }
 
 .setButton {

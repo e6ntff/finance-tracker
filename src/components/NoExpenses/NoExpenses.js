@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from './NoExpenses.module.css'
+import styles from './NoExpenses.module.scss'
 
 const NoExpenses = (props) => {
   return (

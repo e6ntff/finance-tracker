@@ -1,3 +1,5 @@
+@import '../../../vendor/variables.scss';
+
 .bar {
   display: flex;
   gap: 5%;
@@ -5,19 +7,19 @@
 }
 
 .column {
-  border: 1px solid #000;
+  border: 1px solid var(--text-color);
   block-size: 100%;
-  aspect-ratio: .15;
+  aspect-ratio: 0.15;
   border-radius: 15px;
   display: flex;
   align-items: end;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
 }
 
 .value {
   transition: 0.3s;
   --value: 0%;
-  background-color: #f00a;
+  background-color: var(--column-color);
   inline-size: 100%;
   block-size: var(--value);
   border-radius: 15px;
@@ -25,6 +27,7 @@
 
 .month,
 .price {
+  color: var(--text-color);
   line-height: 100%;
   block-size: 5%;
   inline-size: 100%;

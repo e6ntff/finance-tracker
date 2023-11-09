@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from './Select.module.css'
+import styles from './Select.module.scss'
 
 const Select = (props) => {
   return (

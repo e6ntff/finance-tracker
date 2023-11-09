@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import styles from './AddForm.module.css'
+import styles from './AddForm.module.scss'
 
 import getTodayDate from '../../utils/date'
 
@@ -72,6 +72,7 @@ const AddForm = (props) => {
           className={styles.input}
           type="text"
           name="title"
+          id="title"
           value={newItem.title}
           onChange={handleFormChange}
         />
@@ -85,6 +86,7 @@ const AddForm = (props) => {
           min="1"
           step="1"
           name="price"
+          id="price"
           value={newItem.price}
           onChange={handleFormChange}
         />
@@ -96,6 +98,7 @@ const AddForm = (props) => {
           className={styles.input}
           type="date"
           name="date"
+          id="date"
           min="2020-01-01"
           max={getTodayDate(new Date())}
           value={newItem.date}

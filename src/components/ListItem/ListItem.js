@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styles from './ListItem.module.css'
+import styles from './ListItem.module.scss'
 
 import getTodayDate from '../../utils/date'
 

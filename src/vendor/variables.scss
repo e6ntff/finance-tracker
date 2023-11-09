@@ -1,0 +1,19 @@
+:root {
+  --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  --main-font: 'Roboto', sans-serif;
+  --column-color: #f00;
+}
+
+.theme-light {
+  --bg-color: #fff;
+  --text-color: #27313c;
+  --accent-color: #dde8f6;
+  --hover-color: #aac1dc;
+}
+
+.theme-dark {
+  --bg-color: #202020;
+  --text-color: #dcdfe5;
+  --accent-color: #26313d;
+  --hover-color: #000;
+}

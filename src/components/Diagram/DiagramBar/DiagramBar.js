@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from './DiagramBar.module.css'
+import styles from './DiagramBar.module.scss'
 
 const DiagramBar = (props) => {
   const value = props.maxValue > 0 ? (props.value / props.maxValue) * 100 : 0

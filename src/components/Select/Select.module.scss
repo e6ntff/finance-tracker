@@ -1,0 +1,43 @@
+@import '../../vendor/variables.scss';
+@import '../../vendor/fonts.scss';
+
+.select {
+  box-shadow: var(--box-shadow);
+  inline-size: 50%;
+  background: var(--accent-color);
+  color: var(--text-color);
+  padding: 1%;
+  font-size: 1.5em;
+  font-family: var(--main-font);
+  padding: 10px;
+  border: 1px solid var(--text-color);
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.select:hover {
+  background: var(--hover-color);
+}
+
+.label {
+  color: var(--text-color);
+  display: flex;
+  font-family: var(--main-font);
+  inline-size: 50%;
+  gap: 15px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text {
+  text-shadow: var(--box-shadow);
+  font-family: var(--main-font);
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+@media (width < 600px) {
+  .label {
+    inline-size: 100%;
+  }
+}

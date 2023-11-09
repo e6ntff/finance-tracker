@@ -7,7 +7,7 @@
 .column {
   border: 1px solid #000;
   block-size: 100%;
-  inline-size: 100%;
+  aspect-ratio: .15;
   border-radius: 15px;
   display: flex;
   align-items: end;

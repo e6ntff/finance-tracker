@@ -1,28 +1,29 @@
 .diagram {
-	align-self: center;
+  align-self: center;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 1fr;
-  grid-gap: 10% 2.5%;
+  grid-gap: 0 2.5%;
   justify-content: space-between;
   inline-size: 100%;
-  aspect-ratio: 1.5;
   padding: 5%;
   list-style: none;
 }
 
-@media (width < 800px) {
+@media (width < 1000px) {
   .diagram {
-		grid-gap: 10% 5%;
-		inline-size: 75%;
-		aspect-ratio: .75;
+    grid-gap: 5% 10%;
+    aspect-ratio: 0.75;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 1fr 1fr;
   }
 }
 
-@media (width < 600px) {
+@media (width < 700px) {
   .diagram {
-		inline-size: 100%;
+    grid-gap: 2.5% 10%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr 1fr;
+    aspect-ratio: .5;
   }
 }

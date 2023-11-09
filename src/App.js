@@ -9,7 +9,6 @@ import Diagram from './components/Diagram/Diagram'
 import sortByDate from './utils/sortByDate'
 
 const App = (props) => {
-  console.log('Updating...')
   const [list, setList] = useState(props.initialExpenses || [])
 
   const [year, setYear] = useState(2023)

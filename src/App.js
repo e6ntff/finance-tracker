@@ -20,13 +20,13 @@ const App = () => {
       {
         id: 2,
         title: '2',
-        price: 1,
+        price: 160,
         date: '2023-11-01',
       },
       {
         id: 3,
         title: '3',
-        price: 1,
+        price: 85,
         date: '2023-07-01',
       },
       {
@@ -46,21 +46,30 @@ const App = () => {
 
   const [year, setYear] = useState(2023)
 
-  const [filteredList, setFilteredList] = useState(list.filter((item) => new Date(item.date).getFullYear() === year))
+  const [filteredList, setFilteredList] = useState(
+    list.filter((item) => new Date(item.date).getFullYear() === year)
+  )
 
   useEffect(() => {
     setList(sortByDate(list))
   }, [list])
 
   useEffect(() => {
-    setFilteredList(list.filter((item) => new Date(item.date).getFullYear() === year))
-  }, [year])
+    setFilteredList(
+      list.filter((item) => new Date(item.date).getFullYear() === year)
+    )
+  }, [year, list])
 
   return (
     <>
       <AddForm list={list} setList={setList} />
-      <Diagram filteredList={filteredList}/>
-      <List list={list} setList={setList} filteredList={filteredList} setYear={setYear}/>
+      <Diagram filteredList={filteredList} />
+      <List
+        list={list}
+        setList={setList}
+        filteredList={filteredList}
+        setYear={setYear}
+      />
     </>
   )
 }

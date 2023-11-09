@@ -14,7 +14,7 @@
 }
 
 .value {
-  transition: .3s;
+  transition: 0.3s;
   --value: 0%;
   background-color: #f00a;
   inline-size: 100%;
@@ -22,7 +22,8 @@
   border-radius: 15px;
 }
 
-.month {
+.month,
+.price {
   block-size: 5%;
   inline-size: 100%;
   text-align: center;

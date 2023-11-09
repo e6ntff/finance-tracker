@@ -7,6 +7,7 @@ const DiagramBar = (props) => {
 
   return (
     <li className={styles.bar}>
+			<span className={styles.price}>{props.value}</span>
       <div className={styles.column}>
         <div className={styles.value} style={{ '--value': value > 100 ? '100%' : `${value}%` }}></div>
       </div>

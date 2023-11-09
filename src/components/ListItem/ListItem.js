@@ -18,7 +18,9 @@ const ListItem = (props) => {
   })
 
   const handleItemChange = (event) => {
-    const { name, value } = event.target
+  let { name, value } = event.target
+
+    if (name === 'price') value = Number(value)
 
     setItem((prevItem) => ({
       ...prevItem,
@@ -29,6 +31,7 @@ const ListItem = (props) => {
   const updateList = () => {
     props.setList(props.list.map((el) => (el.id === item.id ? item : el)))
   }
+  
   useEffect(() => {
     updateList()
   }, [item])

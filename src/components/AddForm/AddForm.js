@@ -9,7 +9,7 @@ const AddForm = (props) => {
     id: Math.random(),
     title: '',
     date: getTodayDate(new Date()),
-    price: '',
+    price: 0,
   })
 
   const clearItem = () => {
@@ -17,12 +17,13 @@ const AddForm = (props) => {
       id: Math.random(),
       title: '',
       date: getTodayDate(new Date()),
-      price: '',
+      price: 0,
     })
   }
 
   const addNewItem = (event) => {
     event.preventDefault()
+    newItem.price = Number(newItem.price)
     props.setList((prevList) => [newItem, ...prevList])
     clearItem()
   }

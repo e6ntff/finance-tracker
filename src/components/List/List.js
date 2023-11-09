@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ListItem from '../ListItem/ListItem'
 import styles from './List.module.css'
 

@@ -1,6 +1,6 @@
 .bar {
   display: flex;
-  gap: 2.5%;
+  gap: 5%;
   flex-direction: column;
 }
 
@@ -11,6 +11,7 @@
   border-radius: 15px;
   display: flex;
   align-items: end;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .value {
@@ -24,6 +25,7 @@
 
 .month,
 .price {
+  line-height: 100%;
   block-size: 5%;
   inline-size: 100%;
   text-align: center;

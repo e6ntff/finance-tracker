@@ -7,7 +7,6 @@ async function getList() {
 		return list
 	} catch (err) {
 		alert('Failed to fetch')
-		if (err instanceof TypeError) return 'TypeError'
 	}
 }
 

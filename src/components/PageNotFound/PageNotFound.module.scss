@@ -1,0 +1,19 @@
+.page {
+	inline-size: 100%;
+	block-size: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 2.5vw;
+	font-family: var(--main-font);
+	color: var(--main-text);
+}
+
+.title {
+	font-size: 25vw;
+}
+
+.redirect {
+	font-size: 5vw;
+}

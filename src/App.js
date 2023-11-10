@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from 'react-router-dom'
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 
 import './App.scss'
 
@@ -47,7 +42,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="home" />} />
+          <Route path="/" element={<Navigate to={paths.home} />} />
           <Route
             path={paths.dashboard}
             element={
@@ -80,7 +75,7 @@ const App = () => {
             }
           />
           <Route
-            path={paths.home}
+            path={paths.home  }
             element={
               <>
                 <Header setList={setList} />

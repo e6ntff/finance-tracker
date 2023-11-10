@@ -22,7 +22,7 @@
   border: none;
   transition: color 0.3s;
   &:hover {
-    color: var(--hover-color);
+    text-shadow: 0 0 25px var(--text-color);
   }
 }
 

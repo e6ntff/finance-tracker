@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom'
 
 import './App.scss'
 
 import Header from './components/Header/Header'
-
-import getList from './api/getList'
-import sortByDate from './utils/sortByDate'
 import Expenses from './pages/Expenses/Expenses'
 import Dashboard from './pages/Dashboard/Dashboard'
+import PageNotFound from './components/PageNotFound/PageNotFound'
+
+import sortByDate from './utils/sortByDate'
+import paths from './settings/paths'
 
 const App = () => {
-  localStorage.setItem('list', JSON.stringify([]))
-  const [list, setList] = useState([])
+  const [list, setList] = useState(
+    JSON.parse(localStorage.getItem('list')) || []
+  )
 
   const [year, setYear] = useState(2023)
 
   const [filteredList, setFilteredList] = useState(
     list.filter((item) => new Date(item.date).getFullYear() === year)
   )
-
-  useEffect(() => {
-    getList().then((data) => setList(data))
-  }, [])
 
   useEffect(() => {
     setList(sortByDate(list))
@@ -40,20 +44,48 @@ const App = () => {
 
   return (
     <>
-      <Header setList={setList} />
-      <div className="app">
-        <Dashboard
-          filteredList={filteredList}
-          handleYearChanging={handleYearChanging}
-        />
-        <Expenses
-          list={list}
-          setList={setList}
-          filteredList={filteredList}
-          setYear={setYear}
-          handleYearChanging={handleYearChanging}
-        />
-      </div>
+      <Router basename={paths.basename}>
+        <Routes>
+          <Route
+            path=""
+            element={
+              <Navigate to={`${paths.basename}${paths.dashboard}`} replace />
+            }
+          />
+          <Route
+            path={paths.dashboard}
+            element={
+              <>
+                <Header setList={setList} />
+                <div className="app">
+                  <Dashboard
+                    filteredList={filteredList}
+                    handleYearChanging={handleYearChanging}
+                  />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path={paths.expenses}
+            element={
+              <>
+                <Header setList={setList} />
+                <div className="app">
+                  <Expenses
+                    list={list}
+                    setList={setList}
+                    filteredList={filteredList}
+                    setYear={setYear}
+                    handleYearChanging={handleYearChanging}
+                  />
+                </div>
+              </>
+            }
+          />
+          <Route path='/*' element={<PageNotFound />} />
+        </Routes>
+      </Router>
     </>
   )
 }

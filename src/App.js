@@ -3,12 +3,11 @@ import React, { useEffect, useState } from 'react'
 import './App.scss'
 
 import Header from './components/Header/Header'
-import List from './components/List/List'
-import AddForm from './components/AddForm/AddForm'
-import Diagram from './components/Diagram/Diagram'
 
 import getList from './api/getList'
 import sortByDate from './utils/sortByDate'
+import Expenses from './pages/Expenses/Expenses'
+import Dashboard from './pages/Dashboard/Dashboard'
 
 const App = () => {
   localStorage.setItem('list', JSON.stringify([]))
@@ -21,7 +20,7 @@ const App = () => {
   )
 
   useEffect(() => {
-    getList().then(data => setList(data))
+    getList().then((data) => setList(data))
   }, [])
 
   useEffect(() => {
@@ -35,17 +34,24 @@ const App = () => {
     )
   }, [year, list])
 
+  const handleYearChanging = (event) => {
+    setYear(Number(event.target.value))
+  }
+
   return (
     <>
-      <Header setList={setList}/>
-      <div className='app'>
-        <AddForm list={list} setList={setList} />
-        <Diagram filteredList={filteredList} />
-        <List
+      <Header setList={setList} />
+      <div className="app">
+        <Dashboard
+          filteredList={filteredList}
+          handleYearChanging={handleYearChanging}
+        />
+        <Expenses
           list={list}
           setList={setList}
           filteredList={filteredList}
           setYear={setYear}
+          handleYearChanging={handleYearChanging}
         />
       </div>
     </>

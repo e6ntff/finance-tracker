@@ -6,13 +6,12 @@ import Select from '../Select/Select'
 import NoExpenses from '../NoExpenses/NoExpenses'
 
 const List = (props) => {
-  const handleYearChanging = (event) => {
-    props.setYear(Number(event.target.value))
-  }
-
   return (
     <>
-      <Select handleYearChanging={handleYearChanging} setList={props.setList} />
+      <Select
+        handleYearChanging={props.handleYearChanging}
+        setList={props.setList}
+      />
       {!props.filteredList.length && <NoExpenses />}
       <ul className={styles.list}>
         {props.filteredList.map((item) => (

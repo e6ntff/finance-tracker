@@ -88,9 +88,9 @@ const App = () => {
             path={paths.home}
             element={
               <>
-                <Header />
+                <Header setList={setList} />
                 <div className="app">
-                  <Home list={list}/>
+                  <Home list={list} />
                 </div>
               </>
             }

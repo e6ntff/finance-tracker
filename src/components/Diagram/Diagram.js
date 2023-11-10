@@ -2,7 +2,7 @@ import React from 'react'
 
 import styles from './Diagram.module.scss'
 
-import DiagramBar from './DiagramBar/DiagramBar'
+import DiagramBar from '../DiagramBar/DiagramBar'
 
 const Diagram = (props) => {
   let maxValue = 0

@@ -1,0 +1,13 @@
+@import '../../vendor/variables.scss';
+
+.diagram {
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+  grid-gap: 0 2.5%;
+  justify-content: space-between;
+  inline-size: 75%;
+  list-style: none;
+  justify-self: center;
+}

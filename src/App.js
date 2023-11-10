@@ -47,12 +47,7 @@ const App = () => {
     <>
       <Router basename={paths.basename}>
         <Routes>
-          <Route
-            path=""
-            element={
-              <Navigate to={`${paths.basename}${paths.dashboard}`} replace />
-            }
-          />
+          <Route path="/" element={<Navigate to={paths.home} />} />
           <Route
             path={paths.dashboard}
             element={

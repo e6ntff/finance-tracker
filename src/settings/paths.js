@@ -1,5 +1,5 @@
 const paths = {
-	basename: '/expenses-manager/',
+	basename: '/',
 	home: '/home',
 	dashboard: '/dashboard',
 	expenses: '/expenses',

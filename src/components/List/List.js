@@ -9,6 +9,7 @@ const List = (props) => {
   return (
     <>
       <Select
+        year={props.year}
         handleYearChanging={props.handleYearChanging}
         setList={props.setList}
       />

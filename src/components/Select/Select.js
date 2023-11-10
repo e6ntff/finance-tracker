@@ -6,6 +6,7 @@ const Select = (props) => {
   return (
     <div className={styles.label}>
       <select
+        value={props.year}
         name="yearSelect"
         className={styles.select}
         onChange={props.handleYearChanging}

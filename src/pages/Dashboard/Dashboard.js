@@ -9,6 +9,7 @@ const Dashboard = (props) => {
   return (
     <div className={styles.dashboard}>
       <Select
+        year={props.year}
         handleYearChanging={props.handleYearChanging}
         setList={props.setList}
       />

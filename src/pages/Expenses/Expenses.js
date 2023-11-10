@@ -10,11 +10,12 @@ const Expenses = (props) => {
     <div className={styles.expenses}>
       <AddForm list={props.list} setList={props.setList} />
       <List
+        year={props.year}
         list={props.list}
         setList={props.setList}
         filteredList={props.filteredList}
         setYear={props.setYear}
-				handleYearChanging={props.handleYearChanging}
+        handleYearChanging={props.handleYearChanging}
       />
     </div>
   )

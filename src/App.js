@@ -50,6 +50,7 @@ const App = () => {
                 <Header setList={setList} />
                 <div className="app">
                   <Dashboard
+                    year={year}
                     filteredList={filteredList}
                     handleYearChanging={handleYearChanging}
                   />
@@ -64,6 +65,7 @@ const App = () => {
                 <Header setList={setList} />
                 <div className="app">
                   <Expenses
+                    year={year}
                     list={list}
                     setList={setList}
                     filteredList={filteredList}
@@ -75,7 +77,7 @@ const App = () => {
             }
           />
           <Route
-            path={paths.home  }
+            path={paths.home}
             element={
               <>
                 <Header setList={setList} />

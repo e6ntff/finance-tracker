@@ -4,6 +4,7 @@ import styles from './Header.module.scss'
 import ThemeCheckbox from '../ThemeCheckbox/ThemeCheckbox'
 import RefreshButton from '../RefreshButton/RefreshButton'
 import Navigation from '../Navigation/Navigation'
+import Links from '../Links/LInks'
 
 const Header = (props) => {
   return (
@@ -12,6 +13,7 @@ const Header = (props) => {
       <div className={styles.other}>
         <RefreshButton setList={props.setList} />
         <ThemeCheckbox />
+        <Links />
       </div>
     </header>
   )

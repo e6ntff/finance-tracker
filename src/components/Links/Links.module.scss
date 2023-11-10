@@ -1,0 +1,21 @@
+.list {
+	display: flex;
+	gap: 15px;
+	justify-content: space-between;
+	list-style: none;
+}
+
+.item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+svg {
+	block-size: 100%;
+}
+
+.github > path {
+  fill: var(--github-logo);
+  transition: all 0.3s;
+}

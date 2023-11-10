@@ -1,0 +1,16 @@
+@import '../../vendor/variables.scss';
+
+.header {
+	display: flex;
+	justify-content: space-between;
+  position: sticky;
+  inset: 0;
+  inline-size: 100%;
+  padding-block: 2.5%;
+	padding-inline: 5%;
+	z-index: 1;
+  background: var(--bg-color);
+	box-shadow: var(--box-shadow);
+	border-end-start-radius: 8px;
+	border-end-end-radius: 8px;
+}

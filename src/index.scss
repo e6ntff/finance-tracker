@@ -12,7 +12,6 @@ body {
   margin: auto;
   font-family: var(--main-font);
   padding-inline: 20px;
-  padding-block: 10%;
   inline-size: clamp(300px, 100vw, 1000px);
   min-block-size: 100vh;
   background: var(--accent-color);
@@ -20,4 +19,5 @@ body {
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
+  transition: all 0.3s;
 }

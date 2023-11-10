@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import styles from './AddForm.module.scss'
-import ThemeCheckbox from '../ThemeCheckbox/ThemeCheckbox'
 
 import getTodayDate from '../../utils/date'
 
@@ -53,7 +52,6 @@ const AddForm = (props) => {
 
   return (
     <>
-      <ThemeCheckbox />
       <button
         className={`${styles.button} ${styles.setButton}`}
         onClick={() => toggleFormDisplay(true)}

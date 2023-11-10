@@ -11,7 +11,6 @@ const ThemeCheckbox = () => {
   return (
     <>
       <label className={styles.label}>
-        _____
         <input
           type="checkbox"
           name="checkbox"

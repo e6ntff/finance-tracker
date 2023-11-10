@@ -11,7 +11,7 @@ const RefreshButton = (props) => {
 
   return (
     <button className={styles.button} onClick={refresh}>
-      ⟳
+      Fetch
     </button>
   )
 }

@@ -1,16 +1,31 @@
 // @import '../../vendor/variables.scss';
 
 .header {
-	display: flex;
-	justify-content: space-between;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 2em;
   position: sticky;
   inset: 0;
   inline-size: 100%;
   padding-block: 2.5%;
-	padding-inline: 5%;
-	z-index: 1;
+  padding-inline: 5%;
+  z-index: 1;
   background: var(--bg-color);
-	box-shadow: var(--box-shadow);
-	border-end-start-radius: 8px;
-	border-end-end-radius: 8px;
+  box-shadow: var(--box-shadow);
+  border-end-start-radius: 8px;
+  border-end-end-radius: 8px;
+}
+
+.other {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+@media (width < 600px) {
+  .header {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
 }

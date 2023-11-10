@@ -1,0 +1,31 @@
+.nav {
+	display: flex;
+}
+
+.list {
+	inline-size: 100%;
+  list-style: none;
+  display: flex;
+	gap: 30px;
+  justify-content: space-between;
+}
+
+.button {
+	block-size: 100%;
+  color: var(--text-color);
+  inline-size: 100%;
+  padding: .5%;
+  font-size: 1.5em;
+  font-family: var(--main-font);
+  background-color: #0000;
+  cursor: pointer;
+  border: none;
+  transition: color 0.3s;
+  &:hover {
+    color: var(--hover-color);
+  }
+}
+
+.active > .button {
+	text-decoration: underline;
+}

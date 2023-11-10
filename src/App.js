@@ -45,14 +45,9 @@ const App = () => {
 
   return (
     <>
-      <Router basename={paths.basename}>
+      <Router basename="/expenses-manager">
         <Routes>
-          <Route
-            path=""
-            element={
-              <Navigate to={`${paths.basename}${paths.dashboard}`} replace />
-            }
-          />
+          <Route path="" element={<Navigate to="/home" />} />
           <Route
             path={paths.dashboard}
             element={

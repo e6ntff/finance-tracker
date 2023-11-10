@@ -10,6 +10,8 @@
 
 body {
   margin: auto;
+  min-block-size: 100vh;
+  padding-block-end: 20px;
   font-family: var(--main-font);
   padding-inline: 20px;
   inline-size: clamp(300px, 100vw, 1000px);

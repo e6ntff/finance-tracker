@@ -15,6 +15,14 @@ const Navigation = () => {
       <ul className={styles.list}>
         <li className={styles.item}>
           <NavLink
+            to={paths.home}
+            className={isActivePath(paths.home) ? styles.active : ''}
+          >
+            <button className={styles.button}>Home</button>
+          </NavLink>
+        </li>
+        <li className={styles.item}>
+          <NavLink
             to={paths.dashboard}
             className={isActivePath(paths.dashboard) ? styles.active : ''}
           >

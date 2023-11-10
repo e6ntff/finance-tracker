@@ -11,6 +11,7 @@ import './App.scss'
 import Header from './components/Header/Header'
 import Expenses from './pages/Expenses/Expenses'
 import Dashboard from './pages/Dashboard/Dashboard'
+import Home from './pages/Home/Home'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 
 import sortByDate from './utils/sortByDate'
@@ -83,7 +84,18 @@ const App = () => {
               </>
             }
           />
-          <Route path='/*' element={<PageNotFound />} />
+          <Route
+            path={paths.home}
+            element={
+              <>
+                <Header />
+                <div className="app">
+                  <Home list={list}/>
+                </div>
+              </>
+            }
+          />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </>

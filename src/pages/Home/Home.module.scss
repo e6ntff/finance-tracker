@@ -1,0 +1,26 @@
+.home {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 30px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  inline-size: 50%;
+}
+
+.title {
+  font-size: 1.5em;
+  font-weight: 500;
+  font-family: var(--main-font);
+  color: var(--text-color);
+}
+
+@media (width < 600px) {
+  .home {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

@@ -4,6 +4,7 @@ import styles from './Dashboard.module.scss'
 
 import Diagram from '../../components/Diagram/Diagram'
 import Select from '../../components/Select/Select'
+import NoExpenses from '../../components/NoExpenses/NoExpenses'
 
 const Dashboard = (props) => {
   return (
@@ -13,7 +14,12 @@ const Dashboard = (props) => {
         handleYearChanging={props.handleYearChanging}
         setList={props.setList}
       />
-      <Diagram filteredList={props.filteredList} />
+      {/* <Diagram filteredList={props.filteredList} /> */}
+      {props.filteredList.length ? (
+        <Diagram filteredList={props.filteredList} />
+      ) : (
+        <NoExpenses />
+      )}
     </div>
   )
 }

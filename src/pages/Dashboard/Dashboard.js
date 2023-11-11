@@ -14,7 +14,6 @@ const Dashboard = (props) => {
         handleYearChanging={props.handleYearChanging}
         setList={props.setList}
       />
-      {/* <Diagram filteredList={props.filteredList} /> */}
       {props.filteredList.length ? (
         <Diagram filteredList={props.filteredList} />
       ) : (

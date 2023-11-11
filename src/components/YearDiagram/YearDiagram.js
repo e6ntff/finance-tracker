@@ -5,24 +5,42 @@ import styles from './YearDiagram.module.scss'
 import DiagramBar from '../DiagramBar/DiagramBar'
 
 const YearDiagram = (props) => {
-  const data = [
-    { year: '2020', value: 0 },
-    { year: '2021', value: 0 },
-    { year: '2022', value: 0 },
-    { year: '2023', value: 0 },
-  ]
+  const yearsRange = props.list.reduce(
+    (range, item) => {
+      const year = new Date(item.date).getFullYear()
+      range.min = Math.min(range.min, year)
+      range.max = Math.max(range.max, year)
+      return range
+    },
+    { min: Infinity, max: -Infinity }
+  )
 
-  for (const item in props.list) {
-    const currentYear = new Date(props.list[item].date).getFullYear()
+  const yearsArray = Array.from(
+    { length: yearsRange.max - yearsRange.min + 1 },
+    (_, index) => yearsRange.min + index
+  )
 
-    data[currentYear - data[0].year].value += props.list[item].price
-  }
+  const data = yearsArray.map((year) => {
+    return {
+      year: year.toString(),
+      value: 0,
+    }
+  })
 
-  const maxValue = Math.max(...data.map((item) => item.value))
+  const dataWithValues = props.list.reduce((acc, item) => {
+    const currentYear = new Date(item.date).getFullYear()
+    const index = currentYear - yearsRange.min
+
+    acc[index].value += item.price
+
+    return acc
+  }, data)
+
+  const maxValue = Math.max(...dataWithValues.map((item) => item.value))
 
   return (
     <ul className={styles.diagram}>
-      {data.map((item) => (
+      {dataWithValues.map((item) => (
         <DiagramBar
           key={item.year}
           month={item.year}

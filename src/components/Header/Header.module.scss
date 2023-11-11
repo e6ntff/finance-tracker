@@ -2,7 +2,7 @@
 
 .header {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 2fr;
   grid-template-rows: 1fr;
   gap: 2em;
   position: sticky;
@@ -15,15 +15,20 @@
   box-shadow: var(--box-shadow);
   border-end-start-radius: 8px;
   border-end-end-radius: 8px;
+  transition: all 0.3s;
 }
 
 .other {
-  display: flex;
+  inline-size: 100%;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
   justify-content: space-between;
   gap: 30px;
 }
 
-@media (width < 600px) {
+@media (width < 750px) {
   .header {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;

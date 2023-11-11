@@ -1,21 +1,26 @@
 .list {
-	display: flex;
-	gap: 15px;
-	justify-content: space-between;
-	list-style: none;
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  list-style: none;
 }
 
 .item {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 svg {
-	block-size: 100%;
+  block-size: 100%;
+  transition: all 0.3s;
 }
 
-.github > path {
+.github path {
   fill: var(--github-logo);
   transition: all 0.3s;
+}
+
+svg:hover {
+  transform: scale(1.025);
 }

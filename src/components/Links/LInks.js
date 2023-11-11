@@ -6,7 +6,7 @@ const Links = () => {
   return (
     <ul className={styles.list}>
       <li className={styles.item}>
-        <a href="https://github.com/e6ntff" target="_blank">
+        <a href="https://github.com/e6ntff" target="_blank" rel="noreferrer">
           <svg
             className={styles.github}
             width="32px"
@@ -22,8 +22,9 @@ const Links = () => {
         </a>
       </li>
       <li className={styles.item}>
-        <a href="https://t.me/e6ntff" target="_blank">
+        <a href="https://t.me/e6ntff" target="_blank" rel="noreferrer">
           <svg
+            className={styles.telegram}
             width="34px"
             height="34px"
             viewBox="0 0 30 30"

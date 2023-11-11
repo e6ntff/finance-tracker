@@ -25,7 +25,7 @@ const App = () => {
   )
 
   useEffect(() => {
-    setList(sortByDate(list))
+    setList(prevList => sortByDate(prevList))
     localStorage.setItem('list', JSON.stringify(list))
   }, [list])
 

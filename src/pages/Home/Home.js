@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import styles from './Home.module.scss'
 
@@ -7,14 +7,14 @@ import YearDiagram from '../../components/YearDiagram/YearDiagram'
 const Home = (props) => {
   const [total, setTotal] = useState(0)
 
-  const getTotal = () => {
-    const totalPrice = props.list.reduce((acc, item) => acc + item.price, 0)
-    setTotal(totalPrice)
-  }
+  const totalPrice = useMemo(
+    () => props.list.reduce((acc, item) => acc + item.price, 0),
+    [props.list]
+  )
 
   useEffect(() => {
-    getTotal()
-  }, [props.list])
+    setTotal(totalPrice)
+  }, [totalPrice, setTotal])
 
   return (
     <div className={styles.home}>

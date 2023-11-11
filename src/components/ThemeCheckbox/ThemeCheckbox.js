@@ -1,12 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import styles from './ThemeCheckbox.module.scss'
 import setTheme from '../../utils/themes'
 
 const ThemeCheckbox = () => {
-  const [checked, setChecked] = useState(false)
+  useEffect(() => {
+    localStorage.setItem('theme', 'light')
+  }, [])
 
-  setTheme(checked)
+  const [checked, setChecked] = useState(
+    localStorage.getItem('theme') === 'dark'
+  )
+
+  useEffect(() => {
+    setTheme(checked)
+    localStorage.setItem('theme', checked ? 'dark' : 'light')
+  }, [checked])
 
   return (
     <>
@@ -17,7 +26,7 @@ const ThemeCheckbox = () => {
           className={styles.hidden}
           id="theme-checkbox"
           checked={checked}
-          onChange={() => setChecked(!checked)}
+          onChange={() => setChecked((prevChecked) => !prevChecked)}
         />
         <span className={styles.pseudo}></span>
       </label>

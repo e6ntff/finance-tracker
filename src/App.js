@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 
 import './App.scss'
@@ -13,8 +13,11 @@ import sortByDate from './utils/sortByDate'
 import paths from './settings/paths'
 
 const App = () => {
+  if (!JSON.parse(localStorage.getItem('list')))
+    localStorage.setItem('list', '[]')
+
   const [list, setList] = useState(
-    JSON.parse(localStorage.getItem('list')) || []
+    sortByDate(JSON.parse(localStorage.getItem('list')))
   )
 
   const [year, setYear] = useState(2023)
@@ -25,13 +28,13 @@ const App = () => {
   )
 
   useEffect(() => {
-    setList(prevList => sortByDate(prevList))
+    setList((prevList) => sortByDate(prevList))
     localStorage.setItem('list', JSON.stringify(list))
   }, [list])
 
-  const handleYearChanging = (event) => {
+  const handleYearChanging = useCallback((event) => {
     setYear(Number(event.target.value))
-  }
+  }, [])
 
   return (
     <>

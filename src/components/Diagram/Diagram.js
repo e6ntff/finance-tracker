@@ -22,19 +22,25 @@ const Diagram = (props) => {
     { month: 'Dec', value: 0 },
   ]
 
-  for (const item in props.filteredList) {
-    const currentMonth = new Date(props.filteredList[item].date).getMonth()
+  for (const item of props.filteredList) {
+    const currentMonth = new Date(item.date).getMonth()
 
-    data[currentMonth].value += props.filteredList[item].price
+    data[currentMonth].value += item.price
 
-    if (props.filteredList[item].price > maxValue)
-      maxValue = props.filteredList[item].price
+    if (item.price > maxValue) {
+      maxValue = item.price
+    }
   }
 
   return (
     <ul className={styles.diagram}>
       {data.map((item) => (
-        <DiagramBar key={item.month} month={item.month} value={item.value} maxValue={maxValue}/>
+        <DiagramBar
+          key={item.month}
+          month={item.month}
+          value={item.value}
+          maxValue={maxValue}
+        />
       ))}
     </ul>
   )

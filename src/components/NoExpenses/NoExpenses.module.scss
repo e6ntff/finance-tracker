@@ -1,6 +1,7 @@
 // @import '../../vendor/variables.scss';
 
 .text {
+	color: var(--text-color);
 	inline-size: 100%;
 	text-align: center;
 	font-size: 2.5em;

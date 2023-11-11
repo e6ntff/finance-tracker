@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 
 import './App.scss'
@@ -19,20 +19,15 @@ const App = () => {
 
   const [year, setYear] = useState(2023)
 
-  const [filteredList, setFilteredList] = useState(
-    list.filter((item) => new Date(item.date).getFullYear() === year)
+  const filteredList = useMemo(
+    () => list.filter((item) => new Date(item.date).getFullYear() === year),
+    [year, list]
   )
 
   useEffect(() => {
     setList(sortByDate(list))
     localStorage.setItem('list', JSON.stringify(list))
   }, [list])
-
-  useEffect(() => {
-    setFilteredList(
-      list.filter((item) => new Date(item.date).getFullYear() === year)
-    )
-  }, [year, list])
 
   const handleYearChanging = (event) => {
     setYear(Number(event.target.value))

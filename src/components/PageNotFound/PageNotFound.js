@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
 import styles from './PageNotFound.module.scss'
 import paths from '../../settings/paths'
+import { LanguageContext } from '../LanguageContext/LanguageContext'
 
 const PageNotFound = () => {
   const [time, setTime] = useState(5)
@@ -23,11 +24,13 @@ const PageNotFound = () => {
     }
   }, [navigate, time])
 
+  const { language, languages } = useContext(LanguageContext)
+
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>404</h1>
       <span className={styles.redirect}>
-        Redirecting to home page in {time} seconds...
+        {languages.notFound[language](time)}
       </span>
     </div>
   )

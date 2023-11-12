@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import styles from './AddForm.module.scss'
+
+import {LanguageContext} from '../LanguageContext/LanguageContext';
 
 import getTodayDate from '../../utils/date'
 
@@ -50,6 +52,8 @@ const AddForm = (props) => {
     )
   }
 
+  const { language, languages } = useContext(LanguageContext)
+
   return (
     <>
       <button
@@ -57,7 +61,7 @@ const AddForm = (props) => {
         onClick={() => toggleFormDisplay(true)}
         style={{ display: formAndButtonDisplay.button }}
       >
-        Add new expense
+        {languages.addExpense[language]}
       </button>
       <form
         className={styles.form}
@@ -65,7 +69,7 @@ const AddForm = (props) => {
         style={{ display: formAndButtonDisplay.form }}
       >
         <label className={styles.label} htmlFor="title">
-          Title
+          {languages.title[language]}
         </label>
         <input
           required
@@ -77,7 +81,7 @@ const AddForm = (props) => {
           onChange={handleFormChange}
         />
         <label className={styles.label} htmlFor="price">
-          Price
+          {languages.price[language]}
         </label>
         <input
           required
@@ -91,7 +95,7 @@ const AddForm = (props) => {
           onChange={handleFormChange}
         />
         <label className={styles.label} htmlFor="date">
-          Date
+          {languages.date[language]}
         </label>
         <input
           required
@@ -110,7 +114,7 @@ const AddForm = (props) => {
             className={styles.button}
             onClick={() => toggleFormDisplay(false)}
           >
-            Add
+            {languages.add[language]}
           </button>
           <button
             type="button"
@@ -120,7 +124,7 @@ const AddForm = (props) => {
               clearItem()
             }}
           >
-            Cancel
+            {languages.cancel[language]}
           </button>
         </div>
       </form>

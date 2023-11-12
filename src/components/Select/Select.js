@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { LanguageContext } from '../LanguageContext/LanguageContext'
 
 import styles from './Select.module.scss'
 
 const Select = (props) => {
+  const { language, languages } = useContext(LanguageContext)
+
   return (
     <div className={styles.label}>
       <select
@@ -16,7 +19,7 @@ const Select = (props) => {
         <option value="2021">2021</option>
         <option value="2020">2020</option>
       </select>
-      <span className={styles.text}>Filter by year</span>
+      <span className={styles.text}>{languages.filterByYear[language]}</span>
     </div>
   )
 }

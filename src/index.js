@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-import './vendor/variables.scss'
+import './settings/variables.scss'
 import './vendor/fonts.scss'
 import './index.scss'
 

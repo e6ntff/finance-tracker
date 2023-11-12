@@ -1,9 +1,8 @@
-// @import '../../../vendor/variables.scss';
-
 .bar {
   display: flex;
   gap: 5%;
   flex-direction: column;
+  position: relative;
 }
 
 .column {
@@ -31,6 +30,8 @@
 
 .month,
 .price {
+  white-space: normal;
+  text-align: center;
   color: var(--text-color);
   line-height: 100%;
   block-size: 5%;

@@ -8,7 +8,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
-  gap: 30px;
+  gap: 1em;
   justify-content: space-between;
 }
 
@@ -16,7 +16,6 @@
   block-size: 100%;
   color: var(--text-color);
   inline-size: 100%;
-  padding: 0.5%;
   font-size: 1.5em;
   font-family: var(--main-font);
   background-color: #0000;

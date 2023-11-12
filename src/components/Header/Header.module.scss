@@ -1,15 +1,12 @@
-// @import '../../vendor/variables.scss';
-
 .header {
   display: grid;
   grid-template-columns: 3fr 2fr;
   grid-template-rows: 1fr;
-  gap: 2em;
+  gap: 1em;
   position: sticky;
   inset: 0;
   inline-size: 100%;
-  padding-block: 2.5%;
-  padding-inline: 5%;
+  padding: 2.5%;
   z-index: 1;
   background: var(--bg-color);
   box-shadow: var(--box-shadow);
@@ -25,7 +22,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr;
   justify-content: space-between;
-  gap: 30px;
+  gap: 1em;
 }
 
 @media (width < 750px) {

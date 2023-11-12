@@ -1,5 +1,3 @@
-@import './vendor/variables.scss';
-
 *,
 *::before,
 *::after {
@@ -11,10 +9,10 @@
 body {
   margin: auto;
   min-block-size: 100vh;
-  // inline-size: 100vw;
   font-family: var(--main-font);
   padding-inline: 20px;
   inline-size: clamp(300px, 100vw, 1000px);
+  font-size: var(--font-size);
   background: var(--accent-color);
   display: flex;
   justify-content: center;

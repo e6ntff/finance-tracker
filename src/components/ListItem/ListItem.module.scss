@@ -1,6 +1,3 @@
-// @import '../../vendor/variables.scss';
-// @import '../../vendor/fonts.scss';
-
 .item {
   box-shadow: var(--box-shadow);
   color: var(--text-color);
@@ -71,15 +68,15 @@
 
 .other {
   display: flex;
-  gap: 15px;
+  gap: 1em;
   justify-content: center;
   inline-size: 21%;
 }
 
-@media (width < 800px) {
+@media (width < 600px) {
   .item {
     flex-direction: column;
-    gap: 15px;
+    gap: 0.5em;
   }
   .date,
   .title {
@@ -90,7 +87,7 @@
   }
 }
 
-@media (width < 500px) {
+@media (width < 350px) {
   .date,
   .title {
     inline-size: 100%;

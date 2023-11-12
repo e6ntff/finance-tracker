@@ -41,6 +41,14 @@ const Navigation = () => {
             <button className={styles.button}>{languages.expenses[language]}</button>
           </NavLink>
         </li>
+        <li className={styles.item}>
+          <NavLink
+            to={paths.settings}
+            className={isActivePath(paths.settings) ? styles.active : ''}
+          >
+            <button className={styles.button}>{languages.settings[language]}</button>
+          </NavLink>
+        </li>
       </ul>
     </nav>
   )

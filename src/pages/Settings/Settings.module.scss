@@ -1,0 +1,17 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.name {
+	font-family: var(--main-font);
+	color: var(--text-color);
+	text-shadow: var(--box-shadow);
+}

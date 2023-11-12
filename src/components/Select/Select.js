@@ -7,7 +7,7 @@ const Select = (props) => {
   const { language, languages } = useContext(LanguageContext)
 
   return (
-    <div className={styles.label}>
+    <label className={styles.label}>
       <select
         value={props.year}
         name="yearSelect"
@@ -20,7 +20,7 @@ const Select = (props) => {
         <option value="2020">2020</option>
       </select>
       <span className={styles.text}>{languages.filterByYear[language]}</span>
-    </div>
+    </label>
   )
 }
 

@@ -1,19 +1,21 @@
 .page {
-	inline-size: 100%;
-	block-size: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 2.5vw;
-	font-family: var(--main-font);
-	color: var(--main-text);
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5vw;
+  font-family: var(--main-font);
+  text-align: center;
 }
 
 .title {
-	font-size: 25vw;
+  font-size: 25vw;
+  color: var(--text-color);
 }
 
 .redirect {
-	font-size: 5vw;
+  font-size: 5vw;
+  color: var(--text-color);
 }

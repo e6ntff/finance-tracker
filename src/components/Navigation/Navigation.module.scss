@@ -5,7 +5,9 @@
 .list {
   inline-size: 100%;
   list-style: none;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: 30px;
   justify-content: space-between;
 }
@@ -29,4 +31,11 @@
 
 .active > .button {
   text-decoration: underline;
+}
+
+@media (width < 750px) {
+  .list {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
 }

@@ -2,16 +2,24 @@ import React, { useState, useContext } from 'react'
 
 import styles from './AddForm.module.scss'
 
-import {LanguageContext} from '../LanguageContext/LanguageContext';
+import { LanguageContext } from '../LanguageContext/LanguageContext'
 
 import getTodayDate from '../../utils/date'
+import { calculatePrices, currencyRates } from '../../api/getExchangeRates'
+import FormCurrencySelect from '../FormCurrencySelect/FormCurrencySelect'
 
 const AddForm = (props) => {
+  const [currency, setCurrency] = useState('USD')
+
   const [newItem, setNewItem] = useState({
     id: Math.random(),
     title: '',
     date: getTodayDate(new Date()),
-    price: 0,
+    price: {
+      USD: 0,
+      EUR: 0,
+      RUB: 0,
+    },
   })
 
   const clearItem = () => {
@@ -19,24 +27,48 @@ const AddForm = (props) => {
       id: Math.random(),
       title: '',
       date: getTodayDate(new Date()),
-      price: 0,
+      price: {
+        USD: 0,
+        EUR: 0,
+        RUB: 0,
+      },
     })
   }
 
   const addNewItem = (event) => {
     event.preventDefault()
-    newItem.price = Number(newItem.price)
-    props.setList((prevList) => [newItem, ...prevList])
+
+    setNewItem((prevItem) => {
+      return {
+        ...prevItem,
+        price: calculatePrices(prevItem.price, currencyRates, currency),
+      }
+    })
+
+    props.setList((prevList) => {
+      return [newItem, ...prevList]
+    })
+
     clearItem()
   }
 
   const handleFormChange = (event) => {
     const { name, value } = event.target
 
-    setNewItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }))
+    if (name === 'price') {
+      setNewItem((prevItem) => ({
+        ...prevItem,
+        [name]: {
+          ...prevItem[name],
+          [currency]: Number(value),
+        },
+      }))
+    } else {
+      setNewItem((prevItem) => ({
+        ...prevItem,
+        [name]: value,
+      }))
+    }
   }
 
   const [formAndButtonDisplay, setFormAndButtonDisplay] = useState({
@@ -83,17 +115,20 @@ const AddForm = (props) => {
         <label className={styles.label} htmlFor="price">
           {languages.price[language]}
         </label>
-        <input
-          required
-          className={styles.input}
-          type="number"
-          min="1"
-          step="1"
-          name="price"
-          id="price"
-          value={newItem.price}
-          onChange={handleFormChange}
-        />
+        <div className={styles.prcon}>
+          <FormCurrencySelect currency={currency} setCurrency={setCurrency} />
+          <input
+            required
+            className={styles.input}
+            type="number"
+            min="1"
+            step="1"
+            name="price"
+            id="price"
+            value={newItem.price[currency] || ''}
+            onChange={handleFormChange}
+          />
+        </div>
         <label className={styles.label} htmlFor="date">
           {languages.date[language]}
         </label>

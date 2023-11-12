@@ -23,7 +23,7 @@ const CurrencySelect = () => {
     >
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
-      <option value="RUR">RUR</option>
+      <option value="RUB">RUB</option>
     </select>
   )
 }

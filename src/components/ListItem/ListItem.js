@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styles from './ListItem.module.scss'
 
 import getTodayDate from '../../utils/date'
+
+import { CurrencyContext } from '../CurrencyContext/CurrencyContext'
+import getSymbol from '../../utils/currency'
 
 const ListItem = (props) => {
   const deleteItem = (id) => {
@@ -18,7 +21,7 @@ const ListItem = (props) => {
   })
 
   const handleItemChange = (event) => {
-  let { name, value } = event.target
+    let { name, value } = event.target
 
     if (name === 'price') value = Number(value)
 
@@ -31,10 +34,13 @@ const ListItem = (props) => {
   const updateList = () => {
     props.setList(props.list.map((el) => (el.id === item.id ? item : el)))
   }
-  
+
   useEffect(() => {
     updateList()
   }, [item])
+
+  
+  const { currency } = useContext(CurrencyContext)
 
   return (
     <li className={styles.item}>
@@ -55,13 +61,14 @@ const ListItem = (props) => {
         onChange={handleItemChange}
       />
       <div className={styles.other}>
+        <span className={styles.symbol}>{getSymbol(currency)}</span>
         <input
           type="number"
           name="price"
           min="1"
           step="1"
           className={styles.price}
-          value={item.price}
+          value={Math.round(Number(item.price[currency]))}
           onChange={handleItemChange}
         />
         <button className={styles.button} onClick={() => deleteItem(props.id)}>

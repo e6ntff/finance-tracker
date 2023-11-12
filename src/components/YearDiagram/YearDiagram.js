@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import styles from './YearDiagram.module.scss'
 
 import DiagramBar from '../DiagramBar/DiagramBar'
+import { CurrencyContext } from '../CurrencyContext/CurrencyContext'
 
 const YearDiagram = (props) => {
+  const { currency } = useContext(CurrencyContext)
+
   const yearsRange = props.list.reduce(
     (range, item) => {
       const year = new Date(item.date).getFullYear()
@@ -31,7 +34,7 @@ const YearDiagram = (props) => {
     const currentYear = new Date(item.date).getFullYear()
     const index = currentYear - yearsRange.min
 
-    acc[index].value += item.price
+    acc[index].value += item.price[currency]
 
     return acc
   }, data)

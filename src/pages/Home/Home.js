@@ -5,12 +5,17 @@ import { LanguageContext } from '../../components/LanguageContext/LanguageContex
 import styles from './Home.module.scss'
 
 import YearDiagram from '../../components/YearDiagram/YearDiagram'
+import { CurrencyContext } from '../../components/CurrencyContext/CurrencyContext'
+
+import getSymbol from '../../utils/currency'
 
 const Home = (props) => {
+  const { currency } = useContext(CurrencyContext)
+
   const [total, setTotal] = useState(0)
 
   const totalPrice = useMemo(
-    () => props.list.reduce((acc, item) => acc + item.price, 0),
+    () => props.list.reduce((acc, item) => acc + item.price[currency], 0),
     [props.list]
   )
 
@@ -26,7 +31,7 @@ const Home = (props) => {
       <div className={styles.data}>
         <div className={styles.container}>
           <h2 className={styles.title}>{languages.total[language]}</h2>
-          <span className={styles.title}>${total}</span>
+          <span className={styles.title}>{getSymbol(currency) + total}</span>
         </div>
         {/* categories - TODO */}
       </div>

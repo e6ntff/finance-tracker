@@ -1,0 +1,17 @@
+.select {
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  inline-size: 20%;
+  background: var(--accent-color);
+  color: var(--text-color);
+  padding: 1%;
+  font-size: 1.5em;
+  font-family: var(--main-font);
+  padding: 10px;
+  border: 1px solid var(--text-color);
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  &:hover {
+    background: var(--hover-color);
+  }
+}

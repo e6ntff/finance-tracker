@@ -1,11 +1,14 @@
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 
 import styles from './Diagram.module.scss'
 
 import DiagramBar from '../DiagramBar/DiagramBar'
+import { CurrencyContext } from '../CurrencyContext/CurrencyContext'
+import { calculatePrices, currencyRates } from '../../api/getExchangeRates'
 
 const Diagram = (props) => {
-  
+  const { currency } = useContext(CurrencyContext)
+
   const data = useMemo(() => {
     const newData = [
       { month: 'Jan', value: 0 },
@@ -23,14 +26,14 @@ const Diagram = (props) => {
     ]
 
     for (const item of props.filteredList) {
+      item.price = calculatePrices(item.price, currencyRates)
       const currentMonth = new Date(item.date).getMonth()
-
-      newData[currentMonth].value += item.price
+      newData[currentMonth].value += item.price[currency]
     }
 
     newData.maxValue = Math.max(...newData.map((item) => item.value))
     return newData
-  }, [props.filteredList])
+  }, [props.filteredList, currency])
 
   return (
     <ul className={styles.diagram}>

@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -15,6 +14,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import Home from './pages/Home/Home'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import { LanguageProvider } from './components/LanguageContext/LanguageContext'
+import { CurrencyProvider } from './components/CurrencyContext/CurrencyContext'
 
 import sortByDate from './utils/sortByDate'
 import paths from './settings/paths'
@@ -47,40 +47,42 @@ const App = () => {
   return (
     <>
       <LanguageProvider>
-        <Router>
-          <Header setList={setList} />
-          <div className="app">
-            <Routes>
-              <Route path="/" element={<Navigate to={paths.home} />} />
-              <Route
-                path={paths.dashboard}
-                element={
-                  <Dashboard
-                    year={year}
-                    filteredList={filteredList}
-                    handleYearChanging={handleYearChanging}
-                  />
-                }
-              />
-              <Route
-                path={paths.expenses}
-                element={
-                  <Expenses
-                    year={year}
-                    list={list}
-                    setList={setList}
-                    filteredList={filteredList}
-                    setYear={setYear}
-                    handleYearChanging={handleYearChanging}
-                  />
-                }
-              />
-              <Route path={paths.home} element={<Home list={list} />} />
-              <Route path={paths.settings} element={<Settings />} />
-              <Route path="/*" element={<PageNotFound />} />
-            </Routes>
-          </div>
-        </Router>
+        <CurrencyProvider>
+          <Router>
+            <Header setList={setList} />
+            <div className="app">
+              <Routes>
+                <Route path="/" element={<Navigate to={paths.home} />} />
+                <Route
+                  path={paths.dashboard}
+                  element={
+                    <Dashboard
+                      year={year}
+                      filteredList={filteredList}
+                      handleYearChanging={handleYearChanging}
+                    />
+                  }
+                />
+                <Route
+                  path={paths.expenses}
+                  element={
+                    <Expenses
+                      year={year}
+                      list={list}
+                      setList={setList}
+                      filteredList={filteredList}
+                      setYear={setYear}
+                      handleYearChanging={handleYearChanging}
+                    />
+                  }
+                />
+                <Route path={paths.home} element={<Home list={list} />} />
+                <Route path={paths.settings} element={<Settings />} />
+                <Route path="/*" element={<PageNotFound />} />
+              </Routes>
+            </div>
+          </Router>
+        </CurrencyProvider>
       </LanguageProvider>
     </>
   )

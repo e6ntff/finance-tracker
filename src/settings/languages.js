@@ -62,7 +62,11 @@ const languages = {
 	language: {
 		en: 'Language',
 		ru: 'Язык'
-	}
+	},
+  currency: {
+    en: 'Currency',
+    ru: 'Валюта'
+  }
 }
 
 export default languages

@@ -4,10 +4,10 @@ import styles from './Diagram.module.scss'
 
 import DiagramBar from '../DiagramBar/DiagramBar'
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext'
-import { calculatePrices, currencyRates } from '../../api/getExchangeRates'
+import { calculatePrices } from '../../api/getExchangeRates'
 
 const Diagram = (props) => {
-  const { currency } = useContext(CurrencyContext)
+  const { currency, currencyRates } = useContext(CurrencyContext)
 
   const data = useMemo(() => {
     const newData = [

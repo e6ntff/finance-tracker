@@ -1,12 +1,24 @@
 import React, { createContext, useState, useEffect } from 'react'
-import {currencyRates} from '../../api/getExchangeRates'
+import { getExchangeRates } from '../../api/getExchangeRates'
 
 const CurrencyContext = createContext()
 
 function CurrencyProvider({ children }) {
-  if (localStorage.getItem('curr') === null) localStorage.setItem('curr', 'USD')
-
   const [currency, setCurrency] = useState(localStorage.getItem('curr'))
+  const [currencyRates, setCurrencyRates] = useState({})
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const rates = await getExchangeRates()
+        setCurrencyRates(rates.rates)
+      } catch (error) {
+        console.error('Error fetching currency rates:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   return (
     <CurrencyContext.Provider value={{ currency, setCurrency, currencyRates }}>

@@ -5,10 +5,13 @@ import styles from './AddForm.module.scss'
 import { LanguageContext } from '../LanguageContext/LanguageContext'
 
 import getTodayDate from '../../utils/date'
-import { calculatePrices, currencyRates } from '../../api/getExchangeRates'
+import { calculatePrices } from '../../api/getExchangeRates'
 import FormCurrencySelect from '../FormCurrencySelect/FormCurrencySelect'
+import { CurrencyContext } from '../CurrencyContext/CurrencyContext'
 
 const AddForm = (props) => {
+  const { currencyRates } = useContext(CurrencyContext)
+
   const [currency, setCurrency] = useState('USD')
 
   const [newItem, setNewItem] = useState({

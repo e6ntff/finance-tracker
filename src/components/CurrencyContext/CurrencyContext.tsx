@@ -30,10 +30,15 @@ interface CurrencyProviderProps {
 }
 
 const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children }) => {
+  useEffect(() => {
+    if (localStorage.getItem('curr') === null)
+      localStorage.setItem('curr', 'USD');
+  }, []);
+
   const CurrencyFromLocal: string | null = localStorage.getItem('curr');
 
   const [currency, setCurrency] = useState<string>(
-    typeof CurrencyFromLocal === 'string' ? CurrencyFromLocal : ''
+    typeof CurrencyFromLocal === 'string' ? CurrencyFromLocal : 'USD'
   );
   const [currencyRates, setCurrencyRates] = useState<{
     EUR: number;

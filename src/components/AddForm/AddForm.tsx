@@ -49,6 +49,7 @@ const AddForm: React.FC<any> = (props) => {
     });
 
     props.setList((prevList: ExpenseItem[]) => {
+      console.log(newItem)
       return [newItem, ...prevList];
     });
 

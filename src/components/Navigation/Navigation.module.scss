@@ -6,7 +6,7 @@
   inline-size: 100%;
   list-style: none;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, min-content);
   grid-template-rows: 1fr;
   gap: 1em;
   justify-content: space-between;
@@ -32,7 +32,7 @@
   text-decoration: underline;
 }
 
-@media (width < 768px) {
+@media (width < 360px) {
   .list {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;

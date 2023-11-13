@@ -38,3 +38,11 @@
   inline-size: 100%;
   text-align: center;
 }
+
+.month::before,
+.month::after {
+  content: "*";
+  color: #0000;
+  block-size: 100%;
+  inline-size: 100%;
+}

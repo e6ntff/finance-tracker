@@ -73,7 +73,7 @@
   inline-size: 21%;
 }
 
-@media (width < 600px) {
+@media (width < 768px) {
   .item {
     flex-direction: column;
     gap: 0.5em;
@@ -87,7 +87,7 @@
   }
 }
 
-@media (width < 350px) {
+@media (width < 360px) {
   .date,
   .title {
     inline-size: 100%;

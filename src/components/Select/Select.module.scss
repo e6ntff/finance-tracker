@@ -1,6 +1,3 @@
-// @import '../../vendor/variables.scss';
-// @import '../../vendor/fonts.scss';
-
 .select {
   cursor: pointer;
   box-shadow: var(--box-shadow);
@@ -36,7 +33,7 @@
   font-weight: 500;
 }
 
-@media (width < 600px) {
+@media (width < 768px) {
   .label {
     inline-size: 100%;
   }

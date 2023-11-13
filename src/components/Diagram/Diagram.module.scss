@@ -10,7 +10,7 @@
   list-style: none;
 }
 
-@media (width < 1000px) {
+@media (width < 768px) {
   .diagram {
     grid-gap: 5% 10%;
     aspect-ratio: 0.75;
@@ -19,7 +19,7 @@
   }
 }
 
-@media (width < 700px) {
+@media (width < 360px) {
   .diagram {
     grid-gap: 2.5% 10%;
     grid-template-columns: repeat(4, 1fr);

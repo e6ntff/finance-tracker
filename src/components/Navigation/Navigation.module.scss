@@ -32,7 +32,7 @@
   text-decoration: underline;
 }
 
-@media (width < 750px) {
+@media (width < 768px) {
   .list {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;

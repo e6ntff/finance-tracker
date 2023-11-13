@@ -6,3 +6,15 @@
   list-style: none;
   justify-self: center;
 }
+
+@media (width < 768px) {
+  .diagram {
+    inline-size: 75%;
+  }
+}
+
+@media (width < 360px) {
+  .diagram {
+    inline-size: 100%;
+  }
+}

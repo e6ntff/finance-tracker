@@ -29,6 +29,7 @@ const calculatePrices = (prices, rates, currency) => {
       prices['EUR'] = Math.round((prices['RUB'] / rates['RUB']) * rates['EUR'])
       prices['USD'] = Math.round(prices['RUB'] / rates['RUB'])
       break
+    default:
   }
 
   return prices

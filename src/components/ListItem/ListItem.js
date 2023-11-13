@@ -31,15 +31,10 @@ const ListItem = (props) => {
     }))
   }
 
-  const updateList = () => {
-    props.setList(props.list.map((el) => (el.id === item.id ? item : el)))
-  }
-
   useEffect(() => {
-    updateList()
+    props.setList(props.list.map((el) => (el.id === item.id ? item : el)))
   }, [item])
 
-  
   const { currency } = useContext(CurrencyContext)
 
   return (

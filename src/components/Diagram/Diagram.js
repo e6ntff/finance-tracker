@@ -33,7 +33,7 @@ const Diagram = (props) => {
 
     newData.maxValue = Math.max(...newData.map((item) => item.value))
     return newData
-  }, [props.filteredList, currency])
+  }, [props.filteredList, currency, currencyRates])
 
   return (
     <ul className={styles.diagram}>

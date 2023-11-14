@@ -1,34 +1,42 @@
-import React from 'react'
-import ListItem from '../ListItem/ListItem'
-import styles from './List.module.scss'
+import React, { useState, useCallback, useMemo } from 'react';
+import ListItem from '../ListItem/ListItem';
+import styles from './List.module.scss';
 
-import Select from '../Select/Select'
-import NoExpenses from '../NoExpenses/NoExpenses'
+import Select from '../Select/Select';
+import NoExpenses from '../NoExpenses/NoExpenses';
+import { useSelector } from 'react-redux';
 
-const List: React.FC<any> = (props) => {
+const List: React.FC = () => {
+  const list = useSelector((state: GlobalState) => state.list);
+
+  const [year, setYear] = useState<number>(2023);
+
+  const filteredList = useMemo(
+    () => list.filter((item) => new Date(item.date).getFullYear() === year),
+    [year, list]
+  );
+
+  const handleYearChanging = useCallback((event: any) => {
+    setYear(Number(event.target.value));
+  }, []);
+
   return (
     <>
-      <Select
-        year={props.year}
-        handleYearChanging={props.handleYearChanging}
-        setList={props.setList}
-      />
-      {!props.filteredList.length && <NoExpenses />}
+      <Select year={year} handleYearChanging={handleYearChanging} />
+      {!filteredList.length && <NoExpenses />}
       <ul className={styles.list}>
-        {props.filteredList.map((item: ExpenseItem) => (
+        {filteredList.map((item: ExpenseItem) => (
           <ListItem
             key={item.id}
             id={item.id}
             date={item.date}
             title={item.title}
             price={item.price}
-            list={props.list}
-            setList={props.setList}
           />
         ))}
       </ul>
     </>
-  )
-}
+  );
+};
 
-export default List
+export default List;

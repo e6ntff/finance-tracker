@@ -8,8 +8,11 @@ import getTodayDate from '../../utils/date';
 import { calculatePrices } from '../../api/getExchangeRates';
 import FormCurrencySelect from '../FormCurrencySelect/FormCurrencySelect';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
+import { useDispatch } from 'react-redux';
 
-const AddForm: React.FC<any> = (props) => {
+const AddForm: React.FC<any> = () => {
+  const dispatch = useDispatch();
+
   const { currencyRates } = useContext(CurrencyContext);
 
   const [currency, setCurrency] = useState('USD');
@@ -41,17 +44,7 @@ const AddForm: React.FC<any> = (props) => {
   const addNewItem = (event: any) => {
     event.preventDefault();
 
-    setNewItem((prevItem) => {
-      return {
-        ...prevItem,
-        price: calculatePrices(prevItem.price, currencyRates, currency),
-      };
-    });
-
-    props.setList((prevList: ExpenseItem[]) => {
-      console.log(newItem)
-      return [newItem, ...prevList];
-    });
+    dispatch({ type: 'ADD', newItem: newItem });
 
     clearItem();
   };
@@ -61,12 +54,16 @@ const AddForm: React.FC<any> = (props) => {
       event.target;
 
     if (name === 'price') {
-      setNewItem((prevItem: ExpenseItem) => ({
+      setNewItem((prevItem) => ({
         ...prevItem,
         [name]: {
-          ...prevItem[name],
+          ...prevItem.price,
           [currency]: Number(value),
         },
+      }));
+      setNewItem((prevItem: any) => ({
+        ...prevItem,
+        price: calculatePrices(prevItem.price, currencyRates, currency),
       }));
     } else {
       setNewItem((prevItem) => ({

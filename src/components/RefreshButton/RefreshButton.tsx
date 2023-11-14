@@ -4,28 +4,23 @@ import { LanguageContext } from '../LanguageContext/LanguageContext';
 import styles from './RefreshButton.module.scss';
 
 import getList from '../../api/getList';
-import { calculatePrices } from '../../api/getExchangeRates';
-import {
-  CurrencyContext,
-  CurrencyContextProps,
-} from '../CurrencyContext/CurrencyContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { calculatePrices, getExchangeRates } from '../../api/getExchangeRates';
 
 const RefreshButton: React.FC<any> = (props) => {
   const { language, languages } = useContext(LanguageContext);
 
-  const { currencyRates } = useContext<CurrencyContextProps>(CurrencyContext);
+  const dispatch = useDispatch();
 
-  const refresh = () => {
-    getList().then((data) => {
-      if (data !== undefined) {
-        props.setList(
-          data.map((item: ExpenseItem) => ({
-            ...item,
-            price: calculatePrices(item.price, currencyRates),
-          }))
-        );
-      } else {
-        console.error('Data is undefined. Unable to refresh.');
+  const refresh = async () => {
+    Promise.all([getExchangeRates(), getList()]).then((data) => {
+      const rates = data[0] ? data[0].rates : { EUR: 0, RUB: 0 };
+      const newList = data[1];
+      if (newList !== undefined) {
+        newList.forEach((item) => {
+          item.price = calculatePrices(item.price, rates, 'USD');
+        });
+        dispatch({type: "SET", newList: newList})
       }
     });
   };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   HashRouter as Router,
   Route,
@@ -15,10 +15,13 @@ import Home from './pages/Home/Home';
 import PageNotFound from './components/PageNotFound/PageNotFound';
 import { LanguageProvider } from './components/LanguageContext/LanguageContext';
 import { CurrencyProvider } from './components/CurrencyContext/CurrencyContext';
+import { Provider } from 'react-redux';
 
 import sortByDate from './utils/sortByDate';
 import paths from './settings/paths';
 import Settings from './pages/Settings/Settings';
+
+import GlobalStore from './utils/store';
 
 const App: React.FC = () => {
   const ListFromLocal: string | null = localStorage.getItem('list');
@@ -28,24 +31,13 @@ const App: React.FC = () => {
 
   const [list, setList] = useState<ExpenseItem[]>(sortByDate(InitialList));
 
-  const [year, setYear] = useState(2023);
-
-  const filteredList = useMemo(
-    () => list.filter((item) => new Date(item.date).getFullYear() === year),
-    [year, list]
-  );
-
   useEffect(() => {
     setList((prevList: ExpenseItem[]) => sortByDate(prevList));
     localStorage.setItem('list', JSON.stringify(list));
   }, [list]);
 
-  const handleYearChanging = useCallback((event: any) => {
-    setYear(Number(event.target.value));
-  }, []);
-
   return (
-    <>
+    <Provider store={GlobalStore}>
       <LanguageProvider>
         <CurrencyProvider>
           <Router>
@@ -53,30 +45,9 @@ const App: React.FC = () => {
             <div className="app">
               <Routes>
                 <Route path="/" element={<Navigate to={paths.home} />} />
-                <Route
-                  path={paths.dashboard}
-                  element={
-                    <Dashboard
-                      year={year}
-                      filteredList={filteredList}
-                      handleYearChanging={handleYearChanging}
-                    />
-                  }
-                />
-                <Route
-                  path={paths.expenses}
-                  element={
-                    <Expenses
-                      year={year}
-                      list={list}
-                      setList={setList}
-                      filteredList={filteredList}
-                      setYear={setYear}
-                      handleYearChanging={handleYearChanging}
-                    />
-                  }
-                />
-                <Route path={paths.home} element={<Home list={list} />} />
+                <Route path={paths.dashboard} element={<Dashboard />} />
+                <Route path={paths.expenses} element={<Expenses />} />
+                <Route path={paths.home} element={<Home />} />
                 <Route path={paths.settings} element={<Settings />} />
                 <Route path="/*" element={<PageNotFound />} />
               </Routes>
@@ -84,7 +55,7 @@ const App: React.FC = () => {
           </Router>
         </CurrencyProvider>
       </LanguageProvider>
-    </>
+    </Provider>
   );
 };
 

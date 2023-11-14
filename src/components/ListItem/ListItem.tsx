@@ -1,41 +1,60 @@
-import React, { useState, useEffect, useContext } from 'react'
-import styles from './ListItem.module.scss'
+import React, { useState, useEffect, useContext } from 'react';
+import styles from './ListItem.module.scss';
 
-import getTodayDate from '../../utils/date'
+import { calculatePrices } from '../../api/getExchangeRates';
 
-import { CurrencyContext } from '../CurrencyContext/CurrencyContext'
-import getSymbol from '../../utils/currency'
+import getTodayDate from '../../utils/date';
+
+import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
+import getSymbol from '../../utils/currency';
+import { useDispatch } from 'react-redux';
 
 const ListItem: React.FC<any> = (props) => {
-  const deleteItem = (id: number) => {
-    props.setList(props.list.filter((item: ExpenseItem) => item.id !== id))
-  }
+  const dispatch = useDispatch();
 
-  const { id, date, title, price } = props
+  const { currencyRates } = useContext(CurrencyContext);
 
-  const [item, setItem] = useState({
+  const { id, date, title, price } = props;
+
+  const [item, setItem] = useState<ExpenseItem>({
     id: id,
     date: date,
     title: title,
     price: price,
-  })
+  });
+
+  const deleteItem = () => {
+    dispatch({ type: 'REMOVE', itemToRemove: item });
+  };
 
   const handleItemChange = (event: any) => {
-    let { name, value }: {name: string; value: string | number} = event.target
+    let { name, value }: { name: string; value: string } = event.target;
 
-    if (name === 'price') value = Number(value)
-
-    setItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }))
-  }
+    if (name === 'price') {
+      setItem((prevItem) => ({
+        ...prevItem,
+        [name]: {
+          ...prevItem.price,
+          [currency]: Number(value),
+        },
+      }));
+      setItem((prevItem: any) => ({
+        ...prevItem,
+        price: calculatePrices(prevItem.price, currencyRates, currency),
+      }));
+    } else {
+      setItem((prevItem) => ({
+        ...prevItem,
+        [name]: value,
+      }));
+    }
+  };
 
   useEffect(() => {
-    props.setList(props.list.map((el: ExpenseItem) => (el.id === item.id ? item : el)))
-  }, [item])
+    dispatch({ type: 'REPLACE', itemToChange: item });
+  }, [item]);
 
-  const { currency } = useContext(CurrencyContext)
+  const { currency } = useContext(CurrencyContext);
 
   return (
     <li className={styles.item}>
@@ -63,15 +82,15 @@ const ListItem: React.FC<any> = (props) => {
           min="1"
           step="1"
           className={styles.price}
-          value={Math.round(Number(item.price[currency]))}
+          value={item.price[currency]}
           onChange={handleItemChange}
         />
-        <button className={styles.button} onClick={() => deleteItem(props.id)}>
+        <button className={styles.button} onClick={() => deleteItem()}>
           🗑
         </button>
       </div>
     </li>
-  )
-}
+  );
+};
 
-export default ListItem
+export default ListItem;

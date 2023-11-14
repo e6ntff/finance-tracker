@@ -49,7 +49,7 @@ const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children }) => {
     async function fetchData() {
       try {
         const rates = await getExchangeRates();
-        setCurrencyRates(rates.rates);
+        if (rates !== undefined) setCurrencyRates(rates.rates);
       } catch (error) {
         console.error('Error fetching currency rates:', error);
       }

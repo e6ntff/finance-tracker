@@ -26,7 +26,6 @@ const Diagram: React.FC<any> = (props) => {
     ];
 
     for (const item of props.filteredList) {
-      item.price = calculatePrices(item.price, currencyRates);
       const currentMonth = new Date(item.date).getMonth();
       newData[currentMonth].value += item.price[currency];
     }

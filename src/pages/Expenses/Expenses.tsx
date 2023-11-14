@@ -1,24 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-import styles from './Expenses.module.scss'
+import styles from './Expenses.module.scss';
 
-import AddForm from '../../components/AddForm/AddForm'
-import List from '../../components/List/List'
+import AddForm from '../../components/AddForm/AddForm';
+import List from '../../components/List/List';
 
-const Expenses : React.FC<any> = (props) => {
+const Expenses: React.FC = () => {
   return (
     <div className={styles.expenses}>
-      <AddForm list={props.list} setList={props.setList} />
-      <List
-        year={props.year}
-        list={props.list}
-        setList={props.setList}
-        filteredList={props.filteredList}
-        setYear={props.setYear}
-        handleYearChanging={props.handleYearChanging}
-      />
+      <AddForm />
+      <List />
     </div>
-  )
-}
+  );
+};
 
-export default Expenses
+export default Expenses;

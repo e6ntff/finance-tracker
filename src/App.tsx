@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   Navigate,
+  json,
 } from 'react-router-dom';
 
 import './App.scss';
@@ -17,31 +18,18 @@ import { LanguageProvider } from './components/LanguageContext/LanguageContext';
 import { CurrencyProvider } from './components/CurrencyContext/CurrencyContext';
 import { Provider } from 'react-redux';
 
-import sortByDate from './utils/sortByDate';
 import paths from './settings/paths';
 import Settings from './pages/Settings/Settings';
 
 import GlobalStore from './utils/store';
 
 const App: React.FC = () => {
-  const ListFromLocal: string | null = localStorage.getItem('list');
-
-  const InitialList: ExpenseItem[] =
-    typeof ListFromLocal === 'string' ? JSON.parse(ListFromLocal) || [] : [];
-
-  const [list, setList] = useState<ExpenseItem[]>(sortByDate(InitialList));
-
-  useEffect(() => {
-    setList((prevList: ExpenseItem[]) => sortByDate(prevList));
-    localStorage.setItem('list', JSON.stringify(list));
-  }, [list]);
-
   return (
     <Provider store={GlobalStore}>
       <LanguageProvider>
         <CurrencyProvider>
           <Router>
-            <Header setList={setList} />
+            <Header />
             <div className="app">
               <Routes>
                 <Route path="/" element={<Navigate to={paths.home} />} />

@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
+import sortByDate from './sortByDate';
 
 interface GlobalState {
   list: ExpenseItem[];
 }
 
 const InitialState: GlobalState = {
-  list: [],
+  list: JSON.parse(localStorage.getItem('list') || '[]'),
 };
 
 const listReducer = (
@@ -13,10 +14,10 @@ const listReducer = (
   action: AddItemAction | RemoveItemAction | ReplaceItemAction | SetListAction
 ) => {
   switch (action.type) {
-    case "SET":
-      return {list: action.newList}
+    case 'SET':
+      return { list: action.newList };
     case 'ADD':
-      return { ...state, list: [action.newItem, ...state.list] };
+      return { ...state, list: sortByDate([action.newItem, ...state.list]) };
     case 'REMOVE':
       return {
         ...state,
@@ -34,8 +35,21 @@ const listReducer = (
   }
 };
 
+const saveState = (state: GlobalState) => {
+  try {
+    const ListToLocal = JSON.stringify(state.list);
+    localStorage.setItem('list', ListToLocal);
+  } catch (err) {
+    console.error('localStorage saving error: ', err);
+  }
+};
+
 const GlobalStore = configureStore({
   reducer: listReducer,
+});
+
+GlobalStore.subscribe(() => {
+  saveState(GlobalStore.getState());
 });
 
 export default GlobalStore;

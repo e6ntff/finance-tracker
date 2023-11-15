@@ -32,6 +32,10 @@ const languages = {
     en: 'Expenses',
     ru: 'Расходы',
   },
+  categories: {
+    en: 'Categories',
+    ru: 'Категории',
+  },
   settings: {
     en: 'Settings',
     ru: 'Настройки',
@@ -68,6 +72,18 @@ const languages = {
     en: 'Currency',
     ru: 'Валюта',
   },
+  addCat: {
+    en: 'Add new category',
+    ru: 'Добавить категорию',
+  },
+  newCat: {
+    en: 'New category',
+    ru: 'Новая категория'
+  },
+  submitCat: {
+    en: 'Add',
+    ru: 'Добавить'
+  }
 };
 
 export default languages;

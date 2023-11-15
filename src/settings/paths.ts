@@ -3,6 +3,7 @@ const paths = {
   dashboard: '/dashboard',
   expenses: '/expenses',
   settings: '/settings',
+  categories: '/categories'
 };
 
 export default paths;

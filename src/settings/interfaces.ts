@@ -1,7 +1,13 @@
-interface GlobalState {
-  list: ExpenseItem[];
+interface category {
+  id: number;
+  color: string;
+  name: string;
 }
 
+interface GlobalState {
+  list: ExpenseItem[];
+  categories: category[];
+}
 interface AddItemAction {
   type: 'ADD';
   newItem: ExpenseItem;
@@ -22,10 +28,29 @@ interface SetListAction {
   newList: ExpenseItem[];
 }
 
+interface AddCategoryAction {
+  type: 'ADD_CAT';
+  category: category;
+}
+
+interface RemoveCategoryAction {
+  type: 'REMOVE_CAT';
+  category: category;
+}
+
+interface ReplaceCategoryAction {
+  type: 'REPLACE_CAT';
+  category: category;
+}
+
 interface ExpenseItem {
   id: number;
   date: string;
   title: string;
+  category: {
+    color: string;
+    name: string;
+  };
   price: {
     [key: string]: number;
     USD: number;

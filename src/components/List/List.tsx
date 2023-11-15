@@ -29,6 +29,7 @@ const List: React.FC = () => {
           <ListItem
             key={item.id}
             id={item.id}
+            category={item.category}
             date={item.date}
             title={item.title}
             price={item.price}

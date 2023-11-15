@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  Route,
-  Routes,
-  Navigate,
-} from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import Expenses from '../../pages/Expenses/Expenses';
 import Dashboard from '../../pages/Dashboard/Dashboard';
@@ -14,6 +10,7 @@ import PageNotFound from '../../components/PageNotFound/PageNotFound';
 import paths from '../../settings/paths';
 
 import Settings from '../../pages/Settings/Settings';
+import Categories from '../../pages/Categories/Categories';
 
 const AppRoutes = () => {
   return (
@@ -23,6 +20,7 @@ const AppRoutes = () => {
       <Route path={paths.expenses} element={<Expenses />} />
       <Route path={paths.home} element={<Home />} />
       <Route path={paths.settings} element={<Settings />} />
+      <Route path={paths.categories} element={<Categories />} />
       <Route path="/*" element={<PageNotFound />} />
     </Routes>
   );

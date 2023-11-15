@@ -49,6 +49,16 @@ const Navigation: React.FC = () => {
         </li>
         <li className={styles.item}>
           <NavLink
+            to={paths.categories}
+            className={isActivePath(paths.categories) ? styles.active : ''}
+          >
+            <button className={styles.button}>
+              {languages.categories[language]}
+            </button>
+          </NavLink>
+        </li>
+        <li className={styles.item}>
+          <NavLink
             to={paths.settings}
             className={isActivePath(paths.settings) ? styles.active : ''}
           >

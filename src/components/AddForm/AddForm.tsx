@@ -21,6 +21,10 @@ const AddForm: React.FC = () => {
     id: Math.random(),
     title: '',
     date: getTodayDate(new Date()),
+    category: {
+      color: '#ccc',
+      name: 'none',
+    },
     price: {
       USD: 0,
       EUR: 0,
@@ -33,6 +37,10 @@ const AddForm: React.FC = () => {
       id: Math.random(),
       title: '',
       date: getTodayDate(new Date()),
+      category: {
+        color: '#ccc',
+        name: 'none',
+      },
       price: {
         USD: 0,
         EUR: 0,

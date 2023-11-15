@@ -78,12 +78,16 @@ const languages = {
   },
   newCat: {
     en: 'New category',
-    ru: 'Новая категория'
+    ru: 'Новая категория',
   },
   submitCat: {
     en: 'Add',
-    ru: 'Добавить'
-  }
+    ru: 'Добавить',
+  },
+  noCategory: {
+    en: 'No category',
+    ru: 'Без категории',
+  },
 };
 
 export default languages;

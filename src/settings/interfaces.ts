@@ -43,14 +43,17 @@ interface ReplaceCategoryAction {
   category: category;
 }
 
+interface SetCategoryToItem {
+  type: 'SET_CAT';
+  id: number;
+  category: category;
+}
+
 interface ExpenseItem {
   id: number;
   date: string;
   title: string;
-  category: {
-    color: string;
-    name: string;
-  };
+  category: category;
   price: {
     [key: string]: number;
     USD: number;

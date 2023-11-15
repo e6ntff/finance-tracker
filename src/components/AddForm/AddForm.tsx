@@ -22,6 +22,7 @@ const AddForm: React.FC = () => {
     title: '',
     date: getTodayDate(new Date()),
     category: {
+      id: Math.random(),
       color: '#ccc',
       name: 'none',
     },
@@ -38,6 +39,7 @@ const AddForm: React.FC = () => {
       title: '',
       date: getTodayDate(new Date()),
       category: {
+        id: Math.random(),
         color: '#ccc',
         name: 'none',
       },

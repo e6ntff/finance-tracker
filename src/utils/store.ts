@@ -3,8 +3,19 @@ import sortByDate from './sortByDate';
 
 const InitialState: GlobalState = {
   list: JSON.parse(localStorage.getItem('list') || '[]'),
-  categories: JSON.parse(localStorage.getItem('categories') || '[]'),
+  categories: [...JSON.parse(localStorage.getItem('categories') || '[]')],
 };
+
+if (!InitialState.categories.length || InitialState.categories[0].id !== 0) {
+  InitialState.categories = [
+    {
+      id: 0,
+      color: '#cccccc',
+      name: 'No category',
+    },
+    ...InitialState.categories,
+  ];
+}
 
 const listReducer = (
   state: GlobalState = InitialState,
@@ -16,6 +27,7 @@ const listReducer = (
     | AddCategoryAction
     | RemoveCategoryAction
     | ReplaceCategoryAction
+    | SetCategoryToItem
 ) => {
   switch (action.type) {
     case 'SET':
@@ -25,17 +37,19 @@ const listReducer = (
     case 'REMOVE':
       return {
         ...state,
-        list: state.list.filter((item) => item.id !== action.itemToRemove.id),
+        list: state.list.filter(
+          (item: ExpenseItem) => item.id !== action.itemToRemove.id
+        ),
       };
     case 'REPLACE':
       return {
         ...state,
-        list: state.list.map((el: ExpenseItem) =>
-          el.id === action.itemToChange.id ? action.itemToChange : el
+        list: state.list.map((item: ExpenseItem) =>
+          item.id === action.itemToChange.id ? action.itemToChange : item
         ),
       };
     case 'ADD_CAT':
-      return { ...state, categories: [action.category, ...state.categories] };
+      return { ...state, categories: [...state.categories, action.category] };
     case 'REMOVE_CAT':
       return {
         ...state,
@@ -49,6 +63,14 @@ const listReducer = (
         categories: state.categories.map((cat: category) =>
           cat.id === action.category.id ? action.category : cat
         ),
+      };
+    case 'SET_CAT':
+      return {
+        ...state,
+        list: state.list.map((item: ExpenseItem) => {
+          console.log(item.id, action.id)
+          return item.id === action.id ? { ...item, category: action.category } : item;
+        }),
       };
     default:
       return state;

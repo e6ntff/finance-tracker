@@ -9,7 +9,7 @@ const CategoryList: React.FC = () => {
 
   return (
     <ul className={styles.list}>
-      {categories.map((cat: category) => (
+      {categories.slice(1).map((cat: category) => (
         <CategoryItem key={cat.id} id={cat.id} color={cat.color} name={cat.name} />
       ))}
     </ul>

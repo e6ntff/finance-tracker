@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  FormEvent,
+} from 'react';
 import styles from './ListItem.module.scss';
 
 import { calculatePrices } from '../../utils/getExchangeRates';
@@ -7,10 +13,12 @@ import getTodayDate from '../../utils/date';
 
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import getSymbol from '../../utils/currency';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect';
 
 const ListItem: React.FC<ExpenseItem> = (props) => {
+  const categories = useSelector((state: GlobalState) => state.categories);
+
   const dispatch = useDispatch();
 
   const { currencyRates } = useContext(CurrencyContext);
@@ -30,7 +38,7 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
   }, []);
 
   const handleItemChange = (event: any) => {
-    let { name, value }: { name: string; value: string } = event.target;
+    const { name, value }: { name: string; value: string } = event.target;
 
     if (name === 'price') {
       setItem((prevItem) => ({
@@ -44,6 +52,19 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
         ...prevItem,
         price: calculatePrices(prevItem.price, currencyRates, currency),
       }));
+    } else if (name === 'category') {
+      const foundCategory = categories.find(
+        (cat: category) => cat.id === Number(value)
+      ) || {
+        id: 0,
+        color: '#00000000',
+        name: '!!!ERROR!!!'
+      }
+
+      setItem((prevItem: ExpenseItem) => ({
+        ...prevItem,
+        [name]: foundCategory,
+      }));
     } else {
       setItem((prevItem) => ({
         ...prevItem,
@@ -53,6 +74,7 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
   };
 
   useEffect(() => {
+    console.log(item)
     dispatch({ type: 'REPLACE', itemToChange: item });
   }, [item, dispatch]);
 
@@ -77,7 +99,7 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
         onChange={handleItemChange}
       />
       <div className={styles.other}>
-        <CategorySelect />
+        <CategorySelect handleItemChange={handleItemChange} value={item.category.id}/>
         <span className={styles.symbol}>{getSymbol(currency)}</span>
         <input
           type="number"

@@ -6,7 +6,7 @@ import { LanguageContext } from '../../components/LanguageContext/LanguageContex
 import LanguageSelect from '../../components/LanguageSelect/LanguageSelect';
 import CurrencySelect from '../../components/CurrencySelect/CurrencySelect';
 
-const Settings : React.FC = () => {
+const Settings: React.FC = () => {
   const { language, languages } = useContext(LanguageContext);
 
   return (

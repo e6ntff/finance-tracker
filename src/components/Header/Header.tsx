@@ -6,12 +6,12 @@ import RefreshButton from '../RefreshButton/RefreshButton';
 import Navigation from '../Navigation/Navigation';
 import Links from '../Links/Links';
 
-const Header: React.FC<any> = (props) => {
+const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <Navigation />
       <div className={styles.other}>
-        <RefreshButton setList={props.setList} />
+        <RefreshButton />
         <ThemeCheckbox />
         <Links />
       </div>

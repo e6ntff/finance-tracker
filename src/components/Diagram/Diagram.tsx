@@ -4,10 +4,11 @@ import styles from './Diagram.module.scss';
 
 import DiagramBar from '../DiagramBar/DiagramBar';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
-import { calculatePrices } from '../../api/getExchangeRates';
 
-const Diagram: React.FC<any> = (props) => {
-  const { currency, currencyRates } = useContext(CurrencyContext);
+const Diagram: React.FC<{
+  filteredList: ExpenseItem[];
+}> = (props) => {
+  const { currency } = useContext(CurrencyContext);
 
   const data = useMemo(() => {
     const newData = [
@@ -31,8 +32,8 @@ const Diagram: React.FC<any> = (props) => {
     }
 
     const maxValue = Math.max(...newData.map((item) => item.value));
-    return {data: newData, maxValue};
-  }, [props.filteredList, currency, currencyRates]);
+    return { data: newData, maxValue };
+  }, [props.filteredList, currency]);
 
   return (
     <ul className={styles.diagram}>

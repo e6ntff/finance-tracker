@@ -8,7 +8,9 @@ import {
   CurrencyContextProps,
 } from '../CurrencyContext/CurrencyContext';
 
-const YearDiagram: React.FC<any> = (props) => {
+const YearDiagram: React.FC<{
+  list: any;
+}> = (props) => {
   const { currency } = useContext<CurrencyContextProps>(CurrencyContext);
 
   const yearsRange = props.list.reduce(

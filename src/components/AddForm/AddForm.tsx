@@ -5,12 +5,12 @@ import styles from './AddForm.module.scss';
 import { LanguageContext } from '../LanguageContext/LanguageContext';
 
 import getTodayDate from '../../utils/date';
-import { calculatePrices } from '../../api/getExchangeRates';
+import { calculatePrices } from '../../utils/getExchangeRates';
 import FormCurrencySelect from '../FormCurrencySelect/FormCurrencySelect';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import { useDispatch } from 'react-redux';
 
-const AddForm: React.FC<any> = () => {
+const AddForm: React.FC = () => {
   const dispatch = useDispatch();
 
   const { currencyRates } = useContext(CurrencyContext);

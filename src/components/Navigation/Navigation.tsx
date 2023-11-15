@@ -1,18 +1,18 @@
-import React, { useContext } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import React, { useContext } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 
-import styles from './Navigation.module.scss'
+import styles from './Navigation.module.scss';
 
-import { LanguageContext } from '../LanguageContext/LanguageContext'
+import { LanguageContext } from '../LanguageContext/LanguageContext';
 
-import paths from '../../settings/paths'
+import paths from '../../settings/paths';
 
-const Navigation = () => {
-  const location = useLocation()
+const Navigation: React.FC = () => {
+  const location = useLocation();
 
-  const isActivePath = (path: string) => path === location.pathname
+  const isActivePath = (path: string) => path === location.pathname;
 
-  const { language, languages } = useContext(LanguageContext)
+  const { language, languages } = useContext(LanguageContext);
 
   return (
     <nav className={styles.nav}>
@@ -22,7 +22,9 @@ const Navigation = () => {
             to={paths.home}
             className={isActivePath(paths.home) ? styles.active : ''}
           >
-            <button className={styles.button}>{languages.home[language]}</button>
+            <button className={styles.button}>
+              {languages.home[language]}
+            </button>
           </NavLink>
         </li>
         <li className={styles.item}>
@@ -30,7 +32,9 @@ const Navigation = () => {
             to={paths.dashboard}
             className={isActivePath(paths.dashboard) ? styles.active : ''}
           >
-            <button className={styles.button}>{languages.dashboard[language]}</button>
+            <button className={styles.button}>
+              {languages.dashboard[language]}
+            </button>
           </NavLink>
         </li>
         <li className={styles.item}>
@@ -38,7 +42,9 @@ const Navigation = () => {
             to={paths.expenses}
             className={isActivePath(paths.expenses) ? styles.active : ''}
           >
-            <button className={styles.button}>{languages.expenses[language]}</button>
+            <button className={styles.button}>
+              {languages.expenses[language]}
+            </button>
           </NavLink>
         </li>
         <li className={styles.item}>
@@ -46,12 +52,14 @@ const Navigation = () => {
             to={paths.settings}
             className={isActivePath(paths.settings) ? styles.active : ''}
           >
-            <button className={styles.button}>{languages.settings[language]}</button>
+            <button className={styles.button}>
+              {languages.settings[language]}
+            </button>
           </NavLink>
         </li>
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;

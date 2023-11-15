@@ -23,7 +23,7 @@ const Home: React.FC = () => {
         (acc: number, item: ExpenseItem) => acc + item.price[currency],
         0
       ),
-    [list]
+    [list, currency]
   );
 
   useEffect(() => {

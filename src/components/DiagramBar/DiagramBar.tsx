@@ -4,7 +4,11 @@ import styles from './DiagramBar.module.scss';
 import getSymbol from '../../utils/currency';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 
-const DiagramBar: React.FC<any> = (props) => {
+const DiagramBar: React.FC<{
+  month: string;
+  value: number;
+  maxValue: number;
+}> = (props) => {
   const { currency } = useContext(CurrencyContext);
 
   const value = props.maxValue > 0 ? (props.value / props.maxValue) * 100 : 0;
@@ -19,10 +23,7 @@ const DiagramBar: React.FC<any> = (props) => {
         {props.value > 0 ? getSymbol(currency) + props.value : ''}
       </span>
       <div className={styles.column}>
-        <div
-          className={styles.value}
-          style={barStyle}
-        ></div>
+        <div className={styles.value} style={barStyle}></div>
       </div>
       <span className={styles.month}>{props.month}</span>
     </li>

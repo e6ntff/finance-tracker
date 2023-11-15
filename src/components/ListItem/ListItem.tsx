@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styles from './ListItem.module.scss';
 
-import { calculatePrices } from '../../api/getExchangeRates';
+import { calculatePrices } from '../../utils/getExchangeRates';
 
 import getTodayDate from '../../utils/date';
 
@@ -9,7 +9,7 @@ import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import getSymbol from '../../utils/currency';
 import { useDispatch } from 'react-redux';
 
-const ListItem: React.FC<any> = (props) => {
+const ListItem: React.FC<ExpenseItem> = (props) => {
   const dispatch = useDispatch();
 
   const { currencyRates } = useContext(CurrencyContext);
@@ -52,7 +52,7 @@ const ListItem: React.FC<any> = (props) => {
 
   useEffect(() => {
     dispatch({ type: 'REPLACE', itemToChange: item });
-  }, [item]);
+  }, [item, dispatch]);
 
   const { currency } = useContext(CurrencyContext);
 

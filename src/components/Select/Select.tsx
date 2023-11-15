@@ -1,10 +1,13 @@
-import React, { useContext } from 'react'
-import { LanguageContext } from '../LanguageContext/LanguageContext'
+import React, { useContext } from 'react';
+import { LanguageContext } from '../LanguageContext/LanguageContext';
 
-import styles from './Select.module.scss'
+import styles from './Select.module.scss';
 
-const Select: React.FC<any> = (props) => {
-  const { language, languages } = useContext(LanguageContext)
+const Select: React.FC<{
+  year: number;
+  handleYearChanging: any;
+}> = (props) => {
+  const { language, languages } = useContext(LanguageContext);
 
   return (
     <label className={styles.label}>
@@ -21,7 +24,7 @@ const Select: React.FC<any> = (props) => {
       </select>
       <span className={styles.text}>{languages.filterByYear[language]}</span>
     </label>
-  )
-}
+  );
+};
 
-export default Select
+export default Select;

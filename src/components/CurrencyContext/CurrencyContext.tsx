@@ -5,7 +5,7 @@ import React, {
   Context,
   ReactNode,
 } from 'react';
-import { getExchangeRates } from '../../api/getExchangeRates';
+import { getExchangeRates } from '../../utils/getExchangeRates';
 
 interface CurrencyContextProps {
   currency: string;

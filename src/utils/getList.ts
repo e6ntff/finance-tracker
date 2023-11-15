@@ -1,4 +1,4 @@
-import sortByDate from '../utils/sortByDate';
+import sortByDate from './sortByDate';
 
 const getList = async () => {
   try {

@@ -3,11 +3,11 @@ import { LanguageContext } from '../LanguageContext/LanguageContext';
 
 import styles from './RefreshButton.module.scss';
 
-import getList from '../../api/getList';
-import { useDispatch, useSelector } from 'react-redux';
-import { calculatePrices, getExchangeRates } from '../../api/getExchangeRates';
+import getList from '../../utils/getList';
+import { useDispatch } from 'react-redux';
+import { calculatePrices, getExchangeRates } from '../../utils/getExchangeRates';
 
-const RefreshButton: React.FC<any> = (props) => {
+const RefreshButton: React.FC = () => {
   const { language, languages } = useContext(LanguageContext);
 
   const dispatch = useDispatch();

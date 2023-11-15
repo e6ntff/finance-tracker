@@ -1,4 +1,4 @@
-import React, { createContext, useState, Context } from 'react';
+import React, { createContext, useState, Context, ReactNode } from 'react';
 import languages from '../../settings/languages';
 
 interface LanguageContextProps {
@@ -16,9 +16,9 @@ const initialContextValue: LanguageContextProps = {
 const LanguageContext: Context<LanguageContextProps> =
   createContext(initialContextValue);
 
-const LanguageProvider: React.FC<any> = ({ children }) => {
-  // if (localStorage.getItem('lang') === null) localStorage.setItem('lang', 'en');
-
+const LanguageProvider: React.FC<{
+  children: ReactNode;
+}> = ({ children }) => {
   const LangFromLocal: string | null = localStorage.getItem('lang');
 
   const [language, setLanguage] = useState<string>(

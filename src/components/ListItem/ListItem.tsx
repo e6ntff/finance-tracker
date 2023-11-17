@@ -15,7 +15,9 @@ import getSymbol from '../../utils/currency';
 import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect';
 
-const ListItem: React.FC<ExpenseItem> = (props) => {
+type Props = ExpenseItem
+
+const ListItem: React.FC<Props> = (props) => {
   const categories = useSelector((state: GlobalState) => state.categories);
 
   const dispatch = useDispatch();

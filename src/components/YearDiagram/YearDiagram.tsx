@@ -13,11 +13,11 @@ interface DataItem {
   categories: { category: category; value: number }[];
 }
 
-interface YearDiagramProps {
+interface Props {
   list: ExpenseItem[];
 }
 
-const YearDiagram: React.FC<YearDiagramProps> = (props) => {
+const YearDiagram: React.FC<Props> = (props) => {
   const { currency } = useContext<CurrencyContextProps>(CurrencyContext);
 
   const Data = useMemo(() => {

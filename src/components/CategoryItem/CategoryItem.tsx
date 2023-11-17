@@ -3,7 +3,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styles from './CategoryItem.module.scss';
 import { useDispatch } from 'react-redux';
 
-const CategoryItem: React.FC<category> = (props) => {
+type Props = category;
+
+const CategoryItem: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
 
   const { id, color, name } = props;
@@ -43,7 +45,7 @@ const CategoryItem: React.FC<category> = (props) => {
       <input
         name="name"
         type="text"
-				value={currentCategory.name}
+        value={currentCategory.name}
         className={styles.name}
         onChange={handleItemChange}
       />

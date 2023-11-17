@@ -3,14 +3,15 @@ import React from 'react';
 import styles from './CategorySelect.module.scss';
 import { useSelector } from 'react-redux';
 
-const CategorySelect: React.FC<{
+interface Props {
   id: number;
   handleItemChange: any;
-}> = (props) => {
+}
 
-  const categories = useSelector((state: GlobalState) => state.categories)
-  
-  const FoundCategory = categories.find((cat: category) => cat.id === props.id)
+const CategorySelect: React.FC<Props> = (props) => {
+  const categories = useSelector((state: GlobalState) => state.categories);
+
+  const FoundCategory = categories.find((cat: category) => cat.id === props.id);
 
   return (
     <select
@@ -18,7 +19,11 @@ const CategorySelect: React.FC<{
       name="category"
       value={props.id}
       onChange={props.handleItemChange}
-      style={{ '--color': FoundCategory ? FoundCategory.color : '#0000' } as React.CSSProperties}
+      style={
+        {
+          '--color': FoundCategory ? FoundCategory.color : '#0000',
+        } as React.CSSProperties
+      }
     >
       {categories.map((cat: category) => (
         <option

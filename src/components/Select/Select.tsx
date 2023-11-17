@@ -3,10 +3,12 @@ import { LanguageContext } from '../LanguageContext/LanguageContext';
 
 import styles from './Select.module.scss';
 
-const Select: React.FC<{
+interface Props {
   year: number;
   handleYearChanging: any;
-}> = (props) => {
+}
+
+const Select: React.FC<Props> = (props) => {
   const { language, languages } = useContext(LanguageContext);
 
   return (

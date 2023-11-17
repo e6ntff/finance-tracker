@@ -12,13 +12,10 @@ const Dashboard: React.FC = () => {
 
   const list = useSelector((state: GlobalState) => state.list);
 
-  const categories = useSelector((state: GlobalState) => state.categories);
-
   const filteredList = useMemo(
     () => list.filter((item) => new Date(item.date).getFullYear() === year),
     [year, list]
   );
-  console.log(list, categories);
 
   const handleYearChanging = useCallback((event: any) => {
     setYear(Number(event.target.value));

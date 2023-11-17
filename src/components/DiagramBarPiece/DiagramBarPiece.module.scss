@@ -1,17 +1,62 @@
-.catCol {
-  block-size: var(--value);
-  background: var(--color);
-  inline-size: 100%;
+.text {
   transition: all 0.3s;
-  &:first-child {
+  text-align: center;
+  color: var(--text-color);
+}
+
+.label {
+  cursor: pointer;
+  block-size: var(--value);
+  inline-size: 100%;
+  display: flex;
+  transition: all 0.3s;
+
+  &:first-child > .catCol {
     border-end-end-radius: 15px;
     border-end-start-radius: 15px;
   }
-  &:last-child {
+  &:last-child > .catCol {
     border-start-start-radius: 15px;
     border-start-end-radius: 15px;
   }
-  &:hover {
-    transform: scale(1.1);
+  .catCol:hover {
+    & > .tooltip {
+      display: flex;
+    }
   }
+}
+
+.catCol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15%;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  block-size: 100%;
+  background: var(--color);
+  inline-size: 100%;
+  transition: all 0.3s;
+  &:hover {
+    & > .tooltip {
+      transform: scale(0.8);
+    }
+    transform: scale(1.25);
+  }
+}
+
+.tooltip {
+  transform: scale(1);
+  transition: all 0.3s;
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 15%;
+  top: 0;
+  right: 125%;
+  border: 1px solid var(--text-color);
+  border-radius: 3px;
+  background: var(--bg-color);
 }

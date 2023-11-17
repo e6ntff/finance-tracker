@@ -9,28 +9,28 @@ const DiagramBar: React.FC<{
   month: string;
   categories: { category: category; value: number }[];
   maxValue: number;
+  valueByMonths: number;
 }> = (props) => {
   const { currency } = useContext(CurrencyContext);
 
-  const getValue = (value: number) => {
-    const finalValue = (value * 100) / props.maxValue;
-    return finalValue <= 100 ? `${finalValue}%` : '100%';
-  };
-
   return (
     <li className={styles.bar}>
-      <span className={styles.price}></span>
+      <span className={styles.price}>
+        {props.valueByMonths > 0
+          ? getSymbol(currency) + props.valueByMonths
+          : ''}
+      </span>
       <div className={styles.column}>
         {props.categories.map((item: { category: category; value: number }) => (
           <DiagramBarPiece
             key={item.category.id}
+            name={item.category.name}
             value={item.value}
             color={item.category.color}
             maxValue={props.maxValue}
           />
         ))}
       </div>
-      {/* {props.value > 0 ? getSymbol(currency) + props.value : ''} */}
       <span className={styles.month}>{props.month}</span>
     </li>
   );

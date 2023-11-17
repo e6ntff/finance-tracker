@@ -43,16 +43,31 @@ const Diagram: React.FC<{
   // }, [props.filteredList, currency]);
 
   const Data = useMemo(() => {
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
     const allMonthData = monthNames.map((month, monthIndex) => {
       const monthData = props.filteredList
-        .filter(item => new Date(item.date).getMonth() === monthIndex)
+        .filter((item) => new Date(item.date).getMonth() === monthIndex)
         .reduce((acc, item) => {
           const categoryIndex = acc.findIndex(
-            cat => cat.category.id === item.category.id && cat.category.name === item.category.name
+            (cat) =>
+              cat.category.id === item.category.id &&
+              cat.category.name === item.category.name
           );
-  
+
           if (categoryIndex !== -1) {
             acc[categoryIndex].value += item.price[currency];
           } else {
@@ -63,33 +78,41 @@ const Diagram: React.FC<{
           }
           return acc;
         }, [] as { category: category; value: number }[]);
-  
+
       return { month, categories: monthData };
     });
-  
+
     const flattenedData = allMonthData.length > 0 ? allMonthData.flat() : [];
-  
-    const maxValue = Math.max(...flattenedData.map(item => item.categories.map(cat => cat.value)).flat());
-  
+
+    const valuesByMonths = flattenedData
+      .map((item) => item.categories.reduce((acc, cat) => acc + cat.value, 0))
+      .flat();
+
+    const maxValue = Math.max(...valuesByMonths);
+
     const newData: DataItem[] = monthNames.map((month, index) => {
       return {
         month,
         categories: allMonthData[index].categories,
       };
     });
-    // console.log(props.filteredList)
-  
-    return { data: newData, maxValue: maxValue };
+
+    return {
+      data: newData,
+      valuesByMonths: valuesByMonths,
+      maxValue: maxValue,
+    };
   }, [props.filteredList, currency]);
 
   return (
     <ul className={styles.diagram}>
-      {Data.data.map((item) => (
+      {Data.data.map((item, index) => (
         <DiagramBar
           key={item.month}
           month={item.month}
           categories={item.categories}
           maxValue={Data.maxValue}
+          valueByMonths={Data.valuesByMonths[index]}
         />
       ))}
     </ul>

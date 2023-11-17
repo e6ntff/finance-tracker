@@ -8,22 +8,14 @@
   inline-size: 100%;
   list-style: none;
   aspect-ratio: 3;
+  padding-inline: 10%;
 }
 
 @media (width < 768px) {
   .diagram {
-    grid-gap: 5% 10%;
+    grid-gap: 5% 7.5%;
     aspect-ratio: 0.75;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 1fr 1fr;
-  }
-}
-
-@media (width < 360px) {
-  .diagram {
-    grid-gap: 2.5% 10%;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr 1fr 1fr;
-    aspect-ratio: .5;
   }
 }

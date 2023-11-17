@@ -5,20 +5,20 @@ import getSymbol from '../../utils/currency';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import DiagramBarPiece from '../DiagramBarPiece/DiagramBarPiece';
 
-const DiagramBar: React.FC<{
+interface Props {
   month: string;
   categories: { category: category; value: number }[];
   maxValue: number;
   valueBy: number;
-}> = (props) => {
+}
+
+const DiagramBar: React.FC<Props> = (props) => {
   const { currency } = useContext(CurrencyContext);
 
   return (
     <li className={styles.bar}>
       <span className={styles.price}>
-        {props.valueBy > 0
-          ? getSymbol(currency) + props.valueBy
-          : ''}
+        {props.valueBy > 0 ? getSymbol(currency) + props.valueBy : ''}
       </span>
       <div className={styles.column}>
         {props.categories.map((item: { category: category; value: number }) => (

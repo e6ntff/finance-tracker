@@ -10,37 +10,12 @@ interface DataItem {
   categories: { category: category; value: number }[];
 }
 
-const Diagram: React.FC<{
+interface Props {
   filteredList: ExpenseItem[];
-}> = (props) => {
+}
+
+const Diagram: React.FC<Props> = (props) => {
   const { currency } = useContext(CurrencyContext);
-
-  // const data = useMemo(() => {
-  //   const newData = [
-  //     { month: 'Jan', value: 0 },
-  //     { month: 'Feb', value: 0 },
-  //     { month: 'Mar', value: 0 },
-  //     { month: 'Apr', value: 0 },
-  //     { month: 'May', value: 0 },
-  //     { month: 'Jun', value: 0 },
-  //     { month: 'Jul', value: 0 },
-  //     { month: 'Aug', value: 0 },
-  //     { month: 'Sep', value: 0 },
-  //     { month: 'Oct', value: 0 },
-  //     { month: 'Nov', value: 0 },
-  //     { month: 'Dec', value: 0 },
-  //   ];
-
-  //   console.log(props.filteredList)
-
-  //   for (const item of props.filteredList) {
-  //     const currentMonth = new Date(item.date).getMonth();
-  //     newData[currentMonth].value += item.price[currency];
-  //   }
-
-  //   const maxValue = Math.max(...newData.map((item) => item.value));
-  //   return { data: newData, maxValue };
-  // }, [props.filteredList, currency]);
 
   const Data = useMemo(() => {
     const monthNames = [

@@ -2,10 +2,12 @@ import React from 'react';
 
 import styles from './FormCurrencySelect.module.scss';
 
-const FormCurrencySelect: React.FC<{
+interface Props {
   currency: string;
   setCurrency: any;
-}> = (props) => {
+}
+
+const FormCurrencySelect: React.FC<Props> = (props) => {
   const handleCurrencyChange = (event: any) => {
     props.setCurrency(event.target.value);
   };

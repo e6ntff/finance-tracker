@@ -4,12 +4,14 @@ import styles from './DiagramBarPiece.module.scss';
 import getSymbol from '../../utils/currency';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 
-const DiagramBarPiece: React.FC<{
+interface Props {
   value: number;
   color: string;
   name: string;
   maxValue: number;
-}> = (props) => {
+}
+
+const DiagramBarPiece: React.FC<Props> = (props) => {
   const getValue = useCallback(
     (value: number) => {
       const finalValue = (value * 100) / props.maxValue;

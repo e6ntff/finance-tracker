@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  FormEvent,
 } from 'react';
 import styles from './ListItem.module.scss';
 
@@ -35,7 +34,7 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
 
   const deleteItem = useCallback(() => {
     dispatch({ type: 'REMOVE', itemToRemove: item });
-  }, []);
+  }, [dispatch, item]);
 
   const handleItemChange = (event: any) => {
     const { name, value }: { name: string; value: string } = event.target;
@@ -56,7 +55,7 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
       const foundCategory = categories.find(
         (cat: category) => cat.id === Number(value)
       ) || {
-        id: 0,
+        id: 228,
         color: '#00000000',
         name: '!!!ERROR!!!'
       }
@@ -74,9 +73,8 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
   };
 
   useEffect(() => {
-    console.log(item)
     dispatch({ type: 'REPLACE', itemToChange: item });
-  }, [item, dispatch]);
+  }, [item, dispatch, categories]);
 
   const { currency } = useContext(CurrencyContext);
 
@@ -99,7 +97,7 @@ const ListItem: React.FC<ExpenseItem> = (props) => {
         onChange={handleItemChange}
       />
       <div className={styles.other}>
-        <CategorySelect handleItemChange={handleItemChange} value={item.category.id}/>
+        <CategorySelect handleItemChange={handleItemChange} id={item.category.id}/>
         <span className={styles.symbol}>{getSymbol(currency)}</span>
         <input
           type="number"

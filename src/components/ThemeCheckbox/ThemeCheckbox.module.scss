@@ -1,5 +1,3 @@
-// @import '../../vendor/variables.scss';
-
 .hidden {
   position: absolute;
   width: 1px;
@@ -14,7 +12,7 @@
 .label {
   user-select: none;
   font-size: 1.5em;
-  inline-size: 3em;
+  inline-size: 2em;
   position: relative;
   color: #0000;
   border: 1px solid var(--text-color);

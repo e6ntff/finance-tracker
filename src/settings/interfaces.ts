@@ -54,12 +54,7 @@ interface ExpenseItem {
   date: string;
   title: string;
   category: category;
-  price: {
-    [key: string]: number;
-    USD: number;
-    EUR: number;
-    RUB: number;
-  };
+  price: currencies
 }
 
 interface currencies {

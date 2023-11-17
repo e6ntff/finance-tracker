@@ -60,14 +60,14 @@ const YearDiagram: React.FC<{
 
   return (
     <ul className={styles.diagram}>
-      {dataWithValues.map((item) => (
+      {/* {dataWithValues.map((item) => (
         <DiagramBar
           key={item.year}
           month={item.year}
           value={item.value}
           maxValue={maxValue}
         />
-      ))}
+      ))} */}
     </ul>
   );
 };

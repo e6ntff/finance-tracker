@@ -25,7 +25,7 @@
 .buttons {
   inline-size: 100%;
   display: flex;
-  gap: 15px;
+  gap: 1em;
 }
 
 .button {
@@ -71,7 +71,7 @@
   justify-content: space-between;
 }
 
-.prcon {
+.container {
   display: flex;
   gap: 1em;
 }

@@ -26,27 +26,25 @@ const AddCategory: React.FC = () => {
       [name]: value,
     }));
   };
+  
+    const clearCurrentCategory = useCallback(() => {
+      setCurrentCategory({
+        id: Math.random(),
+        color: '#cccccc',
+        name: languages.newCat[language],
+      });
+    }, [languages, language]);
 
   const AddCategory = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
 
-      console.log(currentCategory);
-
       dispatch({ type: 'ADD_CAT', category: currentCategory });
 
       clearCurrentCategory();
     },
-    [currentCategory, dispatch]
+    [currentCategory, dispatch, clearCurrentCategory]
   );
-
-  const clearCurrentCategory = useCallback(() => {
-    setCurrentCategory({
-      id: Math.random(),
-      color: '#cccccc',
-      name: languages.newCat[language],
-    });
-  }, []);
 
   return (
     <form className={styles.form} onSubmit={AddCategory}>

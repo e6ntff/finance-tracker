@@ -6,6 +6,8 @@
 }
 
 .column {
+  display: flex;
+  flex-direction: column-reverse;
   border: 1px solid var(--text-color);
   block-size: 100%;
   border-radius: 15px;
@@ -13,18 +15,29 @@
   align-items: flex-end;
   box-shadow: var(--box-shadow);
   transition: all 0.3s;
+  inline-size: 100%;
+  background: #0000;
   &:hover {
     transform: scale(1.025);
   }
 }
 
-.value {
-  transition: all 0.3s;
-  --value: 0%;
-  background-color: var(--column-color);
-  inline-size: 100%;
+.catCol {
   block-size: var(--value);
-  border-radius: 15px;
+  background: var(--color);
+  inline-size: 100%;
+  transition: all 0.3s;
+  &:first-child {
+    border-end-end-radius: 15px;
+    border-end-start-radius: 15px;
+  }
+  &:last-child {
+    border-start-start-radius: 15px;
+    border-start-end-radius: 15px;
+  }
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .month,
@@ -40,7 +53,7 @@
 
 .month::before,
 .month::after {
-  content: "*";
+  content: '*';
   color: #0000;
   block-size: 100%;
   inline-size: 100%;

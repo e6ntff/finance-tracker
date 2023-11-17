@@ -9,8 +9,8 @@ const Links: React.FC = () => {
         <a href="https://github.com/e6ntff" target="_blank" rel="noreferrer">
           <svg
             className={styles.github}
-            width="32px"
-            height="32px"
+            width="20px"
+            height="20px"
             viewBox="0 0 98 98"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -25,8 +25,8 @@ const Links: React.FC = () => {
         <a href="https://t.me/e6ntff" target="_blank" rel="noreferrer">
           <svg
             className={styles.telegram}
-            width="34px"
-            height="34px"
+            width="22px"
+            height="22px"
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

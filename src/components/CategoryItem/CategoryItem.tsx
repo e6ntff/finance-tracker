@@ -29,7 +29,7 @@ const CategoryItem: React.FC<category> = (props) => {
 
   const deleteCategory = useCallback(() => {
     dispatch({ type: 'REMOVE_CAT', category: currentCategory });
-  }, []);
+  }, [currentCategory, dispatch]);
 
   return (
     <li className={styles.item}>

@@ -52,9 +52,9 @@ const languages = {
     en: 'Price',
     ru: 'Цена',
   },
-  date: {
-    en: 'Date',
-    ru: 'Дата',
+  dateAndCat: {
+    en: 'Date and category',
+    ru: 'Дата и категория',
   },
   add: {
     en: 'Add',

@@ -1,6 +1,6 @@
 .header {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 3fr 1fr;
   grid-template-rows: 1fr;
   gap: 1em;
   position: sticky;
@@ -19,7 +19,7 @@
   inline-size: 100%;
   display: grid;
   justify-items: center;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   justify-content: space-between;
   gap: 1em;

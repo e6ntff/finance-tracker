@@ -8,10 +8,13 @@ import getTodayDate from '../../utils/date';
 import { calculatePrices } from '../../utils/getExchangeRates';
 import FormCurrencySelect from '../FormCurrencySelect/FormCurrencySelect';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import FormCategorySelect from '../FormCategorySelect/FormCategorySelect';
 
 const AddForm: React.FC = () => {
   const dispatch = useDispatch();
+
+  const categories = useSelector((state: GlobalState) => state.categories);
 
   const { currencyRates } = useContext(CurrencyContext);
 
@@ -21,11 +24,7 @@ const AddForm: React.FC = () => {
     id: Math.random(),
     title: '',
     date: getTodayDate(new Date()),
-    category: {
-      id: Math.random(),
-      color: '#ccc',
-      name: 'none',
-    },
+    category: categories[0],
     price: {
       USD: 0,
       EUR: 0,
@@ -38,11 +37,7 @@ const AddForm: React.FC = () => {
       id: Math.random(),
       title: '',
       date: getTodayDate(new Date()),
-      category: {
-        id: Math.random(),
-        color: '#ccc',
-        name: 'none',
-      },
+      category: categories[0],
       price: {
         USD: 0,
         EUR: 0,
@@ -127,7 +122,7 @@ const AddForm: React.FC = () => {
         <label className={styles.label} htmlFor="price">
           {languages.price[language]}
         </label>
-        <div className={styles.prcon}>
+        <div className={styles.container}>
           <FormCurrencySelect currency={currency} setCurrency={setCurrency} />
           <input
             required
@@ -142,19 +137,25 @@ const AddForm: React.FC = () => {
           />
         </div>
         <label className={styles.label} htmlFor="date">
-          {languages.date[language]}
+          {languages.dateAndCat[language]}
         </label>
-        <input
-          required
-          className={styles.input}
-          type="date"
-          name="date"
-          id="date"
-          min="2020-01-01"
-          max={getTodayDate(new Date())}
-          value={newItem.date}
-          onChange={handleFormChange}
-        />
+        <div className={styles.container}>
+          <FormCategorySelect
+            handleFormChange={handleFormChange}
+            value={newItem.category}
+          />
+          <input
+            required
+            className={styles.input}
+            type="date"
+            name="date"
+            id="date"
+            min="2020-01-01"
+            max={getTodayDate(new Date())}
+            value={newItem.date}
+            onChange={handleFormChange}
+          />
+        </div>
         <div className={styles.buttons}>
           <button
             type="submit"

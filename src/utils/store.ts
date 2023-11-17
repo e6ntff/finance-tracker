@@ -10,7 +10,7 @@ if (!InitialState.categories.length || InitialState.categories[0].id !== 0) {
   InitialState.categories = [
     {
       id: 0,
-      color: '#cccccc',
+      color: '#00000000',
       name: 'No category',
     },
     ...InitialState.categories,
@@ -31,7 +31,7 @@ const listReducer = (
 ) => {
   switch (action.type) {
     case 'SET':
-      return { ...state, list: action.newList };
+      return { ...state, list: sortByDate(action.newList) };
     case 'ADD':
       return { ...state, list: sortByDate([action.newItem, ...state.list]) };
     case 'REMOVE':
@@ -44,8 +44,10 @@ const listReducer = (
     case 'REPLACE':
       return {
         ...state,
-        list: state.list.map((item: ExpenseItem) =>
-          item.id === action.itemToChange.id ? action.itemToChange : item
+        list: sortByDate(
+          state.list.map((item: ExpenseItem) =>
+            item.id === action.itemToChange.id ? action.itemToChange : item
+          )
         ),
       };
     case 'ADD_CAT':
@@ -63,14 +65,18 @@ const listReducer = (
         categories: state.categories.map((cat: category) =>
           cat.id === action.category.id ? action.category : cat
         ),
+        list: state.list.map((item: ExpenseItem) =>
+          item.category.id === action.category.id
+            ? { ...item, category: action.category }
+            : item
+        ),
       };
     case 'SET_CAT':
       return {
         ...state,
-        list: state.list.map((item: ExpenseItem) => {
-          console.log(item.id, action.id)
-          return item.id === action.id ? { ...item, category: action.category } : item;
-        }),
+        list: state.list.map((item: ExpenseItem) =>
+          item.id === action.id ? { ...item, category: action.category } : item
+        ),
       };
     default:
       return state;

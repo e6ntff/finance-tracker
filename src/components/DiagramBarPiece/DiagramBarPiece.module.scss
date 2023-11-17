@@ -1,0 +1,17 @@
+.catCol {
+  block-size: var(--value);
+  background: var(--color);
+  inline-size: 100%;
+  transition: all 0.3s;
+  &:first-child {
+    border-end-end-radius: 15px;
+    border-end-start-radius: 15px;
+  }
+  &:last-child {
+    border-start-start-radius: 15px;
+    border-start-end-radius: 15px;
+  }
+  &:hover {
+    transform: scale(1.1);
+  }
+}

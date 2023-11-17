@@ -70,6 +70,19 @@ const AddForm: React.FC = () => {
         ...prevItem,
         price: calculatePrices(prevItem.price, currencyRates, currency),
       }));
+    } else if (name === 'category') {
+      const foundCategory = categories.find(
+        (cat: category) => cat.id === Number(value)
+      ) || {
+        id: 228,
+        color: '#00000000',
+        name: '!!!ERROR!!!',
+      };
+
+      setNewItem((prevItem: ExpenseItem) => ({
+        ...prevItem,
+        [name]: foundCategory,
+      }));
     } else {
       setNewItem((prevItem) => ({
         ...prevItem,

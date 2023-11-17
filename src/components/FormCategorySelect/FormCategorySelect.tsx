@@ -3,13 +3,8 @@ import React from 'react';
 import styles from './FormCategorySelect.module.scss';
 import { useSelector } from 'react-redux';
 
-interface Props {
-  value: category;
-  handleFormChange: any;
-}
-
-const FormCategorySelect: React.FC<Props> = (props) => {
-  const categories = useSelector((state: GlobalState) => state.categories);
+const FormCategorySelect: React.FC<any> = (props) => {
+	const categories = useSelector((state: GlobalState) => state.categories)
 
   return (
     <select

@@ -10,7 +10,7 @@ if (!InitialState.categories.length || InitialState.categories[0].id !== 0) {
   InitialState.categories = [
     {
       id: 0,
-      color: '#00000000',
+      color: '#cccccc',
       name: 'No category',
     },
     ...InitialState.categories,

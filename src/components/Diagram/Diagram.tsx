@@ -112,7 +112,7 @@ const Diagram: React.FC<{
           month={item.month}
           categories={item.categories}
           maxValue={Data.maxValue}
-          valueByMonths={Data.valuesByMonths[index]}
+          valueBy={Data.valuesByMonths[index]}
         />
       ))}
     </ul>

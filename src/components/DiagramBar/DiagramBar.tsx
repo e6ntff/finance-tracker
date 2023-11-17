@@ -9,15 +9,15 @@ const DiagramBar: React.FC<{
   month: string;
   categories: { category: category; value: number }[];
   maxValue: number;
-  valueByMonths: number;
+  valueBy: number;
 }> = (props) => {
   const { currency } = useContext(CurrencyContext);
 
   return (
     <li className={styles.bar}>
       <span className={styles.price}>
-        {props.valueByMonths > 0
-          ? getSymbol(currency) + props.valueByMonths
+        {props.valueBy > 0
+          ? getSymbol(currency) + props.valueBy
           : ''}
       </span>
       <div className={styles.column}>

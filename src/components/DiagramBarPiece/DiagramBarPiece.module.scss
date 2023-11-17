@@ -38,16 +38,18 @@
   background: var(--color);
   inline-size: 100%;
   transition: all 0.3s;
+  z-index: 0;
   &:hover {
+    z-index: 1;
     & > .tooltip {
       transform: scale(0.8);
+      z-index: 1;
     }
-    transform: scale(1.25);
+    transform: scale(1.05);
   }
 }
 
 .tooltip {
-  transform: scale(1);
   transition: all 0.3s;
   position: absolute;
   display: none;

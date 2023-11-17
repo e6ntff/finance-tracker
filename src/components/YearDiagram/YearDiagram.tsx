@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import styles from './YearDiagram.module.scss';
 
@@ -8,66 +8,91 @@ import {
   CurrencyContextProps,
 } from '../CurrencyContext/CurrencyContext';
 
-const YearDiagram: React.FC<{
-  list: any;
-}> = (props) => {
+interface DataItem {
+  year: string;
+  categories: { category: category; value: number }[];
+}
+
+interface YearDiagramProps {
+  list: ExpenseItem[];
+}
+
+const YearDiagram: React.FC<YearDiagramProps> = (props) => {
   const { currency } = useContext<CurrencyContextProps>(CurrencyContext);
 
-  const yearsRange = props.list.reduce(
-    (range: { min: number; max: number }, item: ExpenseItem) => {
-      const year = new Date(item.date).getFullYear();
-      range.min = Math.min(range.min, year);
-      range.max = Math.max(range.max, year);
-      return range;
-    },
-    { min: Infinity, max: -Infinity }
-  );
+  const Data = useMemo(() => {
+    const yearsRange = props.list.reduce(
+      (range: { min: number; max: number }, item: ExpenseItem) => {
+        const year = new Date(item.date).getFullYear();
+        range.min = Math.min(range.min, year);
+        range.max = Math.max(range.max, year);
+        return range;
+      },
+      { min: Infinity, max: -Infinity }
+    );
 
-  const yearsArray = Array.from(
-    { length: yearsRange.max - yearsRange.min + 1 },
-    (_, index) => yearsRange.min + index
-  );
+    const yearsArray = Array.from(
+      { length: yearsRange.max - yearsRange.min + 1 },
+      (_, index) => yearsRange.min + index
+    );
 
-  const data = yearsArray.map((year) => {
-    return {
-      year: year.toString(),
-      value: 0,
-    };
-  });
+    const allYearData = yearsArray.map((year) => {
+      const yearData = props.list
+        .filter((item) => new Date(item.date).getFullYear() === year)
+        .reduce((acc, item) => {
+          const categoryIndex = acc.findIndex(
+            (cat) =>
+              cat.category.id === item.category.id &&
+              cat.category.name === item.category.name
+          );
 
-  const dataWithValues: [{ year: string; value: number }] = props.list.reduce(
-    (acc: [{ year: string; value: number }], item: ExpenseItem) => {
-      const currentYear: number = new Date(item.date).getFullYear();
-      const index: number = currentYear - yearsRange.min;
-
-      acc[index].value +=
-        item.price[
-          currency as keyof {
-            USD: number;
-            EUR: number;
-            RUB: number;
+          if (categoryIndex !== -1) {
+            acc[categoryIndex].value += item.price[currency || ''] || 0;
+          } else {
+            acc.push({
+              category: item.category,
+              value: item.price[currency || ""] || 0,
+            });
           }
-        ];
+          return acc;
+        }, [] as { category: category; value: number }[]);
 
-      return acc;
-    },
-    data
-  );
+      return { year: year.toString(), categories: yearData };
+    });
 
-  const maxValue: number = Math.max(
-    ...dataWithValues.map((item) => item.value)
-  );
+    const flattenedData = allYearData.length > 0 ? allYearData.flat() : [];
+
+    const valuesByYears = flattenedData
+      .map((item) => item.categories.reduce((acc, cat) => acc + cat.value, 0))
+      .flat();
+
+    const maxValue = Math.max(...valuesByYears);
+
+    const newData: DataItem[] = yearsArray.map((year, index) => {
+      return {
+        year: year.toString(),
+        categories: allYearData[index].categories,
+      };
+    });
+
+    return {
+      data: newData,
+      valuesByYears: valuesByYears,
+      maxValue: maxValue,
+    };
+  }, [props.list, currency]);
 
   return (
     <ul className={styles.diagram}>
-      {/* {dataWithValues.map((item) => (
+      {Data.data.map((item, index) => (
         <DiagramBar
           key={item.year}
           month={item.year}
-          value={item.value}
-          maxValue={maxValue}
+          categories={item.categories}
+          maxValue={Data.maxValue}
+          valueBy={Data.valuesByYears[index]}
         />
-      ))} */}
+      ))}
     </ul>
   );
 };

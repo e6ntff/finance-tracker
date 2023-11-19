@@ -1,12 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import styles from './ListItem.module.scss';
 
-import { calculatePrices } from '../../utils/getExchangeRates';
+import calculatePrices from '../../utils/calculatePrices';
 
 import getTodayDate from '../../utils/date';
 
@@ -14,11 +9,12 @@ import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import getSymbol from '../../utils/currency';
 import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect';
+import { getCategories, removeItem, replaceItem } from '../../utils/store';
 
-type Props = ExpenseItem
+type Props = ExpenseItem;
 
 const ListItem: React.FC<Props> = (props) => {
-  const categories = useSelector((state: GlobalState) => state.categories);
+  const categories = useSelector(getCategories);
 
   const dispatch = useDispatch();
 
@@ -35,7 +31,7 @@ const ListItem: React.FC<Props> = (props) => {
   });
 
   const deleteItem = useCallback(() => {
-    dispatch({ type: 'REMOVE', itemToRemove: item });
+    dispatch(removeItem({ item: item }));
   }, [dispatch, item]);
 
   const handleItemChange = (event: any) => {
@@ -59,8 +55,8 @@ const ListItem: React.FC<Props> = (props) => {
       ) || {
         id: 228,
         color: '#00000000',
-        name: '!!!ERROR!!!'
-      }
+        name: '!!!ERROR!!!',
+      };
 
       setItem((prevItem: ExpenseItem) => ({
         ...prevItem,
@@ -75,7 +71,7 @@ const ListItem: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    dispatch({ type: 'REPLACE', itemToChange: item });
+    dispatch(replaceItem({ item: item }));
   }, [item, dispatch, categories]);
 
   const { currency } = useContext(CurrencyContext);
@@ -99,7 +95,10 @@ const ListItem: React.FC<Props> = (props) => {
         onChange={handleItemChange}
       />
       <div className={styles.other}>
-        <CategorySelect handleItemChange={handleItemChange} id={item.category.id}/>
+        <CategorySelect
+          handleItemChange={handleItemChange}
+          id={item.category.id}
+        />
         <span className={styles.symbol}>{getSymbol(currency)}</span>
         <input
           type="number"

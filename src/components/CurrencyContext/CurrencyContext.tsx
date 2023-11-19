@@ -5,7 +5,8 @@ import React, {
   Context,
   ReactNode,
 } from 'react';
-import { getExchangeRates } from '../../utils/getExchangeRates';
+
+import { useGetDataQuery } from '../../utils/api';
 
 interface CurrencyContextProps {
   currency: string;
@@ -40,23 +41,8 @@ const CurrencyProvider: React.FC<CurrencyProviderProps> = ({ children }) => {
   const [currency, setCurrency] = useState<string>(
     typeof CurrencyFromLocal === 'string' ? CurrencyFromLocal : 'USD'
   );
-  const [currencyRates, setCurrencyRates] = useState<{
-    EUR: number;
-    RUB: number;
-  }>({ EUR: 0, RUB: 0 });
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const rates = await getExchangeRates();
-        if (rates !== undefined) setCurrencyRates(rates.rates);
-      } catch (error) {
-        console.error('Error fetching currency rates:', error);
-      }
-    }
-
-    fetchData();
-  }, []);
+  const currencyRates = useGetDataQuery(1).data || { EUR: 0, RUB: 0 };
 
   const contextValue: CurrencyContextProps = {
     currency,

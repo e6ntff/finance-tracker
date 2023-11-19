@@ -2,6 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import styles from './CategoryItem.module.scss';
 import { useDispatch } from 'react-redux';
+import {
+  clearListFromCategory,
+  refreshItemByCategory,
+  removeCategory,
+  replaceCategory,
+} from '../../utils/store';
 
 type Props = category;
 
@@ -26,11 +32,13 @@ const CategoryItem: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    dispatch({ type: 'REPLACE_CAT', category: currentCategory });
+    dispatch(replaceCategory({ category: currentCategory }));
+    dispatch(refreshItemByCategory({ category: currentCategory }));
   }, [currentCategory, dispatch]);
 
   const deleteCategory = useCallback(() => {
-    dispatch({ type: 'REMOVE_CAT', category: currentCategory });
+    dispatch(removeCategory({ category: currentCategory }));
+    dispatch(clearListFromCategory({category: currentCategory}))
   }, [currentCategory, dispatch]);
 
   return (

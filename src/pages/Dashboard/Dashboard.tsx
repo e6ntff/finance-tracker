@@ -6,14 +6,18 @@ import Diagram from '../../components/Diagram/Diagram';
 import Select from '../../components/Select/Select';
 import NoExpenses from '../../components/NoExpenses/NoExpenses';
 import { useSelector } from 'react-redux';
+import { getList } from '../../utils/store';
 
 const Dashboard: React.FC = () => {
   const [year, setYear] = useState<number>(2023);
 
-  const list = useSelector((state: GlobalState) => state.list);
+  const list = useSelector(getList);
 
   const filteredList = useMemo(
-    () => list.filter((item) => new Date(item.date).getFullYear() === year),
+    () =>
+      list.filter(
+        (item: ExpenseItem) => new Date(item.date).getFullYear() === year
+      ),
     [year, list]
   );
 

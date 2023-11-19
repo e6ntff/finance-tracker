@@ -5,16 +5,17 @@ import styles from './AddForm.module.scss';
 import { LanguageContext } from '../LanguageContext/LanguageContext';
 
 import getTodayDate from '../../utils/date';
-import { calculatePrices } from '../../utils/getExchangeRates';
+import calculatePrices from '../../utils/calculatePrices';
 import FormCurrencySelect from '../FormCurrencySelect/FormCurrencySelect';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import { useDispatch, useSelector } from 'react-redux';
 import FormCategorySelect from '../FormCategorySelect/FormCategorySelect';
+import { addItem, getCategories } from '../../utils/store';
 
 const AddForm: React.FC = () => {
   const dispatch = useDispatch();
 
-  const categories = useSelector((state: GlobalState) => state.categories);
+  const categories = useSelector(getCategories);
 
   const { currencyRates } = useContext(CurrencyContext);
 
@@ -49,7 +50,7 @@ const AddForm: React.FC = () => {
   const addNewItem = (event: any) => {
     event.preventDefault();
 
-    dispatch({ type: 'ADD', newItem: newItem });
+    dispatch(addItem({ item: newItem }));
 
     clearItem();
   };

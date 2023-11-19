@@ -2,6 +2,7 @@ import React from 'react';
 
 import styles from './FormCategorySelect.module.scss';
 import { useSelector } from 'react-redux';
+import { getCategories } from '../../utils/store';
 
 interface Props {
   value: category;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const FormCategorySelect: React.FC<Props> = (props) => {
-  const categories = useSelector((state: GlobalState) => state.categories);
+  const categories = useSelector(getCategories);
 
   return (
     <select

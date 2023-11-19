@@ -5,14 +5,16 @@ import styles from './List.module.scss';
 import Select from '../Select/Select';
 import NoExpenses from '../NoExpenses/NoExpenses';
 import { useSelector } from 'react-redux';
+import { getList } from '../../utils/store';
 
 const List: React.FC = () => {
-  const list = useSelector((state: GlobalState) => state.list);
+  const list = useSelector(getList);
 
   const [year, setYear] = useState<number>(2023);
 
   const filteredList = useMemo(
-    () => list.filter((item) => new Date(item.date).getFullYear() === year),
+    () =>
+      list.filter((item: any) => new Date(item.date).getFullYear() === year),
     [year, list]
   );
 

@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useState } from 'react';
 import styles from './AddCategory.module.scss';
 import { LanguageContext } from '../LanguageContext/LanguageContext';
 import { useDispatch } from 'react-redux';
+import { addCategory } from '../../utils/store';
 
 const AddCategory: React.FC = () => {
   const { language, languages } = useContext(LanguageContext);
@@ -26,20 +27,20 @@ const AddCategory: React.FC = () => {
       [name]: value,
     }));
   };
-  
-    const clearCurrentCategory = useCallback(() => {
-      setCurrentCategory({
-        id: Math.random(),
-        color: '#cccccc',
-        name: languages.newCat[language],
-      });
-    }, [languages, language]);
+
+  const clearCurrentCategory = useCallback(() => {
+    setCurrentCategory({
+      id: Math.random(),
+      color: '#cccccc',
+      name: languages.newCat[language],
+    });
+  }, [languages, language]);
 
   const AddCategory = useCallback(
     (event: React.FormEvent) => {
       event.preventDefault();
 
-      dispatch({ type: 'ADD_CAT', category: currentCategory });
+      dispatch(addCategory({ category: currentCategory }));
 
       clearCurrentCategory();
     },

@@ -2,6 +2,7 @@ import React from 'react';
 
 import styles from './CategorySelect.module.scss';
 import { useSelector } from 'react-redux';
+import { getCategories } from '../../utils/store';
 
 interface Props {
   id: number;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const CategorySelect: React.FC<Props> = (props) => {
-  const categories = useSelector((state: GlobalState) => state.categories);
+  const categories = useSelector(getCategories);
 
   const FoundCategory = categories.find((cat: category) => cat.id === props.id);
 

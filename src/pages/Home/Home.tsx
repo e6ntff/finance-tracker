@@ -9,13 +9,14 @@ import { CurrencyContext } from '../../components/CurrencyContext/CurrencyContex
 
 import getSymbol from '../../utils/currency';
 import { useSelector } from 'react-redux';
+import { getList } from '../../utils/store';
 
 const Home: React.FC = () => {
   const { currency } = useContext(CurrencyContext);
 
   const [total, setTotal] = useState<number>(0);
 
-  const list = useSelector((state: GlobalState) => state.list);
+  const list = useSelector(getList);
 
   const totalPrice = useMemo(
     () =>

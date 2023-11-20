@@ -11,6 +11,7 @@ import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import { useDispatch, useSelector } from 'react-redux';
 import FormCategorySelect from '../FormCategorySelect/FormCategorySelect';
 import { addItem, getCategories } from '../../utils/store';
+import { ExpenseItem, category } from '../../settings/interfaces';
 
 const AddForm: React.FC = () => {
   const dispatch = useDispatch();

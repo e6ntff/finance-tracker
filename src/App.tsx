@@ -15,18 +15,24 @@ import AppRoutes from './components/AppRoutes/AppRoutes';
 
 import GlobalStore from './utils/store';
 import Preloader from './components/Preloader/Preloader';
+import setTheme from './utils/themes';
 
 const auth = getAuth(firebaseApp);
+
+setTheme(localStorage.getItem('theme') === 'dark' ? true : false);
 
 const App: React.FC = () => {
   const [logged, setLogged] = useState<boolean>(false);
 
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [user, setUser] = useState<any>({});
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       setLogged(!!authUser);
-      setLoading(false)
+      setUser(JSON.parse(JSON.stringify(authUser)) || {});
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -36,18 +42,18 @@ const App: React.FC = () => {
     <Provider store={GlobalStore}>
       <LanguageProvider>
         <CurrencyProvider>
-          {loading ? <Preloader/> : <Router>
-            {logged && <Header />}
-            {logged ? (
-              <div className="app">
-                <AppRoutes logged={logged}/>
-              </div>
-            ) : (
-              <div className="form">
-                <AppRoutes logged={logged}/>
-              </div>
-            )}
-          </Router>}
+          {loading ? (
+            <Preloader />
+          ) : (
+            <Router>
+              {logged && <Header />}
+              {logged ? (
+                <AppRoutes logged={logged} user={user} />
+              ) : (
+                <AppRoutes logged={logged} user={user} />
+              )}
+            </Router>
+          )}
         </CurrencyProvider>
       </LanguageProvider>
     </Provider>

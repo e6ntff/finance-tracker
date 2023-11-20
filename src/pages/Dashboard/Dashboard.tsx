@@ -7,6 +7,7 @@ import Select from '../../components/Select/Select';
 import NoExpenses from '../../components/NoExpenses/NoExpenses';
 import { useSelector } from 'react-redux';
 import { getList } from '../../utils/store';
+import { ExpenseItem } from '../../settings/interfaces';
 
 const Dashboard: React.FC = () => {
   const [year, setYear] = useState<number>(2023);
@@ -26,13 +27,15 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className={styles.dashboard}>
-      <Select year={year} handleYearChanging={handleYearChanging} />
-      {filteredList.length ? (
-        <Diagram filteredList={filteredList} />
-      ) : (
-        <NoExpenses />
-      )}
+    <div className="app">
+      <div className={styles.dashboard}>
+        <Select year={year} handleYearChanging={handleYearChanging} />
+        {filteredList.length ? (
+          <Diagram filteredList={filteredList} />
+        ) : (
+          <NoExpenses />
+        )}
+      </div>
     </div>
   );
 };

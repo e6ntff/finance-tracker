@@ -1,0 +1,16 @@
+.button {
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
+  inline-size: 100%;
+  padding: 2.5%;
+  font-size: 1.5em;
+  font-family: var(--main-font);
+  background-color: var(--accent-color);
+  cursor: pointer;
+  border: 1px solid var(--text-color);
+  border-radius: 3px;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: var(--hover-color);
+  }
+}

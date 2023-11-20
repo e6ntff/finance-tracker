@@ -5,16 +5,18 @@ import { LanguageContext } from '../LanguageContext/LanguageContext';
 import { useDispatch } from 'react-redux';
 import { addCategory } from '../../utils/store';
 
+import { category } from '../../settings/interfaces';
+
 const AddCategory: React.FC = () => {
   const { language, languages } = useContext(LanguageContext);
 
+  const dispatch = useDispatch();
+  
   const [currentCategory, setCurrentCategory] = useState<category>({
     id: Math.random(),
     color: '#cccccc',
     name: languages.newCat[language],
   });
-
-  const dispatch = useDispatch();
 
   const handleAddCategoryChange = (
     event: React.ChangeEvent<HTMLInputElement>

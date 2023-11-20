@@ -10,6 +10,7 @@ import { CurrencyContext } from '../../components/CurrencyContext/CurrencyContex
 import getSymbol from '../../utils/currency';
 import { useSelector } from 'react-redux';
 import { getList } from '../../utils/store';
+import { ExpenseItem } from '../../settings/interfaces';
 
 const Home: React.FC = () => {
   const { currency } = useContext(CurrencyContext);
@@ -34,12 +35,14 @@ const Home: React.FC = () => {
   const { language, languages } = useContext(LanguageContext);
 
   return (
-    <div className={styles.home}>
-      <YearDiagram list={list} />
-      <div className={styles.data}>
-        <div className={styles.container}>
-          <h2 className={styles.title}>{languages.total[language]}</h2>
-          <span className={styles.title}>{getSymbol(currency) + total}</span>
+    <div className="app">
+      <div className={styles.home}>
+        <YearDiagram list={list} />
+        <div className={styles.data}>
+          <div className={styles.container}>
+            <h2 className={styles.title}>{languages.total[language]}</h2>
+            <span className={styles.title}>{getSymbol(currency) + total}</span>
+          </div>
         </div>
       </div>
     </div>

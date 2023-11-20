@@ -5,11 +5,17 @@ import CategoryList from '../../components/CategoryList/CategoryList';
 import styles from './Categories.module.scss';
 import AddCategory from '../../components/AddCategory/AddCategory';
 
-const Categories: React.FC = () => {
+interface Props {
+  loading: boolean;
+}
+
+const Categories: React.FC<Props> = (props) => {
   return (
-    <div className={styles.categories}>
-      <AddCategory />
-      <CategoryList />
+    <div className="app">
+      <div className={styles.categories}>
+        <AddCategory />
+        <CategoryList loading={props.loading} />
+      </div>
     </div>
   );
 };

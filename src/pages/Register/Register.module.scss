@@ -74,11 +74,11 @@
 }
 
 .input:invalid {
-  border-color: #f00;
-  outline-color: #f00;
+	border-color: #f00;
+	outline-color: #f00;
 }
 
-.input:valid:not([value='']) {
-  border-color: #0f0;
-  outline-color: #0f0;
+.input:valid:not([value=""]) {
+	border-color: #0f0;
+	outline-color: #0f0;
 }

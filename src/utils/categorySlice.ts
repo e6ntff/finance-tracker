@@ -2,17 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import constants from '../settings/constants';
 
+import { category } from '../settings/interfaces';
+
 const categorySlice = createSlice({
   name: 'category',
   initialState: {
-    categories: [
-      constants.defaultCategory,
-      ...JSON.parse(localStorage.getItem('categories') || '[]').filter(
-        (cat: category) => cat.id !== 0
-      ),
-    ],
+    categories: [constants.defaultCategory],
   },
   reducers: {
+    setCategories: (state, action) => {
+      state.categories = action.payload.categories
+    },
     addCategory: (state, action) => {
       state.categories = [...state.categories, action.payload.category];
     },

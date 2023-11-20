@@ -1,4 +1,6 @@
-import constants from "../settings/constants";
+import constants from '../settings/constants';
+
+import { currencies, rates } from '../settings/interfaces';
 
 const calculatePrices = (
   prices: currencies,
@@ -24,4 +26,4 @@ const calculatePrices = (
   return prices;
 };
 
-export default calculatePrices
+export default calculatePrices;

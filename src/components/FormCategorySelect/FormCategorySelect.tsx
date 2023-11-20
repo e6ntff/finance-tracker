@@ -4,6 +4,8 @@ import styles from './FormCategorySelect.module.scss';
 import { useSelector } from 'react-redux';
 import { getCategories } from '../../utils/store';
 
+import { category } from '../../settings/interfaces';
+
 interface Props {
   value: category;
   handleFormChange: any;

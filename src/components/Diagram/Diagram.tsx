@@ -5,6 +5,8 @@ import styles from './Diagram.module.scss';
 import DiagramBar from '../DiagramBar/DiagramBar';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 
+import { ExpenseItem, category } from '../../settings/interfaces';
+
 interface DataItem {
   month: string;
   categories: { category: category; value: number }[];

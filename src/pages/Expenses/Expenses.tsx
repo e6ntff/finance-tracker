@@ -5,11 +5,17 @@ import styles from './Expenses.module.scss';
 import AddForm from '../../components/AddForm/AddForm';
 import List from '../../components/List/List';
 
-const Expenses: React.FC = () => {
+interface Props {
+  loading: boolean;
+}
+
+const Expenses: React.FC<Props> = (props) => {
   return (
-    <div className={styles.expenses}>
-      <AddForm />
-      <List />
+    <div className="app">
+      <div className={styles.expenses}>
+        <AddForm />
+        <List loading={props.loading} />
+      </div>
     </div>
   );
 };

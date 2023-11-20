@@ -1,8 +1,8 @@
 .header {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 5fr 3fr;
   grid-template-rows: 1fr;
-  gap: 1em;
+  gap: 2em;
   position: sticky;
   inset: 0;
   inline-size: 100%;
@@ -19,10 +19,10 @@
   inline-size: 100%;
   display: grid;
   justify-items: center;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr min-content min-content;
   grid-template-rows: 1fr;
   justify-content: space-between;
-  gap: 1em;
+  gap: 1.5em;
 }
 
 @media (width < 768px) {

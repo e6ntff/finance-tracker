@@ -5,6 +5,8 @@ import getSymbol from '../../utils/currency';
 import { CurrencyContext } from '../CurrencyContext/CurrencyContext';
 import DiagramBarPiece from '../DiagramBarPiece/DiagramBarPiece';
 
+import { category } from '../../settings/interfaces';
+
 interface Props {
   month: string;
   categories: { category: category; value: number }[];

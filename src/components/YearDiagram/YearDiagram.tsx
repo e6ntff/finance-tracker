@@ -8,6 +8,8 @@ import {
   CurrencyContextProps,
 } from '../CurrencyContext/CurrencyContext';
 
+import { category, ExpenseItem } from '../../settings/interfaces';
+
 interface DataItem {
   year: string;
   categories: { category: category; value: number }[];
@@ -51,7 +53,7 @@ const YearDiagram: React.FC<Props> = (props) => {
           } else {
             acc.push({
               category: item.category,
-              value: item.price[currency || ""] || 0,
+              value: item.price[currency || ''] || 0,
             });
           }
           return acc;

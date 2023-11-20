@@ -3,26 +3,27 @@ import { combineReducers, configureStore, Middleware } from '@reduxjs/toolkit';
 import api from './api';
 
 import listSlice from './listSlice';
-
 import categorySlice from './categorySlice';
-import { useSelector } from 'react-redux';
+import userSlice from './userSlice';
+
+import pushDataToServer from './pushData';
 
 const rootReducer = combineReducers({
+  user: userSlice.reducer,
   list: listSlice.reducer,
   category: categorySlice.reducer,
 });
 
 const saveState = (state: any) => {
   try {
-    const ListToLocal = JSON.stringify(state.rootReducer.list.list);
-    const categoriesToLocal = JSON.stringify(
-      state.rootReducer.category.categories
-    );
-
-    localStorage.setItem('list', ListToLocal);
-    localStorage.setItem('categories', categoriesToLocal);
-  } catch (err) {
-    console.error('localStorage saving error: ', err);
+    if (Object.keys(state.rootReducer.user.user).length) {
+      pushDataToServer(state.rootReducer.user.user.uid, {
+        list: state.rootReducer.list.list || [],
+        categories: state.rootReducer.category.categories || [],
+      });
+    }
+  } catch (error: any) {
+    console.error(`Saving error: ${error}`);
   }
 };
 
@@ -55,7 +56,7 @@ export { getReducer };
 
 export default GlobalStore;
 
-export const { addCategory, removeCategory, replaceCategory } =
+export const { setCategories, addCategory, removeCategory, replaceCategory } =
   categorySlice.actions;
 
 export const {
@@ -65,5 +66,7 @@ export const {
   setCategoryToItem,
   replaceItem,
   refreshItemByCategory,
-  clearListFromCategory
+  clearListFromCategory,
 } = listSlice.actions;
+
+export const { setUser } = userSlice.actions;

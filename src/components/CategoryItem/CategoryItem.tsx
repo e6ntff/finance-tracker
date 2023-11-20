@@ -9,6 +9,9 @@ import {
   replaceCategory,
 } from '../../utils/store';
 
+import { category } from '../../settings/interfaces';
+import useDebounce from '../../hooks/useDebounce';
+
 type Props = category;
 
 const CategoryItem: React.FC<Props> = (props) => {
@@ -31,14 +34,16 @@ const CategoryItem: React.FC<Props> = (props) => {
     }));
   };
 
+  const debouncedCategory = useDebounce(currentCategory);
+
   useEffect(() => {
-    dispatch(replaceCategory({ category: currentCategory }));
-    dispatch(refreshItemByCategory({ category: currentCategory }));
-  }, [currentCategory, dispatch]);
+    dispatch(replaceCategory({ category: debouncedCategory }));
+    dispatch(refreshItemByCategory({ category: debouncedCategory }));
+  }, [dispatch, debouncedCategory]);
 
   const deleteCategory = useCallback(() => {
     dispatch(removeCategory({ category: currentCategory }));
-    dispatch(clearListFromCategory({category: currentCategory}))
+    dispatch(clearListFromCategory({ category: currentCategory }));
   }, [currentCategory, dispatch]);
 
   return (

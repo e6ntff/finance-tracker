@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import { getCategories, removeItem, replaceItem } from '../../utils/store';
 
+import { ExpenseItem, category } from '../../settings/interfaces';
+import useDebounce from '../../hooks/useDebounce';
+
 type Props = ExpenseItem;
 
 const ListItem: React.FC<Props> = (props) => {
@@ -70,9 +73,11 @@ const ListItem: React.FC<Props> = (props) => {
     }
   };
 
+  const debouncedItem = useDebounce(item);
+
   useEffect(() => {
-    dispatch(replaceItem({ item: item }));
-  }, [item, dispatch, categories]);
+    dispatch(replaceItem({ item: debouncedItem }));
+  }, [debouncedItem, dispatch, categories]);
 
   const { currency } = useContext(CurrencyContext);
 

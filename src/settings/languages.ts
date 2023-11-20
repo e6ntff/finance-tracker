@@ -12,9 +12,8 @@ const languages = {
     ru: 'Обновить',
   },
   notFound: {
-    en: (time: number) => `Redirecting to home page in ${time} seconds...`,
-    ru: (time: number) =>
-      `Переход на домашнюю страницу через ${time} секунд...`,
+    en: (time: number) => `Redirecting in ${time} seconds...`,
+    ru: (time: number) => `Переход через ${time} секунд...`,
   },
   noExpenses: {
     en: 'No expenses this year',
@@ -87,6 +86,46 @@ const languages = {
   noCategory: {
     en: 'No category',
     ru: 'Без категории',
+  },
+  logIn: {
+    en: 'Log in',
+    ru: 'Войти',
+  },
+  signIn: {
+    en: 'Sign in',
+    ru: 'Зарегистрироваться',
+  },
+  signOut: {
+    en: 'Sign out',
+    ru: 'Выйти',
+  },
+  invalidLogin: {
+    en: 'Invalid login or password',
+    ru: 'Неверный логин или пароль',
+  },
+  password: {
+    en: 'Password',
+    ru: 'Пароль',
+  },
+  repeatPassword: {
+    en: 'Repeat password',
+    ru: 'Пароль еще раз',
+  },
+  email: {
+    en: 'E-mail',
+    ru: 'E-mail',
+  },
+  already: {
+    en: 'Already have an account?',
+    ru: 'Уже есть аккаунт?',
+  },
+  yet: {
+    en: 'Do not have an account yet?',
+    ru: 'Еще нет аккаунта?',
+  },
+  passMatch: {
+    en: 'Passwords do not match',
+    ru: 'Пароли не совпадают',
   },
 };
 

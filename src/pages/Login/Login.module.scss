@@ -1,0 +1,55 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 2.5em;
+  padding: 2.5%;
+  font: var(--main-font);
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s;
+}
+
+.label {
+  font-family: var(--main-font);
+  text-shadow: var(--box-shadow);
+  color: var(--text-color);
+  font-size: 1.5em;
+	display: flex;
+	flex-direction: column;
+	gap: .5em;
+}
+
+.input {
+  font-family: var(--main-font);
+  color: var(--text-color);
+  box-shadow: var(--box-shadow);
+  inline-size: 100%;
+  background: var(--accent-color);
+  padding: 1%;
+  font-size: 1.5em;
+  padding: 1.5%;
+  border: 1px solid var(--text-color);
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  &:hover {
+    background: var(--hover-color);
+  }
+}
+
+.button {
+  box-shadow: var(--box-shadow);
+  color: var(--text-color);
+  inline-size: 100%;
+  padding: 2.5%;
+  font-size: 1.5em;
+  font-family: var(--main-font);
+  background-color: var(--accent-color);
+  cursor: pointer;
+  border: 1px solid var(--text-color);
+  border-radius: 3px;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: var(--hover-color);
+  }
+}

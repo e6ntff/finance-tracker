@@ -7,6 +7,10 @@
   margin-block-end: 20px;
 }
 
+html {
+  block-size: 100vh;
+}
+
 .app {
   position: relative;
   inline-size: 100%;
@@ -17,4 +21,14 @@
   border-radius: 8px;
   box-shadow: var(--box-shadow);
   transition: all 0.3s;
+}
+
+.form {
+  margin-block: auto;
+  position: relative;
+  inline-size: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  block-size: 100%;
 }

@@ -1,30 +1,35 @@
-interface category {
+export interface category {
   id: number;
   color: string;
   name: string;
 }
 
-interface GlobalState {
+export interface GlobalState {
   list: ExpenseItem[];
   categories: category[];
 }
 
-interface ExpenseItem {
+export interface ExpenseItem {
   id: number;
   date: string;
   title: string;
   category: category;
-  price: currencies
+  price: currencies;
 }
 
-interface currencies {
+export interface currencies {
   [key: string]: number;
   USD: number;
   EUR: number;
   RUB: number;
 }
 
-interface rates {
+export interface rates {
   EUR: number;
   RUB: number;
+}
+
+export interface User {
+  username: string;
+  password: string;
 }

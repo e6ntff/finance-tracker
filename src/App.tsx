@@ -14,6 +14,7 @@ import firebaseApp from './utils/firebase';
 import AppRoutes from './components/AppRoutes/AppRoutes';
 
 import GlobalStore from './utils/store';
+import Preloader from './components/Preloader/Preloader';
 
 const auth = getAuth(firebaseApp);
 
@@ -35,7 +36,7 @@ const App: React.FC = () => {
     <Provider store={GlobalStore}>
       <LanguageProvider>
         <CurrencyProvider>
-          {loading &  : <Router>
+          {loading ? <Preloader/> : <Router>
             {logged && <Header />}
             {logged ? (
               <div className="app">

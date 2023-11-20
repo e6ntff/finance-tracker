@@ -127,6 +127,46 @@ const languages = {
     en: 'Passwords do not match',
     ru: 'Пароли не совпадают',
   },
+  about: {
+    en: 'About',
+    ru: 'О нас',
+  },
+  aboutText: {
+    part1: {
+      en: 'Welcome to the "About" section!',
+      ru: 'Добро пожаловать в раздел "О нас"!',
+    },
+    part2: {
+      en: 'Our Expense Manager is a simple and effective app for tracking your expenses. Record your spending in just a few clicks, assign convenient categories, and keep an eye on your finances.',
+      ru: 'Наш Менеджер Расходов — простое и эффективное приложение для учета ваших расходов. Внесите свои траты всего в несколько кликов, присваивайте им удобные категории и следите за своими финансами.',
+    },
+    part3: {
+      en: 'Key Features:',
+      ru: 'Основные функции:',
+    },
+    part4: {
+      1: {
+        en: 'Expense Tracking: Easily monitor each expenditure, specifying the amount and category.',
+        ru: 'Добавление расходов: Легко отслеживайте каждый ваш расход, указывая сумму и категорию.',
+      },
+      2: {
+        en: 'Category Management: Create and customize expense categories to suit your needs.',
+        ru: 'Управление категориями: Создавайте и изменяйте категории расходов под свои потребности.',
+      },
+      3: {
+        en: 'Charts and Graphs: Visualize your financial data with clear and informative charts.',
+        ru: 'Графики и диаграммы: Визуализируйте свои финансовые данные с помощью наглядных графиков.',
+      },
+      4: {
+        en: 'Data Editing: Correct errors or update information at any time.',
+        ru: 'Редактирование данных: Исправляйте ошибки или обновляйте информацию в любое время.',
+      },
+    },
+    part5: {
+      en: 'Do not burden yourself with complex apps. We provide a straightforward and intuitive way to track your expenses.',
+      ru: 'Не утруждайте себя сложными приложениями. Мы предоставляем простой и интуитивно понятный способ отслеживания ваших расходов.',
+    },
+  },
 };
 
 export default languages;

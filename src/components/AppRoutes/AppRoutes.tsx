@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { setCategories, setList, setUser } from '../../utils/store';
 import getData from '../../utils/getData';
 import Register from '../../pages/Register/Register';
+import About from '../../pages/About/About';
 
 interface Props {
   logged: boolean;
@@ -79,6 +80,10 @@ const AppRoutes: React.FC<Props> = (props) => {
       <Route
         path={paths.settings}
         element={props.logged ? <Settings /> : <Navigate to="/" />}
+      />
+      <Route
+        path={paths.about}
+        element={props.logged ? <About /> : <Navigate to="/" />}
       />
       <Route
         path={paths.categories}

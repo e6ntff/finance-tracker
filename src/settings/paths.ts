@@ -4,9 +4,10 @@ const paths = {
   expenses: '/expenses',
   settings: '/settings',
   categories: '/categories',
+  about: '/about',
   login: '/login',
   register: '/register',
-  error: '/not-found'
+  error: '/not-found',
 };
 
 export default paths;

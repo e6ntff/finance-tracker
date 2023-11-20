@@ -67,6 +67,16 @@ const Navigation: React.FC = () => {
             </button>
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to={paths.about}
+            className={isActivePath(paths.about) ? styles.active : ''}
+          >
+            <button className={styles.button}>
+              {languages.about[language]}
+            </button>
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );

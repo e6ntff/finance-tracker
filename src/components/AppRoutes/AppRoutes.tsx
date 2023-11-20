@@ -36,7 +36,7 @@ const AppRoutes: React.FC<Props> = (props) => {
       }
       dispatch(setUser({ user: props.user }));
     });
-  }, [props.user]);
+  }, [props.user, dispatch]);
 
   return (
     <Routes>

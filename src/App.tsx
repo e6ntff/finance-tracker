@@ -47,11 +47,7 @@ const App: React.FC = () => {
           ) : (
             <Router>
               {logged && <Header />}
-              {logged ? (
-                <AppRoutes logged={logged} user={user} />
-              ) : (
-                <AppRoutes logged={logged} user={user} />
-              )}
+              <AppRoutes logged={logged} user={user} />
             </Router>
           )}
         </CurrencyProvider>

@@ -17,6 +17,8 @@ import useDebounce from '../../hooks/useDebounce';
 type Props = ExpenseItem;
 
 const ListItem: React.FC<Props> = (props) => {
+  const { currency } = useContext(CurrencyContext);
+
   const categories = useSelector(getCategories);
 
   const dispatch = useDispatch();
@@ -37,49 +39,51 @@ const ListItem: React.FC<Props> = (props) => {
     dispatch(removeItem({ item: item }));
   }, [dispatch, item]);
 
-  const handleItemChange = (event: any) => {
-    const { name, value }: { name: string; value: string } = event.target;
+  const handleItemChange = useCallback(
+    (event: any) => {
+      const { name, value }: { name: string; value: string } = event.target;
 
-    if (name === 'price') {
-      setItem((prevItem) => ({
-        ...prevItem,
-        [name]: {
-          ...prevItem.price,
-          [currency]: Number(value),
-        },
-      }));
-      setItem((prevItem: any) => ({
-        ...prevItem,
-        price: calculatePrices(prevItem.price, currencyRates, currency),
-      }));
-    } else if (name === 'category') {
-      const foundCategory = categories.find(
-        (cat: category) => cat.id === Number(value)
-      ) || {
-        id: 228,
-        color: '#00000000',
-        name: '!!!ERROR!!!',
-      };
+      if (name === 'price') {
+        setItem((prevItem) => ({
+          ...prevItem,
+          [name]: {
+            ...prevItem.price,
+            [currency]: Number(value),
+          },
+        }));
+        setItem((prevItem: any) => ({
+          ...prevItem,
+          price: calculatePrices(prevItem.price, currencyRates, currency),
+        }));
+      } else if (name === 'category') {
+        const foundCategory = categories.find(
+          (cat: category) => cat.id === Number(value)
+        ) || {
+          id: 228,
+          color: '#00000000',
+          name: '!!!ERROR!!!',
+        };
 
-      setItem((prevItem: ExpenseItem) => ({
-        ...prevItem,
-        [name]: foundCategory,
-      }));
-    } else {
-      setItem((prevItem) => ({
-        ...prevItem,
-        [name]: value,
-      }));
-    }
-  };
+        setItem((prevItem: ExpenseItem) => ({
+          ...prevItem,
+          [name]: foundCategory,
+        }));
+      } else {
+        setItem((prevItem) => ({
+          ...prevItem,
+          [name]: value,
+        }));
+      }
+    },
+    [categories, currencyRates, currency]
+  );
 
   const debouncedItem = useDebounce(item);
 
   useEffect(() => {
+    // console.log(1);
     dispatch(replaceItem({ item: debouncedItem }));
-  }, [debouncedItem, dispatch, categories]);
-
-  const { currency } = useContext(CurrencyContext);
+  }, [debouncedItem, dispatch]);
 
   return (
     <li className={styles.item}>

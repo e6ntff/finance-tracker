@@ -56,8 +56,12 @@ export { getReducer };
 
 export default GlobalStore;
 
-export const { setCategories, addCategory, removeCategory, replaceCategory } =
-  categorySlice.actions;
+export const {
+  setCategories,
+  addCategory,
+  removeCategory,
+  replaceCategory,
+} = categorySlice.actions;
 
 export const {
   setList,

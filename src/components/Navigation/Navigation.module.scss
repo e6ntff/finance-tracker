@@ -1,10 +1,7 @@
 .list {
   inline-size: 100%;
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(6, min-content);
-  grid-template-rows: 1fr;
-  gap: 1em;
+  display: flex;
   justify-content: space-between;
   grid-area: 1 / 1 / 1 / 2;
 }
@@ -14,7 +11,6 @@
   color: var(--text-color);
   inline-size: 100%;
   font-size: 1.5em;
-  padding: 2.5%;
   text-wrap: nowrap;
   font-family: var(--main-font);
   background-color: #0000;
@@ -31,7 +27,7 @@
   text-decoration: underline;
 }
 
-@media (width < 760px) {
+@media (width < 768px) {
   .nav {
     grid-area: 1 / 1 / 1 / 3;
   }

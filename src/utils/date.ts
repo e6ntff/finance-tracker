@@ -4,6 +4,6 @@ const getTodayDate = (date: Date) => {
   const year = date.getFullYear();
 
   return `${year}-${month}-${day}`;
-};
+}
 
 export default getTodayDate;

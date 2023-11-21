@@ -5,14 +5,14 @@ import styles from './LanguageSelect.module.scss';
 import { LanguageContext } from '../LanguageContext/LanguageContext';
 
 const LanguageSelect: React.FC = () => {
+  const { language, setLanguage } = useContext(LanguageContext);
+  
   useEffect(() => {
     const storedLanguage = localStorage.getItem('lang');
     if (storedLanguage !== null) {
       setLanguage(storedLanguage);
     }
-  }, []);
-
-  const { language, setLanguage } = useContext(LanguageContext);
+  }, [setLanguage]);
 
   const handleLanguageChange = (event: any) => {
     setLanguage(event.target.value);

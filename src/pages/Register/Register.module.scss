@@ -49,8 +49,11 @@
   border: 1px solid var(--text-color);
   border-radius: 3px;
   transition: background-color 0.3s;
-  &:hover {
+  &:not(:disabled) :hover {
     background-color: var(--hover-color);
+  }
+  &:disabled {
+    opacity: 0.25;
   }
 }
 
@@ -74,11 +77,11 @@
 }
 
 .input:invalid {
-	border-color: #f00;
-	outline-color: #f00;
+  border-color: #f00;
+  outline-color: #f00;
 }
 
-.input:valid:not([value=""]) {
-	border-color: #0f0;
-	outline-color: #0f0;
+.input:valid:not([value='']) {
+  border-color: #0f0;
+  outline-color: #0f0;
 }

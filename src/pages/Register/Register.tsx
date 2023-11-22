@@ -16,19 +16,39 @@ const Register: React.FC = () => {
 
   const [valid, setValid] = useState<boolean>(true);
 
+  const [fields, setFields] = useState({
+    email: false,
+    password: false,
+    passwordAgain: false,
+  });
+
   const [currentUser, setCurrentUser] = useState({
     email: '',
     password: '',
     passwordAgain: '',
   });
 
+  const checkValidity = () => {
+    for (const field of Object.values(fields)) {
+      if (!field) return false;
+    }
+    if (currentUser.password !== currentUser.passwordAgain) return false;
+    return true;
+  };
+
   const handleFormChange = (event: any) => {
     setValid(true);
     const { name, value } = event.target;
+    const { valid } = event.target.validity;
 
     setCurrentUser((prevUser) => ({
       ...prevUser,
       [name]: value,
+    }));
+
+    setFields((prevFields) => ({
+      ...prevFields,
+      [name]: valid,
     }));
   };
 
@@ -58,7 +78,8 @@ const Register: React.FC = () => {
         <label htmlFor="email" className={styles.label}>
           {languages.email[language]}
           <input
-            pattern='^[^\s@]+@[^\s@]+\.[^\s@]+$'
+            required
+            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             type="text"
             name="email"
             className={styles.input}
@@ -69,6 +90,7 @@ const Register: React.FC = () => {
         <label htmlFor="password" className={styles.label}>
           {languages.password[language]}
           <input
+            required
             type="password"
             name="password"
             minLength={6}
@@ -81,6 +103,7 @@ const Register: React.FC = () => {
         <label htmlFor="password-repeat" className={styles.label}>
           {languages.repeatPassword[language]}
           <input
+            required
             type="password"
             name="passwordAgain"
             minLength={6}
@@ -93,7 +116,11 @@ const Register: React.FC = () => {
         {currentUser.password !== currentUser.passwordAgain && (
           <p className={styles.invalid}>{languages.passMatch[language]}</p>
         )}
-        <button type="submit" className={styles.button}>
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={!checkValidity()}
+        >
           {languages.signIn[language]}
         </button>
         <button

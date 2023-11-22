@@ -16,18 +16,37 @@ const Login: React.FC = () => {
 
   const [valid, setValid] = useState<boolean>(true);
 
+  const [fields, setFields] = useState({
+    email: false,
+    password: false,
+  });
+
   const [currentUser, setCurrentUser] = useState({
     email: '',
     password: '',
   });
 
+  const checkValidity = () => {
+    for (const field of Object.values(fields)) {
+      if (!field) return false;
+    }
+    return true;
+  };
+
   const handleFormChange = (event: any) => {
-    setValid(true)
+    setValid(true);
     const { name, value } = event.target;
+
+    const { valid } = event.target.validity;
 
     setCurrentUser((prevUser) => ({
       ...prevUser,
       [name]: value,
+    }));
+
+    setFields((prevFields) => ({
+      ...prevFields,
+      [name]: valid,
     }));
   };
 
@@ -52,6 +71,8 @@ const Login: React.FC = () => {
         <label htmlFor="email" className={styles.label}>
           {languages.email[language]}
           <input
+            required
+            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             type="text"
             name="email"
             className={styles.input}
@@ -62,6 +83,7 @@ const Login: React.FC = () => {
         <label htmlFor="password" className={styles.label}>
           {languages.password[language]}
           <input
+            required
             type="password"
             name="password"
             minLength={6}
@@ -74,10 +96,21 @@ const Login: React.FC = () => {
         {!valid && (
           <p className={styles.invalid}>{languages.invalidLogin[language]}</p>
         )}
-        <button type="submit" className={styles.button}>
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={!checkValidity()}
+        >
           {languages.logIn[language]}
         </button>
-        <button className={styles.link} onClick={() => {navigate(paths.register)}}>{languages.yet[language]}</button>
+        <button
+          className={styles.link}
+          onClick={() => {
+            navigate(paths.register);
+          }}
+        >
+          {languages.yet[language]}
+        </button>
       </form>
     </div>
   );

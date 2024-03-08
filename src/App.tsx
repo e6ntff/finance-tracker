@@ -35,7 +35,18 @@ const App: React.FC = observer(() => {
 					justify='center'
 					align='center'
 				>
-					<Spin />
+					<Flex
+						style={{
+							inlineSize: '100%',
+							blockSize: '100%',
+							position: 'absolute',
+							inset: 0,
+						}}
+						justify='center'
+						align='center'
+					>
+						<Spin />
+					</Flex>
 				</Flex>
 			) : (
 				<Router>

@@ -3,6 +3,7 @@ import Navigation from './Navigation';
 import Links from './Links';
 import SignOutButton from './SignOutButton';
 import { Flex } from 'antd';
+import ThemeCheckbox from './ThemeCheckbox';
 
 const AppHeader: React.FC = () => {
 	return (
@@ -16,6 +17,7 @@ const AppHeader: React.FC = () => {
 				justify='space-between'
 				align='center'
 			>
+				<ThemeCheckbox />
 				<SignOutButton />
 				<Links />
 			</Flex>

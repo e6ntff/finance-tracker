@@ -1,10 +1,12 @@
 import { makeAutoObservable, reaction } from 'mobx';
-import { currencies, language } from 'settings/interfaces';
+import { Theme, currencies, language } from 'settings/interfaces';
 import { listStore } from './listStore';
 import { categoryStore } from './categoryStore';
 import getData from './getData';
 import constants from 'settings/constants';
 import saveData from './saveData';
+import { theme } from 'antd';
+const { defaultAlgorithm, darkAlgorithm } = theme;
 
 class UserStore {
 	listStore;
@@ -15,6 +17,20 @@ class UserStore {
 	language: language = 'en';
 	currency: string = '';
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
+	theme: { theme: 'default' | 'dark'; algorithm: Theme } = {
+		theme: 'default',
+		algorithm: defaultAlgorithm,
+	};
+
+	toggleTheme = () => {
+		if (this.theme.theme === 'default') {
+			this.theme.theme = 'dark';
+			this.theme.algorithm = darkAlgorithm;
+		} else if (this.theme.theme === 'dark') {
+			this.theme.theme = 'default';
+			this.theme.algorithm = defaultAlgorithm;
+		}
+	};
 
 	setLogged = (value: boolean) => {
 		this.logged = value;

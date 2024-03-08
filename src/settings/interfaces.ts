@@ -1,4 +1,7 @@
 import dayjs from 'dayjs';
+import { theme } from 'antd';
+
+const {defaultAlgorithm, darkAlgorithm} = theme
 export interface category {
 	id: number;
 	color: string;
@@ -30,3 +33,5 @@ export interface AuthUser {
 }
 
 export type language = 'en' | 'ru';
+
+export type Theme = typeof darkAlgorithm | typeof defaultAlgorithm

@@ -5,7 +5,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from './utils/firebase';
 import AppRoutes from './components/AppRoutes';
 import { observer } from 'mobx-react-lite';
-import { Flex, Layout, Spin } from 'antd';
+import { ConfigProvider, Flex, Layout, Spin, theme } from 'antd';
 import { userStore } from 'utils/userStore';
 import getCurrencyRates from 'utils/getCurrencyRates';
 import { Content, Header } from 'antd/es/layout/layout';
@@ -14,7 +14,7 @@ const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
 	const { logged } = userStore;
-	const { loading } = userStore;
+	const { loading, theme: currentTheme } = userStore;
 	const { setCurrencyRates, setCurrency, setUser } = userStore;
 
 	useEffect(() => {
@@ -28,8 +28,10 @@ const App: React.FC = observer(() => {
 		return () => unsubscribe();
 	}, [setCurrency, setCurrencyRates, setUser]);
 
+	const { paddingLG, borderRadiusLG, marginLG } = theme.useToken().token;
+
 	return (
-		<>
+		<ConfigProvider theme={{ algorithm: currentTheme.algorithm }}>
 			{loading ? (
 				<Flex
 					justify='center'
@@ -50,33 +52,39 @@ const App: React.FC = observer(() => {
 				</Flex>
 			) : (
 				<Router>
-					<Layout style={{ inlineSize: 'min(100%, 1280px)', margin: 'auto' }}>
+					<Layout
+						style={{
+							inlineSize: 'min(100%, 1280px)',
+							margin: 'auto',
+							blockSize: '100%',
+						}}
+					>
 						{logged && (
 							<Header
 								style={{
 									position: 'sticky',
 									inset: 0,
 									zIndex: 1,
-									marginInline: '2em',
-									borderEndEndRadius: '0.5em',
-									borderEndStartRadius: '0.5em',
+									marginInline: marginLG,
+									borderEndEndRadius: borderRadiusLG,
+									borderEndStartRadius: borderRadiusLG,
 								}}
 							>
 								<AppHeader />
 							</Header>
 						)}
-						<Layout>
+						<Layout style={{ blockSize: '100%' }}>
 							<Layout
 								style={{
-									padding: '2em',
+									padding: paddingLG,
 								}}
 							>
 								<Content
 									style={{
-										padding: '2em',
+										padding: paddingLG,
 										margin: 'auto',
 										inlineSize: `${logged ? '100%' : 'max-content'}`,
-										background: '#fff',
+										blockSize: 'min-content',
 										borderRadius: '0.5em',
 									}}
 								>
@@ -87,7 +95,7 @@ const App: React.FC = observer(() => {
 					</Layout>
 				</Router>
 			)}
-		</>
+		</ConfigProvider>
 	);
 });
 

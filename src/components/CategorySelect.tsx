@@ -1,31 +1,35 @@
 import React from 'react';
-import { category } from '../settings/interfaces';
+import { ExpenseItem, category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
-import { Select } from 'antd';
+import { Flex, Select } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 interface Props {
-	id: number;
-	handler: any;
+	item: ExpenseItem;
+	handler: (arg0: number) => void;
 }
 
-const CategorySelect: React.FC<Props> = observer(({ id, handler }) => {
+const CategorySelect: React.FC<Props> = observer(({ item, handler }) => {
 	const { categories } = categoryStore;
 
 	return (
-		<Select
-			value={id}
-			onChange={handler}
-		>
-			{categories.map((cat: category) => (
-				<Select.Option
-					key={cat.id}
-					value={cat.id}
-				>
-					{cat.name}
-				</Select.Option>
-			))}
-		</Select>
+		<Flex justify='center'>
+			<Select
+				value={item.category.id}
+				onChange={handler}
+				suffixIcon={<EditFilled style={{ color: item.category.color }} />}
+			>
+				{categories.map((category: category) => (
+					<Select.Option
+						key={category.id}
+						value={category.id}
+					>
+						{category.name}
+					</Select.Option>
+				))}
+			</Select>
+		</Flex>
 	);
 });
 

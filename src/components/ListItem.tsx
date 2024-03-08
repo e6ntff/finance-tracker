@@ -122,7 +122,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 			<Col span={4}>
 				<CategorySelect
 					handler={handleCategoryChange}
-					id={currentItem.category.id}
+					item={currentItem}
 				/>
 			</Col>
 			<Col span={5}>

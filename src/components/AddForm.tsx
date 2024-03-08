@@ -129,7 +129,7 @@ const AddForm: React.FC = observer(() => {
 						<Row>
 							<Col span={15}>
 								<CategorySelect
-									id={newItem.category.id}
+									item={newItem}
 									handler={handleCategoryChange}
 								/>
 							</Col>

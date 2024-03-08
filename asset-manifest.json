@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/expenses-manager/static/css/main.21582aff.css",
-    "main.js": "/expenses-manager/static/js/main.b8185d8a.js",
+    "main.js": "/expenses-manager/static/js/main.beb605cc.js",
     "static/media/telegram.svg": "/expenses-manager/static/media/telegram.4933126af283f398246bd0db634cadbe.svg",
     "static/media/github.svg": "/expenses-manager/static/media/github.97ed8e7eef60d61ca469881dd6f34511.svg",
     "index.html": "/expenses-manager/index.html",
     "main.21582aff.css.map": "/expenses-manager/static/css/main.21582aff.css.map",
-    "main.b8185d8a.js.map": "/expenses-manager/static/js/main.b8185d8a.js.map"
+    "main.beb605cc.js.map": "/expenses-manager/static/js/main.beb605cc.js.map"
   },
   "entrypoints": [
     "static/css/main.21582aff.css",
-    "static/js/main.b8185d8a.js"
+    "static/js/main.beb605cc.js"
   ]
 }

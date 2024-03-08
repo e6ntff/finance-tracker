@@ -7,8 +7,13 @@ import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import Link from 'antd/es/typography/Link';
-import { Button, Flex, Form, Input, Typography } from 'antd';
+import { Button, Flex, Form, Input, Tooltip, Typography } from 'antd';
 import { AuthUser } from 'settings/interfaces';
+import {
+	EyeInvisibleOutlined,
+	EyeOutlined,
+	QuestionCircleOutlined,
+} from '@ant-design/icons';
 
 const auth = getAuth(firebaseApp);
 
@@ -18,6 +23,7 @@ const Register: React.FC = observer(() => {
 	const { language, setLogged } = userStore;
 
 	const [incorrect, setIncorrect] = useState<boolean>(false);
+	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
 	const [fields, setFields] = useState({
 		email: false,
@@ -46,7 +52,7 @@ const Register: React.FC = observer(() => {
 			setCurrentUser((prevUser: AuthUser) => ({ ...prevUser, email: value }));
 			setFields((prevFields) => ({ ...prevFields, email: validity.valid }));
 		},
-		[setIncorrect, setCurrentUser, setFields, currentUser]
+		[setIncorrect, setCurrentUser, setFields]
 	);
 
 	const handlePasswordChange = useCallback(
@@ -74,24 +80,28 @@ const Register: React.FC = observer(() => {
 				currentUser.password
 			);
 			navigate('/');
-			setLogged(true)
+			setLogged(true);
 		} catch (error: any) {
 			setIncorrect(true);
 		}
-	}, [currentUser, navigate]);
+	}, [currentUser, navigate, setLogged]);
 
 	const goToLogIn = useCallback(() => {
 		navigate(paths.login);
 	}, [navigate]);
 
+	const handlePasswordVisibilityChange = () => {
+		setIsPasswordVisible((prev: boolean) => !prev);
+	};
+
 	return (
 		<Form
 			layout='vertical'
 			labelCol={{
-				span: 4,
+				span: 26,
 			}}
 			wrapperCol={{
-				span: 14,
+				span: 26,
 			}}
 		>
 			<Form.Item label={languages.email[language]}>
@@ -103,12 +113,37 @@ const Register: React.FC = observer(() => {
 					onChange={handleEmailChange}
 				/>
 			</Form.Item>
-			<Form.Item label={languages.password[language]}>
+			<Form.Item
+				label={
+					<Flex gap={4}>
+						{languages.password[language]}
+						<Tooltip
+							title={languages.passwordRequirements[language]}
+							placement='right'
+						>
+							<QuestionCircleOutlined style={{ opacity: 0.5 }} />
+						</Tooltip>
+					</Flex>
+				}
+			>
 				<Input
 					required
-					type='password'
+					type={isPasswordVisible ? 'text' : 'password'}
 					value={currentUser.password}
 					onChange={handlePasswordChange}
+					suffix={
+						isPasswordVisible ? (
+							<EyeOutlined
+								style={{ opacity: 0.5 }}
+								onClick={handlePasswordVisibilityChange}
+							/>
+						) : (
+							<EyeInvisibleOutlined
+								style={{ opacity: 0.5 }}
+								onClick={handlePasswordVisibilityChange}
+							/>
+						)
+					}
 				/>
 			</Form.Item>
 			<Form.Item label={languages.repeatPassword[language]}>

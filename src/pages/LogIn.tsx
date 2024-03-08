@@ -9,13 +9,16 @@ import languages from 'settings/languages';
 import { Button, Flex, Form, Input, Typography } from 'antd';
 import { AuthUser } from 'settings/interfaces';
 import Link from 'antd/es/typography/Link';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 
 const auth = getAuth(firebaseApp);
 
 const LogIn: React.FC = observer(() => {
 	const navigate = useNavigate();
 	const { language, setLogged } = userStore;
+
 	const [incorrect, setIncorrect] = useState<boolean>(false);
+	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
 	const [fields, setFields] = useState({
 		email: true,
@@ -68,15 +71,25 @@ const LogIn: React.FC = observer(() => {
 				currentUser.password
 			);
 			navigate('/');
-			setLogged(true)
+			setLogged(true);
 		} catch (error: any) {
 			setIncorrect(true);
 		}
-	}, [setIncorrect, navigate, currentUser.email, currentUser.password]);
+	}, [
+		setIncorrect,
+		navigate,
+		currentUser.email,
+		currentUser.password,
+		setLogged,
+	]);
 
 	const goToSignIn = useCallback(() => {
 		navigate(paths.register);
 	}, [navigate]);
+
+	const handlePasswordVisibilityChange = () => {
+		setIsPasswordVisible((prev: boolean) => !prev);
+	};
 
 	return (
 		<Form
@@ -100,9 +113,22 @@ const LogIn: React.FC = observer(() => {
 			<Form.Item label={languages.password[language]}>
 				<Input
 					required
-					type='password'
+					type={isPasswordVisible ? 'text' : 'password'}
 					value={currentUser.password}
 					onChange={handlePasswordChange}
+					suffix={
+						isPasswordVisible ? (
+							<EyeOutlined
+								style={{ opacity: 0.5 }}
+								onClick={handlePasswordVisibilityChange}
+							/>
+						) : (
+							<EyeInvisibleOutlined
+								style={{ opacity: 0.5 }}
+								onClick={handlePasswordVisibilityChange}
+							/>
+						)
+					}
 				/>
 			</Form.Item>
 			<Flex

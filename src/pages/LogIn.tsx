@@ -14,7 +14,7 @@ const auth = getAuth(firebaseApp);
 
 const LogIn: React.FC = observer(() => {
 	const navigate = useNavigate();
-	const { language } = userStore;
+	const { language, setLogged } = userStore;
 	const [incorrect, setIncorrect] = useState<boolean>(false);
 
 	const [fields, setFields] = useState({
@@ -68,6 +68,7 @@ const LogIn: React.FC = observer(() => {
 				currentUser.password
 			);
 			navigate('/');
+			setLogged(true)
 		} catch (error: any) {
 			setIncorrect(true);
 		}
@@ -81,10 +82,10 @@ const LogIn: React.FC = observer(() => {
 		<Form
 			layout='vertical'
 			labelCol={{
-				span: 4,
+				span: 26,
 			}}
 			wrapperCol={{
-				span: 14,
+				span: 26,
 			}}
 		>
 			<Form.Item label={languages.email[language]}>

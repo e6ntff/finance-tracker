@@ -55,7 +55,7 @@ const AppRoutes: React.FC = observer(() => {
 			/>
 			<Route
 				path='/*'
-				element={<Navigate to={paths.expenses} />}
+				element={<Navigate to='/' />}
 			/>
 		</Routes>
 	);

@@ -15,7 +15,7 @@ const auth = getAuth(firebaseApp);
 const Register: React.FC = observer(() => {
 	const navigate = useNavigate();
 
-	const { language } = userStore;
+	const { language, setLogged } = userStore;
 
 	const [incorrect, setIncorrect] = useState<boolean>(false);
 
@@ -42,7 +42,6 @@ const Register: React.FC = observer(() => {
 	const handleEmailChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			const { value, validity } = event.target;
-			console.log(currentUser);
 			setIncorrect(false);
 			setCurrentUser((prevUser: AuthUser) => ({ ...prevUser, email: value }));
 			setFields((prevFields) => ({ ...prevFields, email: validity.valid }));
@@ -75,6 +74,7 @@ const Register: React.FC = observer(() => {
 				currentUser.password
 			);
 			navigate('/');
+			setLogged(true)
 		} catch (error: any) {
 			setIncorrect(true);
 		}

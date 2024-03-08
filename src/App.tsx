@@ -13,7 +13,7 @@ import { Content, Header } from 'antd/es/layout/layout';
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const [logged, setLogged] = useState<boolean>(false);
+	const { logged, setLogged } = userStore;
 	const { loading } = userStore;
 	const { setCurrencyRates, setCurrency, setUser } = userStore;
 
@@ -22,7 +22,6 @@ const App: React.FC = observer(() => {
 		setCurrency(localStorage.getItem('currency') || 'USD');
 
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-			setLogged(!!authUser);
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
 		});
 
@@ -64,8 +63,8 @@ const App: React.FC = observer(() => {
 								<Content
 									style={{
 										padding: '2em',
-										margin: 0,
-										minHeight: 280,
+										margin: 'auto',
+										inlineSize: `${logged ? '100%' : 'max-content'}`,
 										background: '#fff',
 										borderRadius: '0.5em',
 									}}

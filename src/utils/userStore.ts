@@ -10,7 +10,7 @@ class UserStore {
 	listStore;
 	categoryStore;
 	user: any = {};
-	logged: boolean = false;
+	logged: boolean = !!this.user.uid;
 	loading: boolean = true;
 	language: language = 'en';
 	currency: string = '';

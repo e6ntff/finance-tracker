@@ -6,11 +6,10 @@ import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { Empty, List, Spin } from 'antd';
 import YearSelect from './YearSelect';
-import { userStore } from 'utils/userStore';
 
 const ItemList: React.FC = observer(() => {
 	const { list } = listStore;
-	const { loading } = userStore;
+	const { loading } = listStore;
 	const [year, setYear] = useState<string>(dayjs().year().toString());
 
 	const filteredList = useMemo(

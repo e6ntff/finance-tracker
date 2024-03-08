@@ -28,6 +28,7 @@ class UserStore {
 		this.user = user;
 		if (user.uid) {
 			this.setLogged(true);
+			this.setLoading(false);
 		}
 		getData(user).then((data) => {
 			if (data) {
@@ -35,8 +36,9 @@ class UserStore {
 				this.categoryStore.setCategories(
 					data.categories || [constants.defaultCategory]
 				);
+				this.categoryStore.setLoading(false);
+				this.listStore.setLoading(false);
 			}
-			this.setLoading(false);
 		});
 	};
 

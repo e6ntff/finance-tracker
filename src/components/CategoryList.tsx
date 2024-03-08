@@ -4,11 +4,10 @@ import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { List, Spin } from 'antd';
-import { userStore } from 'utils/userStore';
 
 const CategoryList: React.FC = observer(() => {
 	const { categories } = categoryStore;
-	const { loading } = userStore;
+	const { loading } = categoryStore;
 	return (
 		<List style={{ inlineSize: 'min(100%, 768px)' }}>
 			{loading && <Spin />}

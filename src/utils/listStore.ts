@@ -4,6 +4,11 @@ import { ExpenseItem, category } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 class ListStore {
 	list: ExpenseItem[] = [];
+	loading: boolean = true
+
+	setLoading = (value: boolean) => {
+		this.loading = value;
+	};
 
 	setList = (list: ExpenseItem[]) => {
 		this.list = list;

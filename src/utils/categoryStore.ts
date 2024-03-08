@@ -4,6 +4,11 @@ import constants from '../settings/constants';
 
 class CategoryStore {
 	categories: category[] = [constants.defaultCategory];
+	loading: boolean = true;
+
+	setLoading = (value: boolean) => {
+		this.loading = value;
+	};
 
 	setCategories = (categories: category[]) => {
 		this.categories = categories;

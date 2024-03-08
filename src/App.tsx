@@ -1,59 +1,84 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-
-import './App.scss';
-
-import Header from './components/Header/Header';
-
-import { LanguageProvider } from './components/LanguageContext/LanguageContext';
-import { CurrencyProvider } from './components/CurrencyContext/CurrencyContext';
-import { Provider } from 'react-redux';
+import AppHeader from './components/Header';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from './utils/firebase';
-
-import AppRoutes from './components/AppRoutes/AppRoutes';
-
-import GlobalStore from './utils/store';
-import Preloader from './components/Preloader/Preloader';
-import setTheme from './utils/themes';
+import AppRoutes from './components/AppRoutes';
+import { observer } from 'mobx-react-lite';
+import { Flex, Layout, Spin } from 'antd';
+import { userStore } from 'utils/userStore';
+import getCurrencyRates from 'utils/getCurrencyRates';
+import { Content, Header } from 'antd/es/layout/layout';
 
 const auth = getAuth(firebaseApp);
 
-setTheme(localStorage.getItem('theme') === 'dark' ? true : false);
+const App: React.FC = observer(() => {
+	const [logged, setLogged] = useState<boolean>(false);
+	const { loading } = userStore;
+	const { setCurrencyRates, setCurrency, setUser } = userStore;
 
-const App: React.FC = () => {
-  const [logged, setLogged] = useState<boolean>(false);
+	useEffect(() => {
+		getCurrencyRates().then(setCurrencyRates);
+		setCurrency(localStorage.getItem('currency') || 'USD');
 
-  const [loading, setLoading] = useState<boolean>(true);
+		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+			setLogged(!!authUser);
+			setUser(JSON.parse(JSON.stringify(authUser)) || {});
+		});
 
-  const [user, setUser] = useState<any>({});
+		return () => unsubscribe();
+	}, [setCurrency, setCurrencyRates]);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setLogged(!!authUser);
-      setUser(JSON.parse(JSON.stringify(authUser)) || {});
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  return (
-    <Provider store={GlobalStore}>
-      <LanguageProvider>
-        <CurrencyProvider>
-          {loading ? (
-            <Preloader />
-          ) : (
-            <Router>
-              {logged && <Header />}
-              <AppRoutes logged={logged} user={user} />
-            </Router>
-          )}
-        </CurrencyProvider>
-      </LanguageProvider>
-    </Provider>
-  );
-};
+	return (
+		<>
+			{loading ? (
+				<Flex
+					justify='center'
+					align='center'
+				>
+					<Spin />
+				</Flex>
+			) : (
+				<Router>
+					<Layout>
+						{logged && (
+							<Header
+								style={{
+									position: 'sticky',
+									inset: 0,
+									zIndex: 1,
+									marginInline: '2em',
+									borderEndEndRadius: '0.5em',
+									borderEndStartRadius: '0.5em',
+								}}
+							>
+								<AppHeader />
+							</Header>
+						)}
+						<Layout>
+							<Layout
+								style={{
+									padding: '2em',
+								}}
+							>
+								<Content
+									style={{
+										padding: '2em',
+										margin: 0,
+										minHeight: 280,
+										background: '#fff',
+										borderRadius: '0.5em',
+									}}
+								>
+									<AppRoutes />
+								</Content>
+							</Layout>
+						</Layout>
+					</Layout>
+				</Router>
+			)}
+		</>
+	);
+});
 
 export default App;

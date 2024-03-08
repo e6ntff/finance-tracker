@@ -1,22 +1,16 @@
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-body {
-  margin: auto;
-  min-block-size: 100vh;
-  font-family: var(--main-font);
-  padding-inline: 20px;
-  inline-size: clamp(300px, 100vw, 1000px);
-  font-size: var(--font-size);
-  background: var(--accent-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
-  transition: all 0.3s;
+#root {
+	inline-size: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 50px;
+	min-block-size: calc(100vh);
 }

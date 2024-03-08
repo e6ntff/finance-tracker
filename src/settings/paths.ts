@@ -1,13 +1,11 @@
 const paths = {
-  home: '/home',
-  dashboard: '/dashboard',
-  expenses: '/expenses',
-  settings: '/settings',
-  categories: '/categories',
-  about: '/about',
-  login: '/login',
-  register: '/register',
-  error: '/not-found',
+	home: '/home',
+	dashboard: '/dashboard',
+	expenses: '/expenses',
+	categories: '/categories',
+	settings: '/settings',
+	login: '/login',
+	register: '/register',
 };
 
 export default paths;

@@ -1,11 +1,11 @@
 import { ExpenseItem } from '../settings/interfaces';
 
 const sortByDate = (list: ExpenseItem[]) => {
-  const sortedList = list.sort(
-    (prev: ExpenseItem, next: ExpenseItem) =>
-      new Date(next.date).getTime() - new Date(prev.date).getTime()
-  );
-  return sortedList;
+	const sortedList = list.sort(
+		(prev: ExpenseItem, next: ExpenseItem) =>
+			next.date.valueOf() - prev.date.valueOf()
+	);
+	return sortedList;
 };
 
 export default sortByDate;

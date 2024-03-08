@@ -8,6 +8,7 @@ const Expenses: React.FC = () => {
 		<Flex
 			vertical
 			gap={16}
+			align='center'
 		>
 			<AddForm />
 			<ItemList />

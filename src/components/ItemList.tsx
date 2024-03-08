@@ -4,7 +4,7 @@ import ListItem from './ListItem';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Empty, List, Spin } from 'antd';
+import { Divider, Empty, List, Spin } from 'antd';
 import YearSelect from './YearSelect';
 import { userStore } from 'utils/userStore';
 
@@ -14,7 +14,8 @@ const ItemList: React.FC = observer(() => {
 	const [year, setYear] = useState<string>(dayjs().year().toString());
 
 	const filteredList = useMemo(
-		() => list.slice().filter((item: any) => item.date.year().toString() === year),
+		() =>
+			list.slice().filter((item: any) => item.date.year().toString() === year),
 		[year, list]
 	);
 
@@ -27,6 +28,7 @@ const ItemList: React.FC = observer(() => {
 
 	return (
 		<>
+			<Divider />
 			<YearSelect
 				year={year}
 				handleYearChanging={handleYearChanging}
@@ -41,7 +43,7 @@ const ItemList: React.FC = observer(() => {
 					/>
 				)
 			)}
-			<List>
+			<List style={{ inlineSize: 'min(100%, 768px)' }}>
 				{filteredList.map((item: ExpenseItem) => {
 					return (
 						<ListItem

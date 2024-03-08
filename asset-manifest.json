@@ -1,14 +1,15 @@
 {
   "files": {
-    "main.css": "/expenses-manager/static/css/main.914e76cc.css",
-    "main.js": "/expenses-manager/static/js/main.d0fbcced.js",
-    "static/media/Roboto-Medium.ttf": "/expenses-manager/static/media/Roboto-Medium.7c8d04cd831df3033c8a.ttf",
+    "main.css": "/expenses-manager/static/css/main.21582aff.css",
+    "main.js": "/expenses-manager/static/js/main.b8185d8a.js",
+    "static/media/telegram.svg": "/expenses-manager/static/media/telegram.4933126af283f398246bd0db634cadbe.svg",
+    "static/media/github.svg": "/expenses-manager/static/media/github.97ed8e7eef60d61ca469881dd6f34511.svg",
     "index.html": "/expenses-manager/index.html",
-    "main.914e76cc.css.map": "/expenses-manager/static/css/main.914e76cc.css.map",
-    "main.d0fbcced.js.map": "/expenses-manager/static/js/main.d0fbcced.js.map"
+    "main.21582aff.css.map": "/expenses-manager/static/css/main.21582aff.css.map",
+    "main.b8185d8a.js.map": "/expenses-manager/static/js/main.b8185d8a.js.map"
   },
   "entrypoints": [
-    "static/css/main.914e76cc.css",
-    "static/js/main.d0fbcced.js"
+    "static/css/main.21582aff.css",
+    "static/js/main.b8185d8a.js"
   ]
 }

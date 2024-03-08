@@ -50,7 +50,7 @@ const App: React.FC = observer(() => {
 				</Flex>
 			) : (
 				<Router>
-					<Layout>
+					<Layout style={{ inlineSize: 'min(100%, 1280px)', margin: 'auto' }}>
 						{logged && (
 							<Header
 								style={{

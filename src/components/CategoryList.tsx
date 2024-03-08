@@ -9,7 +9,7 @@ const CategoryList: React.FC = observer(() => {
 	const { categories } = categoryStore;
 	const { loading } = categoryStore;
 	return (
-		<List style={{ inlineSize: 'min(100%, 768px)' }}>
+		<List style={{ inlineSize: '100%' }}>
 			{loading && <Spin />}
 			{categories
 				.slice(1)

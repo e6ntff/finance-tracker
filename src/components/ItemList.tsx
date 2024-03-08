@@ -41,7 +41,7 @@ const ItemList: React.FC = observer(() => {
 					/>
 				)
 			)}
-			<List style={{ inlineSize: 'min(100%, 768px)' }}>
+			<List style={{ inlineSize: '100%' }}>
 				{filteredList.map((item: ExpenseItem) => {
 					return (
 						<ListItem

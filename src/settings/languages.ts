@@ -153,6 +153,10 @@ const languages = {
 			'Декабрь',
 		],
 	},
+	passwordRequirements: {
+		en: `● 6 - 16 symbols`,
+		ru: `● 6 - 16 символов`,
+	},
 };
 
 export default languages;

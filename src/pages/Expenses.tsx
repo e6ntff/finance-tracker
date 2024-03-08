@@ -1,7 +1,7 @@
 import React from 'react';
 import AddForm from '../components/AddForm';
 import ItemList from '../components/ItemList';
-import { Flex } from 'antd';
+import { Divider, Flex } from 'antd';
 
 const Expenses: React.FC = () => {
 	return (
@@ -11,6 +11,7 @@ const Expenses: React.FC = () => {
 			align='center'
 		>
 			<AddForm />
+			<Divider />
 			<ItemList />
 		</Flex>
 	);

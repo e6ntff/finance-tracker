@@ -1,7 +1,7 @@
 import React from 'react';
 import CategoryList from '../components/CategoryList';
 import AddCategory from '../components/AddCategory';
-import { Flex } from 'antd';
+import { Divider, Flex } from 'antd';
 
 const Categories: React.FC = () => {
 	return (
@@ -11,6 +11,7 @@ const Categories: React.FC = () => {
 			gap={16}
 		>
 			<AddCategory />
+			<Divider />
 			<CategoryList />
 		</Flex>
 	);

@@ -4,7 +4,7 @@ import ListItem from './ListItem';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Divider, Empty, List, Spin } from 'antd';
+import { Empty, List, Spin } from 'antd';
 import YearSelect from './YearSelect';
 import { userStore } from 'utils/userStore';
 
@@ -28,7 +28,6 @@ const ItemList: React.FC = observer(() => {
 
 	return (
 		<>
-			<Divider />
 			<YearSelect
 				year={year}
 				handleYearChanging={handleYearChanging}

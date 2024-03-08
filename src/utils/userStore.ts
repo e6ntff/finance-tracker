@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction } from 'mobx';
-import { User, currencies, language } from 'settings/interfaces';
+import { currencies, language } from 'settings/interfaces';
 import { listStore } from './listStore';
 import { categoryStore } from './categoryStore';
 import getData from './getData';

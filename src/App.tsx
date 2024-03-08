@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import AppHeader from './components/Header';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -13,7 +13,7 @@ import { Content, Header } from 'antd/es/layout/layout';
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const { logged, setLogged } = userStore;
+	const { logged } = userStore;
 	const { loading } = userStore;
 	const { setCurrencyRates, setCurrency, setUser } = userStore;
 
@@ -26,7 +26,7 @@ const App: React.FC = observer(() => {
 		});
 
 		return () => unsubscribe();
-	}, [setCurrency, setCurrencyRates]);
+	}, [setCurrency, setCurrencyRates, setUser]);
 
 	return (
 		<>

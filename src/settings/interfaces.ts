@@ -23,12 +23,6 @@ export interface rates {
 	EUR: number;
 	RUB: number;
 }
-
-export interface User {
-	username: string;
-	password: string;
-}
-
 export interface AuthUser {
 	email: string;
 	password: string;

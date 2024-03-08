@@ -13,6 +13,7 @@ import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Title from 'antd/es/typography/Title';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
 	initialIitem: ExpenseItem;
@@ -55,7 +56,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	);
 
 	const handleCategoryChange = useCallback(
-		(id: any) => {
+		(id: number) => {
 			const foundCategory = categories.find((cat: category) => cat.id === id);
 			setCurrentItem((prevItem: ExpenseItem) => ({
 				...prevItem,
@@ -137,7 +138,9 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 				</Flex>
 			</Col>
 			<Col span={2}>
-				<Button onClick={deleteItem}>🗑</Button>
+				<Button onClick={deleteItem}>
+					<DeleteOutlined />
+				</Button>
 			</Col>
 		</Item>
 	);

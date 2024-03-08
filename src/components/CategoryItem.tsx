@@ -8,6 +8,7 @@ import { Button, Col, ColorPicker, Flex } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
 import Item from 'antd/es/list/Item';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
 	initialCategory: category;
@@ -70,7 +71,9 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 				</Flex>
 			</Col>
 			<Col span={2}>
-				<Button onClick={deleteCategory}>🗑</Button>
+				<Button onClick={deleteCategory}>
+					<DeleteOutlined />
+				</Button>
 			</Col>
 		</Item>
 	);

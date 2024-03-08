@@ -1,40 +1,22 @@
 import React from 'react';
 import { Flex } from 'antd';
-import telegramLogo from '../media/telegram.svg';
-import githubLogo from '../media/github.svg';
+import { GithubOutlined } from '@ant-design/icons';
+import Link from 'antd/es/typography/Link';
 
 const Links: React.FC = () => {
 	return (
 		<Flex gap={16}>
-			<a
+			<Link
 				href='https://github.com/e6ntff'
 				target='_blank'
-				rel='noreferrer'
 			>
-				<div
+				<GithubOutlined
 					style={{
-						blockSize: '2em',
-						inlineSize: '2em',
-						background: `url(${githubLogo})`,
-						backgroundSize: 'cover',
+						color: '#fff',
+						fontSize: '2em',
 					}}
-				></div>
-			</a>
-
-			<a
-				href='https://t.me/e6ntff'
-				target='_blank'
-				rel='noreferrer'
-			>
-				<div
-					style={{
-						blockSize: '2em',
-						inlineSize: '2em',
-						background: `url(${telegramLogo})`,
-						backgroundSize: 'cover',
-					}}
-				></div>
-			</a>
+				/>
+			</Link>
 		</Flex>
 	);
 };

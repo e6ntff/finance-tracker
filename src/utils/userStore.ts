@@ -10,7 +10,7 @@ class UserStore {
 	listStore;
 	categoryStore;
 	user: any = {};
-	logged: boolean = !!this.user.uid;
+	logged: boolean = false;
 	loading: boolean = true;
 	language: language = 'en';
 	currency: string = '';
@@ -24,9 +24,11 @@ class UserStore {
 		this.loading = value;
 	};
 
-	setUser = (user: User) => {
+	setUser = (user: any) => {
 		this.user = user;
-		this.setLogged(true);
+		if (user.uid) {
+			this.setLogged(true);
+		}
 		getData(user).then((data) => {
 			if (data) {
 				this.listStore.setList(data.list || []);

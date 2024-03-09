@@ -6,7 +6,17 @@ import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
-import { Button, Col, DatePicker, Flex, Form, Input, Row } from 'antd';
+import {
+	Button,
+	Col,
+	Collapse,
+	DatePicker,
+	Flex,
+	Form,
+	Input,
+	Row,
+	Typography,
+} from 'antd';
 import CurrencySelect from 'components/CurrencySelect';
 import { listStore } from 'utils/listStore';
 import constants from 'settings/constants';
@@ -89,78 +99,82 @@ const AddForm: React.FC = observer(() => {
 	);
 
 	return (
-		<>
-			{isFormActive ? (
-				<Form
-					layout='vertical'
-					style={{ inlineSize: '50%' }}
-				>
-					<Form.Item label={languages.title[language]}>
-						<Input
-							required
-							type='text'
-							value={newItem.title}
-							onInput={handleTitleChange}
-						/>
-					</Form.Item>
-					<Form.Item label={languages.price[language]}>
-						<Row>
-							<Col span={5}>
-								<CurrencySelect
-									value={currency}
-									setCurrency={setCurrency}
-									onChange={setCurrency}
-								/>
-							</Col>
-							<Col span={1}></Col>
-							<Col span={18}>
+		<Collapse
+			ghost
+			style={{ inlineSize: '50%', alignSelf: 'start' }}
+			size='small'
+			items={[
+				{
+					key: 0,
+					label: (
+						<Typography.Text>{languages.addExpense[language]}</Typography.Text>
+					),
+					children: (
+						<Form
+							layout='vertical'
+							style={{ inlineSize: '100%' }}
+						>
+							<Form.Item label={languages.title[language]}>
 								<Input
 									required
-									type='number'
-									min='1'
-									step='1'
-									value={Math.round(newItem.price[currency])}
-									onInput={handlePriceChange}
+									type='text'
+									value={newItem.title}
+									onInput={handleTitleChange}
 								/>
-							</Col>
-						</Row>
-					</Form.Item>
-					<Form.Item label={languages.dateAndCat[language]}>
-						<Row>
-							<Col span={15}>
-								<CategorySelect
-									item={newItem}
-									handler={handleCategoryChange}
-								/>
-							</Col>
-							<Col span={1}></Col>
-							<Col span={8}>
-								<DatePicker
-									required
-									onChange={handleDateChange}
-									value={newItem.date}
-									minDate={dayjs('2020-01-01')}
-									maxDate={dayjs(getTodayDate(new Date()))}
-								/>
-							</Col>
-						</Row>
-					</Form.Item>
-					<Flex justify='space-between'>
-						<Button onClick={addNewItem}>{languages.add[language]}</Button>
-						<Button onClick={toggleFormDisplay}>
-							{languages.cancel[language]}
-						</Button>
-					</Flex>
-				</Form>
-			) : (
-				<Button
-					onClick={toggleFormDisplay}
-					style={{ inlineSize: '50%' }}
-				>
-					{languages.addExpense[language]}
-				</Button>
-			)}
-		</>
+							</Form.Item>
+							<Form.Item label={languages.price[language]}>
+								<Row>
+									<Col span={5}>
+										<CurrencySelect
+											value={currency}
+											setCurrency={setCurrency}
+											onChange={setCurrency}
+										/>
+									</Col>
+									<Col span={1}></Col>
+									<Col span={18}>
+										<Input
+											required
+											type='number'
+											min='1'
+											step='1'
+											value={Math.round(newItem.price[currency])}
+											onInput={handlePriceChange}
+										/>
+									</Col>
+								</Row>
+							</Form.Item>
+							<Form.Item label={languages.dateAndCat[language]}>
+								<Row>
+									<Col span={15}>
+										<CategorySelect
+											item={newItem}
+											handler={handleCategoryChange}
+										/>
+									</Col>
+									<Col span={1}></Col>
+									<Col span={8}>
+										<DatePicker
+											required
+											onChange={handleDateChange}
+											value={newItem.date}
+											minDate={dayjs('2020-01-01')}
+											maxDate={dayjs(getTodayDate(new Date()))}
+										/>
+									</Col>
+								</Row>
+							</Form.Item>
+							<Flex justify='space-between'>
+								<Button onClick={addNewItem}>{languages.add[language]}</Button>
+								<Button onClick={toggleFormDisplay}>
+									{languages.cancel[language]}
+								</Button>
+							</Flex>
+						</Form>
+					),
+				},
+			]}
+		/>
 	);
 });
 

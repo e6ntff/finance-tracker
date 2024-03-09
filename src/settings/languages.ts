@@ -51,10 +51,6 @@ const languages = {
 		en: 'Add',
 		ru: 'Добавить',
 	},
-	cancel: {
-		en: 'Cancel',
-		ru: 'Отмена',
-	},
 	language: {
 		en: 'Language',
 		ru: 'Язык',

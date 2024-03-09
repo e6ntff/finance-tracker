@@ -33,11 +33,7 @@ const App: React.FC = observer(() => {
 
 	return (
 		<ConfigProvider theme={{ algorithm: currentTheme.algorithm }}>
-			<Scrollbars
-				autoHide
-				autoHideTimeout={1000}
-				autoHideDuration={200}
-			>
+			<Scrollbars autoHide autoHideTimeout={1000} autoHideDuration={200}>
 				{loading ? (
 					<Flex
 						justify='center'
@@ -61,6 +57,7 @@ const App: React.FC = observer(() => {
 						<Layout
 							style={{
 								margin: 'auto',
+								minBlockSize: '100%',
 							}}
 						>
 							{logged && (

@@ -61,7 +61,7 @@ const DiagramPie: React.FC<Props> = observer(
 				}
 			});
 			return values;
-		}, [list, currency, interval, intervalBig, intervalSmall, language]);
+		}, [list, currency, interval, intervalBig, intervalSmall]);
 
 		const [names, colors, values] = [
 			valuesByCategory.map((value: Value) => value.category.name),
@@ -80,18 +80,28 @@ const DiagramPie: React.FC<Props> = observer(
 			],
 		};
 
+		const text = useMemo(() => {
+			if (interval === 'year') {
+				if (intervalSmall) {
+					return `${languages.expensesIn[language]} ${intervalSmall}`;
+				} else {
+					return languages.expensesAll[language];
+				}
+			} else if (interval === 'month') {
+				if (intervalSmall) {
+					return `${languages.expensesIn[language]} ${languages.months[language][intervalSmall]} ${intervalBig}`;
+				} else {
+					return `${languages.expensesIn[language]} ${intervalBig}`;
+				}
+			}
+			return '';
+		}, [interval, intervalBig, intervalSmall, language]);
+
 		const options = {
 			plugins: {
 				title: {
 					display: true,
-					text: `${
-						languages.expensesIn(
-							intervalSmall && intervalBig
-								? languages.months[language][intervalSmall]
-								// : languages.months[language][intervalBig]
-								: ''
-						)[language]
-					}`,
+					text: text,
 				},
 				legend: {
 					display: true,

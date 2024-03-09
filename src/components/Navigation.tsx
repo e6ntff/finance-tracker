@@ -19,7 +19,7 @@ const Navigation: React.FC = observer(() => {
 	const items = [
 		{
 			label: (
-				<NavLink to={paths.stats}>{languages.dashboard[language]}</NavLink>
+				<NavLink to={paths.stats}>{languages.stats[language]}</NavLink>
 			),
 			key: paths.stats,
 			title: '',

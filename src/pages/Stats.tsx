@@ -69,7 +69,7 @@ const Stats: React.FC = observer(() => {
 			</Flex>
 			{year && (
 				<>
-					<Title level={3}>{`${languages.in[language]} ${
+					<Title level={3}>{`${languages.expensesIn[language]} ${
 						month ? languages.months[language][month] : ''
 					} ${year}: ${getSymbol(currency)}${Math.round(
 						getTotalInCurrentInterval(month)

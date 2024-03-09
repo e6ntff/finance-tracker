@@ -15,7 +15,7 @@ const languages = {
 		en: 'Home',
 		ru: 'Главная',
 	},
-	dashboard: {
+	stats: {
 		en: 'Stats',
 		ru: 'Статистика',
 	},
@@ -99,10 +99,14 @@ const languages = {
 		en: 'Passwords do not match',
 		ru: 'Пароли не совпадают',
 	},
-	expensesIn: (interval: string | null) => ({
-		en: interval ? `Expenses in ${interval}` : 'All expenses',
-		ru: interval ? `Расходы за ${interval}` : 'Все расходы',
-	}),
+	expensesIn: {
+		en: `Expenses in`,
+		ru: `Расходы за`,
+	},
+	expensesAll: {
+		en: `All expenses`,
+		ru: `Все расходы`,
+	},
 	months: {
 		en: [
 			'January',
@@ -137,10 +141,6 @@ const languages = {
 		en: `● 6 - 16 symbols`,
 		ru: `● 6 - 16 символов`,
 	},
-	in: {
-		en: 'In',
-		ru: 'За'
-	}
 };
 
 export default languages;

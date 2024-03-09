@@ -54,7 +54,6 @@ const App: React.FC = observer(() => {
 				<Router>
 					<Layout
 						style={{
-							inlineSize: 'min(100%, 1280px)',
 							margin: 'auto',
 							blockSize: '100%',
 						}}
@@ -62,10 +61,11 @@ const App: React.FC = observer(() => {
 						{logged && (
 							<Header
 								style={{
+									inlineSize: 'min(100%, 960px)',
+									margin: 'auto',
 									position: 'sticky',
 									inset: 0,
 									zIndex: 1,
-									marginInline: marginLG,
 									borderEndEndRadius: borderRadiusLG,
 									borderEndStartRadius: borderRadiusLG,
 								}}
@@ -73,7 +73,13 @@ const App: React.FC = observer(() => {
 								<AppHeader />
 							</Header>
 						)}
-						<Layout style={{ blockSize: '100%' }}>
+						<Layout
+							style={{
+								blockSize: '100%',
+								inlineSize: 'min(100%, 960px)',
+								margin: 'auto',
+							}}
+						>
 							<Layout
 								style={{
 									padding: paddingLG,

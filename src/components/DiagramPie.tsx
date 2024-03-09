@@ -14,7 +14,6 @@ import {
 import getSymbol from 'utils/getSymbol';
 import { Flex } from 'antd';
 import languages from 'settings/languages';
-import { getMonth } from 'utils/date';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 interface Value {
@@ -25,31 +24,29 @@ interface Value {
 interface Props {
 	list: ExpenseItem[];
 	interval: 'year' | 'month';
-	intervalBig: string | null;
-	intervalSmall: string | null;
+	intervalBig: number | null;
+	intervalSmall: number | null;
 }
 
 const DiagramPie: React.FC<Props> = observer(
 	({ list, interval, intervalBig, intervalSmall }) => {
 		const { currency, language } = userStore;
-
 		const valuesByCategory: Value[] = useMemo(() => {
 			const values: Value[] = [];
 			list.forEach((item: ExpenseItem) => {
 				const indexOfCategory: number = values.findIndex(
 					(value: Value) => value.category.id === item.category.id
 				);
-
-				let expenseDate: string | null = null;
+				let expenseDate: number | null = null;
 				if (interval === 'year') {
 					if (intervalBig === null && intervalSmall !== null) {
-						expenseDate = item.date.year().toString();
+						expenseDate = item.date.year();
 					}
 				} else if (interval === 'month') {
 					if (intervalSmall === null) {
-						expenseDate = item.date.year().toString();
+						expenseDate = item.date.year();
 					} else {
-						expenseDate = getMonth(language, item.date)[0];
+						expenseDate = item.date.month();
 					}
 				}
 				if (expenseDate === (intervalSmall ? intervalSmall : intervalBig)) {
@@ -88,9 +85,12 @@ const DiagramPie: React.FC<Props> = observer(
 				title: {
 					display: true,
 					text: `${
-						languages.expensesIn(intervalSmall ? intervalSmall : intervalBig)[
-							language
-						]
+						languages.expensesIn(
+							intervalSmall && intervalBig
+								? languages.months[language][intervalSmall]
+								// : languages.months[language][intervalBig]
+								: ''
+						)[language]
 					}`,
 				},
 				legend: {

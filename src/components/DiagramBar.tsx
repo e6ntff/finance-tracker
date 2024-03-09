@@ -13,13 +13,13 @@ import {
 	CategoryScale,
 	LinearScale,
 } from 'chart.js';
-import { getMonth } from 'utils/date';
+import languages from 'settings/languages';
 Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
 
 interface Props {
 	interval: 'year' | 'month';
 	list: ExpenseItem[];
-	setInterval: (arg0: string | null) => void;
+	setInterval: (arg0: number | null) => void;
 }
 
 const DiagramBar: React.FC<Props> = observer(
@@ -28,7 +28,7 @@ const DiagramBar: React.FC<Props> = observer(
 
 		const labels = useMemo(() => {
 			if (interval === 'month') {
-				return getMonth(language);
+				return languages.months[language];
 			} else if (interval === 'year') {
 				const years: string[] = [];
 				list.forEach((item: ExpenseItem) => {
@@ -76,7 +76,7 @@ const DiagramBar: React.FC<Props> = observer(
 			onClick: (_: any, chartElements: any) => {
 				if (chartElements.length) {
 					const index = chartElements[0].index;
-					setInterval(data.labels[index]);
+					setInterval(interval === 'year' ? Number(data.labels[index]) : index);
 				} else {
 					setInterval(null);
 				}

@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Expenses from '../pages/Expenses';
 import Dashboard from '../pages/Dashboard';
-import Home from '../pages/Home';
 import paths from '../settings/paths';
 import Settings from '../pages/Settings';
 import Categories from '../pages/Categories';
@@ -40,10 +39,6 @@ const AppRoutes: React.FC = observer(() => {
 			<Route
 				path={paths.expenses}
 				element={logged ? <Expenses /> : <Navigate to='/' />}
-			/>
-			<Route
-				path={paths.home}
-				element={logged ? <Home /> : <Navigate to='/' />}
 			/>
 			<Route
 				path={paths.settings}

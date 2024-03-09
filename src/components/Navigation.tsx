@@ -5,6 +5,12 @@ import { Menu } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
+import {
+	FolderOpenOutlined,
+	LineChartOutlined,
+	SettingOutlined,
+	ShoppingCartOutlined,
+} from '@ant-design/icons';
 
 const Navigation: React.FC = observer(() => {
 	const { language } = userStore;
@@ -12,16 +18,12 @@ const Navigation: React.FC = observer(() => {
 
 	const items = [
 		{
-			label: <NavLink to={paths.home}>{languages.home[language]}</NavLink>,
-			key: paths.home,
-			title: '',
-		},
-		{
 			label: (
 				<NavLink to={paths.dashboard}>{languages.dashboard[language]}</NavLink>
 			),
 			key: paths.dashboard,
 			title: '',
+			icon: <LineChartOutlined />,
 		},
 		{
 			label: (
@@ -29,6 +31,7 @@ const Navigation: React.FC = observer(() => {
 			),
 			key: paths.expenses,
 			title: '',
+			icon: <ShoppingCartOutlined />,
 		},
 		{
 			label: (
@@ -38,6 +41,7 @@ const Navigation: React.FC = observer(() => {
 			),
 			key: paths.categories,
 			title: '',
+			icon: <FolderOpenOutlined />,
 		},
 		{
 			label: (
@@ -45,10 +49,12 @@ const Navigation: React.FC = observer(() => {
 			),
 			key: paths.settings,
 			title: '',
+			icon: <SettingOutlined />,
 		},
 	];
 	return (
 		<Menu
+			style={{ inlineSize: '100%' }}
 			selectedKeys={[location.pathname]}
 			mode='horizontal'
 			theme='dark'

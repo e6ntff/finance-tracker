@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -10,12 +10,16 @@ import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
 import getSymbol from 'utils/getSymbol';
 
-const Dashboard: React.FC = observer(() => {
+const Stats: React.FC = observer(() => {
 	const { list } = listStore;
 	const { language, currency } = userStore;
 
 	const [year, setYear] = useState<number | null>(null);
 	const [month, setMonth] = useState<number | null>(null);
+
+	useEffect(() => {
+		setMonth(null);
+	}, [year]);
 
 	const total = useMemo(
 		() =>
@@ -35,7 +39,6 @@ const Dashboard: React.FC = observer(() => {
 		(month?: number | null) =>
 			filteredList.reduce((acc: number, item: ExpenseItem) => {
 				if (item.date.month() === month || !month) {
-					console.log(item.price[currency]);
 					return acc + item.price[currency];
 				}
 				return acc;
@@ -98,4 +101,4 @@ const Dashboard: React.FC = observer(() => {
 	);
 });
 
-export default Dashboard;
+export default Stats;

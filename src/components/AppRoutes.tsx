@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Expenses from '../pages/Expenses';
-import Dashboard from '../pages/Dashboard';
+import Stats from '../pages/Stats';
 import paths from '../settings/paths';
 import Settings from '../pages/Settings';
 import Categories from '../pages/Categories';
@@ -33,8 +33,8 @@ const AppRoutes: React.FC = observer(() => {
 				element={logged ? <Navigate to='/' /> : <Register />}
 			/>
 			<Route
-				path={paths.dashboard}
-				element={logged ? <Dashboard /> : <Navigate to='/' />}
+				path={paths.stats}
+				element={logged ? <Stats /> : <Navigate to='/' />}
 			/>
 			<Route
 				path={paths.expenses}

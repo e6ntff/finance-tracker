@@ -1,6 +1,5 @@
 const paths = {
-	home: '/home',
-	dashboard: '/dashboard',
+	stats: '/stats',
 	expenses: '/expenses',
 	categories: '/categories',
 	settings: '/settings',

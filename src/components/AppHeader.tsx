@@ -10,7 +10,7 @@ const AppHeader: React.FC = () => {
 		<Flex
 			justify='space-between'
 			align='center'
-		>
+			>
 			<Navigation />
 			<Flex
 				gap={32}

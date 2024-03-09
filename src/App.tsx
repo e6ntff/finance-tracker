@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-import AppHeader from './components/Header';
+import AppHeader from './components/AppHeader';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from './utils/firebase';
 import AppRoutes from './components/AppRoutes';
@@ -29,11 +29,15 @@ const App: React.FC = observer(() => {
 		return () => unsubscribe();
 	}, [setCurrency, setCurrencyRates, setUser]);
 
-	const { paddingLG, borderRadiusLG, marginLG } = theme.useToken().token;
+	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 
 	return (
 		<ConfigProvider theme={{ algorithm: currentTheme.algorithm }}>
-			<Scrollbars autoHide autoHideTimeout={1000} autoHideDuration={200}>
+			<Scrollbars
+				autoHide
+				autoHideTimeout={1000}
+				autoHideDuration={200}
+			>
 				{loading ? (
 					<Flex
 						justify='center'

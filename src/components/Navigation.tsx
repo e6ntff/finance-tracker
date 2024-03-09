@@ -10,30 +10,50 @@ const Navigation: React.FC = observer(() => {
 	const { language } = userStore;
 	const location = useLocation();
 
+	const items = [
+		{
+			label: <NavLink to={paths.home}>{languages.home[language]}</NavLink>,
+			key: paths.home,
+			title: '',
+		},
+		{
+			label: (
+				<NavLink to={paths.dashboard}>{languages.dashboard[language]}</NavLink>
+			),
+			key: paths.dashboard,
+			title: '',
+		},
+		{
+			label: (
+				<NavLink to={paths.expenses}>{languages.expenses[language]}</NavLink>
+			),
+			key: paths.expenses,
+			title: '',
+		},
+		{
+			label: (
+				<NavLink to={paths.categories}>
+					{languages.categories[language]}
+				</NavLink>
+			),
+			key: paths.categories,
+			title: '',
+		},
+		{
+			label: (
+				<NavLink to={paths.settings}>{languages.settings[language]}</NavLink>
+			),
+			key: paths.settings,
+			title: '',
+		},
+	];
 	return (
 		<Menu
 			selectedKeys={[location.pathname]}
 			mode='horizontal'
 			theme='dark'
-		>
-			<Menu.Item key={paths.home}>
-				<NavLink to={paths.home}>{languages.home[language]}</NavLink>
-			</Menu.Item>
-			<Menu.Item key={paths.dashboard}>
-				<NavLink to={paths.dashboard}>{languages.dashboard[language]}</NavLink>
-			</Menu.Item>
-			<Menu.Item key={paths.expenses}>
-				<NavLink to={paths.expenses}>{languages.expenses[language]}</NavLink>
-			</Menu.Item>
-			<Menu.Item key={paths.categories}>
-				<NavLink to={paths.categories}>
-					{languages.categories[language]}
-				</NavLink>
-			</Menu.Item>
-			<Menu.Item key={paths.settings}>
-				<NavLink to={paths.settings}>{languages.settings[language]}</NavLink>
-			</Menu.Item>
-		</Menu>
+			items={items}
+		/>
 	);
 });
 

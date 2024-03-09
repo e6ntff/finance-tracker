@@ -12,6 +12,7 @@ import { AuthUser } from 'settings/interfaces';
 import {
 	EyeInvisibleOutlined,
 	EyeOutlined,
+	LoginOutlined,
 	QuestionCircleOutlined,
 } from '@ant-design/icons';
 
@@ -176,7 +177,7 @@ const Register: React.FC = observer(() => {
 						disabled={!valid}
 						onClick={signIn}
 					>
-						{languages.signIn[language]}
+						<LoginOutlined />
 					</Button>
 					<Link onClick={goToLogIn}>{languages.already[language]}</Link>
 				</Flex>

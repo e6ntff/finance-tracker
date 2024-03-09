@@ -63,7 +63,7 @@ const AddCategory: React.FC = observer(() => {
 				onChange={handleNameChange}
 			/>
 			<Button onClick={addCurrentCategory}>
-				{languages.submitCat[language]}
+				{languages.add[language]}
 			</Button>
 		</Flex>
 	);

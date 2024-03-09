@@ -9,7 +9,11 @@ import languages from 'settings/languages';
 import { Button, Flex, Form, Input, Typography } from 'antd';
 import { AuthUser } from 'settings/interfaces';
 import Link from 'antd/es/typography/Link';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import {
+	EyeInvisibleOutlined,
+	EyeOutlined,
+	LoginOutlined,
+} from '@ant-design/icons';
 
 const auth = getAuth(firebaseApp);
 
@@ -148,7 +152,7 @@ const LogIn: React.FC = observer(() => {
 						disabled={!valid}
 						onClick={logIn}
 					>
-						{languages.logIn[language]}
+						<LoginOutlined />
 					</Button>
 					<Link onClick={goToSignIn}>{languages.yet[language]}</Link>
 				</Flex>

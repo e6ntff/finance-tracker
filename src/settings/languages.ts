@@ -16,7 +16,7 @@ const languages = {
 		ru: 'Главная',
 	},
 	dashboard: {
-		en: 'Dashboard',
+		en: 'Stats',
 		ru: 'Статистика',
 	},
 	expenses: {
@@ -67,25 +67,9 @@ const languages = {
 		en: 'New category',
 		ru: 'Новая категория',
 	},
-	submitCat: {
-		en: 'Add',
-		ru: 'Добавить',
-	},
 	noCategory: {
 		en: 'No category',
 		ru: 'Без категории',
-	},
-	logIn: {
-		en: 'Log in',
-		ru: 'Войти',
-	},
-	signIn: {
-		en: 'Sign in',
-		ru: 'Зарегистрироваться',
-	},
-	signOut: {
-		en: 'Sign out',
-		ru: 'Выйти',
 	},
 	invalidLogin: {
 		en: 'Invalid login or password',
@@ -101,7 +85,7 @@ const languages = {
 	},
 	email: {
 		en: 'E-mail',
-		ru: 'E-mail',
+		ru: 'Электронная почта',
 	},
 	already: {
 		en: 'Already have an account?',
@@ -153,6 +137,10 @@ const languages = {
 		en: `● 6 - 16 symbols`,
 		ru: `● 6 - 16 символов`,
 	},
+	in: {
+		en: 'In',
+		ru: 'За'
+	}
 };
 
 export default languages;

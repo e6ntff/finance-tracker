@@ -5,7 +5,7 @@ import languages from 'settings/languages';
 import { Flex, Select, Typography } from 'antd';
 
 interface Props {
-	year: string;
+	year: string | null;
 	handleYearChanging: any;
 }
 

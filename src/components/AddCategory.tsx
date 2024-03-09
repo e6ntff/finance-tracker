@@ -48,7 +48,10 @@ const AddCategory: React.FC = observer(() => {
 	}, [currentCategory, addCategory, clearCurrentCategory]);
 
 	return (
-		<Flex gap={8}>
+		<Flex
+			gap={32}
+			style={{ inlineSize: '100%' }}
+		>
 			<ColorPicker
 				value={currentCategory.color}
 				format='hex'

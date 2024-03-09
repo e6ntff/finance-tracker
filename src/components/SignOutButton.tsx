@@ -6,11 +6,11 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
-import languages from 'settings/languages';
 import { Button } from 'antd';
+import { PoweroffOutlined } from '@ant-design/icons';
 
 const SignOutButton: React.FC = observer(() => {
-	const { language, setLogged } = userStore;
+	const { setLogged } = userStore;
 	const { setList } = listStore;
 	const { setCategories } = categoryStore;
 	const auth = getAuth(firebaseApp);
@@ -31,7 +31,7 @@ const SignOutButton: React.FC = observer(() => {
 			danger
 			onClick={logOut}
 		>
-			{languages.signOut[language]}
+			<PoweroffOutlined />
 		</Button>
 	);
 });

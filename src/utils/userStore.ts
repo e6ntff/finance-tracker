@@ -13,7 +13,6 @@ class UserStore {
 	categoryStore;
 	user: any = {};
 	logged: boolean = false;
-	loading: boolean = true;
 	language: language = 'en';
 	currency: string = '';
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
@@ -36,15 +35,10 @@ class UserStore {
 		this.logged = value;
 	};
 
-	setLoading = (value: boolean) => {
-		this.loading = value;
-	};
-
 	setUser = (user: any) => {
 		this.user = user;
 		if (user.uid) {
 			this.setLogged(true);
-			this.setLoading(false);
 		}
 		getData(user).then((data) => {
 			if (data) {

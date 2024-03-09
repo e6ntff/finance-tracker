@@ -9,6 +9,7 @@ import { ConfigProvider, Flex, Layout, Spin, theme } from 'antd';
 import { userStore } from 'utils/userStore';
 import getCurrencyRates from 'utils/getCurrencyRates';
 import { Content, Header } from 'antd/es/layout/layout';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const auth = getAuth(firebaseApp);
 
@@ -32,75 +33,80 @@ const App: React.FC = observer(() => {
 
 	return (
 		<ConfigProvider theme={{ algorithm: currentTheme.algorithm }}>
-			{loading ? (
-				<Flex
-					justify='center'
-					align='center'
-				>
+			<Scrollbars
+				autoHide
+				autoHideTimeout={1000}
+				autoHideDuration={200}
+			>
+				{loading ? (
 					<Flex
-						style={{
-							inlineSize: '100%',
-							blockSize: '100%',
-							position: 'absolute',
-							inset: 0,
-						}}
 						justify='center'
 						align='center'
 					>
-						<Spin />
+						<Flex
+							style={{
+								inlineSize: '100%',
+								blockSize: '100%',
+								position: 'absolute',
+								inset: 0,
+							}}
+							justify='center'
+							align='center'
+						>
+							<Spin />
+						</Flex>
 					</Flex>
-				</Flex>
-			) : (
-				<Router>
-					<Layout
-						style={{
-							margin: 'auto',
-							blockSize: '100%',
-						}}
-					>
-						{logged && (
-							<Header
-								style={{
-									inlineSize: 'min(100%, 960px)',
-									margin: 'auto',
-									position: 'sticky',
-									inset: 0,
-									zIndex: 1,
-									borderEndEndRadius: borderRadiusLG,
-									borderEndStartRadius: borderRadiusLG,
-								}}
-							>
-								<AppHeader />
-							</Header>
-						)}
+				) : (
+					<Router>
 						<Layout
 							style={{
-								blockSize: '100%',
-								inlineSize: 'min(100%, 960px)',
 								margin: 'auto',
 							}}
 						>
-							<Layout
-								style={{
-									padding: paddingLG,
-								}}
-							>
-								<Content
+							{logged && (
+								<Header
 									style={{
-										padding: paddingLG,
+										inlineSize: 'min(100%, 960px)',
 										margin: 'auto',
-										inlineSize: `${logged ? '100%' : 'max-content'}`,
-										blockSize: 'min-content',
-										borderRadius: '0.5em',
+										position: 'sticky',
+										inset: 0,
+										zIndex: 1,
+										borderEndEndRadius: borderRadiusLG,
+										borderEndStartRadius: borderRadiusLG,
 									}}
 								>
-									<AppRoutes />
-								</Content>
+									<AppHeader />
+								</Header>
+							)}
+							<Layout
+								style={{
+									blockSize: '100%',
+									inlineSize: 'min(100%, 960px)',
+									margin: 'auto',
+								}}
+							>
+								<Layout
+									style={{
+										padding: paddingLG,
+									}}
+								>
+									<Content
+										style={{
+											padding: paddingLG,
+											margin: 'auto',
+											inlineSize: `${logged ? '100%' : 'max-content'}`,
+											blockSize: 'min-content',
+											borderRadius: '0.5em',
+										}}
+									>
+										<AppRoutes />
+									</Content>
+								</Layout>
 							</Layout>
 						</Layout>
-					</Layout>
-				</Router>
-			)}
+					</Router>
+				)}
+			</Scrollbars>
 		</ConfigProvider>
 	);
 });

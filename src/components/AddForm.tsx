@@ -24,7 +24,7 @@ import dayjs from 'dayjs';
 import CategorySelect from './CategorySelect';
 
 const AddForm: React.FC = observer(() => {
-	const [isFormActive, setIsFormActive] = useState<boolean>(false);
+	const [activeKey, setActiveKey] = useState<string | string[]>([]);
 	const [currency, setCurrency] = useState('USD');
 	const { addItem } = listStore;
 	const { categories } = categoryStore;
@@ -42,15 +42,19 @@ const AddForm: React.FC = observer(() => {
 		setNewItem({ ...emptyItem, id: Math.random() });
 	}, [setNewItem, emptyItem]);
 
-	const toggleFormDisplay = useCallback(() => {
-		setIsFormActive((prev: boolean) => !prev);
-		clearItem();
-	}, [setIsFormActive, clearItem]);
+	const handleActiveKeyChange = useCallback(
+		(key: string | string[]) => {
+			console.log(key)
+			setActiveKey(key);
+			clearItem();
+		},
+		[setActiveKey, clearItem]
+	);
 
 	const addNewItem = useCallback(() => {
 		addItem(newItem);
-		toggleFormDisplay();
-	}, [addItem, toggleFormDisplay, newItem]);
+		handleActiveKeyChange([]);
+	}, [addItem, handleActiveKeyChange, newItem]);
 
 	const handleTitleChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,6 +105,8 @@ const AddForm: React.FC = observer(() => {
 	return (
 		<Collapse
 			ghost
+			activeKey={activeKey}
+			onChange={handleActiveKeyChange}
 			style={{ inlineSize: '50%', alignSelf: 'start' }}
 			size='small'
 			items={[
@@ -166,9 +172,6 @@ const AddForm: React.FC = observer(() => {
 							</Form.Item>
 							<Flex justify='space-between'>
 								<Button onClick={addNewItem}>{languages.add[language]}</Button>
-								<Button onClick={toggleFormDisplay}>
-									{languages.cancel[language]}
-								</Button>
 							</Flex>
 						</Form>
 					),

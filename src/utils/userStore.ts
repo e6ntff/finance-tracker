@@ -16,18 +16,21 @@ class UserStore {
 	language: language = 'en';
 	currency: string = '';
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
-	theme: { theme: 'default' | 'dark'; algorithm: Theme } = {
-		theme: 'default',
-		algorithm: defaultAlgorithm,
+	theme: 'default' | 'dark' = 'default'
+	themeAlgorithm: Theme =
+		this.theme === 'dark' ? defaultAlgorithm : darkAlgorithm;
+
+	setTheme = (key: 'default' | 'dark') => {
+		this.theme = key;
+		localStorage.setItem('theme', key);
+		this.themeAlgorithm = key === 'default' ? defaultAlgorithm : darkAlgorithm;
 	};
 
 	toggleTheme = () => {
-		if (this.theme.theme === 'default') {
-			this.theme.theme = 'dark';
-			this.theme.algorithm = darkAlgorithm;
-		} else if (this.theme.theme === 'dark') {
-			this.theme.theme = 'default';
-			this.theme.algorithm = defaultAlgorithm;
+		if (this.theme === 'default') {
+			this.setTheme('dark');
+		} else if (this.theme === 'dark') {
+			this.setTheme('default');
 		}
 	};
 

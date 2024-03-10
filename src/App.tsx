@@ -14,25 +14,28 @@ import { Scrollbars } from 'react-custom-scrollbars';
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const { logged } = userStore;
-	const { theme: currentTheme } = userStore;
+	const { logged, setTheme } = userStore;
+	const { themeAlgorithm } = userStore;
 	const { setCurrencyRates, setCurrency, setUser } = userStore;
 
 	useEffect(() => {
 		getCurrencyRates().then(setCurrencyRates);
 		setCurrency(localStorage.getItem('currency') || 'USD');
+		setTheme(
+			(localStorage.getItem('theme') as 'default' | 'dark') || 'default'
+		);
 
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
 		});
 
 		return () => unsubscribe();
-	}, [setCurrency, setCurrencyRates, setUser]);
+	}, [setCurrency, setCurrencyRates, setUser, setTheme]);
 
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 
 	return (
-		<ConfigProvider theme={{ algorithm: currentTheme.algorithm }}>
+		<ConfigProvider theme={{ algorithm: themeAlgorithm }}>
 			<Scrollbars
 				autoHide
 				autoHideTimeout={1000}

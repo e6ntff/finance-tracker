@@ -2,13 +2,14 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Empty, Flex } from 'antd';
+import { Button, Empty, Flex } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import Title from 'antd/es/typography/Title';
 import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
 import getSymbol from 'utils/getSymbol';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
@@ -46,53 +47,67 @@ const Stats: React.FC = observer(() => {
 		[filteredList, currency]
 	);
 
+	const goBack = () => {
+		if (month) {
+			setMonth(null);
+		} else if (year) {
+			setYear(null);
+		}
+	};
+
 	return list.length ? (
-		<Flex vertical>
-			<Title level={3}>{`${languages.total[language]}: ${getSymbol(
-				currency
-			)}${Math.round(total)}`}</Title>
-			<Flex
-				align='center'
-				justify='space-between'
-			>
-				<DiagramBar
-					list={list}
-					interval='year'
-					setInterval={setYear}
-				/>
-				<DiagramPie
-					list={list}
-					interval='year'
-					intervalBig={null}
-					intervalSmall={year}
-				/>
-			</Flex>
-			{year && (
-				<>
+		year ? (
+			<>
+				<Flex gap={16}>
+					<Button onClick={goBack}>
+						<ArrowLeftOutlined />
+					</Button>
 					<Title level={3}>{`${languages.expensesIn[language]} ${
 						month ? languages.months[language][month] : ''
 					} ${year}: ${getSymbol(currency)}${Math.round(
 						getTotalInCurrentInterval(month)
 					)}`}</Title>
-					<Flex
-						align='center'
-						justify='space-between'
-					>
-						<DiagramBar
-							interval='month'
-							list={filteredList}
-							setInterval={setMonth}
-						/>
-						<DiagramPie
-							list={filteredList}
-							interval='month'
-							intervalBig={year}
-							intervalSmall={month}
-						/>
-					</Flex>
-				</>
-			)}
-		</Flex>
+				</Flex>
+				<Flex
+					align='center'
+					justify='space-between'
+				>
+					<DiagramBar
+						interval='month'
+						list={filteredList}
+						setInterval={setMonth}
+					/>
+					<DiagramPie
+						list={filteredList}
+						interval='month'
+						intervalBig={year}
+						intervalSmall={month}
+					/>
+				</Flex>
+			</>
+		) : (
+			<>
+				<Title level={3}>{`${languages.expensesAll[language]}: ${getSymbol(
+					currency
+				)}${Math.round(total)}`}</Title>
+				<Flex
+					align='center'
+					justify='space-between'
+				>
+					<DiagramBar
+						list={list}
+						interval='year'
+						setInterval={setYear}
+					/>
+					<DiagramPie
+						list={list}
+						interval='year'
+						intervalBig={null}
+						intervalSmall={year}
+					/>
+				</Flex>
+			</>
+		)
 	) : (
 		<Empty
 			image={Empty.PRESENTED_IMAGE_SIMPLE}

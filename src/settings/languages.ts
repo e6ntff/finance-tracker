@@ -1,8 +1,4 @@
 const languages = {
-	total: {
-		en: 'Total',
-		ru: 'Всего',
-	},
 	filterByYear: {
 		en: 'Filter by year',
 		ru: 'Фильтр по году',

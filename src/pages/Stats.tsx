@@ -8,7 +8,7 @@ import DiagramPie from 'components/DiagramPie';
 import Title from 'antd/es/typography/Title';
 import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
-import getSymbol from 'utils/getSymbol';
+import { getSymbol } from 'utils/utils';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const Stats: React.FC = observer(() => {

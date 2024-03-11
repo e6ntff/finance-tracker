@@ -1,10 +1,10 @@
-import sortByDate from './sortByDate';
+import { sortByDate } from './utils';
 import constants from '../settings/constants';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 class ListStore {
 	list: ExpenseItem[] = [];
-	loading: boolean = true
+	loading: boolean = true;
 
 	setLoading = (value: boolean) => {
 		this.loading = value;

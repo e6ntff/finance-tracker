@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import calculatePrices from '../utils/calculatePrices';
-import getTodayDate from '../utils/date';
-import getSymbol from '../utils/getSymbol';
+import { getSymbol, getTodayDate } from 'utils/utils';
 import CategorySelect from './CategorySelect';
 import { ExpenseItem, category } from '../settings/interfaces';
 import useDebounce from '../hooks/useDebounce';

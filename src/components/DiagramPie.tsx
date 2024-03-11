@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Flex } from 'antd';
 import { Pie } from 'react-chartjs-2';
+import { getSymbol } from 'utils/utils';
 import {
 	Chart,
 	ArcElement,
@@ -12,7 +13,6 @@ import {
 	Legend,
 	Title,
 } from 'chart.js';
-import getSymbol from 'utils/getSymbol';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 interface Value {

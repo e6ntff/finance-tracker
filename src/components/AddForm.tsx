@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import getTodayDate from '../utils/date';
+import { getTodayDate } from 'utils/utils';
 import calculatePrices from '../utils/calculatePrices';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';

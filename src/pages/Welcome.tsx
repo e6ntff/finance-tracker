@@ -16,6 +16,7 @@ import {
 	EyeOutlined,
 	LoginOutlined,
 	QuestionCircleOutlined,
+	WarningOutlined,
 } from '@ant-design/icons';
 
 const auth = getAuth(firebaseApp);
@@ -228,15 +229,21 @@ const Welcome: React.FC = observer(() => {
 				gap={16}
 			>
 				{incorrect && (
-					<Typography.Text type='danger'>
-						{languages.invalidLogin[language]}
-					</Typography.Text>
+					<Flex gap={4}>
+						<WarningOutlined />
+						<Typography.Text type='danger'>
+							{languages.invalidLogin[language]}
+						</Typography.Text>
+					</Flex>
 				)}
 				{currentUser.password !== currentUser.passwordAgain &&
 					mode === 'signIn' && (
-						<Typography.Text type='danger'>
-							{languages.passMatch[language]}
-						</Typography.Text>
+						<Flex gap={4}>
+							<WarningOutlined />
+							<Typography.Text type='danger'>
+								{languages.passMatch[language]}
+							</Typography.Text>
+						</Flex>
 					)}
 				<Flex
 					align='center'

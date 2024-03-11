@@ -14,22 +14,21 @@ const CategorySelect: React.FC<Props> = observer(({ item, handler }) => {
 	const { categories } = categoryStore;
 
 	return (
-		<Flex justify='center'>
-			<Select
-				value={item.category.id}
-				onChange={handler}
-				suffixIcon={<EditFilled style={{ color: item.category.color }} />}
-			>
-				{categories.map((category: category) => (
-					<Select.Option
-						key={category.id}
-						value={category.id}
-					>
-						{category.name}
-					</Select.Option>
-				))}
-			</Select>
-		</Flex>
+		<Select
+			style={{ inlineSize: '100%' }}
+			value={item.category.id}
+			onChange={handler}
+			suffixIcon={<EditFilled style={{ color: item.category.color }} />}
+		>
+			{categories.map((category: category) => (
+				<Select.Option
+					key={category.id}
+					value={category.id}
+				>
+					{category.name}
+				</Select.Option>
+			))}
+		</Select>
 	);
 });
 

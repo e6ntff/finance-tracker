@@ -1,6 +1,7 @@
 # Expense Manager
 
 Track and manage your expenses effortlessly with Expense Manager. This application allows you to categorize your spending, visualize expenses through intuitive charts, and customize the display language and currency. Created with react using mobX and beautiful Ant Design components for UI.
+Track and manage your expenses effortlessly with Expense Manager. This application allows you to categorize your spending, visualize expenses through intuitive charts, and customize the display language and currency. Created with react using mobX and beautiful Ant Design components for UI.
 
 ## Features
 

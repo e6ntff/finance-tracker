@@ -28,8 +28,7 @@ const AddForm: React.FC = observer(() => {
 	const [currency, setCurrency] = useState('USD');
 	const { addItem } = listStore;
 	const { categories } = categoryStore;
-	const { language } = userStore;
-	const { currencyRates } = userStore;
+	const { language, currencyRates } = userStore;
 
 	const emptyItem: ExpenseItem = useMemo(
 		() => constants.getEmptyItem(getTodayDate),
@@ -44,7 +43,7 @@ const AddForm: React.FC = observer(() => {
 
 	const handleActiveKeyChange = useCallback(
 		(key: string | string[]) => {
-			console.log(key)
+			console.log(key);
 			setActiveKey(key);
 			clearItem();
 		},

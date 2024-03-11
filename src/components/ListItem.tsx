@@ -66,12 +66,12 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 		[setCurrentItem, categories]
 	);
 
-	const clearInput = (initialValue: number, value: string) => {
+	const clearInput = useCallback((initialValue: number, value: string) => {
 		if (Number(value).toString() === value) {
 			return Number(value);
 		}
 		return initialValue;
-	};
+	}, []);
 
 	const handlePriceChange = useCallback(
 		(value: string) => {
@@ -89,7 +89,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 				};
 			});
 		},
-		[setCurrentItem, currency, currencyRates]
+		[setCurrentItem, currency, currencyRates, clearInput]
 	);
 
 	const debouncedItem = useDebounce(currentItem);

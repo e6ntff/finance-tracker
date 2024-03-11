@@ -13,14 +13,17 @@ class ListStore {
 	setList = (list: ExpenseItem[]) => {
 		this.list = list;
 	};
+
 	addItem = (item: ExpenseItem) => {
 		this.list = sortByDate([item, ...this.list]);
 	};
+
 	removeItem = (itemToRemove: ExpenseItem) => {
 		this.list = this.list.filter(
 			(item: ExpenseItem) => itemToRemove.id !== item.id
 		);
 	};
+
 	replaceItem = (itemToReplace: ExpenseItem) => {
 		this.list = sortByDate(
 			this.list.map((item: ExpenseItem) =>
@@ -28,13 +31,7 @@ class ListStore {
 			)
 		);
 	};
-	setCategoryToItem = (itemToSet: ExpenseItem) => {
-		this.list = this.list.map((item: ExpenseItem) =>
-			item.id === itemToSet.id
-				? { ...item, category: itemToSet.category }
-				: item
-		);
-	};
+
 	clearListFromCategory = (category: category) => {
 		this.list = this.list.map((item: ExpenseItem) =>
 			item.category.id === category.id
@@ -45,6 +42,7 @@ class ListStore {
 				: item
 		);
 	};
+
 	refreshItemByCategory = (category: category) => {
 		this.list = this.list.map((item: ExpenseItem) =>
 			item.category.id === category.id ? { ...item, category: category } : item

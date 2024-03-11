@@ -10,7 +10,7 @@ const Settings: React.FC = observer(() => {
 	const { language, setLanguage, currency, setCurrency } = userStore;
 
 	return (
-		<div className='app'>
+		<Flex justify='center'>
 			<Flex
 				vertical
 				gap={16}
@@ -41,7 +41,7 @@ const Settings: React.FC = observer(() => {
 					/>
 				</Flex>
 			</Flex>
-		</div>
+		</Flex>
 	);
 });
 

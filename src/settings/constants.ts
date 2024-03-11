@@ -5,7 +5,7 @@ const constants = {
 	defaultCategory: {
 		id: 0,
 		color: '#cccccc',
-		name: 'No category',
+		name: 'Other',
 	},
 	getEmptyItem: (getTodayDate: (date: Date) => string) => ({
 		id: Math.random(),

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import firebaseApp from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
@@ -23,12 +23,10 @@ const LogIn: React.FC = observer(() => {
 
 	const [incorrect, setIncorrect] = useState<boolean>(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-
 	const [fields, setFields] = useState({
 		email: true,
 		password: true,
 	});
-
 	const [currentUser, setCurrentUser] = useState<AuthUser>({
 		email: '',
 		password: '',
@@ -94,6 +92,16 @@ const LogIn: React.FC = observer(() => {
 	const handlePasswordVisibilityChange = () => {
 		setIsPasswordVisible((prev: boolean) => !prev);
 	};
+
+	useEffect(() => {
+		const logInWithEnter = (key: any) => {
+			if (key.code === 'Enter' && valid) logIn();
+		};
+
+		window.addEventListener('keyup', logInWithEnter);
+
+		return () => window.removeEventListener('keyup', logInWithEnter);
+	});
 
 	return (
 		<Form

@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+} from 'firebase/auth';
 import firebaseApp from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
-import paths from '../settings/paths';
 import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
@@ -18,37 +20,64 @@ import {
 
 const auth = getAuth(firebaseApp);
 
-const Register: React.FC = observer(() => {
-	const navigate = useNavigate();
-
+const Welcome: React.FC = observer(() => {
 	const { language, setLogged } = userStore;
 
+	const emptyFields = useMemo(
+		() => ({
+			logIn: {
+				email: false,
+				password: false,
+			},
+			signIn: {
+				email: false,
+				password: false,
+				passwordAgain: false,
+			},
+		}),
+		[]
+	);
+
+	const emptyUser = useMemo(
+		() => ({
+			logIn: {
+				email: '',
+				password: '',
+			},
+			signIn: {
+				email: '',
+				password: '',
+				passwordAgain: '',
+			},
+		}),
+		[]
+	);
+
+	const [mode, setMode] = useState<'logIn' | 'signIn'>('logIn');
 	const [incorrect, setIncorrect] = useState<boolean>(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-	const [fields, setFields] = useState({
-		email: false,
-		password: false,
-		passwordAgain: false,
-	});
-	const [currentUser, setCurrentUser] = useState<AuthUser>({
-		email: '',
-		password: '',
-		passwordAgain: '',
-	});
+	const [fields, setFields] = useState<AuthUser<boolean>>(emptyFields[mode]);
+	const [currentUser, setCurrentUser] = useState<AuthUser<string>>(
+		emptyUser[mode]
+	);
 
 	const valid: boolean = useMemo(() => {
 		for (const field of Object.values(fields)) {
 			if (!field) return false;
 		}
-		if (currentUser.password !== currentUser.passwordAgain) return false;
+		if (currentUser.password !== currentUser.passwordAgain && mode === 'signIn')
+			return false;
 		return true;
-	}, [fields, currentUser.password, currentUser.passwordAgain]);
+	}, [fields, currentUser.password, currentUser.passwordAgain, mode]);
 
 	const handleEmailChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			const { value, validity } = event.target;
 			setIncorrect(false);
-			setCurrentUser((prevUser: AuthUser) => ({ ...prevUser, email: value }));
+			setCurrentUser((prevUser: AuthUser<string>) => ({
+				...prevUser,
+				email: value,
+			}));
 			setFields((prevFields) => ({ ...prevFields, email: validity.valid }));
 		},
 		[setIncorrect, setCurrentUser, setFields]
@@ -58,7 +87,7 @@ const Register: React.FC = observer(() => {
 		(event: React.ChangeEvent<HTMLInputElement>, again?: boolean) => {
 			const { value } = event.target;
 			setIncorrect(false);
-			setCurrentUser((prevUser: AuthUser) => ({
+			setCurrentUser((prevUser: AuthUser<string>) => ({
 				...prevUser,
 				[again ? 'passwordAgain' : 'password']: value,
 			}));
@@ -78,16 +107,43 @@ const Register: React.FC = observer(() => {
 				currentUser.email,
 				currentUser.password
 			);
-			navigate('/');
 			setLogged(true);
 		} catch (error: any) {
 			setIncorrect(true);
 		}
-	}, [currentUser, navigate, setLogged]);
+	}, [currentUser, setLogged]);
 
-	const goToLogIn = useCallback(() => {
-		navigate(paths.login);
-	}, [navigate]);
+	const logIn = useCallback(async () => {
+		try {
+			await signInWithEmailAndPassword(
+				auth,
+				currentUser.email,
+				currentUser.password
+			);
+			setLogged(true);
+		} catch (error: any) {
+			setIncorrect(true);
+		}
+	}, [setIncorrect, currentUser.email, currentUser.password, setLogged]);
+
+	const changeMode = useCallback(() => {
+		setMode((prevMode: 'logIn' | 'signIn') => {
+			const newMode = prevMode === 'logIn' ? 'signIn' : 'logIn';
+			setFields(emptyFields[newMode]);
+			setCurrentUser(emptyUser[newMode]);
+			setIncorrect(false);
+			setIsPasswordVisible(false);
+			return newMode;
+		});
+	}, [
+		setMode,
+		setFields,
+		setCurrentUser,
+		setIncorrect,
+		setIsPasswordVisible,
+		emptyFields,
+		emptyUser,
+	]);
 
 	const handlePasswordVisibilityChange = () => {
 		setIsPasswordVisible((prev: boolean) => !prev);
@@ -126,12 +182,14 @@ const Register: React.FC = observer(() => {
 				label={
 					<Flex gap={4}>
 						{languages.password[language]}
-						<Tooltip
-							title={languages.passwordRequirements[language]}
-							placement='right'
-						>
-							<QuestionCircleOutlined style={{ opacity: 0.5 }} />
-						</Tooltip>
+						{mode === 'signIn' && (
+							<Tooltip
+								title={languages.passwordRequirements[language]}
+								placement='right'
+							>
+								<QuestionCircleOutlined style={{ opacity: 0.5 }} />
+							</Tooltip>
+						)}
 					</Flex>
 				}
 			>
@@ -155,14 +213,16 @@ const Register: React.FC = observer(() => {
 					}
 				/>
 			</Form.Item>
-			<Form.Item label={languages.repeatPassword[language]}>
-				<Input
-					required
-					type='password'
-					value={currentUser.passwordAgain}
-					onChange={(event) => handlePasswordChange(event, true)}
-				/>
-			</Form.Item>
+			{mode === 'signIn' && (
+				<Form.Item label={languages.repeatPassword[language]}>
+					<Input
+						required
+						type='password'
+						value={currentUser.passwordAgain}
+						onChange={(event) => handlePasswordChange(event, true)}
+					/>
+				</Form.Item>
+			)}
 			<Flex
 				vertical
 				gap={16}
@@ -172,26 +232,31 @@ const Register: React.FC = observer(() => {
 						{languages.invalidLogin[language]}
 					</Typography.Text>
 				)}
-				{currentUser.password !== currentUser.passwordAgain && (
-					<Typography.Text type='danger'>
-						{languages.passMatch[language]}
-					</Typography.Text>
-				)}
+				{currentUser.password !== currentUser.passwordAgain &&
+					mode === 'signIn' && (
+						<Typography.Text type='danger'>
+							{languages.passMatch[language]}
+						</Typography.Text>
+					)}
 				<Flex
 					align='center'
 					gap={16}
 				>
 					<Button
 						disabled={!valid}
-						onClick={signIn}
+						onClick={logIn}
 					>
 						<LoginOutlined />
 					</Button>
-					<Link onClick={goToLogIn}>{languages.already[language]}</Link>
+					<Link onClick={changeMode}>
+						{mode === 'logIn'
+							? languages.already[language]
+							: languages.yet[language]}
+					</Link>
 				</Flex>
 			</Flex>
 		</Form>
 	);
 });
 
-export default Register;
+export default Welcome;

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { theme } from 'antd';
 
-const {defaultAlgorithm, darkAlgorithm} = theme
+const { defaultAlgorithm, darkAlgorithm } = theme;
 export interface category {
 	id: number;
 	color: string;
@@ -26,12 +26,12 @@ export interface rates {
 	EUR: number;
 	RUB: number;
 }
-export interface AuthUser {
-	email: string;
-	password: string;
-	passwordAgain?: string;
+export interface AuthUser<T> {
+	email: T;
+	password: T;
+	passwordAgain?: T;
 }
 
 export type language = 'en' | 'ru';
 
-export type Theme = typeof darkAlgorithm | typeof defaultAlgorithm
+export type Theme = typeof darkAlgorithm | typeof defaultAlgorithm;

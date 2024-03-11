@@ -5,10 +5,9 @@ import Stats from '../pages/Stats';
 import paths from '../settings/paths';
 import Settings from '../pages/Settings';
 import Categories from '../pages/Categories';
-import Login from '../pages/LogIn';
-import Register from '../pages/SignIn';
 import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
+import Welcome from 'pages/Welcome';
 
 const AppRoutes: React.FC = observer(() => {
 	const { logged } = userStore;
@@ -16,21 +15,7 @@ const AppRoutes: React.FC = observer(() => {
 		<Routes>
 			<Route
 				path='/'
-				element={
-					logged ? (
-						<Navigate to={paths.expenses} />
-					) : (
-						<Navigate to={paths.login} />
-					)
-				}
-			/>
-			<Route
-				path={paths.login}
-				element={logged ? <Navigate to='/' /> : <Login />}
-			/>
-			<Route
-				path={paths.register}
-				element={logged ? <Navigate to='/' /> : <Register />}
+				element={logged ? <Navigate to={paths.expenses} /> : <Welcome />}
 			/>
 			<Route
 				path={paths.stats}

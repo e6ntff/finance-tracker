@@ -11,10 +11,11 @@ Track and manage your expenses effortlessly with Expense Manager. This applicati
 
 ## Screenshots
 
-![Diagram](https://ibb.co/sjgSZQT/image.png)
-![Form](https://ibb.co/XJ7zX9d/image.png)
-![Expenses](https://ibb.co/sjgSZQT/image.png)
-![Categories](https://ibb.co/sjgSZQT/image.png)
+![Diagram](https://i.ibb.co/3vLBSZF/image.png)
+![Form](https://i.ibb.co/vQQ3n7C/image.png)
+![Expenses](https://i.ibb.co/hKmRZWF/image.png)
+![Categories](https://i.ibb.co/8cG38yM/image.png)
 
 ## Contributions
+
 You can contribute all you want to help me improve my project!

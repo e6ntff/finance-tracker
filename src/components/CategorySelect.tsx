@@ -2,7 +2,7 @@ import React from 'react';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
-import { Flex, Select } from 'antd';
+import { Select } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 interface Props {

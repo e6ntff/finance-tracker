@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
+import { Flex } from 'antd';
 import { Pie } from 'react-chartjs-2';
 import {
 	Chart,
@@ -12,8 +13,6 @@ import {
 	Title,
 } from 'chart.js';
 import getSymbol from 'utils/getSymbol';
-import { Flex } from 'antd';
-import languages from 'settings/languages';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 interface Value {
@@ -30,7 +29,7 @@ interface Props {
 
 const DiagramPie: React.FC<Props> = observer(
 	({ list, interval, intervalBig, intervalSmall }) => {
-		const { currency, language } = userStore;
+		const { currency } = userStore;
 		const valuesByCategory: Value[] = useMemo(() => {
 			const values: Value[] = [];
 			list.forEach((item: ExpenseItem) => {
@@ -80,29 +79,8 @@ const DiagramPie: React.FC<Props> = observer(
 			],
 		};
 
-		const text = useMemo(() => {
-			if (interval === 'year') {
-				if (intervalSmall) {
-					return `${languages.expensesIn[language]} ${intervalSmall}`;
-				} else {
-					return languages.expensesAll[language];
-				}
-			} else if (interval === 'month') {
-				if (intervalSmall) {
-					return `${languages.expensesIn[language]} ${languages.months[language][intervalSmall]} ${intervalBig}`;
-				} else {
-					return `${languages.expensesIn[language]} ${intervalBig}`;
-				}
-			}
-			return '';
-		}, [interval, intervalBig, intervalSmall, language]);
-
 		const options = {
 			plugins: {
-				title: {
-					display: true,
-					text: text,
-				},
 				legend: {
 					display: true,
 					position: 'right' as const,

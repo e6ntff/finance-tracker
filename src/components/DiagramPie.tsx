@@ -29,7 +29,7 @@ interface Props {
 
 const DiagramPie: React.FC<Props> = observer(
 	({ list, interval, intervalBig, intervalSmall }) => {
-		const { currency } = userStore;
+		const { currency, isSmallScreen } = userStore;
 
 		const valuesByCategory: Value[] = useMemo(() => {
 			const values: Value[] = [];
@@ -90,7 +90,7 @@ const DiagramPie: React.FC<Props> = observer(
 		};
 
 		return (
-			<Flex style={{ inlineSize: '40%' }}>
+			<Flex style={{ inlineSize: isSmallScreen ? 'unset' : '40%' }}>
 				<Pie
 					data={data}
 					options={options}

@@ -24,7 +24,7 @@ interface Props {
 
 const DiagramBar: React.FC<Props> = observer(
 	({ interval, list, setInterval }) => {
-		const { currency, language } = userStore;
+		const { currency, language, isSmallScreen } = userStore;
 
 		const labels = useMemo(() => {
 			if (interval === 'month') {
@@ -84,7 +84,7 @@ const DiagramBar: React.FC<Props> = observer(
 		};
 
 		return (
-			<Flex style={{ inlineSize: '50%' }}>
+			<Flex style={{ inlineSize: isSmallScreen ? 'unset' : '50%' }}>
 				<Bar
 					data={data}
 					options={options}

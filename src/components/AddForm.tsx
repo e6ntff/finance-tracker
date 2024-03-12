@@ -29,7 +29,7 @@ const AddForm: React.FC = observer(() => {
 	const [currency, setCurrency] = useState('USD');
 	const { addItem } = listStore;
 	const { categories } = categoryStore;
-	const { language, currencyRates } = userStore;
+	const { language, currencyRates, isSmallScreen } = userStore;
 
 	const emptyItem: ExpenseItem = useMemo(
 		() => constants.getEmptyItem(getTodayDate),
@@ -65,7 +65,8 @@ const AddForm: React.FC = observer(() => {
 
 	const handleDateChange = useCallback(
 		(value: dayjs.Dayjs) => {
-			setNewItem((prevItem: ExpenseItem) => ({ ...prevItem, date: value }));
+			if (value)
+				setNewItem((prevItem: ExpenseItem) => ({ ...prevItem, date: value }));
 		},
 		[setNewItem]
 	);
@@ -101,12 +102,60 @@ const AddForm: React.FC = observer(() => {
 		[setNewItem, currency, currencyRates]
 	);
 
+	const TitleJSX = (
+		<Input
+			required
+			type='text'
+			value={newItem.title}
+			onInput={handleTitleChange}
+		/>
+	);
+
+	const PriceJSX = (
+		<Input
+			required
+			type='number'
+			min='1'
+			step='1'
+			value={Math.round(newItem.price[currency])}
+			onInput={handlePriceChange}
+		/>
+	);
+
+	const CurrencyJSX = (
+		<CurrencySelect
+			value={currency}
+			setCurrency={setCurrency}
+			onChange={setCurrency}
+		/>
+	);
+
+	const DateJSX = (
+		<DatePicker
+			required
+			onChange={handleDateChange}
+			value={newItem.date}
+			minDate={dayjs('2020-01-01')}
+			maxDate={dayjs(getTodayDate(new Date()))}
+		/>
+	);
+
+	const CategoryJSX = (
+		<CategorySelect
+			item={newItem}
+			handler={handleCategoryChange}
+		/>
+	);
+
 	return (
 		<Collapse
 			ghost
 			activeKey={activeKey}
 			onChange={handleActiveKeyChange}
-			style={{ inlineSize: '50%', alignSelf: 'start' }}
+			style={{
+				inlineSize: isSmallScreen ? '100%' : 'min(25em, 50%)',
+				alignSelf: 'start',
+			}}
 			size='small'
 			items={[
 				{
@@ -120,53 +169,20 @@ const AddForm: React.FC = observer(() => {
 							style={{ inlineSize: '100%' }}
 						>
 							<Form.Item label={languages.title[language]}>
-								<Input
-									required
-									type='text'
-									value={newItem.title}
-									onInput={handleTitleChange}
-								/>
+								{TitleJSX}
 							</Form.Item>
 							<Form.Item label={languages.price[language]}>
 								<Row>
-									<Col span={5}>
-										<CurrencySelect
-											value={currency}
-											setCurrency={setCurrency}
-											onChange={setCurrency}
-										/>
-									</Col>
+									<Col span={16}>{PriceJSX}</Col>
 									<Col span={1}></Col>
-									<Col span={18}>
-										<Input
-											required
-											type='number'
-											min='1'
-											step='1'
-											value={Math.round(newItem.price[currency])}
-											onInput={handlePriceChange}
-										/>
-									</Col>
+									<Col span={7}>{CurrencyJSX}</Col>
 								</Row>
 							</Form.Item>
 							<Form.Item label={languages.dateAndCat[language]}>
 								<Row>
-									<Col span={15}>
-										<CategorySelect
-											item={newItem}
-											handler={handleCategoryChange}
-										/>
-									</Col>
+									<Col span={10}>{DateJSX}</Col>
 									<Col span={1}></Col>
-									<Col span={8}>
-										<DatePicker
-											required
-											onChange={handleDateChange}
-											value={newItem.date}
-											minDate={dayjs('2020-01-01')}
-											maxDate={dayjs(getTodayDate(new Date()))}
-										/>
-									</Col>
+									<Col span={13}>{CategoryJSX}</Col>
 								</Row>
 							</Form.Item>
 							<Flex justify='space-between'>

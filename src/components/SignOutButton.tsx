@@ -10,7 +10,7 @@ import { Button } from 'antd';
 import { PoweroffOutlined } from '@ant-design/icons';
 
 const SignOutButton: React.FC = observer(() => {
-	const { setLogged } = userStore;
+	const { setLogged, isSmallScreen } = userStore;
 	const { setList } = listStore;
 	const { setCategories } = categoryStore;
 	const auth = getAuth(firebaseApp);
@@ -28,6 +28,7 @@ const SignOutButton: React.FC = observer(() => {
 
 	return (
 		<Button
+			size={isSmallScreen ? 'small' : 'middle'}
 			danger
 			onClick={logOut}
 		>

@@ -14,13 +14,15 @@ import {
 
 const Navigation: React.FC = observer(() => {
 	const location = useLocation();
-	
-	const { language } = userStore;
+
+	const { language, isSmallScreen } = userStore;
 
 	const items = [
 		{
 			label: (
-				<NavLink to={paths.stats}>{languages.stats[language]}</NavLink>
+				<NavLink to={paths.stats}>
+					{!isSmallScreen && languages.stats[language]}
+				</NavLink>
 			),
 			key: paths.stats,
 			title: '',
@@ -28,7 +30,9 @@ const Navigation: React.FC = observer(() => {
 		},
 		{
 			label: (
-				<NavLink to={paths.expenses}>{languages.expenses[language]}</NavLink>
+				<NavLink to={paths.expenses}>
+					{!isSmallScreen && languages.expenses[language]}
+				</NavLink>
 			),
 			key: paths.expenses,
 			title: '',
@@ -37,7 +41,7 @@ const Navigation: React.FC = observer(() => {
 		{
 			label: (
 				<NavLink to={paths.categories}>
-					{languages.categories[language]}
+					{!isSmallScreen && languages.categories[language]}
 				</NavLink>
 			),
 			key: paths.categories,
@@ -46,7 +50,9 @@ const Navigation: React.FC = observer(() => {
 		},
 		{
 			label: (
-				<NavLink to={paths.settings}>{languages.settings[language]}</NavLink>
+				<NavLink to={paths.settings}>
+					{!isSmallScreen && languages.settings[language]}
+				</NavLink>
 			),
 			key: paths.settings,
 			title: '',

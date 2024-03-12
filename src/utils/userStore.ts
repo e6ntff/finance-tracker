@@ -12,13 +12,18 @@ class UserStore {
 	listStore;
 	categoryStore;
 	user: any = {};
+	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
 	language: language = 'en';
 	currency: string = '';
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
-	theme: 'default' | 'dark' = 'default'
+	theme: 'default' | 'dark' = 'default';
 	themeAlgorithm: Theme =
 		this.theme === 'dark' ? defaultAlgorithm : darkAlgorithm;
+
+	setIsSmallScreen = (value: boolean) => {
+		this.isSmallScreen = value;
+	};
 
 	setTheme = (key: 'default' | 'dark') => {
 		this.theme = key;

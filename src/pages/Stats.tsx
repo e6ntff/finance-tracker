@@ -13,7 +13,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
-	const { language, currency } = userStore;
+	const { language, currency, isSmallScreen } = userStore;
 
 	const [year, setYear] = useState<number | null>(null);
 	const [month, setMonth] = useState<number | null>(null);
@@ -56,58 +56,61 @@ const Stats: React.FC = observer(() => {
 	};
 
 	return list.length ? (
-		year ? (
-			<>
-				<Flex gap={16}>
+		<>
+			<Flex gap={16}>
+				{year && (
 					<Button onClick={goBack}>
 						<ArrowLeftOutlined />
 					</Button>
+				)}
+				{year ? (
 					<Title level={3}>{`${languages.expensesIn[language]} ${
 						month ? languages.months[language][month] : ''
 					} ${year}: ${getSymbol(currency)}${Math.round(
 						getTotalInCurrentInterval(month)
 					)}`}</Title>
-				</Flex>
-				<Flex
-					align='center'
-					justify='space-between'
-				>
-					<DiagramBar
-						interval='month'
-						list={filteredList}
-						setInterval={setMonth}
-					/>
-					<DiagramPie
-						list={filteredList}
-						interval='month'
-						intervalBig={year}
-						intervalSmall={month}
-					/>
-				</Flex>
-			</>
-		) : (
-			<>
-				<Title level={3}>{`${languages.expensesAll[language]}: ${getSymbol(
-					currency
-				)}${Math.round(total)}`}</Title>
-				<Flex
-					align='center'
-					justify='space-between'
-				>
-					<DiagramBar
-						list={list}
-						interval='year'
-						setInterval={setYear}
-					/>
-					<DiagramPie
-						list={list}
-						interval='year'
-						intervalBig={null}
-						intervalSmall={year}
-					/>
-				</Flex>
-			</>
-		)
+				) : (
+					<Title level={3}>{`${languages.expensesAll[language]}: ${getSymbol(
+						currency
+					)}${Math.round(total)}`}</Title>
+				)}
+			</Flex>
+			<Flex
+				align='center'
+				justify='space-between'
+				style={{ flexDirection: isSmallScreen ? 'column-reverse' : 'row' }}
+			>
+				{year ? (
+					<>
+						<DiagramBar
+							interval='month'
+							list={filteredList}
+							setInterval={setMonth}
+						/>
+						<DiagramPie
+							list={filteredList}
+							interval='month'
+							intervalBig={year}
+							intervalSmall={month}
+						/>
+					</>
+				) : (
+					<>
+						<DiagramBar
+							list={list}
+							interval='year'
+							setInterval={setYear}
+						/>
+						<DiagramPie
+							list={list}
+							interval='year'
+							intervalBig={null}
+							intervalSmall={year}
+						/>
+					</>
+				)}
+			</Flex>
+		</>
 	) : (
 		<Empty
 			image={Empty.PRESENTED_IMAGE_SIMPLE}

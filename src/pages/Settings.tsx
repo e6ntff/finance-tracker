@@ -14,7 +14,7 @@ const Settings: React.FC = observer(() => {
 			<Flex
 				vertical
 				gap={16}
-				style={{ inlineSize: '25%' }}
+				style={{ inlineSize: '10em' }}
 			>
 				<Flex
 					vertical

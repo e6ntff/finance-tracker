@@ -5,7 +5,7 @@ import CategorySelect from './CategorySelect';
 import { ExpenseItem, category } from '../settings/interfaces';
 import useDebounce from '../hooks/useDebounce';
 import Item from 'antd/es/list/Item';
-import { Button, Col, DatePicker, Flex } from 'antd';
+import { Button, Col, DatePicker, Flex, Row } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
@@ -20,8 +20,7 @@ interface Props {
 
 const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	const { id, category, date, title, price } = initialIitem;
-	const { currency } = userStore;
-	const { currencyRates } = userStore;
+	const { currency, currencyRates, isSmallScreen } = userStore;
 	const { categories } = categoryStore;
 	const { replaceItem, removeItem } = listStore;
 
@@ -49,7 +48,11 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 
 	const handleDateChange = useCallback(
 		(value: any) => {
-			setCurrentItem((prevItem: ExpenseItem) => ({ ...prevItem, date: value }));
+			if (value)
+				setCurrentItem((prevItem: ExpenseItem) => ({
+					...prevItem,
+					date: value,
+				}));
 		},
 		[setCurrentItem]
 	);
@@ -90,50 +93,80 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 		replaceItem(debouncedItem);
 	}, [debouncedItem, replaceItem]);
 
+	const DatePickerJSX = (
+		<DatePicker
+			value={currentItem.date}
+			minDate={dayjs('2020-01-01')}
+			maxDate={dayjs(getTodayDate(new Date()))}
+			onChange={handleDateChange}
+		/>
+	);
+
+	const TitleJSX = (
+		<Flex justify='center'>
+			<Title
+				level={3}
+				style={{ margin: 0 }}
+				editable={{ onChange: handleTitleChange }}
+			>
+				{currentItem.title}
+			</Title>
+		</Flex>
+	);
+
+	const CategorySelectJSX = (
+		<CategorySelect
+			handler={handleCategoryChange}
+			item={currentItem}
+		/>
+	);
+
+	const PriceJSX = (
+		<Flex justify='center'>
+			<Title
+				level={3}
+				style={{ margin: 0 }}
+				editable={{ onChange: handlePriceChange }}
+			>
+				{getSymbol(currency)}
+				{Math.round(currentItem.price[currency])}
+			</Title>
+		</Flex>
+	);
+
+	const ButtonJSX = (
+		<Button onClick={deleteItem}>
+			<DeleteOutlined />
+		</Button>
+	);
+
 	return (
 		<Item>
-			<Col span={4}>
-				<DatePicker
-					value={currentItem.date}
-					minDate={dayjs('2020-01-01')}
-					maxDate={dayjs(getTodayDate(new Date()))}
-					onChange={handleDateChange}
-				/>
-			</Col>
-			<Col span={8}>
-				<Flex justify='center'>
-					<Title
-						level={3}
-						style={{ margin: 0 }}
-						editable={{ onChange: handleTitleChange }}
-					>
-						{currentItem.title}
-					</Title>
+			{isSmallScreen ? (
+				<Flex
+					vertical
+					gap={8}
+					style={{ inlineSize: '100%', margin: 'auto' }}
+				>
+					<Row justify='space-between'>
+						<Col span={14}>{TitleJSX}</Col>
+						<Col span={8}>{PriceJSX}</Col>
+					</Row>
+					<Row justify='space-between'>
+						<Col span={9}>{DatePickerJSX}</Col>
+						<Col span={9}>{CategorySelectJSX}</Col>
+						<Col span={4}>{ButtonJSX}</Col>
+					</Row>
 				</Flex>
-			</Col>
-			<Col span={4}>
-				<CategorySelect
-					handler={handleCategoryChange}
-					item={currentItem}
-				/>
-			</Col>
-			<Col span={5}>
-				<Flex justify='center'>
-					<Title
-						level={3}
-						style={{ margin: 0 }}
-						editable={{ onChange: handlePriceChange }}
-					>
-						{getSymbol(currency)}
-						{Math.round(currentItem.price[currency])}
-					</Title>
-				</Flex>
-			</Col>
-			<Col span={2}>
-				<Button onClick={deleteItem}>
-					<DeleteOutlined />
-				</Button>
-			</Col>
+			) : (
+				<>
+					<Col span={4}>{DatePickerJSX}</Col>
+					<Col span={8}>{TitleJSX}</Col>
+					<Col span={4}>{CategorySelectJSX}</Col>
+					<Col span={5}>{PriceJSX}</Col>
+					<Col span={2}>{ButtonJSX}</Col>
+				</>
+			)}
 		</Item>
 	);
 });

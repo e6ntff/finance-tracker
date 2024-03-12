@@ -10,20 +10,34 @@ import { userStore } from 'utils/userStore';
 import getCurrencyRates from 'utils/getCurrencyRates';
 import { Content, Header } from 'antd/es/layout/layout';
 import { Scrollbars } from 'react-custom-scrollbars';
+import constants from 'settings/constants';
+import { getConfig } from 'settings/getConfig';
 
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const { logged, setTheme } = userStore;
+	const { logged, setTheme, isSmallScreen, setIsSmallScreen } = userStore;
 	const { themeAlgorithm } = userStore;
 	const { setCurrencyRates, setCurrency, setUser } = userStore;
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
+		const handleResize = () => {
+			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [setIsSmallScreen]);
+
+	useEffect(() => {
 		if (logged) setIsLoaded(true);
 		const loadingTimer = setTimeout(() => {
 			setIsLoaded(true);
-		}, 500);
+		}, 1000);
 
 		return () => clearTimeout(loadingTimer);
 	}, [logged]);
@@ -45,7 +59,7 @@ const App: React.FC = observer(() => {
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 
 	return (
-		<ConfigProvider theme={{ algorithm: themeAlgorithm }}>
+		<ConfigProvider theme={getConfig(isSmallScreen, themeAlgorithm)}>
 			<Scrollbars
 				autoHide
 				autoHideTimeout={1000}
@@ -56,6 +70,8 @@ const App: React.FC = observer(() => {
 						style={{
 							margin: 'auto',
 							minBlockSize: '100%',
+							inlineSize: '100%',
+							paddingInline: paddingLG,
 						}}
 					>
 						{isLoaded ? (
@@ -63,13 +79,18 @@ const App: React.FC = observer(() => {
 								{logged && (
 									<Header
 										style={{
-											inlineSize: 'min(100%, 960px)',
+											inlineSize: isSmallScreen
+												? 'min(100%, 560px)'
+												: 'min(100%, 960px)',
+											blockSize: 'unset',
+											lineHeight: '3.5em',
 											margin: 'auto',
 											position: 'sticky',
 											inset: 0,
 											zIndex: 1,
 											borderEndEndRadius: borderRadiusLG,
 											borderEndStartRadius: borderRadiusLG,
+											paddingInline: paddingLG,
 										}}
 									>
 										<AppHeader />
@@ -77,14 +98,16 @@ const App: React.FC = observer(() => {
 								)}
 								<Layout
 									style={{
+										inlineSize: isSmallScreen
+											? 'min(100%, 560px)'
+											: 'min(100%, 960px)',
 										blockSize: '100%',
-										inlineSize: 'min(100%, 960px)',
 										margin: 'auto',
 									}}
 								>
 									<Layout
 										style={{
-											padding: paddingLG,
+											padding: isSmallScreen ? 0 : paddingLG,
 										}}
 									>
 										<Content

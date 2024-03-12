@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 const constants = {
+	windowBreakpoint: 768,
 	baseCurrency: 'USD',
 	defaultCategory: {
 		id: 0,

@@ -3,6 +3,7 @@ import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import { Flex, Select, Typography } from 'antd';
+import { ClockCircleOutlined } from '@ant-design/icons';
 
 interface Props {
 	year: string | null;
@@ -14,8 +15,8 @@ const YearSelect: React.FC<Props> = observer(({ year, handleYearChanging }) => {
 
 	return (
 		<Flex
-			gap={16}
-			align='center'
+			gap={8}
+			style={{ alignSelf: 'start' }}
 		>
 			<Select
 				value={year}
@@ -27,7 +28,7 @@ const YearSelect: React.FC<Props> = observer(({ year, handleYearChanging }) => {
 				<Select.Option value='2021'>2021</Select.Option>
 				<Select.Option value='2020'>2020</Select.Option>
 			</Select>
-			<Typography.Text>{languages.filterByYear[language]}</Typography.Text>
+			<ClockCircleOutlined style={{ opacity: 0.5 }} />
 		</Flex>
 	);
 });

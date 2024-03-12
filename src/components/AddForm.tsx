@@ -22,6 +22,7 @@ import { listStore } from 'utils/listStore';
 import constants from 'settings/constants';
 import dayjs from 'dayjs';
 import CategorySelect from './CategorySelect';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const AddForm: React.FC = observer(() => {
 	const [activeKey, setActiveKey] = useState<string | string[]>([]);
@@ -43,7 +44,6 @@ const AddForm: React.FC = observer(() => {
 
 	const handleActiveKeyChange = useCallback(
 		(key: string | string[]) => {
-			console.log(key);
 			setActiveKey(key);
 			clearItem();
 		},
@@ -170,7 +170,12 @@ const AddForm: React.FC = observer(() => {
 								</Row>
 							</Form.Item>
 							<Flex justify='space-between'>
-								<Button onClick={addNewItem}>{languages.add[language]}</Button>
+								<Button onClick={addNewItem}>
+									<CheckOutlined />
+								</Button>
+								<Button onClick={() => setActiveKey([])}>
+									<CloseOutlined />
+								</Button>
 							</Flex>
 						</Form>
 					),

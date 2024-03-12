@@ -5,24 +5,22 @@ import SignOutButton from './SignOutButton';
 import { Flex } from 'antd';
 import ThemeCheckbox from './ThemeCheckbox';
 
-const AppHeader: React.FC = () => {
-	return (
+const AppHeader: React.FC = () => (
+	<Flex
+		justify='space-between'
+		align='center'
+	>
+		<Navigation />
 		<Flex
+			gap={32}
 			justify='space-between'
 			align='center'
-			>
-			<Navigation />
-			<Flex
-				gap={32}
-				justify='space-between'
-				align='center'
-			>
-				<ThemeCheckbox />
-				<SignOutButton />
-				<Links />
-			</Flex>
+		>
+			<ThemeCheckbox />
+			<SignOutButton />
+			<Links />
 		</Flex>
-	);
-};
+	</Flex>
+);
 
 export default AppHeader;

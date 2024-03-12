@@ -11,6 +11,7 @@ import Welcome from 'pages/Welcome';
 
 const AppRoutes: React.FC = observer(() => {
 	const { logged } = userStore;
+
 	return (
 		<Routes>
 			<Route

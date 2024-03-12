@@ -13,8 +13,9 @@ import {
 } from '@ant-design/icons';
 
 const Navigation: React.FC = observer(() => {
-	const { language } = userStore;
 	const location = useLocation();
+	
+	const { language } = userStore;
 
 	const items = [
 		{

@@ -3,18 +3,17 @@ import { category } from '../settings/interfaces';
 import constants from 'settings/constants';
 import ColorPicker, { Color } from 'antd/es/color-picker';
 import { Button, Flex, Input } from 'antd';
-import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
-import languages from 'settings/languages';
 import { categoryStore } from 'utils/categoryStore';
+import { CheckOutlined } from '@ant-design/icons';
 
 const AddCategory: React.FC = observer(() => {
-	const { language } = userStore;
 	const { addCategory } = categoryStore;
 
 	const [currentCategory, setCurrentCategory] = useState<category>({
-		...constants.defaultCategory,
 		id: Math.random(),
+		color: '#fff',
+		name: '',
 	});
 
 	const handleNameChange = useCallback(
@@ -63,7 +62,7 @@ const AddCategory: React.FC = observer(() => {
 				onChange={handleNameChange}
 			/>
 			<Button onClick={addCurrentCategory}>
-				{languages.add[language]}
+				<CheckOutlined />
 			</Button>
 		</Flex>
 	);

@@ -6,8 +6,8 @@ import { observer } from 'mobx-react-lite';
 import { List, Spin } from 'antd';
 
 const CategoryList: React.FC = observer(() => {
-	const { categories } = categoryStore;
-	const { loading } = categoryStore;
+	const { categories, loading } = categoryStore;
+
 	return (
 		<List style={{ inlineSize: '100%' }}>
 			{loading && <Spin />}

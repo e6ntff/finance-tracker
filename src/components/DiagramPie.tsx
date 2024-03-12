@@ -30,6 +30,7 @@ interface Props {
 const DiagramPie: React.FC<Props> = observer(
 	({ list, interval, intervalBig, intervalSmall }) => {
 		const { currency } = userStore;
+
 		const valuesByCategory: Value[] = useMemo(() => {
 			const values: Value[] = [];
 			list.forEach((item: ExpenseItem) => {

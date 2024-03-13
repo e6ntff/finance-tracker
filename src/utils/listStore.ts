@@ -1,4 +1,3 @@
-import { sortByDate } from './utils';
 import constants from '../settings/constants';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
@@ -15,7 +14,7 @@ class ListStore {
 	};
 
 	addItem = (item: ExpenseItem) => {
-		this.list = sortByDate([item, ...this.list]);
+		this.list = [item, ...this.list];
 	};
 
 	removeItem = (itemToRemove: ExpenseItem) => {
@@ -25,10 +24,8 @@ class ListStore {
 	};
 
 	replaceItem = (itemToReplace: ExpenseItem) => {
-		this.list = sortByDate(
-			this.list.map((item: ExpenseItem) =>
-				item.id === itemToReplace.id ? itemToReplace : item
-			)
+		this.list = this.list.map((item: ExpenseItem) =>
+			item.id === itemToReplace.id ? itemToReplace : item
 		);
 	};
 

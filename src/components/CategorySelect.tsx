@@ -1,24 +1,25 @@
 import React from 'react';
-import { ExpenseItem, category } from '../settings/interfaces';
+import { category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { Select } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 interface Props {
-	item: ExpenseItem;
+	category: category | null;
 	handler: (arg0: number) => void;
 }
 
-const CategorySelect: React.FC<Props> = observer(({ item, handler }) => {
+const CategorySelect: React.FC<Props> = observer(({ category, handler }) => {
 	const { categories } = categoryStore;
 
 	return (
 		<Select
-			style={{ inlineSize: '100%' }}
-			value={item.category.id}
+			allowClear
+			style={{ minInlineSize: '9em' }}
+			value={category?.id}
 			onChange={handler}
-			suffixIcon={<EditFilled style={{ color: item.category.color }} />}
+			suffixIcon={<EditFilled style={{ color: category?.color }} />}
 		>
 			{categories.map((category: category) => (
 				<Select.Option

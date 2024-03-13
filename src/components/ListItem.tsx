@@ -37,7 +37,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 
 	const startItemDeleting = useCallback(() => {
 		setIsItemDeleting(true);
-	}, [currentItem, removeItem, isItemDeleting, setIsItemDeleting]);
+	}, [setIsItemDeleting]);
 
 	const cancelItemDeleting = useCallback(() => {
 		setIsItemDeleting(false);
@@ -58,7 +58,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 			setDeleteValue(0);
 		}
 		return () => clearInterval(deleteId);
-	}, [isItemDeleting]);
+	}, [isItemDeleting, currentItem, removeItem]);
 
 	const handleTitleChange = useCallback(
 		(value: string) => {
@@ -139,10 +139,15 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	);
 
 	const CategorySelectJSX = (
-		<CategorySelect
-			handler={handleCategoryChange}
-			item={currentItem}
-		/>
+		<Flex
+			vertical
+			align='stretch'
+		>
+			<CategorySelect
+				category={currentItem.category}
+				handler={handleCategoryChange}
+			/>
+		</Flex>
 	);
 
 	const PriceJSX = (

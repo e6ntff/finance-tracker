@@ -49,6 +49,32 @@ const ItemList: React.FC = observer(() => {
 		language,
 		categoryToFilter,
 	]);
+	const filteredList = useMemo(() => {
+		if (year || categoryToFilter) {
+			return sortBy(
+				list.filter((item: ExpenseItem) => {
+					if (!categoryToFilter) return item.date.year().toString() === year;
+					if (!year) return item.category.id === categoryToFilter.id;
+					return (
+						item.date.year().toString() === year &&
+						item.category.id === categoryToFilter.id
+					);
+				}),
+				sortingAlgorithm,
+				isSortingReversed,
+				language
+			);
+		} else {
+			return sortBy(list, sortingAlgorithm, isSortingReversed, language);
+		}
+	}, [
+		year,
+		list,
+		sortingAlgorithm,
+		isSortingReversed,
+		language,
+		categoryToFilter,
+	]);
 
 	const handleYearChanging = useCallback(
 		(value: string) => {

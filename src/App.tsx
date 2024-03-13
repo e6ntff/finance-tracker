@@ -37,7 +37,7 @@ const App: React.FC = observer(() => {
 		if (logged) setIsLoaded(true);
 		const loadingTimer = setTimeout(() => {
 			setIsLoaded(true);
-		}, 1000);
+		}, constants.spinDelay);
 
 		return () => clearTimeout(loadingTimer);
 	}, [logged]);

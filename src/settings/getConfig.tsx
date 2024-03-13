@@ -11,5 +11,10 @@ export const getConfig: (
 			iconMarginInlineEnd: isSmallScreen ? 0 : 10,
 			itemPaddingInline: 14,
 		},
+		Progress: {
+			motionDurationSlow: '0s',
+			motionEaseInOutCirc: 'linear',
+			motionEaseOutQuint: 'linear',
+		},
 	},
 });

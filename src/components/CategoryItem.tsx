@@ -4,11 +4,12 @@ import useDebounce from '../hooks/useDebounce';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Col, ColorPicker, Flex } from 'antd';
+import { Button, Col, ColorPicker, Flex, Progress } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
 import Item from 'antd/es/list/Item';
-import { DeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
+import constants from 'settings/constants';
 
 interface Props {
 	initialCategory: category;
@@ -18,28 +19,61 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	const { id, color, name } = initialCategory;
 	const { replaceCategory, removeCategory } = categoryStore;
 	const { refreshItemByCategory, clearListFromCategory } = listStore;
+	const [isCategoryItemDeleting, setIsCategoryItemDeleting] =
+		useState<boolean>(false);
+	const [deleteValue, setDeleteValue] = useState<number>(0);
 
-	const [category, setCategory] = useState<category>({
+	const [currentCategory, setCurrentCategory] = useState<category>({
 		id: id,
 		color: color,
 		name: name,
 	});
 
+	const startCategoryItemDeleting = useCallback(() => {
+		setIsCategoryItemDeleting(true);
+	}, [
+		currentCategory,
+		removeCategory,
+		isCategoryItemDeleting,
+		setIsCategoryItemDeleting,
+	]);
+
+	const cancelCategoryItemDeleting = useCallback(() => {
+		setIsCategoryItemDeleting(false);
+	}, [setIsCategoryItemDeleting]);
+
+	useEffect(() => {
+		const deleteId = setInterval(() => {
+			setDeleteValue((prevValue: number) => {
+				const newValue = prevValue + 10;
+				if (newValue >= constants.deleteDelay && isCategoryItemDeleting) {
+					deleteCategory();
+				}
+				return newValue;
+			});
+		}, 10);
+		if (!isCategoryItemDeleting) {
+			clearInterval(deleteId);
+			setDeleteValue(0);
+		}
+		return () => clearInterval(deleteId);
+	}, [isCategoryItemDeleting]);
+
 	const handleNameChange = useCallback((value: string) => {
-		setCategory((prevCategory) => ({
+		setCurrentCategory((prevCategory) => ({
 			...prevCategory,
 			name: value,
 		}));
 	}, []);
 
 	const handleColorChange = useCallback((value: Color) => {
-		setCategory((prevCategory) => ({
+		setCurrentCategory((prevCategory) => ({
 			...prevCategory,
 			color: `#${value.toHex()}`,
 		}));
 	}, []);
 
-	const debouncedCategory = useDebounce(category);
+	const debouncedCategory = useDebounce(currentCategory);
 
 	useEffect(() => {
 		replaceCategory(debouncedCategory);
@@ -47,34 +81,58 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	}, [debouncedCategory, replaceCategory, refreshItemByCategory]);
 
 	const deleteCategory = useCallback(() => {
-		removeCategory(category);
-		clearListFromCategory(category);
-	}, [category, removeCategory, clearListFromCategory]);
+		removeCategory(currentCategory);
+		clearListFromCategory(currentCategory);
+	}, [currentCategory, removeCategory, clearListFromCategory]);
+
+	const ColorPickerJSX = (
+		<ColorPicker
+			value={currentCategory.color}
+			format='hex'
+			onChange={handleColorChange}
+		/>
+	);
+
+	const TitleJSX = (
+		<Flex justify='center'>
+			<Title
+				level={3}
+				editable={{ onChange: handleNameChange }}
+			>
+				{currentCategory.name}
+			</Title>
+		</Flex>
+	);
+
+	const ButtonJSX = isCategoryItemDeleting ? (
+		<Button onClick={cancelCategoryItemDeleting}>
+			<CloseOutlined />
+		</Button>
+	) : (
+		<Button onClick={startCategoryItemDeleting}>
+			<DeleteOutlined />
+		</Button>
+	);
+
+	const ProgressJSX = (
+		<Progress
+			showInfo={false}
+			percent={(deleteValue / constants.deleteDelay) * 100}
+			status='exception'
+		/>
+	);
 
 	return (
 		<Item>
-			<Col span={1}>
-				<ColorPicker
-					value={category.color}
-					format='hex'
-					onChange={handleColorChange}
-				/>
-			</Col>
-			<Col span={20}>
-				<Flex justify='center'>
-					<Title
-						level={3}
-						editable={{ onChange: handleNameChange }}
-					>
-						{category.name}
-					</Title>
-				</Flex>
-			</Col>
-			<Col span={2}>
-				<Button onClick={deleteCategory}>
-					<DeleteOutlined />
-				</Button>
-			</Col>
+			{!isCategoryItemDeleting ? (
+				<>
+					<Col span={1}>{ColorPickerJSX}</Col>
+					<Col span={20}>{TitleJSX}</Col>
+				</>
+			) : (
+				<Col span={21}>{ProgressJSX}</Col>
+			)}
+			<Col span={2}>{ButtonJSX}</Col>
 		</Item>
 	);
 });

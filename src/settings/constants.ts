@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 const constants = {
 	spinDelay: 1500,
-	deleteDelay: 3000,
+	deleteDelay: 1000,
 	windowBreakpoint: 768,
 	baseCurrency: 'USD',
 	defaultCategory: {

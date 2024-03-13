@@ -5,14 +5,15 @@ import CategorySelect from './CategorySelect';
 import { ExpenseItem, category } from '../settings/interfaces';
 import useDebounce from '../hooks/useDebounce';
 import Item from 'antd/es/list/Item';
-import { Button, Col, DatePicker, Flex, Row } from 'antd';
+import { Button, Col, DatePicker, Flex, Progress, Row } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Title from 'antd/es/typography/Title';
-import { DeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
+import constants from 'settings/constants';
 
 interface Props {
 	initialIitem: ExpenseItem;
@@ -23,6 +24,8 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	const { currency, currencyRates, isSmallScreen } = userStore;
 	const { categories } = categoryStore;
 	const { replaceItem, removeItem } = listStore;
+	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
+	const [deleteValue, setDeleteValue] = useState<number>(0);
 
 	const [currentItem, setCurrentItem] = useState<ExpenseItem>({
 		id: id,
@@ -32,9 +35,30 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 		price: price,
 	});
 
-	const deleteItem = useCallback(() => {
-		removeItem(currentItem);
-	}, [currentItem, removeItem]);
+	const startItemDeleting = useCallback(() => {
+		setIsItemDeleting(true);
+	}, [currentItem, removeItem, isItemDeleting, setIsItemDeleting]);
+
+	const cancelItemDeleting = useCallback(() => {
+		setIsItemDeleting(false);
+	}, [setIsItemDeleting]);
+
+	useEffect(() => {
+		const deleteId = setInterval(() => {
+			setDeleteValue((prevValue: number) => {
+				const newValue = prevValue + 10;
+				if (newValue >= constants.deleteDelay && isItemDeleting) {
+					removeItem(currentItem);
+				}
+				return newValue;
+			});
+		}, 10);
+		if (!isItemDeleting) {
+			clearInterval(deleteId);
+			setDeleteValue(0);
+		}
+		return () => clearInterval(deleteId);
+	}, [isItemDeleting]);
 
 	const handleTitleChange = useCallback(
 		(value: string) => {
@@ -134,39 +158,55 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 		</Flex>
 	);
 
-	const ButtonJSX = (
-		<Button onClick={deleteItem}>
+	const ButtonJSX = isItemDeleting ? (
+		<Button onClick={cancelItemDeleting}>
+			<CloseOutlined />
+		</Button>
+	) : (
+		<Button onClick={startItemDeleting}>
 			<DeleteOutlined />
 		</Button>
 	);
 
+	const ProgressJSX = (
+		<Progress
+			showInfo={false}
+			percent={(deleteValue / constants.deleteDelay) * 100}
+			status='exception'
+		/>
+	);
+
 	return (
 		<Item>
-			{isSmallScreen ? (
-				<Flex
-					vertical
-					gap={8}
-					style={{ inlineSize: '100%', margin: 'auto' }}
-				>
-					<Row justify='space-between'>
-						<Col span={14}>{TitleJSX}</Col>
-						<Col span={8}>{PriceJSX}</Col>
-					</Row>
-					<Row justify='space-between'>
-						<Col span={9}>{DatePickerJSX}</Col>
-						<Col span={9}>{CategorySelectJSX}</Col>
-						<Col span={4}>{ButtonJSX}</Col>
-					</Row>
-				</Flex>
+			{!isItemDeleting ? (
+				isSmallScreen ? (
+					<Flex
+						vertical
+						gap={8}
+						style={{ inlineSize: '100%', margin: 'auto' }}
+					>
+						<Row justify='space-between'>
+							<Col span={14}>{TitleJSX}</Col>
+							<Col span={8}>{PriceJSX}</Col>
+						</Row>
+						<Row justify='space-between'>
+							<Col span={9}>{DatePickerJSX}</Col>
+							<Col span={9}>{CategorySelectJSX}</Col>
+							<Col span={4}>{ButtonJSX}</Col>
+						</Row>
+					</Flex>
+				) : (
+					<>
+						<Col span={4}>{DatePickerJSX}</Col>
+						<Col span={8}>{TitleJSX}</Col>
+						<Col span={4}>{CategorySelectJSX}</Col>
+						<Col span={5}>{PriceJSX}</Col>
+					</>
+				)
 			) : (
-				<>
-					<Col span={4}>{DatePickerJSX}</Col>
-					<Col span={8}>{TitleJSX}</Col>
-					<Col span={4}>{CategorySelectJSX}</Col>
-					<Col span={5}>{PriceJSX}</Col>
-					<Col span={2}>{ButtonJSX}</Col>
-				</>
+				<Col span={21}>{ProgressJSX}</Col>
 			)}
+			<Col span={2}>{ButtonJSX}</Col>
 		</Item>
 	);
 });

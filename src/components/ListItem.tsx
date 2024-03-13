@@ -37,7 +37,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 
 	const startItemDeleting = useCallback(() => {
 		setIsItemDeleting(true);
-	}, [currentItem, removeItem, isItemDeleting, setIsItemDeleting]);
+	}, [setIsItemDeleting]);
 
 	const cancelItemDeleting = useCallback(() => {
 		setIsItemDeleting(false);
@@ -58,7 +58,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 			setDeleteValue(0);
 		}
 		return () => clearInterval(deleteId);
-	}, [isItemDeleting]);
+	}, [isItemDeleting, currentItem, removeItem]);
 
 	const handleTitleChange = useCallback(
 		(value: string) => {
@@ -139,10 +139,15 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	);
 
 	const CategorySelectJSX = (
-		<CategorySelect
-			handler={handleCategoryChange}
-			item={currentItem}
-		/>
+		<Flex
+			vertical
+			align='stretch'
+		>
+			<CategorySelect
+				category={currentItem.category}
+				handler={handleCategoryChange}
+			/>
+		</Flex>
 	);
 
 	const PriceJSX = (
@@ -192,7 +197,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 						<Row justify='space-between'>
 							<Col span={9}>{DatePickerJSX}</Col>
 							<Col span={9}>{CategorySelectJSX}</Col>
-							<Col span={4}>{ButtonJSX}</Col>
+							<Col>{ButtonJSX}</Col>
 						</Row>
 					</Flex>
 				) : (
@@ -201,12 +206,15 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 						<Col span={8}>{TitleJSX}</Col>
 						<Col span={4}>{CategorySelectJSX}</Col>
 						<Col span={5}>{PriceJSX}</Col>
+						<Col>{ButtonJSX}</Col>
 					</>
 				)
 			) : (
-				<Col span={21}>{ProgressJSX}</Col>
+				<>
+					<Col span={21}>{ProgressJSX}</Col>
+					<Col>{ButtonJSX}</Col>
+				</>
 			)}
-			<Col span={2}>{ButtonJSX}</Col>
 		</Item>
 	);
 });

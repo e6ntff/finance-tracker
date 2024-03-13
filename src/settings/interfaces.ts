@@ -35,3 +35,5 @@ export interface AuthUser<T> {
 export type language = 'en' | 'ru';
 
 export type Theme = typeof darkAlgorithm | typeof defaultAlgorithm;
+
+export type Sort = 'date' | 'title' | 'price';

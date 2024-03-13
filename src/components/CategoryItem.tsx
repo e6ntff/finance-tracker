@@ -29,14 +29,14 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		name: name,
 	});
 
+	const deleteCategory = useCallback(() => {
+		removeCategory(currentCategory);
+		clearListFromCategory(currentCategory);
+	}, [currentCategory, removeCategory, clearListFromCategory]);
+
 	const startCategoryItemDeleting = useCallback(() => {
 		setIsCategoryItemDeleting(true);
-	}, [
-		currentCategory,
-		removeCategory,
-		isCategoryItemDeleting,
-		setIsCategoryItemDeleting,
-	]);
+	}, [setIsCategoryItemDeleting]);
 
 	const cancelCategoryItemDeleting = useCallback(() => {
 		setIsCategoryItemDeleting(false);
@@ -57,7 +57,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 			setDeleteValue(0);
 		}
 		return () => clearInterval(deleteId);
-	}, [isCategoryItemDeleting]);
+	}, [isCategoryItemDeleting, deleteCategory]);
 
 	const handleNameChange = useCallback((value: string) => {
 		setCurrentCategory((prevCategory) => ({
@@ -79,11 +79,6 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		replaceCategory(debouncedCategory);
 		refreshItemByCategory(debouncedCategory);
 	}, [debouncedCategory, replaceCategory, refreshItemByCategory]);
-
-	const deleteCategory = useCallback(() => {
-		removeCategory(currentCategory);
-		clearListFromCategory(currentCategory);
-	}, [currentCategory, removeCategory, clearListFromCategory]);
 
 	const ColorPickerJSX = (
 		<ColorPicker

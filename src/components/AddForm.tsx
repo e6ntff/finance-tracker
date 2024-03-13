@@ -142,7 +142,7 @@ const AddForm: React.FC = observer(() => {
 
 	const CategoryJSX = (
 		<CategorySelect
-			item={newItem}
+			category={newItem.category}
 			handler={handleCategoryChange}
 		/>
 	);

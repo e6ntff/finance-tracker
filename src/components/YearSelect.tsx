@@ -4,18 +4,20 @@ import { Flex, Select } from 'antd';
 import { ClockCircleOutlined } from '@ant-design/icons';
 
 interface Props {
-	year: string | null;
-	handleYearChanging: any;
+	value: string;
+	onChange: (arg0: string) => void;
 }
 
-const YearSelect: React.FC<Props> = observer(({ year, handleYearChanging }) => (
+const YearSelect: React.FC<Props> = observer(({ value, onChange }) => (
 	<Flex
 		gap={8}
 		style={{ alignSelf: 'start' }}
 	>
 		<Select
-			value={year}
-			onChange={handleYearChanging}
+			allowClear
+			value={value}
+			onChange={onChange}
+			style={{ inlineSize: '6em' }}
 		>
 			<Select.Option value='2024'>2024</Select.Option>
 			<Select.Option value='2023'>2023</Select.Option>

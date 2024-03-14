@@ -58,16 +58,9 @@ const App: React.FC = observer(() => {
 
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 
-	const ScrollbarsRef = useRef(null);
-
 	return (
 		<ConfigProvider theme={getConfig(isSmallScreen, themeAlgorithm)}>
-			<Scrollbars
-				autoHide
-				autoHideTimeout={1000}
-				autoHideDuration={200}
-				ref={ScrollbarsRef}
-			>
+			<Scrollbars autoHide>
 				<Router>
 					<Layout
 						style={{

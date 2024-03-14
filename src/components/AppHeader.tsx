@@ -1,7 +1,7 @@
 import React from 'react';
 import Navigation from './Navigation';
 import Links from './Links';
-import SignOutButton from './SignOutButton';
+import LogOutButton from './LogOutButton';
 import { Flex } from 'antd';
 import ThemeCheckbox from './ThemeCheckbox';
 import { observer } from 'mobx-react-lite';
@@ -22,7 +22,7 @@ const AppHeader: React.FC = observer(() => {
 				align='center'
 			>
 				<ThemeCheckbox />
-				<SignOutButton />
+				<LogOutButton />
 				<Links />
 			</Flex>
 		</Flex>

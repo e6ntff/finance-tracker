@@ -4,6 +4,7 @@ const constants = {
 	spinDelay: 1500,
 	deleteDelay: 1000,
 	windowBreakpoint: 768,
+	defaultPageSize: 20,
 	baseCurrency: 'USD',
 	defaultCategory: {
 		id: 0,

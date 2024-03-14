@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import AppHeader from './components/AppHeader';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -58,12 +58,15 @@ const App: React.FC = observer(() => {
 
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 
+	const ScrollbarsRef = useRef(null);
+
 	return (
 		<ConfigProvider theme={getConfig(isSmallScreen, themeAlgorithm)}>
 			<Scrollbars
 				autoHide
 				autoHideTimeout={1000}
 				autoHideDuration={200}
+				ref={ScrollbarsRef}
 			>
 				<Router>
 					<Layout

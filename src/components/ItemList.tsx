@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useMemo, memo } from 'react';
+import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
 import ListItem from './ListItem';
 import { ExpenseItem, Sort, category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Empty, Flex, List, Spin } from 'antd';
+import { Button, Empty, Flex, List, Pagination, Spin } from 'antd';
 import YearSelect from './YearSelect';
 import SortSelect from './SortSelect';
 import { sortBy } from 'utils/utils';
@@ -11,6 +11,8 @@ import { userStore } from 'utils/userStore';
 import { ReloadOutlined } from '@ant-design/icons';
 import CategorySelect from './CategorySelect';
 import { categoryStore } from 'utils/categoryStore';
+import constants from 'settings/constants';
+import Scrollbars from 'react-custom-scrollbars';
 
 const ItemList: React.FC = observer(() => {
 	const { list, loading } = listStore;
@@ -19,6 +21,8 @@ const ItemList: React.FC = observer(() => {
 	const [year, setYear] = useState<string>('');
 	const [sortingAlgorithm, setSortingAlgorithm] = useState<Sort>('date');
 	const [isSortingReversed, setIsSortingReversed] = useState<boolean>(false);
+	const [pageSize, setPageSize] = useState<number>(constants.defaultPageSize);
+	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [categoryToFilter, setCategoryToFilter] = useState<category | null>(
 		null
 	);
@@ -50,6 +54,12 @@ const ItemList: React.FC = observer(() => {
 		categoryToFilter,
 	]);
 
+	const listToShowOnCurrentPage = useMemo(() => {
+		const startIndex = (currentPage - 1) * pageSize;
+		const endIndex = startIndex + pageSize;
+		return filteredList.slice(startIndex, endIndex);
+	}, [filteredList, currentPage, pageSize]);
+
 	const handleYearChanging = useCallback(
 		(value: string) => {
 			setYear(value);
@@ -73,8 +83,17 @@ const ItemList: React.FC = observer(() => {
 			isSortingReversed ||
 			year ||
 			categoryToFilter ||
+			pageSize !== constants.defaultPageSize ||
+			currentPage !== 1 ||
 			sortingAlgorithm !== 'date',
-		[isSortingReversed, year, sortingAlgorithm, categoryToFilter]
+		[
+			isSortingReversed,
+			year,
+			sortingAlgorithm,
+			categoryToFilter,
+			pageSize,
+			currentPage,
+		]
 	);
 
 	const resetSettings = useCallback(() => {
@@ -92,56 +111,85 @@ const ItemList: React.FC = observer(() => {
 		[setCategoryToFilter, categories]
 	);
 
+	const handlePageChanging = (value: number, size: number) => {
+		setCurrentPage(value);
+		setPageSize(size);
+	};
+
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [year, sortingAlgorithm, isSortingReversed, categoryToFilter]);
+
+	const SelectorsJSX = (
+		<Flex
+			style={{ inlineSize: '100%' }}
+			gap={16}
+			vertical={isSmallScreen}
+		>
+			<Flex gap={16}>
+				<YearSelect
+					value={year}
+					onChange={handleYearChanging}
+				/>
+				<CategorySelect
+					category={categoryToFilter}
+					handler={handleCategoryChange}
+				/>
+			</Flex>
+			<Flex gap={16}>
+				<SortSelect
+					onChange={handleSortAlgorithmChanging}
+					isSortingReversed={isSortingReversed}
+					toggleIsSortingReversed={toggleIsSortingReversed}
+				/>
+				{isSettingsChanged && (
+					<Button onClick={resetSettings}>
+						<ReloadOutlined />
+					</Button>
+				)}
+			</Flex>
+		</Flex>
+	);
+
+	const EmptyJSX = (
+		<Empty
+			image={Empty.PRESENTED_IMAGE_SIMPLE}
+			description={''}
+		/>
+	);
+
+	const ListJSX = (
+		<List style={{ inlineSize: '100%' }}>
+			{listToShowOnCurrentPage.map((item: ExpenseItem) => {
+				return (
+					<ListItem
+						key={item.id}
+						initialIitem={item}
+					/>
+				);
+			})}
+		</List>
+	);
+
+	const PaginationJSX = !loading && (
+		<Pagination
+			showQuickJumper
+			showSizeChanger
+			current={currentPage}
+			pageSize={pageSize}
+			total={filteredList.length}
+			onChange={handlePageChanging}
+			onShowSizeChange={handlePageChanging}
+		/>
+	);
+
 	return (
 		<>
-			<Flex
-				style={{ inlineSize: '100%' }}
-				gap={16}
-				vertical={isSmallScreen}
-			>
-				<Flex gap={16}>
-					<YearSelect
-						value={year}
-						onChange={handleYearChanging}
-					/>
-					<CategorySelect
-						category={categoryToFilter}
-						handler={handleCategoryChange}
-					/>
-				</Flex>
-				<Flex gap={16}>
-					<SortSelect
-						onChange={handleSortAlgorithmChanging}
-						isSortingReversed={isSortingReversed}
-						toggleIsSortingReversed={toggleIsSortingReversed}
-					/>
-					{isSettingsChanged && (
-						<Button onClick={resetSettings}>
-							<ReloadOutlined />
-						</Button>
-					)}
-				</Flex>
-			</Flex>
-			{loading ? (
-				<Spin />
-			) : (
-				!filteredList.length && (
-					<Empty
-						image={Empty.PRESENTED_IMAGE_SIMPLE}
-						description={''}
-					/>
-				)
-			)}
-			<List style={{ inlineSize: '100%' }}>
-				{filteredList.map((item: ExpenseItem) => {
-					return (
-						<ListItem
-							key={item.id}
-							initialIitem={item}
-						/>
-					);
-				})}
-			</List>
+			{SelectorsJSX}
+			{listToShowOnCurrentPage.length >= 10 && PaginationJSX}
+			{loading ? <Spin /> : !filteredList.length && EmptyJSX}
+			{ListJSX}
+			{PaginationJSX}
 		</>
 	);
 });

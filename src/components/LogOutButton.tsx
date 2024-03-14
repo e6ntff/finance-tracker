@@ -21,6 +21,8 @@ const LogOutButton: React.FC = observer(() => {
 			setLogged(false);
 			setList([]);
 			setCategories([constants.defaultCategory]);
+			categoryStore.setLoading(true);
+			listStore.setLoading(true);
 		} catch (error: any) {
 			alert(error.message);
 		}

@@ -251,12 +251,12 @@ const Welcome: React.FC = observer(() => {
 				>
 					<Button
 						disabled={!valid}
-						onClick={logIn}
+						onClick={mode === 'logIn' ? logIn : signIn}
 					>
 						<LoginOutlined />
 					</Button>
 					<Link onClick={changeMode}>
-						{mode === 'logIn'
+						{mode === 'signIn'
 							? languages.already[language]
 							: languages.yet[language]}
 					</Link>

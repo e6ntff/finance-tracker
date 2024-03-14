@@ -185,10 +185,10 @@ const ItemList: React.FC = observer(() => {
 	return (
 		<>
 			{SelectorsJSX}
-			{listToShowOnCurrentPage.length >= 10 && PaginationJSX}
+			{PaginationJSX}
 			{loading ? <Spin /> : !filteredList.length && EmptyJSX}
 			{ListJSX}
-			{PaginationJSX}
+			{listToShowOnCurrentPage.length >= 10 && PaginationJSX}
 		</>
 	);
 });

@@ -7,9 +7,9 @@ import { userStore } from 'utils/userStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
 import { Button } from 'antd';
-import { PoweroffOutlined } from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
 
-const SignOutButton: React.FC = observer(() => {
+const LogOutButton: React.FC = observer(() => {
 	const { setLogged, isSmallScreen } = userStore;
 	const { setList } = listStore;
 	const { setCategories } = categoryStore;
@@ -32,9 +32,9 @@ const SignOutButton: React.FC = observer(() => {
 			danger
 			onClick={logOut}
 		>
-			<PoweroffOutlined />
+			<LogoutOutlined />
 		</Button>
 	);
 });
 
-export default SignOutButton;
+export default LogOutButton;

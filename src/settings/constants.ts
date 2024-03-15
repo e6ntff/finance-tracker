@@ -5,6 +5,7 @@ const constants = {
 	deleteDelay: 1000,
 	windowBreakpoint: 768,
 	defaultPageSize: 20,
+	defaultAlgoritm: 'date',
 	baseCurrency: 'USD',
 	defaultCategory: {
 		id: 0,

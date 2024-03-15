@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Flex, Segmented } from 'antd';
+import { Flex, Segmented } from 'antd';
 import {
 	CalendarOutlined,
 	FontColorsOutlined,
@@ -22,14 +22,13 @@ const SortSelect: React.FC<Props> = observer(
 			gap={8}
 			style={{ alignSelf: 'start' }}
 		>
-			<Button onClick={toggleIsSortingReversed}>
-				{isSortingReversed ? (
-					<SortDescendingOutlined />
-				) : (
-					<SortAscendingOutlined />
-				)}
-			</Button>
+			{isSortingReversed ? (
+				<SortDescendingOutlined />
+			) : (
+				<SortAscendingOutlined />
+			)}
 			<Segmented
+				onDoubleClick={toggleIsSortingReversed}
 				onChange={onChange}
 				options={[
 					{ label: <CalendarOutlined />, value: 'date' },

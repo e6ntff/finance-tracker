@@ -26,42 +26,37 @@ const DiagramBar: React.FC<Props> = observer(
 	({ interval, list, setInterval }) => {
 		const { currency, language, isSmallScreen } = userStore;
 
-		const labels = useMemo(() => {
+		const values: number[] | { [key: string]: number } = useMemo(() => {
 			if (interval === 'month') {
-				return languages.months[language];
-			} else if (interval === 'year') {
-				const years: string[] = [];
+				const result: number[] = new Array(12).fill(0);
+
 				list.forEach((item: ExpenseItem) => {
-					const year = item.date.year().toString();
-					if (!years.find((item: string) => item === year)) years.unshift(year);
+					const key = item.date.month();
+					result[key] += item.price[currency];
 				});
-				return years.sort((prev, next) => Number(prev) - Number(next));
+				return result;
+			} else if (interval === 'year') {
+				const result: { [key: string]: number } = {};
+				list.forEach((item: ExpenseItem) => {
+					const key = item.date.year().toString();
+					if (result[key] === undefined) {
+						result[key] = 0;
+					} else {
+						result[key] += item.price[currency];
+					}
+				});
+				return result;
 			}
 			return [];
-		}, [interval, list, language]);
-
-		const values = useMemo(() => {
-			const values: number[] = new Array(12).fill(0);
-			list.forEach((item: ExpenseItem) => {
-				const index = (() => {
-					if (interval === 'month') {
-						return item.date.month();
-					} else if (interval === 'year') {
-						return item.date.year() - Number(labels[0]);
-					}
-					return -1;
-				})();
-				values[index] += item.price[currency];
-			});
-			return values;
-		}, [currency, list, interval, labels]);
+		}, [currency, list, interval]);
 
 		const data = {
-			labels: labels,
+			labels:
+				interval === 'month' ? languages.months[language] : Object.keys(values),
 			datasets: [
 				{
 					label: getSymbol(currency),
-					data: values,
+					data: Object.values(values),
 					backgroundColor: '#f00',
 				},
 			],

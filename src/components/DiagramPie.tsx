@@ -49,7 +49,9 @@ const DiagramPie: React.FC<Props> = observer(
 						expenseDate = item.date.month();
 					}
 				}
-				if (expenseDate === (intervalSmall ? intervalSmall : intervalBig)) {
+				if (
+					expenseDate === (intervalSmall !== null ? intervalSmall : intervalBig)
+				) {
 					if (indexOfCategory !== -1) {
 						values[indexOfCategory].value += item.price[currency];
 					} else {

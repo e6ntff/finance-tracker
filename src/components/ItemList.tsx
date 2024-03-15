@@ -13,18 +13,41 @@ import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
 import CategoriesSelect from './CategoriesSelect';
 
+interface Options {
+	years: string[];
+	sortingAlgorithm: Sort;
+	isSortingReversed: boolean;
+	pageSize: number;
+	currentPage: number;
+	categoriesToFilter: category[];
+}
+
+const defaultOptions = {
+	years: [],
+	sortingAlgorithm: constants.defaultAlgoritm as Sort,
+	isSortingReversed: false,
+	pageSize: constants.defaultPageSize,
+	currentPage: 1,
+	categoriesToFilter: [],
+};
+
 const ItemList: React.FC = observer(() => {
 	const { list, loading } = listStore;
 	const { categories } = categoryStore;
 	const { language, isSmallScreen } = userStore;
-	const [years, setYears] = useState<string[]>([]);
-	const [sortingAlgorithm, setSortingAlgorithm] = useState<Sort>('date');
-	const [isSortingReversed, setIsSortingReversed] = useState<boolean>(false);
-	const [pageSize, setPageSize] = useState<number>(constants.defaultPageSize);
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [categoriesToFilter, setCategoriesToFilter] = useState<category[]>([]);
+	const [options, setOptions] = useState<Options>(
+		JSON.parse(
+			localStorage.getItem('options') || JSON.stringify(defaultOptions)
+		)
+	);
+
+	useEffect(() => {
+		localStorage.setItem('options', JSON.stringify(options));
+	}, [options]);
 
 	const filteredList = useMemo(() => {
+		const { years, categoriesToFilter, sortingAlgorithm, isSortingReversed } =
+			options;
 		if (years || categoriesToFilter) {
 			return sortBy(
 				list.filter((item: ExpenseItem) => {
@@ -54,69 +77,53 @@ const ItemList: React.FC = observer(() => {
 		} else {
 			return sortBy(list, sortingAlgorithm, isSortingReversed, language);
 		}
-	}, [
-		years,
-		list,
-		sortingAlgorithm,
-		isSortingReversed,
-		language,
-		categoriesToFilter,
-	]);
+	}, [list, language, options]);
 
 	const listToShowOnCurrentPage = useMemo(() => {
+		const { currentPage, pageSize } = options;
 		const startIndex = (currentPage - 1) * pageSize;
 		const endIndex = startIndex + pageSize;
 		return filteredList.slice(startIndex, endIndex);
-	}, [filteredList, currentPage, pageSize]);
+	}, [filteredList, options]);
 
 	const handleYearChanging = useCallback(
 		(values: string[]) => {
-			setYears(values);
+			setOptions((prevOptions: Options) => ({ ...prevOptions, years: values }));
 		},
-		[setYears]
+		[setOptions]
 	);
 
 	const handleSortAlgorithmChanging = useCallback(
 		(value: Sort) => {
-			setSortingAlgorithm(value);
+			setOptions((prevOptions: Options) => ({
+				...prevOptions,
+				sortingAlgorithm: value,
+			}));
 		},
-		[setSortingAlgorithm]
+		[setOptions]
 	);
 
 	const toggleIsSortingReversed = useCallback(() => {
-		setIsSortingReversed((prevValue: boolean) => !prevValue);
-	}, [setIsSortingReversed]);
+		setOptions((prevOptions: Options) => ({
+			...prevOptions,
+			isSortingReversed: !prevOptions.isSortingReversed,
+		}));
+	}, [setOptions]);
 
 	const isSettingsChanged = useMemo(
 		() =>
-			isSortingReversed ||
-			years ||
-			categoriesToFilter ||
-			pageSize !== constants.defaultPageSize ||
-			currentPage !== 1 ||
-			sortingAlgorithm !== 'date',
-		[
-			isSortingReversed,
-			years,
-			sortingAlgorithm,
-			categoriesToFilter,
-			pageSize,
-			currentPage,
-		]
+			options.isSortingReversed ||
+			options.years ||
+			options.categoriesToFilter ||
+			options.pageSize !== constants.defaultPageSize ||
+			options.currentPage !== 1 ||
+			options.sortingAlgorithm !== 'date',
+		[options]
 	);
 
 	const resetSettings = useCallback(() => {
-		setIsSortingReversed(false);
-		setSortingAlgorithm('date');
-		setYears([]);
-		setCategoriesToFilter([]);
-		handlePageChanging(1, constants.defaultPageSize);
-	}, [
-		setIsSortingReversed,
-		setSortingAlgorithm,
-		setYears,
-		setCategoriesToFilter,
-	]);
+		setOptions(defaultOptions);
+	}, [setOptions]);
 
 	const handleCategoriesToFilterChange = useCallback(
 		(values: number[]) => {
@@ -133,19 +140,33 @@ const ItemList: React.FC = observer(() => {
 				[]
 			);
 
-			setCategoriesToFilter(foundCategories);
+			setOptions((prevOptions: Options) => ({
+				...prevOptions,
+				categoriesToFilter: foundCategories,
+			}));
 		},
-		[setCategoriesToFilter, categories]
+		[setOptions, categories]
 	);
 
-	const handlePageChanging = (value: number, size: number) => {
-		setCurrentPage(value);
-		setPageSize(size);
-	};
+	const handlePageChanging = useCallback(
+		(value: number, size: number) => {
+			setOptions((prevOptions: Options) => ({
+				...prevOptions,
+				currentPage: value,
+				pageSize: size,
+			}));
+		},
+		[setOptions]
+	);
 
 	useEffect(() => {
-		setCurrentPage(1);
-	}, [years, sortingAlgorithm, isSortingReversed, categoriesToFilter]);
+		setOptions((prevOptions: Options) => ({ ...prevOptions, currentPage: 1 }));
+	}, [
+		options.years,
+		options.sortingAlgorithm,
+		options.isSortingReversed,
+		options.categoriesToFilter,
+	]);
 
 	const SelectorsJSX = (
 		<Flex
@@ -155,18 +176,18 @@ const ItemList: React.FC = observer(() => {
 		>
 			<Flex gap={16}>
 				<YearSelect
-					values={years}
+					values={options.years}
 					onChange={handleYearChanging}
 				/>
 				<CategoriesSelect
-					values={categoriesToFilter}
+					values={options.categoriesToFilter}
 					onChange={handleCategoriesToFilterChange}
 				/>
 			</Flex>
 			<Flex gap={16}>
 				<SortSelect
 					onChange={handleSortAlgorithmChanging}
-					isSortingReversed={isSortingReversed}
+					isSortingReversed={options.isSortingReversed}
 					toggleIsSortingReversed={toggleIsSortingReversed}
 				/>
 				{isSettingsChanged && (
@@ -202,8 +223,8 @@ const ItemList: React.FC = observer(() => {
 		<Pagination
 			showQuickJumper
 			showSizeChanger
-			current={currentPage}
-			pageSize={pageSize}
+			current={options.currentPage}
+			pageSize={options.pageSize}
 			total={filteredList.length}
 			onChange={handlePageChanging}
 			onShowSizeChange={handlePageChanging}

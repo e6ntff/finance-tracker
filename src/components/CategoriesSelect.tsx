@@ -17,6 +17,7 @@ const CategoriesSelect: React.FC<Props> = observer(({ values, onChange }) => {
 			mode='multiple'
 			allowClear
 			style={{ minInlineSize: '9em' }}
+			value={values.map((value: category) => value.id)}
 			onChange={onChange}
 		>
 			{categories.map((category: category) => (

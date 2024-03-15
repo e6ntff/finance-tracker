@@ -36,15 +36,16 @@ const ItemList: React.FC = observer(() => {
 						return categoriesToFilter.some(
 							(category: category) => item.category.id === category.id
 						);
-					return (
-						// years.some(
-						// 	(year: string) => item.date.year().toString() === year
-						// ) &&
-						// categoriesToFilter.some(
-						// 	(category: category) => item.category.id === category.id
-						// )
-						item
-					);
+					if (years.length && categoriesToFilter.length)
+						return (
+							years.some(
+								(year: string) => item.date.year().toString() === year
+							) &&
+							categoriesToFilter.some(
+								(category: category) => item.category.id === category.id
+							)
+						);
+					return item;
 				}),
 				sortingAlgorithm,
 				isSortingReversed,

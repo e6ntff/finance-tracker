@@ -9,32 +9,41 @@ import SortSelect from './SortSelect';
 import { sortBy } from 'utils/utils';
 import { userStore } from 'utils/userStore';
 import { ReloadOutlined } from '@ant-design/icons';
-import CategorySelect from './CategorySelect';
 import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
+import CategoriesSelect from './CategoriesSelect';
 
 const ItemList: React.FC = observer(() => {
 	const { list, loading } = listStore;
 	const { categories } = categoryStore;
 	const { language, isSmallScreen } = userStore;
-	const [year, setYear] = useState<string>('');
+	const [years, setYears] = useState<string[]>([]);
 	const [sortingAlgorithm, setSortingAlgorithm] = useState<Sort>('date');
 	const [isSortingReversed, setIsSortingReversed] = useState<boolean>(false);
 	const [pageSize, setPageSize] = useState<number>(constants.defaultPageSize);
 	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [categoryToFilter, setCategoryToFilter] = useState<category | null>(
-		null
-	);
+	const [categoriesToFilter, setCategoriesToFilter] = useState<category[]>([]);
 
 	const filteredList = useMemo(() => {
-		if (year || categoryToFilter) {
+		if (years || categoriesToFilter) {
 			return sortBy(
 				list.filter((item: ExpenseItem) => {
-					if (!categoryToFilter) return item.date.year().toString() === year;
-					if (!year) return item.category.id === categoryToFilter.id;
+					if (!categoriesToFilter.length && years.length)
+						return years.some(
+							(year: string) => item.date.year().toString() === year
+						);
+					if (!years.length && categoriesToFilter.length)
+						return categoriesToFilter.some(
+							(category: category) => item.category.id === category.id
+						);
 					return (
-						item.date.year().toString() === year &&
-						item.category.id === categoryToFilter.id
+						// years.some(
+						// 	(year: string) => item.date.year().toString() === year
+						// ) &&
+						// categoriesToFilter.some(
+						// 	(category: category) => item.category.id === category.id
+						// )
+						item
 					);
 				}),
 				sortingAlgorithm,
@@ -45,12 +54,12 @@ const ItemList: React.FC = observer(() => {
 			return sortBy(list, sortingAlgorithm, isSortingReversed, language);
 		}
 	}, [
-		year,
+		years,
 		list,
 		sortingAlgorithm,
 		isSortingReversed,
 		language,
-		categoryToFilter,
+		categoriesToFilter,
 	]);
 
 	const listToShowOnCurrentPage = useMemo(() => {
@@ -60,10 +69,10 @@ const ItemList: React.FC = observer(() => {
 	}, [filteredList, currentPage, pageSize]);
 
 	const handleYearChanging = useCallback(
-		(value: string) => {
-			setYear(value);
+		(values: string[]) => {
+			setYears(values);
 		},
-		[setYear]
+		[setYears]
 	);
 
 	const handleSortAlgorithmChanging = useCallback(
@@ -80,16 +89,16 @@ const ItemList: React.FC = observer(() => {
 	const isSettingsChanged = useMemo(
 		() =>
 			isSortingReversed ||
-			year ||
-			categoryToFilter ||
+			years ||
+			categoriesToFilter ||
 			pageSize !== constants.defaultPageSize ||
 			currentPage !== 1 ||
 			sortingAlgorithm !== 'date',
 		[
 			isSortingReversed,
-			year,
+			years,
 			sortingAlgorithm,
-			categoryToFilter,
+			categoriesToFilter,
 			pageSize,
 			currentPage,
 		]
@@ -98,16 +107,34 @@ const ItemList: React.FC = observer(() => {
 	const resetSettings = useCallback(() => {
 		setIsSortingReversed(false);
 		setSortingAlgorithm('date');
-		setYear('');
-		setCategoryToFilter(null);
-	}, [setIsSortingReversed, setSortingAlgorithm, setYear, setCategoryToFilter]);
+		setYears([]);
+		setCategoriesToFilter([]);
+		handlePageChanging(1, constants.defaultPageSize);
+	}, [
+		setIsSortingReversed,
+		setSortingAlgorithm,
+		setYears,
+		setCategoriesToFilter,
+	]);
 
-	const handleCategoryChange = useCallback(
-		(id: number) => {
-			const foundCategory = categories.find((cat: category) => cat.id === id);
-			setCategoryToFilter(foundCategory || null);
+	const handleCategoriesToFilterChange = useCallback(
+		(values: number[]) => {
+			const foundCategories: category[] = values.reduce(
+				(acc: category[], value: number) => {
+					const foundCategory = categories.find(
+						(category: category) => category.id === value
+					);
+					if (foundCategory) {
+						acc.push(foundCategory);
+					}
+					return acc;
+				},
+				[]
+			);
+
+			setCategoriesToFilter(foundCategories);
 		},
-		[setCategoryToFilter, categories]
+		[setCategoriesToFilter, categories]
 	);
 
 	const handlePageChanging = (value: number, size: number) => {
@@ -117,7 +144,7 @@ const ItemList: React.FC = observer(() => {
 
 	useEffect(() => {
 		setCurrentPage(1);
-	}, [year, sortingAlgorithm, isSortingReversed, categoryToFilter]);
+	}, [years, sortingAlgorithm, isSortingReversed, categoriesToFilter]);
 
 	const SelectorsJSX = (
 		<Flex
@@ -127,12 +154,12 @@ const ItemList: React.FC = observer(() => {
 		>
 			<Flex gap={16}>
 				<YearSelect
-					value={year}
+					values={years}
 					onChange={handleYearChanging}
 				/>
-				<CategorySelect
-					category={categoryToFilter}
-					handler={handleCategoryChange}
+				<CategoriesSelect
+					values={categoriesToFilter}
+					onChange={handleCategoriesToFilterChange}
 				/>
 			</Flex>
 			<Flex gap={16}>

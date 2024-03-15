@@ -22,6 +22,11 @@ const getData = async (user: any) => {
 					date: dayjs(item.date),
 				}));
 				return userData;
+			} else {
+				return {
+					list: [],
+					categories: [constants.defaultCategory],
+				};
 			}
 		} catch (error: any) {
 			alert(`Error getting data: ${error.message}`);

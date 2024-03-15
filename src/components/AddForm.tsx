@@ -142,8 +142,8 @@ const AddForm: React.FC = observer(() => {
 
 	const CategoryJSX = (
 		<CategorySelect
-			category={newItem.category}
-			handler={handleCategoryChange}
+			value={newItem.category}
+			onChange={handleCategoryChange}
 		/>
 	);
 

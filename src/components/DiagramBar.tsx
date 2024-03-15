@@ -35,7 +35,7 @@ const DiagramBar: React.FC<Props> = observer(
 					const year = item.date.year().toString();
 					if (!years.find((item: string) => item === year)) years.unshift(year);
 				});
-				return years;
+				return years.sort((prev, next) => Number(prev) - Number(next));
 			}
 			return [];
 		}, [interval, list, language]);

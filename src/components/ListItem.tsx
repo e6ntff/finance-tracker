@@ -144,8 +144,8 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 			align='stretch'
 		>
 			<CategorySelect
-				category={currentItem.category}
-				handler={handleCategoryChange}
+				value={currentItem.category}
+				onChange={handleCategoryChange}
 			/>
 		</Flex>
 	);

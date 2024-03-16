@@ -1,13 +1,15 @@
 import dayjs from 'dayjs';
 
+const pageSizeOptions = [18, 36, 54, 72, 90];
+
 const constants = {
 	spinDelay: 1500,
 	deleteDelay: 1000,
 	windowBreakpoint: 768,
-	defaultPageSize: 20,
+	defaultPageSize: pageSizeOptions[0],
 	defaultAlgoritm: 'date',
 	defaultMode: 'list',
-	pageSizeOptions: [18, 36, 54, 72, 90],
+	pageSizeOptions: pageSizeOptions,
 	baseCurrency: 'USD',
 	defaultCategory: {
 		id: 0,

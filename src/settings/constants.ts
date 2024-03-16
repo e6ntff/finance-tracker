@@ -6,6 +6,8 @@ const constants = {
 	windowBreakpoint: 768,
 	defaultPageSize: 20,
 	defaultAlgoritm: 'date',
+	defaultMode: 'list',
+	pageSizeOptions: [18, 36, 54, 72, 90],
 	baseCurrency: 'USD',
 	defaultCategory: {
 		id: 0,

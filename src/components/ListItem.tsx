@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import calculatePrices from '../utils/calculatePrices';
 import { getSymbol, getTodayDate } from 'utils/utils';
 import CategorySelect from './CategorySelect';
-import { ExpenseItem, category } from '../settings/interfaces';
+import { ExpenseItem, Mode, category } from '../settings/interfaces';
 import useDebounce from '../hooks/useDebounce';
 import Item from 'antd/es/list/Item';
-import { Button, Col, DatePicker, Flex, Progress, Row } from 'antd';
+import { Button, Card, Col, DatePicker, Flex, Progress, Row } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
@@ -16,10 +16,11 @@ import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
 
 interface Props {
+	mode: Mode;
 	initialIitem: ExpenseItem;
 }
 
-const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
+const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 	const { id, category, date, title, price } = initialIitem;
 	const { currency, currencyRates, isSmallScreen } = userStore;
 	const { categories } = categoryStore;
@@ -129,9 +130,9 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	const TitleJSX = (
 		<Flex justify='center'>
 			<Title
-				level={3}
+				level={isSmallScreen ? 4 : 3}
 				style={{ margin: 0 }}
-				editable={{ onChange: handleTitleChange }}
+				editable={isItemDeleting ? false : { onChange: handleTitleChange }}
 			>
 				{currentItem.title}
 			</Title>
@@ -153,9 +154,9 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 	const PriceJSX = (
 		<Flex justify='center'>
 			<Title
-				level={3}
+				level={isSmallScreen ? 4 : 3}
 				style={{ margin: 0 }}
-				editable={{ onChange: handlePriceChange }}
+				editable={isItemDeleting ? false : { onChange: handlePriceChange }}
 			>
 				{getSymbol(currency)}
 				{Math.round(currentItem.price[currency])}
@@ -163,13 +164,12 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 		</Flex>
 	);
 
-	const ButtonJSX = isItemDeleting ? (
-		<Button onClick={cancelItemDeleting}>
-			<CloseOutlined />
-		</Button>
-	) : (
-		<Button onClick={startItemDeleting}>
-			<DeleteOutlined />
+	const ButtonJSX = (
+		<Button
+			onClick={isItemDeleting ? cancelItemDeleting : startItemDeleting}
+			size={isSmallScreen ? 'small' : 'middle'}
+		>
+			{isItemDeleting ? <CloseOutlined /> : <DeleteOutlined />}
 		</Button>
 	);
 
@@ -181,7 +181,7 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 		/>
 	);
 
-	return (
+	return mode === 'list' ? (
 		<Item>
 			{!isItemDeleting ? (
 				isSmallScreen ? (
@@ -216,6 +216,29 @@ const ListItem: React.FC<Props> = observer(({ initialIitem }) => {
 				</>
 			)}
 		</Item>
+	) : (
+		<Card
+			size={isSmallScreen ? 'small' : 'default'}
+			style={{
+				flex: `1 1 ${isSmallScreen ? 15 : 20}em`,
+			}}
+			bordered
+			title={TitleJSX}
+			actions={[PriceJSX, ButtonJSX]}
+		>
+			{isItemDeleting ? (
+				<Flex>{ProgressJSX}</Flex>
+			) : (
+				<Flex
+					vertical={isSmallScreen}
+					align='stretch'
+					gap={8}
+				>
+					{DatePickerJSX}
+					{CategorySelectJSX}
+				</Flex>
+			)}
+		</Card>
 	);
 });
 

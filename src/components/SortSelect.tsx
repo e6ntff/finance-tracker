@@ -3,21 +3,22 @@ import { observer } from 'mobx-react-lite';
 import { Flex, Segmented } from 'antd';
 import {
 	CalendarOutlined,
+	DollarOutlined,
 	FontColorsOutlined,
-	PoundCircleOutlined,
 	SortAscendingOutlined,
 	SortDescendingOutlined,
 } from '@ant-design/icons';
 import { Sort } from 'settings/interfaces';
 
 interface Props {
+	value: Sort;
 	onChange: (arg0: Sort) => void;
 	isSortingReversed: boolean;
 	toggleIsSortingReversed: () => void;
 }
 
 const SortSelect: React.FC<Props> = observer(
-	({ onChange, isSortingReversed, toggleIsSortingReversed }) => (
+	({ value, onChange, isSortingReversed, toggleIsSortingReversed }) => (
 		<Flex
 			gap={8}
 			style={{ alignSelf: 'start' }}
@@ -28,12 +29,13 @@ const SortSelect: React.FC<Props> = observer(
 				<SortAscendingOutlined />
 			)}
 			<Segmented
+				value={value}
 				onDoubleClick={toggleIsSortingReversed}
 				onChange={onChange}
 				options={[
 					{ label: <CalendarOutlined />, value: 'date' },
 					{ label: <FontColorsOutlined />, value: 'title' },
-					{ label: <PoundCircleOutlined />, value: 'price' },
+					{ label: <DollarOutlined />, value: 'price' },
 				]}
 			/>
 		</Flex>

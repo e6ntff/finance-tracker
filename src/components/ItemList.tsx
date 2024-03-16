@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
 import ListItem from './ListItem';
-import { ExpenseItem, Sort, category } from '../settings/interfaces';
+import { ExpenseItem, Mode, Sort, category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { Button, Empty, Flex, List, Pagination, Spin } from 'antd';
@@ -12,6 +12,7 @@ import { ReloadOutlined } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
 import CategoriesSelect from './CategoriesSelect';
+import ModeSelect from './ModeSelect';
 
 interface Options {
 	years: string[];
@@ -20,6 +21,7 @@ interface Options {
 	pageSize: number;
 	currentPage: number;
 	categoriesToFilter: category[];
+	mode: Mode;
 }
 
 const defaultOptions = {
@@ -29,6 +31,7 @@ const defaultOptions = {
 	pageSize: constants.defaultPageSize,
 	currentPage: 1,
 	categoriesToFilter: [],
+	mode: constants.defaultMode as Mode,
 };
 
 const ItemList: React.FC = observer(() => {
@@ -44,6 +47,13 @@ const ItemList: React.FC = observer(() => {
 	useEffect(() => {
 		localStorage.setItem('options', JSON.stringify(options));
 	}, [options]);
+
+	useEffect(() => {
+		setOptions((prevOptions: Options) => ({
+			...prevOptions,
+			isSortingReversed: false,
+		}));
+	}, [options.sortingAlgorithm]);
 
 	const filteredList = useMemo(() => {
 		const { years, categoriesToFilter, sortingAlgorithm, isSortingReversed } =
@@ -110,11 +120,15 @@ const ItemList: React.FC = observer(() => {
 		}));
 	}, [setOptions]);
 
+	const handleModeChanging = (value: Mode) => {
+		setOptions((prevOptions: Options) => ({ ...prevOptions, mode: value }));
+	};
+
 	const isSettingsChanged = useMemo(
 		() =>
 			options.isSortingReversed ||
-			options.years ||
-			options.categoriesToFilter ||
+			options.years.length > 0 ||
+			options.categoriesToFilter.length > 0 ||
 			options.pageSize !== constants.defaultPageSize ||
 			options.currentPage !== 1 ||
 			options.sortingAlgorithm !== 'date',
@@ -186,9 +200,14 @@ const ItemList: React.FC = observer(() => {
 			</Flex>
 			<Flex gap={16}>
 				<SortSelect
+					value={options.sortingAlgorithm}
 					onChange={handleSortAlgorithmChanging}
 					isSortingReversed={options.isSortingReversed}
 					toggleIsSortingReversed={toggleIsSortingReversed}
+				/>
+				<ModeSelect
+					value={options.mode}
+					onChange={handleModeChanging}
 				/>
 				{isSettingsChanged && (
 					<Button onClick={resetSettings}>
@@ -206,23 +225,38 @@ const ItemList: React.FC = observer(() => {
 		/>
 	);
 
-	const ListJSX = (
-		<List style={{ inlineSize: '100%' }}>
-			{listToShowOnCurrentPage.map((item: ExpenseItem) => {
-				return (
+	const ListJSX =
+		options.mode === 'list' ? (
+			<List style={{ inlineSize: '100%' }}>
+				{listToShowOnCurrentPage.map((item: ExpenseItem) => (
 					<ListItem
 						key={item.id}
+						mode={options.mode}
 						initialIitem={item}
 					/>
-				);
-			})}
-		</List>
-	);
+				))}
+			</List>
+		) : (
+			<Flex
+				wrap='wrap'
+				justify='space-between'
+				gap={8}
+			>
+				{listToShowOnCurrentPage.map((item: ExpenseItem) => (
+					<ListItem
+						key={item.id}
+						mode={options.mode}
+						initialIitem={item}
+					/>
+				))}
+			</Flex>
+		);
 
 	const PaginationJSX = !loading && (
 		<Pagination
 			showQuickJumper
 			showSizeChanger
+			pageSizeOptions={constants.pageSizeOptions}
 			current={options.currentPage}
 			pageSize={options.pageSize}
 			total={filteredList.length}
@@ -237,7 +271,9 @@ const ItemList: React.FC = observer(() => {
 			{PaginationJSX}
 			{loading ? <Spin /> : !filteredList.length && EmptyJSX}
 			{ListJSX}
-			{listToShowOnCurrentPage.length >= 10 && PaginationJSX}
+			{((listToShowOnCurrentPage.length >= 10 && options.mode === 'list') ||
+				listToShowOnCurrentPage.length >= 20) &&
+				PaginationJSX}
 		</>
 	);
 });

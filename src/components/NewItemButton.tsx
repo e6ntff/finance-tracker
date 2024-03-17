@@ -7,9 +7,11 @@ import { listStore } from 'utils/listStore';
 import constants from 'settings/constants';
 import ItemModal from './ItemModal';
 import { PlusOutlined } from '@ant-design/icons';
+import { userStore } from 'utils/userStore';
 
 const NewItemButton: React.FC = observer(() => {
 	const { addItem } = listStore;
+	const { isSmallScreen } = userStore;
 
 	const emptyItem: ExpenseItem = useMemo(
 		() => constants.getEmptyItem(getTodayDate),
@@ -38,7 +40,10 @@ const NewItemButton: React.FC = observer(() => {
 
 	return (
 		<>
-			<Button onClick={toggleIsModalOpened}>
+			<Button
+				onClick={toggleIsModalOpened}
+				size={isSmallScreen ? 'small' : 'middle'}
+			>
 				<PlusOutlined />
 			</Button>
 			<ItemModal

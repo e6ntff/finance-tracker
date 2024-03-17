@@ -22,7 +22,13 @@ const ModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 		} else {
 			onChange(lastSelectedOption);
 		}
-	}, [isSmallScreen]);
+	}, [
+		isSmallScreen,
+		lastSelectedOption,
+		onChange,
+		setLastSelectedOption,
+		value,
+	]);
 
 	return (
 		<Flex
@@ -30,6 +36,7 @@ const ModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 			style={{ alignSelf: 'start' }}
 		>
 			<Segmented
+				size={isSmallScreen ? 'small' : 'middle'}
 				value={value}
 				onChange={onChange}
 				options={[

@@ -10,7 +10,7 @@ interface Props {
 }
 
 const CurrencySelect: React.FC<Props> = observer(({ value, onChange }) => {
-	const { setCurrency } = userStore;
+	const { setCurrency, isSmallScreen } = userStore;
 
 	useEffect(() => {
 		const localCurrency = localStorage.getItem('curr');
@@ -19,6 +19,7 @@ const CurrencySelect: React.FC<Props> = observer(({ value, onChange }) => {
 
 	return (
 		<Select
+			size={isSmallScreen ? 'small' : 'middle'}
 			value={value}
 			onChange={onChange}
 		>

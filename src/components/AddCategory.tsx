@@ -6,9 +6,11 @@ import { Button, Flex, Input } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { CheckOutlined } from '@ant-design/icons';
+import { userStore } from 'utils/userStore';
 
 const AddCategory: React.FC = observer(() => {
 	const { addCategory } = categoryStore;
+	const { isSmallScreen } = userStore;
 
 	const [currentCategory, setCurrentCategory] = useState<category>({
 		id: Math.random(),
@@ -52,16 +54,21 @@ const AddCategory: React.FC = observer(() => {
 			style={{ inlineSize: '100%' }}
 		>
 			<ColorPicker
+				size={isSmallScreen ? 'small' : 'middle'}
 				value={currentCategory.color}
 				format='hex'
 				onChange={handleColorChange}
 			/>
 			<Input
+				size={isSmallScreen ? 'small' : 'middle'}
 				type='text'
 				value={currentCategory.name}
 				onChange={handleNameChange}
 			/>
-			<Button onClick={addCurrentCategory}>
+			<Button
+				onClick={addCurrentCategory}
+				size={isSmallScreen ? 'small' : 'middle'}
+			>
 				<CheckOutlined />
 			</Button>
 		</Flex>

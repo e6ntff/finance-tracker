@@ -7,6 +7,7 @@ import constants from 'settings/constants';
 import { Mode, Options, Sort, category } from 'settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { userStore } from 'utils/userStore';
+import useDebounce from 'hooks/useDebounce';
 
 const defaultOptions = {
 	years: [],
@@ -125,6 +126,8 @@ const Expenses: React.FC = observer(() => {
 		options.categoriesToFilter,
 	]);
 
+	const debouncedOptions = useDebounce(options);
+
 	return (
 		<Flex
 			vertical
@@ -142,9 +145,9 @@ const Expenses: React.FC = observer(() => {
 				isSettingsChanged={isSettingsChanged}
 				options={options}
 			/>
-			<Divider />
+			<Divider/>
 			<ItemList
-				options={options}
+				options={debouncedOptions}
 				handlePageChanging={handlePageChanging}
 			/>
 		</Flex>

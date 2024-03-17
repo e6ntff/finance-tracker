@@ -19,7 +19,7 @@ interface Props {
 const ItemList: React.FC<Props> = observer(
 	({ options, handlePageChanging }) => {
 		const { list, loading } = listStore;
-		const { language } = userStore;
+		const { language, isSmallScreen } = userStore;
 
 		const filteredList = useMemo(
 			() => getFilteredList(options, list, language),
@@ -67,6 +67,7 @@ const ItemList: React.FC<Props> = observer(
 
 		const PaginationJSX = !loading && (
 			<Pagination
+				size={isSmallScreen ? 'small' : 'default'}
 				showQuickJumper
 				showSizeChanger
 				pageSizeOptions={constants.pageSizeOptions}

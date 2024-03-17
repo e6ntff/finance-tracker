@@ -3,6 +3,7 @@ import { category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { Select, Tag } from 'antd';
+import { userStore } from 'utils/userStore';
 
 interface Props {
 	values: category[];
@@ -44,13 +45,15 @@ const tagRender = (props: any, categories: category[]) => {
 
 const CategoriesSelect: React.FC<Props> = observer(({ values, onChange }) => {
 	const { categories } = categoryStore;
+	const { isSmallScreen } = userStore;
 
 	return (
 		<Select
+			size={isSmallScreen ? 'small' : 'middle'}
 			mode='multiple'
 			showSearch={false}
 			tagRender={(props) => tagRender(props, categories)}
-			style={{ minInlineSize: '9em' }}
+			style={{ minInlineSize: '10em' }}
 			value={values.map((value: category) => value.id)}
 			onChange={onChange}
 		>

@@ -24,7 +24,7 @@ const ItemModal: React.FC<Props> = observer(
 	({ opened, initialItem, toggleOpened, submitItem }) => {
 		const [currency, setCurrency] = useState(constants.baseCurrency);
 		const { categories } = categoryStore;
-		const { language, currencyRates } = userStore;
+		const { language, currencyRates, isSmallScreen } = userStore;
 		const [currentItem, setCurrentItem] = useState<ExpenseItem>(initialItem);
 
 		const handleTitleChange = useCallback(
@@ -127,7 +127,10 @@ const ItemModal: React.FC<Props> = observer(
 
 		return (
 			<Modal
+				style={{ inlineSize: '' }}
 				open={opened}
+				okButtonProps={{ size: isSmallScreen ? 'small' : 'middle' }}
+				cancelButtonProps={{ size: isSmallScreen ? 'small' : 'middle' }}
 				onOk={() => {
 					submitItem(currentItem);
 				}}
@@ -139,6 +142,7 @@ const ItemModal: React.FC<Props> = observer(
 				cancelText={<CloseOutlined />}
 			>
 				<Form
+					size={isSmallScreen ? 'small' : 'middle'}
 					layout='vertical'
 					style={{ inlineSize: '100%' }}
 				>

@@ -9,6 +9,7 @@ import {
 	SortDescendingOutlined,
 } from '@ant-design/icons';
 import { Sort } from 'settings/interfaces';
+import { userStore } from 'utils/userStore';
 
 interface Props {
 	value: Sort;
@@ -18,28 +19,32 @@ interface Props {
 }
 
 const SortSelect: React.FC<Props> = observer(
-	({ value, onChange, isSortingReversed, toggleIsSortingReversed }) => (
-		<Flex
-			gap={8}
-			style={{ alignSelf: 'start' }}
-		>
-			{isSortingReversed ? (
-				<SortDescendingOutlined />
-			) : (
-				<SortAscendingOutlined />
-			)}
-			<Segmented
-				value={value}
-				onDoubleClick={toggleIsSortingReversed}
-				onChange={onChange}
-				options={[
-					{ label: <CalendarOutlined />, value: 'date' },
-					{ label: <FontColorsOutlined />, value: 'title' },
-					{ label: <DollarOutlined />, value: 'price' },
-				]}
-			/>
-		</Flex>
-	)
+	({ value, onChange, isSortingReversed, toggleIsSortingReversed }) => {
+		const { isSmallScreen } = userStore;
+		return (
+			<Flex
+				gap={8}
+				style={{ alignSelf: 'start' }}
+			>
+				{isSortingReversed ? (
+					<SortDescendingOutlined />
+				) : (
+					<SortAscendingOutlined />
+				)}
+				<Segmented
+					size={isSmallScreen ? 'small' : 'middle'}
+					value={value}
+					onDoubleClick={toggleIsSortingReversed}
+					onChange={onChange}
+					options={[
+						{ label: <CalendarOutlined />, value: 'date' },
+						{ label: <FontColorsOutlined />, value: 'title' },
+						{ label: <DollarOutlined />, value: 'price' },
+					]}
+				/>
+			</Flex>
+		);
+	}
 );
 
 export default SortSelect;

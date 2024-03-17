@@ -10,7 +10,7 @@ interface Props {
 }
 
 const LanguageSelect: React.FC<Props> = observer(() => {
-	const { language, setLanguage } = userStore;
+	const { language, setLanguage, isSmallScreen } = userStore;
 
 	useEffect(() => {
 		const storedLanguage = localStorage.getItem('lang');
@@ -29,6 +29,7 @@ const LanguageSelect: React.FC<Props> = observer(() => {
 
 	return (
 		<Select
+			size={isSmallScreen ? 'small' : 'middle'}
 			value={language}
 			onChange={handleLanguageChange}
 		>

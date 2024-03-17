@@ -62,7 +62,10 @@ const Selectors: React.FC<Props> = observer(
 						onChange={handleModeChanging}
 					/>
 					{isSettingsChanged && (
-						<Button onClick={resetSettings}>
+						<Button
+							onClick={resetSettings}
+							size={isSmallScreen ? 'small' : 'middle'}
+						>
 							<ReloadOutlined />
 						</Button>
 					)}

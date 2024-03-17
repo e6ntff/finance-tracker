@@ -4,12 +4,13 @@ import useDebounce from '../hooks/useDebounce';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Col, ColorPicker, Flex, Progress } from 'antd';
+import { Button, Col, ColorPicker, Flex, Progress, Typography } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
 import Item from 'antd/es/list/Item';
 import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
+import { userStore } from 'utils/userStore';
 
 interface Props {
 	initialCategory: category;
@@ -19,6 +20,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	const { id, color, name } = initialCategory;
 	const { replaceCategory, removeCategory } = categoryStore;
 	const { refreshItemByCategory, clearListFromCategory } = listStore;
+	const { isSmallScreen } = userStore;
 	const [isCategoryItemDeleting, setIsCategoryItemDeleting] =
 		useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
@@ -82,6 +84,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 
 	const ColorPickerJSX = (
 		<ColorPicker
+			size={isSmallScreen ? 'small' : 'middle'}
 			value={currentCategory.color}
 			format='hex'
 			onChange={handleColorChange}
@@ -90,22 +93,29 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 
 	const TitleJSX = (
 		<Flex justify='center'>
-			<Title
-				level={3}
-				editable={{ onChange: handleNameChange }}
-			>
-				{currentCategory.name}
-			</Title>
+			{isSmallScreen ? (
+				<Typography.Text strong>{currentCategory.name}</Typography.Text>
+			) : (
+				<Title
+					level={isSmallScreen ? 5 : 3}
+					editable={{ onChange: handleNameChange }}
+				>
+					{currentCategory.name}
+				</Title>
+			)}
 		</Flex>
 	);
 
-	const ButtonJSX = isCategoryItemDeleting ? (
-		<Button onClick={cancelCategoryItemDeleting}>
-			<CloseOutlined />
-		</Button>
-	) : (
-		<Button onClick={startCategoryItemDeleting}>
-			<DeleteOutlined />
+	const ButtonJSX = (
+		<Button
+			size={isSmallScreen ? 'small' : 'middle'}
+			onClick={
+				isCategoryItemDeleting
+					? cancelCategoryItemDeleting
+					: startCategoryItemDeleting
+			}
+		>
+			{isCategoryItemDeleting ? <CloseOutlined /> : <DeleteOutlined />}
 		</Button>
 	);
 

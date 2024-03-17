@@ -13,6 +13,7 @@ import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
 import CategoriesSelect from './CategoriesSelect';
 import ModeSelect from './ModeSelect';
+import NewItemButton from './NewItemButton';
 
 interface Options {
 	years: string[];
@@ -188,33 +189,30 @@ const ItemList: React.FC = observer(() => {
 			gap={16}
 			vertical={isSmallScreen}
 		>
-			<Flex gap={16}>
-				<YearSelect
-					values={options.years}
-					onChange={handleYearChanging}
-				/>
-				<CategoriesSelect
-					values={options.categoriesToFilter}
-					onChange={handleCategoriesToFilterChange}
-				/>
-			</Flex>
-			<Flex gap={16}>
-				<SortSelect
-					value={options.sortingAlgorithm}
-					onChange={handleSortAlgorithmChanging}
-					isSortingReversed={options.isSortingReversed}
-					toggleIsSortingReversed={toggleIsSortingReversed}
-				/>
-				<ModeSelect
-					value={options.mode}
-					onChange={handleModeChanging}
-				/>
-				{isSettingsChanged && (
-					<Button onClick={resetSettings}>
-						<ReloadOutlined />
-					</Button>
-				)}
-			</Flex>
+			<NewItemButton />
+			<YearSelect
+				values={options.years}
+				onChange={handleYearChanging}
+			/>
+			<CategoriesSelect
+				values={options.categoriesToFilter}
+				onChange={handleCategoriesToFilterChange}
+			/>
+			<SortSelect
+				value={options.sortingAlgorithm}
+				onChange={handleSortAlgorithmChanging}
+				isSortingReversed={options.isSortingReversed}
+				toggleIsSortingReversed={toggleIsSortingReversed}
+			/>
+			<ModeSelect
+				value={options.mode}
+				onChange={handleModeChanging}
+			/>
+			{isSettingsChanged && (
+				<Button onClick={resetSettings}>
+					<ReloadOutlined />
+				</Button>
+			)}
 		</Flex>
 	);
 

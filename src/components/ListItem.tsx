@@ -1,19 +1,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import calculatePrices from '../utils/calculatePrices';
-import { getSymbol, getTodayDate } from 'utils/utils';
-import CategorySelect from './CategorySelect';
-import { ExpenseItem, Mode, category } from '../settings/interfaces';
-import useDebounce from '../hooks/useDebounce';
+import { getSymbol } from 'utils/utils';
+import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import { Button, Card, Col, DatePicker, Flex, Progress, Row } from 'antd';
+import {
+	Button,
+	Card,
+	Col,
+	Flex,
+	Modal,
+	Progress,
+	Row,
+	Tag,
+	Typography,
+} from 'antd';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
-import dayjs from 'dayjs';
 import Title from 'antd/es/typography/Title';
-import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
+import ItemModal from './ItemModal';
 
 interface Props {
 	mode: Mode;
@@ -27,6 +34,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 	const { replaceItem, removeItem } = listStore;
 	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
+	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 	const [currentItem, setCurrentItem] = useState<ExpenseItem>({
 		id: id,
@@ -36,13 +44,9 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		price: price,
 	});
 
-	const startItemDeleting = useCallback(() => {
-		setIsItemDeleting(true);
-	}, [setIsItemDeleting]);
-
-	const cancelItemDeleting = useCallback(() => {
-		setIsItemDeleting(false);
-	}, [setIsItemDeleting]);
+	const toggleIsItemDeleting = () => {
+		setIsItemDeleting((prevValue: boolean) => !prevValue);
+	};
 
 	useEffect(() => {
 		const deleteId = setInterval(() => {
@@ -61,112 +65,88 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		return () => clearInterval(deleteId);
 	}, [isItemDeleting, currentItem, removeItem]);
 
-	const handleTitleChange = useCallback(
-		(value: string) => {
-			setCurrentItem((prevItem: ExpenseItem) => ({
-				...prevItem,
-				title: value,
-			}));
-		},
-		[setCurrentItem]
-	);
-
-	const handleDateChange = useCallback(
-		(value: any) => {
-			if (value)
-				setCurrentItem((prevItem: ExpenseItem) => ({
-					...prevItem,
-					date: value,
-				}));
-		},
-		[setCurrentItem]
-	);
-
-	const handleCategoryChange = useCallback(
-		(id: number) => {
-			const foundCategory = categories.find((cat: category) => cat.id === id);
-			setCurrentItem((prevItem: ExpenseItem) => ({
-				...prevItem,
-				category: foundCategory || prevItem.category,
-			}));
-		},
-		[setCurrentItem, categories]
-	);
-
-	const handlePriceChange = useCallback(
-		(value: string) => {
-			setCurrentItem((prevItem) => {
-				const updatedItem = {
-					...prevItem,
-					price: {
-						...prevItem.price,
-						[currency]: parseInt(value.toString()) || prevItem.price[currency],
-					},
-				};
-				return {
-					...updatedItem,
-					price: calculatePrices(updatedItem.price, currencyRates, currency),
-				};
-			});
-		},
-		[setCurrentItem, currency, currencyRates]
-	);
-
-	const debouncedItem = useDebounce(currentItem);
-
-	useEffect(() => {
-		replaceItem(debouncedItem);
-	}, [debouncedItem, replaceItem]);
-
-	const DatePickerJSX = (
-		<DatePicker
-			value={currentItem.date}
-			minDate={dayjs('2020-01-01')}
-			maxDate={dayjs(getTodayDate(new Date()))}
-			onChange={handleDateChange}
-		/>
-	);
-
-	const TitleJSX = (
+	const DateJSX = (
 		<Flex justify='center'>
-			<Title
-				level={isSmallScreen ? 4 : 3}
-				style={{ margin: 0 }}
-				editable={isItemDeleting ? false : { onChange: handleTitleChange }}
-			>
-				{currentItem.title}
-			</Title>
+			{isSmallScreen ? (
+				<Typography.Text strong>
+					{currentItem.date.format('YYYY-MM-DD')}
+				</Typography.Text>
+			) : (
+				<Title
+					level={3}
+					style={{ margin: 0 }}
+				>
+					{currentItem.date.format('YYYY-MM-DD')}
+				</Title>
+			)}
 		</Flex>
 	);
 
-	const CategorySelectJSX = (
+	const toggleIsModalOpened = () => {
+		setIsModalOpened((prevValue: boolean) => !prevValue);
+	};
+
+	const updateCurrentItem = (item: ExpenseItem) => {
+		setCurrentItem(item);
+		replaceItem(item);
+		toggleIsModalOpened();
+	};
+
+	const TitleJSX = (
+		<Flex justify='center'>
+			{isSmallScreen ? (
+				<Typography.Text strong>{currentItem.title}</Typography.Text>
+			) : (
+				<Title
+					level={3}
+					style={{ margin: 0 }}
+				>
+					{currentItem.title}
+				</Title>
+			)}
+		</Flex>
+	);
+
+	const CategoryJSX = (
 		<Flex
 			vertical
 			align='stretch'
 		>
-			<CategorySelect
-				value={currentItem.category}
-				onChange={handleCategoryChange}
-			/>
+			<Tag color={currentItem.category.color}>
+				<span
+					style={{
+						color: currentItem.category.color,
+						filter: 'invert(1)',
+					}}
+				>
+					{currentItem.category.name}
+				</span>
+			</Tag>
 		</Flex>
 	);
 
 	const PriceJSX = (
 		<Flex justify='center'>
-			<Title
-				level={isSmallScreen ? 4 : 3}
-				style={{ margin: 0 }}
-				editable={isItemDeleting ? false : { onChange: handlePriceChange }}
-			>
-				{getSymbol(currency)}
-				{Math.round(currentItem.price[currency])}
-			</Title>
+			{isSmallScreen ? (
+				<Typography.Text strong>
+					{getSymbol(currency)}
+					{Math.round(currentItem.price[currency])}
+				</Typography.Text>
+			) : (
+				<Title
+					level={3}
+					style={{ margin: 0 }}
+				>
+					{getSymbol(currency)}
+					{Math.round(currentItem.price[currency])}
+				</Title>
+			)}
 		</Flex>
 	);
 
-	const ButtonJSX = (
+	const DeleteButtonJSX = (
 		<Button
-			onClick={isItemDeleting ? cancelItemDeleting : startItemDeleting}
+			onClick={toggleIsItemDeleting}
 			size={isSmallScreen ? 'small' : 'middle'}
 		>
 			{isItemDeleting ? <CloseOutlined /> : <DeleteOutlined />}
@@ -181,64 +161,71 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		/>
 	);
 
-	return mode === 'list' ? (
-		<Item>
-			{!isItemDeleting ? (
-				isSmallScreen ? (
-					<Flex
-						vertical
-						gap={8}
-						style={{ inlineSize: '100%', margin: 'auto' }}
-					>
-						<Row justify='space-between'>
-							<Col span={14}>{TitleJSX}</Col>
-							<Col span={8}>{PriceJSX}</Col>
-						</Row>
-						<Row justify='space-between'>
-							<Col span={9}>{DatePickerJSX}</Col>
-							<Col span={9}>{CategorySelectJSX}</Col>
-							<Col>{ButtonJSX}</Col>
-						</Row>
-					</Flex>
-				) : (
-					<>
-						<Col span={4}>{DatePickerJSX}</Col>
-						<Col span={8}>{TitleJSX}</Col>
-						<Col span={4}>{CategorySelectJSX}</Col>
-						<Col span={5}>{PriceJSX}</Col>
-						<Col>{ButtonJSX}</Col>
-					</>
-				)
-			) : (
-				<>
-					<Col span={21}>{ProgressJSX}</Col>
-					<Col>{ButtonJSX}</Col>
-				</>
-			)}
-		</Item>
-	) : (
-		<Card
-			size={isSmallScreen ? 'small' : 'default'}
-			style={{
-				flex: `1 1 ${isSmallScreen ? 15 : 20}em`,
-			}}
-			bordered
-			title={TitleJSX}
-			actions={[PriceJSX, ButtonJSX]}
+	const EditButtonJSX = (
+		<Button
+			size={isSmallScreen ? 'small' : 'middle'}
+			onClick={toggleIsModalOpened}
 		>
-			{isItemDeleting ? (
-				<Flex>{ProgressJSX}</Flex>
+			<EditOutlined />
+		</Button>
+	);
+
+	return (
+		<>
+			<ItemModal
+				opened={isModalOpened}
+				initialItem={currentItem}
+				toggleOpened={toggleIsModalOpened}
+				submitItem={updateCurrentItem}
+			/>
+
+			{mode === 'list' ? (
+				<Item>
+					{!isItemDeleting ? (
+						<>
+							<Col span={5}>{DateJSX}</Col>
+							<Col span={7}>{TitleJSX}</Col>
+							<Col span={4}>{CategoryJSX}</Col>
+							<Col span={3}>{PriceJSX}</Col>
+							<Col>{EditButtonJSX}</Col>
+							<Col>{DeleteButtonJSX}</Col>
+						</>
+					) : (
+						<>
+							<Col span={21}>{ProgressJSX}</Col>
+							<Col>{DeleteButtonJSX}</Col>
+						</>
+					)}
+				</Item>
 			) : (
-				<Flex
-					vertical={isSmallScreen}
-					align='stretch'
-					gap={8}
+				<Card
+					size={isSmallScreen ? 'small' : 'default'}
+					style={{
+						flex: `1 1 ${isSmallScreen ? 10 : 15}em`,
+					}}
+					bordered
+					title={TitleJSX}
+					actions={[
+						!isItemDeleting && EditButtonJSX,
+						PriceJSX,
+						DeleteButtonJSX,
+					]}
 				>
-					{DatePickerJSX}
-					{CategorySelectJSX}
-				</Flex>
+					{isItemDeleting ? (
+						<Flex>{ProgressJSX}</Flex>
+					) : (
+						<Flex
+							vertical
+							align='stretch'
+							gap={8}
+						>
+							{DateJSX}
+							{CategoryJSX}
+						</Flex>
+					)}
+				</Card>
 			)}
-		</Card>
+		</>
 	);
 });
 

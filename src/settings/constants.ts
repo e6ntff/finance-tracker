@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-const pageSizeOptions = [18, 36, 54, 72, 90];
+const pageSizeOptions = [20, 40, 80];
 
 const constants = {
 	spinDelay: 1500,

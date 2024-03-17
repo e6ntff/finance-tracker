@@ -34,7 +34,6 @@ const tagRender = (props: any, categories: category[]) => {
 				style={{
 					color: color,
 					filter: 'invert(1)',
-					// backgroundClip: 'text',
 				}}
 			>
 				{label}

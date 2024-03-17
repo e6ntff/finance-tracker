@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ExpenseItem, Interval, Value, category } from '../settings/interfaces';
+import { ExpenseItem, Interval, Value } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Flex } from 'antd';

@@ -4,9 +4,8 @@ import {
 	Options,
 	Value,
 	category,
-	currencies,
 	language,
-} from 'settings/interfaces';
+} from '../settings/interfaces';
 import { sortBy } from './utils';
 
 export const getFilteredList = (

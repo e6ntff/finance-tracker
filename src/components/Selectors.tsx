@@ -39,30 +39,34 @@ const Selectors: React.FC<Props> = observer(
 				gap={16}
 				vertical={isSmallScreen}
 			>
-				<NewItemButton />
-				<YearSelect
-					values={options.years}
-					onChange={handleYearChanging}
-				/>
-				<CategoriesSelect
-					values={options.categoriesToFilter}
-					onChange={handleCategoriesToFilterChange}
-				/>
-				<SortSelect
-					value={options.sortingAlgorithm}
-					onChange={handleSortAlgorithmChanging}
-					isSortingReversed={options.isSortingReversed}
-					toggleIsSortingReversed={toggleIsSortingReversed}
-				/>
-				<ModeSelect
-					value={options.mode}
-					onChange={handleModeChanging}
-				/>
-				{isSettingsChanged && (
-					<Button onClick={resetSettings}>
-						<ReloadOutlined />
-					</Button>
-				)}
+				<Flex gap={16}>
+					<NewItemButton />
+					<YearSelect
+						values={options.years}
+						onChange={handleYearChanging}
+					/>
+					<CategoriesSelect
+						values={options.categoriesToFilter}
+						onChange={handleCategoriesToFilterChange}
+					/>
+				</Flex>
+				<Flex gap={16}>
+					<SortSelect
+						value={options.sortingAlgorithm}
+						onChange={handleSortAlgorithmChanging}
+						isSortingReversed={options.isSortingReversed}
+						toggleIsSortingReversed={toggleIsSortingReversed}
+					/>
+					<ModeSelect
+						value={options.mode}
+						onChange={handleModeChanging}
+					/>
+					{isSettingsChanged && (
+						<Button onClick={resetSettings}>
+							<ReloadOutlined />
+						</Button>
+					)}
+				</Flex>
 			</Flex>
 		);
 	}

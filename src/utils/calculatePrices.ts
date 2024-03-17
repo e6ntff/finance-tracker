@@ -1,5 +1,4 @@
 import constants from '../settings/constants';
-
 import { currencies, rates } from '../settings/interfaces';
 
 const calculatePrices = (

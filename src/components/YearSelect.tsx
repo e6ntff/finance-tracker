@@ -4,6 +4,7 @@ import { Flex, Select } from 'antd';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { listStore } from 'utils/listStore';
 import { ExpenseItem } from 'settings/interfaces';
+import { userStore } from 'utils/userStore';
 
 interface Props {
 	values: string[];
@@ -12,6 +13,7 @@ interface Props {
 
 const YearSelect: React.FC<Props> = observer(({ values, onChange }) => {
 	const { list } = listStore;
+	const { isSmallScreen } = userStore;
 
 	const years = useMemo(
 		() =>
@@ -31,6 +33,7 @@ const YearSelect: React.FC<Props> = observer(({ values, onChange }) => {
 			style={{ alignSelf: 'start' }}
 		>
 			<Select
+				size={isSmallScreen ? 'small' : 'middle'}
 				mode='multiple'
 				showSearch={false}
 				value={values}

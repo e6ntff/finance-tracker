@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, memo } from 'react';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -124,4 +124,4 @@ const Stats: React.FC = observer(() => {
 	);
 });
 
-export default Stats;
+export default memo(Stats);

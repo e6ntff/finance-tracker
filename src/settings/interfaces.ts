@@ -38,4 +38,14 @@ export type Theme = typeof darkAlgorithm | typeof defaultAlgorithm;
 
 export type Sort = 'date' | 'title' | 'price';
 
-export type Mode = 'list' | 'grid'
+export type Mode = 'list' | 'grid';
+
+export interface Options {
+	years: string[];
+	sortingAlgorithm: Sort;
+	isSortingReversed: boolean;
+	pageSize: number;
+	currentPage: number;
+	categoriesToFilter: category[];
+	mode: Mode;
+}

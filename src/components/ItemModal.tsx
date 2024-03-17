@@ -135,8 +135,8 @@ const ItemModal: React.FC<Props> = observer(
 					setCurrentItem(initialItem);
 					toggleOpened();
 				}}
-				okButtonProps={{ icon: <CheckOutlined />, title: '' }}
-				cancelButtonProps={{ icon: <CloseOutlined /> }}
+				okText={<CheckOutlined />}
+				cancelText={<CloseOutlined />}
 			>
 				<Form
 					layout='vertical'

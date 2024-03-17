@@ -6,6 +6,7 @@ import { Button } from 'antd';
 import { listStore } from 'utils/listStore';
 import constants from 'settings/constants';
 import ItemModal from './ItemModal';
+import { PlusOutlined } from '@ant-design/icons';
 
 const NewItemButton: React.FC = observer(() => {
 	const { addItem } = listStore;
@@ -14,7 +15,7 @@ const NewItemButton: React.FC = observer(() => {
 		() => constants.getEmptyItem(getTodayDate),
 		[]
 	);
-	
+
 	const [newItem, setNewItem] = useState<ExpenseItem>(emptyItem);
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
@@ -37,7 +38,9 @@ const NewItemButton: React.FC = observer(() => {
 
 	return (
 		<>
-			<Button onClick={toggleIsModalOpened}>123</Button>
+			<Button onClick={toggleIsModalOpened}>
+				<PlusOutlined />
+			</Button>
 			<ItemModal
 				opened={isModalOpened}
 				initialItem={newItem}

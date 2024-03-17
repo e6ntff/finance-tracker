@@ -15,10 +15,6 @@ const languages = {
 		en: 'Settings',
 		ru: 'Настройки',
 	},
-	addExpense: {
-		en: 'New expense',
-		ru: 'Новый расход',
-	},
 	title: {
 		en: 'Title',
 		ru: 'Название',

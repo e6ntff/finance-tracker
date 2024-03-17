@@ -40,6 +40,8 @@ export type Sort = 'date' | 'title' | 'price';
 
 export type Mode = 'list' | 'grid';
 
+export type Interval = 'year' | 'month';
+
 export interface Options {
 	years: string[];
 	sortingAlgorithm: Sort;
@@ -48,4 +50,9 @@ export interface Options {
 	currentPage: number;
 	categoriesToFilter: category[];
 	mode: Mode;
+}
+
+export interface Value {
+	category: category;
+	value: number;
 }

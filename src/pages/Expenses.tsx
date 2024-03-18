@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ItemList from '../components/ItemList';
-import { Divider, Flex } from 'antd';
+import { Flex } from 'antd';
 import Selectors from 'components/Selectors';
 import { observer } from 'mobx-react-lite';
 import constants from 'settings/constants';
@@ -8,6 +8,11 @@ import { Mode, Options, Sort, category } from 'settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { userStore } from 'utils/userStore';
 import useDebounce from 'hooks/useDebounce';
+import {
+	getFilteredList,
+	getListToShowOnCurrentPage,
+} from 'utils/transformData';
+import { listStore } from 'utils/listStore';
 
 const defaultOptions = {
 	years: [],
@@ -21,7 +26,8 @@ const defaultOptions = {
 
 const Expenses: React.FC = observer(() => {
 	const { categories } = categoryStore;
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, language } = userStore;
+	const { list } = listStore;
 
 	const [options, setOptions] = useState<Options>(
 		JSON.parse(
@@ -126,7 +132,17 @@ const Expenses: React.FC = observer(() => {
 		options.categoriesToFilter,
 	]);
 
-	const debouncedOptions = useDebounce(options);
+	const filteredList = useMemo(
+		() => getFilteredList(options, list, language),
+		[list, language, options]
+	);
+
+	const listToShowOnCurrentPage = useMemo(
+		() => getListToShowOnCurrentPage(options, filteredList),
+		[filteredList, options]
+	);
+
+	const debouncedOptions: Options = useDebounce(options);
 
 	return (
 		<Flex
@@ -136,19 +152,23 @@ const Expenses: React.FC = observer(() => {
 		>
 			<Selectors
 				isSmallScreen={isSmallScreen}
-				handleYearChanging={handleYearChanging}
-				handleCategoriesToFilterChange={handleCategoriesToFilterChange}
-				handleSortAlgorithmChanging={handleSortAlgorithmChanging}
-				toggleIsSortingReversed={toggleIsSortingReversed}
-				handleModeChanging={handleModeChanging}
-				resetSettings={resetSettings}
+				handlers={{
+					handleYearChanging,
+					handleCategoriesToFilterChange,
+					handleSortAlgorithmChanging,
+					toggleIsSortingReversed,
+					handleModeChanging,
+					resetSettings,
+					handlePageChanging,
+				}}
 				isSettingsChanged={isSettingsChanged}
+				filteredListLength={filteredList.length}
 				options={options}
 			/>
-			<Divider/>
 			<ItemList
 				options={debouncedOptions}
-				handlePageChanging={handlePageChanging}
+				filteredListLength={filteredList.length}
+				listToShowOnCurrentPage={listToShowOnCurrentPage}
 			/>
 		</Flex>
 	);

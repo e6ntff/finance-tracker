@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Flex, Segmented } from 'antd';
 import { MenuOutlined, TableOutlined } from '@ant-design/icons';
@@ -12,23 +12,6 @@ interface Props {
 
 const ModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 	const { isSmallScreen } = userStore;
-
-	const [lastSelectedOption, setLastSelectedOption] = useState<Mode>(value);
-
-	useEffect(() => {
-		if (isSmallScreen) {
-			onChange('grid');
-			setLastSelectedOption(value);
-		} else {
-			onChange(lastSelectedOption);
-		}
-	}, [
-		isSmallScreen,
-		lastSelectedOption,
-		onChange,
-		setLastSelectedOption,
-		value,
-	]);
 
 	return (
 		<Flex

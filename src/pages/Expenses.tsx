@@ -8,10 +8,7 @@ import { Mode, Options, Sort, category } from 'settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { userStore } from 'utils/userStore';
 import useDebounce from 'hooks/useDebounce';
-import {
-	getFilteredList,
-	getListToShowOnCurrentPage,
-} from 'utils/transformData';
+import { getFilteredList } from 'utils/transformData';
 import { listStore } from 'utils/listStore';
 
 const defaultOptions = {
@@ -34,6 +31,12 @@ const Expenses: React.FC = observer(() => {
 			localStorage.getItem('options') || JSON.stringify(defaultOptions)
 		)
 	);
+
+	useEffect(() => {
+		if (isSmallScreen) {
+			setOptions((prevOptions: Options) => ({ ...prevOptions, mode: 'grid' }));
+		}
+	}, [setOptions, isSmallScreen]);
 
 	useEffect(() => {
 		localStorage.setItem('options', JSON.stringify(options));
@@ -137,11 +140,6 @@ const Expenses: React.FC = observer(() => {
 		[list, language, options]
 	);
 
-	const listToShowOnCurrentPage = useMemo(
-		() => getListToShowOnCurrentPage(options, filteredList),
-		[filteredList, options]
-	);
-
 	const debouncedOptions: Options = useDebounce(options);
 
 	return (
@@ -167,8 +165,7 @@ const Expenses: React.FC = observer(() => {
 			/>
 			<ItemList
 				options={debouncedOptions}
-				filteredListLength={filteredList.length}
-				listToShowOnCurrentPage={listToShowOnCurrentPage}
+				filteredList={filteredList}
 			/>
 		</Flex>
 	);

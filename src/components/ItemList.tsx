@@ -1,60 +1,96 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import ListItem from './ListItem';
 import { ExpenseItem, Options } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Empty, Flex, List, Spin } from 'antd';
+import { Col, Empty, List, Row, Spin } from 'antd';
+import { getListToShowOnCurrentPage } from 'utils/transformData';
+import { userStore } from 'utils/userStore';
 
 interface Props {
 	options: Options;
-	filteredListLength: number;
-	listToShowOnCurrentPage: ExpenseItem[];
+	filteredList: ExpenseItem[];
 }
 
-const ItemList: React.FC<Props> = observer(
-	({ options, filteredListLength, listToShowOnCurrentPage }) => {
-		const { loading } = listStore;
+const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
+	const { loading } = listStore;
+	const { width } = userStore;
+	const [colNumber, setColNumber] = useState<number>(3);
 
-		return (
-			<>
-				{loading ? (
-					<Spin />
-				) : (
-					!filteredListLength && (
-						<Empty
-							image={Empty.PRESENTED_IMAGE_SIMPLE}
-							description={''}
+	useEffect(() => {
+		if (width < 380) {
+			setColNumber(1);
+			return;
+		}
+		if (width < 577) {
+			setColNumber(2);
+			return;
+		}
+		setColNumber(3);
+	}, [setColNumber, width]);
+
+	const listToShowOnCurrentPage = useMemo(
+		() => getListToShowOnCurrentPage(options, filteredList),
+		[filteredList, options]
+	);
+
+	const SplittedList = useMemo(() => {
+		const result: ExpenseItem[][] = [];
+		let row = -1;
+
+		filteredList.forEach((item: ExpenseItem, col: number) => {
+			if (col % colNumber === 0) {
+				row++;
+				result.push([]);
+			}
+			result[row].push(item);
+		});
+
+		return result;
+	}, [filteredList, colNumber]);
+
+	return (
+		<>
+			{loading ? (
+				<Spin />
+			) : (
+				!filteredList.length && (
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						description={''}
+					/>
+				)
+			)}
+			{options.mode === 'list' ? (
+				<List style={{ inlineSize: '100%' }}>
+					{listToShowOnCurrentPage.map((item: ExpenseItem) => (
+						<ListItem
+							key={item.id}
+							mode={options.mode}
+							initialIitem={item}
 						/>
-					)
-				)}
-				{options.mode === 'list' ? (
-					<List style={{ inlineSize: '100%' }}>
-						{listToShowOnCurrentPage.map((item: ExpenseItem) => (
-							<ListItem
-								key={item.id}
-								mode={options.mode}
-								initialIitem={item}
-							/>
-						))}
-					</List>
-				) : (
-					<Flex
-						wrap='wrap'
-						justify='space-between'
-						gap={8}
+					))}
+				</List>
+			) : (
+				SplittedList.map((row: ExpenseItem[]) => (
+					<Row
+						gutter={16}
+						style={{ inlineSize: '100%' }}
 					>
-						{listToShowOnCurrentPage.map((item: ExpenseItem) => (
-							<ListItem
-								key={item.id}
-								mode={options.mode}
-								initialIitem={item}
-							/>
+						{row.map((item: ExpenseItem) => (
+							<Col span={24 / colNumber}>
+								<ListItem
+									key={item.id}
+									mode={options.mode}
+									initialIitem={item}
+								/>
+							</Col>
 						))}
-					</Flex>
-				)}
-			</>
-		);
-	}
-);
+					</Row>
+				))
+			)}
+		</>
+	);
+});
 
 export default memo(ItemList);

@@ -12,6 +12,7 @@ class UserStore {
 	listStore;
 	categoryStore;
 	user: any = {};
+	width: number = window.innerWidth;
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
 	language: language = 'en';
@@ -21,7 +22,8 @@ class UserStore {
 	themeAlgorithm: Theme =
 		this.theme === 'dark' ? defaultAlgorithm : darkAlgorithm;
 
-	setIsSmallScreen = (value: boolean) => {
+	setWidth = (width: number, value: boolean) => {
+		this.width = width;
 		this.isSmallScreen = value;
 	};
 

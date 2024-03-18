@@ -16,14 +16,17 @@ import { getConfig } from 'settings/getConfig';
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const { logged, setTheme, isSmallScreen, setIsSmallScreen } = userStore;
+	const { logged, setTheme, isSmallScreen, setWidth } = userStore;
 	const { themeAlgorithm } = userStore;
 	const { setCurrencyRates, setCurrency, setUser } = userStore;
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
 		const handleResize = () => {
-			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
+			setWidth(
+				window.innerWidth,
+				window.innerWidth < constants.windowBreakpoint
+			);
 		};
 
 		window.addEventListener('resize', handleResize);
@@ -31,7 +34,7 @@ const App: React.FC = observer(() => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [setIsSmallScreen]);
+	}, [setWidth]);
 
 	useEffect(() => {
 		if (logged) setIsLoaded(true);

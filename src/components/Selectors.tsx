@@ -94,7 +94,6 @@ const Selectors: React.FC<Props> = observer(
 					<Pagination
 						style={{ alignSelf: 'center' }}
 						size={isSmallScreen ? 'small' : 'default'}
-						showQuickJumper
 						showSizeChanger
 						pageSizeOptions={constants.pageSizeOptions}
 						current={options.currentPage}

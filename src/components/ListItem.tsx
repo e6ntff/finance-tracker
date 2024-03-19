@@ -65,8 +65,43 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		return () => clearInterval(deleteId);
 	}, [isItemDeleting, currentItem, removeItem]);
 
+	const toggleIsModalOpened = () => {
+		setIsModalOpened((prevValue: boolean) => !prevValue);
+	};
+
+	const updateCurrentItem = (item: ExpenseItem) => {
+		setCurrentItem(item);
+		replaceItem(item);
+		toggleIsModalOpened();
+	};
+
+	const TitleJSX = (
+		<Flex
+			justify='center'
+			style={{
+				opacity: isItemDeleting ? '.5' : '1',
+			}}
+		>
+			{isSmallScreen ? (
+				<Typography.Text strong>{currentItem.title}</Typography.Text>
+			) : (
+				<Title
+					level={3}
+					style={{ margin: 0 }}
+				>
+					{currentItem.title}
+				</Title>
+			)}
+		</Flex>
+	);
+
 	const DateJSX = (
-		<Flex justify='center'>
+		<Flex
+			justify='center'
+			style={{
+				opacity: isItemDeleting ? '.5' : '1',
+			}}
+		>
 			{isSmallScreen ? (
 				<Typography.Text strong>
 					{currentItem.date.format('YYYY-MM-DD')}
@@ -82,35 +117,13 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		</Flex>
 	);
 
-	const toggleIsModalOpened = () => {
-		setIsModalOpened((prevValue: boolean) => !prevValue);
-	};
-
-	const updateCurrentItem = (item: ExpenseItem) => {
-		setCurrentItem(item);
-		replaceItem(item);
-		toggleIsModalOpened();
-	};
-
-	const TitleJSX = (
-		<Flex justify='center'>
-			{isSmallScreen ? (
-				<Typography.Text strong>{currentItem.title}</Typography.Text>
-			) : (
-				<Title
-					level={3}
-					style={{ margin: 0 }}
-				>
-					{currentItem.title}
-				</Title>
-			)}
-		</Flex>
-	);
-
 	const CategoryJSX = (
 		<Flex
 			vertical
 			align='stretch'
+			style={{
+				opacity: isItemDeleting ? '.5' : '1',
+			}}
 		>
 			<Tag color={currentItem.category.color}>
 				<span
@@ -126,7 +139,12 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 	);
 
 	const PriceJSX = (
-		<Flex justify='center'>
+		<Flex
+			justify='center'
+			style={{
+				opacity: isItemDeleting ? '.5' : '1',
+			}}
+		>
 			{isSmallScreen ? (
 				<Typography.Text strong>
 					{getSymbol(currency)}
@@ -163,6 +181,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 
 	const EditButtonJSX = (
 		<Button
+			disabled={isItemDeleting}
 			size={isSmallScreen ? 'small' : 'middle'}
 			onClick={toggleIsModalOpened}
 		>
@@ -204,25 +223,17 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 						flex: `1 1 ${isSmallScreen ? 10 : 15}em`,
 					}}
 					bordered
-					title={TitleJSX}
-					actions={[
-						!isItemDeleting && EditButtonJSX,
-						PriceJSX,
-						DeleteButtonJSX,
-					]}
+					title={isItemDeleting ? ProgressJSX : TitleJSX}
+					actions={[EditButtonJSX, PriceJSX, DeleteButtonJSX]}
 				>
-					{isItemDeleting ? (
-						<Flex>{ProgressJSX}</Flex>
-					) : (
-						<Flex
-							vertical
-							align='stretch'
-							gap={8}
-						>
-							{DateJSX}
-							{CategoryJSX}
-						</Flex>
-					)}
+					<Flex
+						vertical
+						align='stretch'
+						gap={8}
+					>
+						{DateJSX}
+						{CategoryJSX}
+					</Flex>
 				</Card>
 			)}
 		</>

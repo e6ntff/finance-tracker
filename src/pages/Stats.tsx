@@ -1,10 +1,4 @@
-import React, {
-	useState,
-	useCallback,
-	useMemo,
-	useEffect,
-	memo,
-} from 'react';
+import React, { useState, useCallback, useMemo, useEffect, memo } from 'react';
 import { ExpenseItem, StatsOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -157,6 +151,7 @@ const Stats: React.FC = observer(() => {
 								: total
 						)}
 						prefix={getSymbol(currency)}
+						valueStyle={{ color: '#f00' }}
 					/>
 				</Card>
 				<CalendarModal

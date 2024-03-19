@@ -35,8 +35,8 @@ const DiagramBar: React.FC<Props> = observer(
 		const values: number[] | { [key: string]: number } = useMemo(() => {
 			if (interval === 'year')
 				return getValuesForBarDiagramByYear(list, currency);
-			return getValuesForBarDiagramByMonth(list, month, currency);
-		}, [currency, list, interval, month]);
+			return getValuesForBarDiagramByMonth(list, year, currency);
+		}, [currency, list, interval, year]);
 
 		const data = {
 			labels:

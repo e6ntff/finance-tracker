@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import constants from 'settings/constants';
 import { listStore } from 'utils/listStore';
-import { getValuesByMonthOrDay } from 'utils/transformData';
+import { getValuesForCalendar } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { getSymbol } from 'utils/utils';
 import DiagramPie from './DiagramPie';
@@ -34,12 +34,12 @@ const CalendarModal: React.FC<Props> = observer(
 		};
 
 		const valuesByMonth = useMemo(
-			() => getValuesByMonthOrDay(list, currency, year, month),
+			() => getValuesForCalendar(list, currency, year, month),
 			[year, month, currency, list]
 		);
 
 		const valuesByDay = useMemo(
-			() => getValuesByMonthOrDay(list, currency, year, month, day),
+			() => getValuesForCalendar(list, currency, year, month, day),
 			[year, month, day, currency, list]
 		);
 		

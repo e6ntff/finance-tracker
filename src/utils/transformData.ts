@@ -55,7 +55,7 @@ export const getListToShowOnCurrentPage = (
 	return filteredList.slice(startIndex, endIndex);
 };
 
-export const getValuesByMonthOrDay = (
+export const getValuesForCalendar = (
 	list: ExpenseItem[],
 	currency: string,
 	year: number | null,
@@ -98,8 +98,10 @@ export const getValuesForBarDiagramByMonth = (
 ) => {
 	const result: number[] = new Array(12).fill(0);
 	list.forEach((item: ExpenseItem) => {
-		const key = item.date.month();
-		result[key] += item.price[currency];
+		if (item.date.year() === year) {
+			const key = item.date.month();
+			result[key] += item.price[currency];
+		}
 	});
 	return result;
 };
@@ -128,6 +130,7 @@ export const getValuesForPieDiagramByYear = (
 export const getValuesForPieDiagramByMonth = (
 	list: ExpenseItem[],
 	year: number | null,
+	month: number | null,
 	currency: string
 ) => {
 	const values: Value[] = [];
@@ -135,7 +138,10 @@ export const getValuesForPieDiagramByMonth = (
 		const indexOfCategory: number = values.findIndex(
 			(value: Value) => value.category.id === item.category.id
 		);
-		if (item.date.year() === year) {
+		if (
+			item.date.year() === year &&
+			(month !== null ? item.date.month() === month : true)
+		) {
 			if (indexOfCategory !== -1) {
 				values[indexOfCategory].value += item.price[currency];
 			} else {

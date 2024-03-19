@@ -36,7 +36,7 @@ const DiagramPie: React.FC<Props> = observer(
 			if (interval === 'year')
 				return getValuesForPieDiagramByYear(list, currency);
 			if (interval === 'month')
-				return getValuesForPieDiagramByMonth(list, year, currency);
+				return getValuesForPieDiagramByMonth(list, year, month, currency);
 			return getValuesForPieDiagramInCurrentDay(
 				list,
 				year,

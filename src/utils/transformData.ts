@@ -1,6 +1,5 @@
 import {
 	ExpenseItem,
-	Interval,
 	Options,
 	Value,
 	category,
@@ -76,39 +75,37 @@ export const getValuesByMonthOrDay = (
 	return result;
 };
 
-export const getValuesForBarDiagram = (
-	interval: Interval,
+export const getValuesForBarDiagramByYear = (
 	list: ExpenseItem[],
 	currency: string
 ) => {
-	if (interval === 'month') {
-		const result: number[] = new Array(12).fill(0);
-
-		list.forEach((item: ExpenseItem) => {
-			const key = item.date.month();
+	const result: { [key: string]: number } = {};
+	list.forEach((item: ExpenseItem) => {
+		const key = item.date.year().toString();
+		if (result[key] === undefined) {
+			result[key] = 0;
+		} else {
 			result[key] += item.price[currency];
-		});
-		return result;
-	} else if (interval === 'year') {
-		const result: { [key: string]: number } = {};
-		list.forEach((item: ExpenseItem) => {
-			const key = item.date.year().toString();
-			if (result[key] === undefined) {
-				result[key] = 0;
-			} else {
-				result[key] += item.price[currency];
-			}
-		});
-		return result;
-	}
-	return [];
+		}
+	});
+	return result;
 };
 
-export const getValuesForPieDiagram = (
-	interval: Interval,
+export const getValuesForBarDiagramByMonth = (
 	list: ExpenseItem[],
-	intervalBig: number | null,
-	intervalSmall: number | null,
+	year: number | null,
+	currency: string
+) => {
+	const result: number[] = new Array(12).fill(0);
+	list.forEach((item: ExpenseItem) => {
+		const key = item.date.month();
+		result[key] += item.price[currency];
+	});
+	return result;
+};
+
+export const getValuesForPieDiagramByYear = (
+	list: ExpenseItem[],
 	currency: string
 ) => {
 	const values: Value[] = [];
@@ -116,20 +113,58 @@ export const getValuesForPieDiagram = (
 		const indexOfCategory: number = values.findIndex(
 			(value: Value) => value.category.id === item.category.id
 		);
-		let expenseDate: number | null = null;
-		if (interval === 'year') {
-			if (intervalBig === null && intervalSmall !== null) {
-				expenseDate = item.date.year();
-			}
-		} else if (interval === 'month') {
-			if (intervalSmall === null) {
-				expenseDate = item.date.year();
+		if (indexOfCategory !== -1) {
+			values[indexOfCategory].value += item.price[currency];
+		} else {
+			values.push({
+				category: item.category,
+				value: item.price[currency],
+			});
+		}
+	});
+	return values;
+};
+
+export const getValuesForPieDiagramByMonth = (
+	list: ExpenseItem[],
+	year: number | null,
+	currency: string
+) => {
+	const values: Value[] = [];
+	list.forEach((item: ExpenseItem) => {
+		const indexOfCategory: number = values.findIndex(
+			(value: Value) => value.category.id === item.category.id
+		);
+		if (item.date.year() === year) {
+			if (indexOfCategory !== -1) {
+				values[indexOfCategory].value += item.price[currency];
 			} else {
-				expenseDate = item.date.month();
+				values.push({
+					category: item.category,
+					value: item.price[currency],
+				});
 			}
 		}
+	});
+	return values;
+};
+
+export const getValuesForPieDiagramInCurrentDay = (
+	list: ExpenseItem[],
+	year: number | null,
+	month: number | null,
+	day: number | null,
+	currency: string
+) => {
+	const values: Value[] = [];
+	list.forEach((item: ExpenseItem) => {
+		const indexOfCategory: number = values.findIndex(
+			(value: Value) => value.category.id === item.category.id
+		);
 		if (
-			expenseDate === (intervalSmall !== null ? intervalSmall : intervalBig)
+			item.date.date() === day &&
+			item.date.month() === month &&
+			item.date.year() === year
 		) {
 			if (indexOfCategory !== -1) {
 				values[indexOfCategory].value += item.price[currency];

@@ -17,7 +17,7 @@ const constants = {
 	defaultMode: 'list',
 	pageSizeOptions: pageSizeOptions,
 	baseCurrency: 'USD',
-	startDate: dayjs(new Date(2020, 1, 1)),
+	startDate: dayjs(new Date(2020, 0, 1)),
 	defaultCategory: defaultCategory,
 	emptyItem: {
 		id: Math.random(),

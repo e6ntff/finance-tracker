@@ -1,5 +1,12 @@
-import React, { useState, useCallback, useMemo, useEffect, memo } from 'react';
-import { ExpenseItem } from '../settings/interfaces';
+import React, {
+	useState,
+	useCallback,
+	useMemo,
+	useEffect,
+	memo,
+	startTransition,
+} from 'react';
+import { ExpenseItem, StatsOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { Button, Card, Empty, Flex, Spin, Statistic } from 'antd';
@@ -12,14 +19,56 @@ import { ArrowLeftOutlined, CalendarOutlined } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
 import CalendarModal from 'components/CalendarModal';
 
+const defaultStatsOptions: StatsOptions = {
+	year: null,
+	month: null,
+	day: null,
+};
+
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
 	const { language, currency, isSmallScreen } = userStore;
-
-	const [year, setYear] = useState<number | null>(null);
-	const [month, setMonth] = useState<number | null>(null);
-	const [day, setDay] = useState<number | null>(null);
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+	const [statsOptions, setStatsOptions] = useState<StatsOptions>(
+		JSON.parse(
+			localStorage.getItem('statsOptions') ||
+				JSON.stringify(defaultStatsOptions)
+		)
+	);
+
+	useEffect(() => {
+		localStorage.setItem('statsOptions', JSON.stringify(statsOptions));
+	}, [statsOptions]);
+
+	const setMonth = useCallback(
+		(value: number | null) => {
+			setStatsOptions((prevOptions: StatsOptions) => ({
+				...prevOptions,
+				month: value,
+			}));
+		},
+		[setStatsOptions]
+	);
+
+	const setYear = useCallback(
+		(value: number | null) => {
+			setStatsOptions((prevOptions: StatsOptions) => ({
+				...prevOptions,
+				year: value,
+			}));
+		},
+		[setStatsOptions]
+	);
+
+	const setDay = useCallback(
+		(value: number | null) => {
+			setStatsOptions((prevOptions: StatsOptions) => ({
+				...prevOptions,
+				day: value,
+			}));
+		},
+		[setStatsOptions]
+	);
 
 	const toggleIsModalOpened = useCallback(() => {
 		setIsModalOpened((prevValue: boolean) => !prevValue);
@@ -27,11 +76,11 @@ const Stats: React.FC = observer(() => {
 
 	useEffect(() => {
 		setMonth(null);
-	}, [year]);
+	}, [statsOptions.year, setMonth]);
 
 	useEffect(() => {
 		setDay(null);
-	}, [month]);
+	}, [statsOptions.month, setDay]);
 
 	const total = useMemo(
 		() =>
@@ -43,8 +92,11 @@ const Stats: React.FC = observer(() => {
 	);
 
 	const filteredList = useMemo(
-		() => list.filter((item: ExpenseItem) => item.date.year() === year),
-		[year, list]
+		() =>
+			list.filter(
+				(item: ExpenseItem) => item.date.year() === statsOptions.year
+			),
+		[statsOptions.year, list]
 	);
 
 	const getTotalInCurrentInterval = useCallback(
@@ -58,13 +110,13 @@ const Stats: React.FC = observer(() => {
 		[filteredList, currency]
 	);
 
-	const goBack = () => {
-		if (month) {
+	const goBack = useCallback(() => {
+		if (statsOptions.month) {
 			setMonth(null);
-		} else if (year) {
+		} else if (statsOptions.year) {
 			setYear(null);
 		}
-	};
+	}, [setMonth, setYear, statsOptions.month, statsOptions.year]);
 
 	return listStore.loading || categoryStore.loading ? (
 		<Flex justify='center'>
@@ -73,7 +125,7 @@ const Stats: React.FC = observer(() => {
 	) : list.length ? (
 		<>
 			<Flex gap={16}>
-				{year && (
+				{statsOptions.year && (
 					<Flex
 						vertical
 						justify='space-between'
@@ -92,23 +144,27 @@ const Stats: React.FC = observer(() => {
 				>
 					<Statistic
 						title={`${
-							year ? languages.In[language] : languages.expensesAll[language]
-						} ${month !== null ? languages.months[language][month] : ''} ${
-							year || ''
-						}`}
-						value={Math.round(year ? getTotalInCurrentInterval(month) : total)}
+							statsOptions.year
+								? languages.In[language]
+								: languages.expensesAll[language]
+						} ${
+							statsOptions.month !== null
+								? languages.months[language][statsOptions.month]
+								: ''
+						} ${statsOptions.year || ''}`}
+						value={Math.round(
+							statsOptions.year
+								? getTotalInCurrentInterval(statsOptions.month)
+								: total
+						)}
 						prefix={getSymbol(currency)}
 					/>
 				</Card>
 				<CalendarModal
 					opened={isModalOpened}
 					toggleOpened={toggleIsModalOpened}
-					year={year}
-					month={month}
-					day={day}
-					setYear={setYear}
-					setMonth={setMonth}
-					setDay={setDay}
+					statsOptions={statsOptions}
+					setStatsOptions={setStatsOptions}
 				/>
 			</Flex>
 			<Flex
@@ -116,21 +172,18 @@ const Stats: React.FC = observer(() => {
 				justify='space-between'
 				style={{ flexDirection: isSmallScreen ? 'column-reverse' : 'row' }}
 			>
-				{year ? (
+				{statsOptions.year ? (
 					<>
 						<DiagramBar
 							list={filteredList}
 							interval='month'
-							year={year}
-							month={month}
+							statsOptions={statsOptions}
 							setInterval={setMonth}
 						/>
 						<DiagramPie
 							list={filteredList}
 							interval='month'
-							year={year}
-							month={month}
-							day={day}
+							statsOptions={statsOptions}
 						/>
 					</>
 				) : (
@@ -138,16 +191,13 @@ const Stats: React.FC = observer(() => {
 						<DiagramBar
 							list={list}
 							interval='year'
-							year={year}
-							month={month}
+							statsOptions={statsOptions}
 							setInterval={setYear}
 						/>
 						<DiagramPie
 							list={list}
 							interval='year'
-							year={year}
-							month={month}
-							day={day}
+							statsOptions={statsOptions}
 						/>
 					</>
 				)}

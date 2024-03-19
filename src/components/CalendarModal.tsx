@@ -8,29 +8,29 @@ import { getValuesForCalendar } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { getSymbol } from 'utils/utils';
 import DiagramPie from './DiagramPie';
+import { StatsOptions } from 'settings/interfaces';
 
 interface Props {
-	year: number | null;
-	month: number | null;
-	day: number | null;
-	setYear: (arg0: number | null) => void;
-	setMonth: (arg0: number | null) => void;
-	setDay: (arg0: number | null) => void;
+	statsOptions: StatsOptions;
+	setStatsOptions: (arg0: StatsOptions) => void;
 	opened: boolean;
 	toggleOpened: () => void;
 }
 
 const CalendarModal: React.FC<Props> = observer(
-	({ opened, toggleOpened, year, month, day, setYear, setMonth, setDay }) => {
+	({ opened, toggleOpened, statsOptions, setStatsOptions }) => {
+		const { year, month, day } = statsOptions;
 		const { list } = listStore;
 		const { currency } = userStore;
 
 		const [isDiagramVisible, setIsDiagramVisible] = useState<boolean>(false);
 
 		const handleDateChange = (date: dayjs.Dayjs) => {
-			setYear(date.year());
-			setMonth(date.month());
-			setDay(date.date());
+			setStatsOptions({
+				year: date.year(),
+				month: date.month(),
+				day: date.date(),
+			});
 		};
 
 		const valuesByMonth = useMemo(
@@ -42,7 +42,7 @@ const CalendarModal: React.FC<Props> = observer(
 			() => getValuesForCalendar(list, currency, year, month, day),
 			[year, month, day, currency, list]
 		);
-		
+
 		useEffect(() => {
 			if (day && valuesByDay[day]) {
 				setIsDiagramVisible(true);
@@ -108,9 +108,7 @@ const CalendarModal: React.FC<Props> = observer(
 						<DiagramPie
 							list={list}
 							interval='day'
-							year={year}
-							month={month}
-							day={day}
+							statsOptions={statsOptions}
 						/>
 					)}
 				</Flex>

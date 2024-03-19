@@ -1,5 +1,10 @@
 import React, { useMemo } from 'react';
-import { ExpenseItem, Interval, Value } from '../settings/interfaces';
+import {
+	ExpenseItem,
+	Interval,
+	StatsOptions,
+	Value,
+} from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Flex } from 'antd';
@@ -23,13 +28,12 @@ Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 interface Props {
 	list: ExpenseItem[];
 	interval: Interval;
-	year: number | null;
-	month: number | null;
-	day: number | null;
+	statsOptions: StatsOptions;
 }
 
 const DiagramPie: React.FC<Props> = observer(
-	({ list, interval, year, month, day }) => {
+	({ list, interval, statsOptions }) => {
+		const { year, month, day } = statsOptions;
 		const { currency, isSmallScreen } = userStore;
 
 		const valuesByCategory: Value[] = useMemo(() => {

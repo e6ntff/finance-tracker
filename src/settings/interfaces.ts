@@ -40,7 +40,7 @@ export type Sort = 'date' | 'title' | 'price';
 
 export type Mode = 'list' | 'grid';
 
-export type Interval = 'year' | 'month';
+export type Interval = 'year' | 'month' | 'day';
 
 export interface Options {
 	years: string[];

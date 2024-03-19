@@ -63,9 +63,9 @@ const languages = {
 		en: 'Passwords do not match',
 		ru: 'Пароли не совпадают',
 	},
-	expensesIn: {
-		en: `Expenses in`,
-		ru: `Расходы за`,
+	In: {
+		en: `In`,
+		ru: `За`,
 	},
 	expensesAll: {
 		en: `All expenses`,

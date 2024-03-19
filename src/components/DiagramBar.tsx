@@ -14,23 +14,29 @@ import {
 	CategoryScale,
 	LinearScale,
 } from 'chart.js';
-import { getValuesForBarDiagram } from 'utils/transformData';
+import {
+	getValuesForBarDiagramByMonth,
+	getValuesForBarDiagramByYear,
+} from 'utils/transformData';
 Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
 
 interface Props {
-	interval: Interval;
 	list: ExpenseItem[];
+	interval: Interval;
+	year: number | null;
+	month: number | null;
 	setInterval: (arg0: number | null) => void;
 }
 
 const DiagramBar: React.FC<Props> = observer(
-	({ interval, list, setInterval }) => {
+	({ list, interval, year, month, setInterval }) => {
 		const { currency, language, isSmallScreen } = userStore;
 
-		const values: number[] | { [key: string]: number } = useMemo(
-			() => getValuesForBarDiagram(interval, list, currency),
-			[currency, list, interval]
-		);
+		const values: number[] | { [key: string]: number } = useMemo(() => {
+			if (interval === 'year')
+				return getValuesForBarDiagramByYear(list, currency);
+			return getValuesForBarDiagramByMonth(list, month, currency);
+		}, [currency, list, interval, month]);
 
 		const data = {
 			labels:

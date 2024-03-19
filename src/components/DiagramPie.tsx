@@ -13,31 +13,38 @@ import {
 	Legend,
 	Title,
 } from 'chart.js';
-import { getValuesForPieDiagram } from 'utils/transformData';
+import {
+	getValuesForPieDiagramInCurrentDay,
+	getValuesForPieDiagramByMonth,
+	getValuesForPieDiagramByYear,
+} from 'utils/transformData';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 interface Props {
 	list: ExpenseItem[];
 	interval: Interval;
-	intervalBig: number | null;
-	intervalSmall: number | null;
+	year: number | null;
+	month: number | null;
+	day: number | null;
 }
 
 const DiagramPie: React.FC<Props> = observer(
-	({ list, interval, intervalBig, intervalSmall }) => {
+	({ list, interval, year, month, day }) => {
 		const { currency, isSmallScreen } = userStore;
 
-		const valuesByCategory: Value[] = useMemo(
-			() =>
-				getValuesForPieDiagram(
-					interval,
-					list,
-					intervalBig,
-					intervalSmall,
-					currency
-				),
-			[list, currency, interval, intervalBig, intervalSmall]
-		);
+		const valuesByCategory: Value[] = useMemo(() => {
+			if (interval === 'year')
+				return getValuesForPieDiagramByYear(list, currency);
+			if (interval === 'month')
+				return getValuesForPieDiagramByMonth(list, year, currency);
+			return getValuesForPieDiagramInCurrentDay(
+				list,
+				year,
+				month,
+				day,
+				currency
+			);
+		}, [list, currency, interval, year, month, day]);
 
 		const [names, colors, values] = [
 			valuesByCategory.map((value: Value) => value.category.name),
@@ -66,7 +73,11 @@ const DiagramPie: React.FC<Props> = observer(
 		};
 
 		return (
-			<Flex style={{ inlineSize: isSmallScreen ? 'unset' : '40%' }}>
+			<Flex
+				style={{
+					inlineSize: isSmallScreen || interval === 'day' ? 'unset' : '40%',
+				}}
+			>
 				<Pie
 					data={data}
 					options={options}

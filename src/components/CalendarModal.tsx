@@ -1,13 +1,13 @@
 import { Calendar, Flex, Modal, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import constants from 'settings/constants';
 import { listStore } from 'utils/listStore';
 import { getValuesByMonthOrDay } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { getSymbol } from 'utils/utils';
-import Title from 'antd/es/typography/Title';
+import DiagramPie from './DiagramPie';
 
 interface Props {
 	year: number | null;
@@ -25,6 +25,8 @@ const CalendarModal: React.FC<Props> = observer(
 		const { list } = listStore;
 		const { currency } = userStore;
 
+		const [isDiagramVisible, setIsDiagramVisible] = useState<boolean>(false);
+
 		const handleDateChange = (date: dayjs.Dayjs) => {
 			setYear(date.year());
 			setMonth(date.month());
@@ -41,26 +43,21 @@ const CalendarModal: React.FC<Props> = observer(
 			[year, month, day, currency, list]
 		);
 
-		const monthCellRender = (date: dayjs.Dayjs) => {
-			const index = date.month();
-			const value = valuesByMonth[index];
-			return value ? (
-				<Flex
-					justify='center'
-					align='center'
-				>
-					<Title level={5}>{`${getSymbol(currency)}${value}`}</Title>
-				</Flex>
-			) : (
-				<></>
-			);
-		};
+		useEffect(() => {
+			if (day && valuesByDay[day]) {
+				setIsDiagramVisible(true);
+			} else {
+				setIsDiagramVisible(false);
+			}
+		}, [day, valuesByDay]);
 
-		const dateCellRender = (date: dayjs.Dayjs) => {
-			const index = date.date();
-			const value = valuesByDay[index];
+		const cellRender = (date: dayjs.Dayjs, info: any) => {
+			const index = info.type === 'date' ? date.date() : date.month();
+			const value =
+				info.type === 'date' ? valuesByDay[index] : valuesByMonth[index];
 			return value ? (
 				<Flex
+					vertical
 					justify='center'
 					align='center'
 				>
@@ -71,12 +68,6 @@ const CalendarModal: React.FC<Props> = observer(
 			) : (
 				<></>
 			);
-		};
-
-		const cellRender = (current: any, info: any) => {
-			if (info.type === 'date') return dateCellRender(current);
-			if (info.type === 'month') return monthCellRender(current);
-			return info.originNode;
 		};
 
 		return (
@@ -94,14 +85,27 @@ const CalendarModal: React.FC<Props> = observer(
 					},
 				}}
 			>
-				<Calendar
-					cellRender={cellRender}
-					validRange={[constants.startDate, dayjs()]}
-					value={dayjs(
-						new Date(year as number, month as number, day as number)
+				<Flex
+					vertical
+					align='center'
+				>
+					<Calendar
+						cellRender={cellRender}
+						fullscreen={false}
+						validRange={[constants.startDate, dayjs()]}
+						value={dayjs(new Date(year as number, month || 0, day || 1))}
+						onChange={handleDateChange}
+					/>
+					{isDiagramVisible && (
+						<DiagramPie
+							list={list}
+							interval='day'
+							year={year}
+							month={month}
+							day={day}
+						/>
 					)}
-					onChange={handleDateChange}
-				/>
+				</Flex>
 			</Modal>
 		);
 	}

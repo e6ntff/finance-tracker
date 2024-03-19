@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect, memo } from 'react';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Empty, Flex, Spin } from 'antd';
+import { Button, Card, Empty, Flex, Spin, Statistic } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import Title from 'antd/es/typography/Title';
@@ -29,6 +29,10 @@ const Stats: React.FC = observer(() => {
 	useEffect(() => {
 		setMonth(null);
 	}, [year]);
+
+	useEffect(() => {
+		setDay(null);
+	}, [month]);
 
 	const total = useMemo(
 		() =>
@@ -71,26 +75,32 @@ const Stats: React.FC = observer(() => {
 		<>
 			<Flex gap={16}>
 				{year && (
-					<Button onClick={goBack}>
-						<ArrowLeftOutlined />
-					</Button>
+					<Flex
+						vertical
+						justify='space-between'
+					>
+						<Button onClick={goBack}>
+							<ArrowLeftOutlined />
+						</Button>
+						<Button onClick={toggleIsModalOpened}>
+							<CalendarOutlined />
+						</Button>
+					</Flex>
 				)}
-				{year ? (
-					<Title level={3}>{`${languages.expensesIn[language]} ${
-						month !== null ? languages.months[language][month] : ''
-					} ${year}: ${getSymbol(currency)}${Math.round(
-						getTotalInCurrentInterval(month)
-					)}`}</Title>
-				) : (
-					<Title level={3}>{`${languages.expensesAll[language]}: ${getSymbol(
-						currency
-					)}${Math.round(total)}`}</Title>
-				)}
-				{year !== null && (
-					<Button onClick={toggleIsModalOpened}>
-						<CalendarOutlined />
-					</Button>
-				)}
+				<Card
+					bordered={false}
+					size='small'
+				>
+					<Statistic
+						title={`${
+							year ? languages.In[language] : languages.expensesAll[language]
+						} ${month !== null ? languages.months[language][month] : ''} ${
+							year || ''
+						}`}
+						value={Math.round(year ? getTotalInCurrentInterval(month) : total)}
+						prefix={getSymbol(currency)}
+					/>
+				</Card>
 				<CalendarModal
 					opened={isModalOpened}
 					toggleOpened={toggleIsModalOpened}
@@ -110,15 +120,18 @@ const Stats: React.FC = observer(() => {
 				{year ? (
 					<>
 						<DiagramBar
-							interval='month'
 							list={filteredList}
+							interval='month'
+							year={year}
+							month={month}
 							setInterval={setMonth}
 						/>
 						<DiagramPie
 							list={filteredList}
 							interval='month'
-							intervalBig={year}
-							intervalSmall={month}
+							year={year}
+							month={month}
+							day={day}
 						/>
 					</>
 				) : (
@@ -126,13 +139,16 @@ const Stats: React.FC = observer(() => {
 						<DiagramBar
 							list={list}
 							interval='year'
+							year={year}
+							month={month}
 							setInterval={setYear}
 						/>
 						<DiagramPie
 							list={list}
 							interval='year'
-							intervalBig={null}
-							intervalSmall={year}
+							year={year}
+							month={month}
+							day={day}
 						/>
 					</>
 				)}

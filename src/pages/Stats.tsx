@@ -9,8 +9,9 @@ import Title from 'antd/es/typography/Title';
 import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
 import { getSymbol } from 'utils/utils';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CalendarOutlined } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
+import CalendarModal from 'components/CalendarModal';
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
@@ -18,6 +19,12 @@ const Stats: React.FC = observer(() => {
 
 	const [year, setYear] = useState<number | null>(null);
 	const [month, setMonth] = useState<number | null>(null);
+	const [day, setDay] = useState<number | null>(null);
+	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+
+	const toggleIsModalOpened = useCallback(() => {
+		setIsModalOpened((prevValue: boolean) => !prevValue);
+	}, [setIsModalOpened]);
 
 	useEffect(() => {
 		setMonth(null);
@@ -79,6 +86,21 @@ const Stats: React.FC = observer(() => {
 						currency
 					)}${Math.round(total)}`}</Title>
 				)}
+				{year !== null && (
+					<Button onClick={toggleIsModalOpened}>
+						<CalendarOutlined />
+					</Button>
+				)}
+				<CalendarModal
+					opened={isModalOpened}
+					toggleOpened={toggleIsModalOpened}
+					year={year}
+					month={month}
+					day={day}
+					setYear={setYear}
+					setMonth={setMonth}
+					setDay={setDay}
+				/>
 			</Flex>
 			<Flex
 				align='center'

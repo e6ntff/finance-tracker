@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { getTodayDate } from 'utils/utils';
 import calculatePrices from '../utils/calculatePrices';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
@@ -113,8 +112,8 @@ const ItemModal: React.FC<Props> = observer(
 				required
 				onChange={handleDateChange}
 				value={currentItem.date}
-				minDate={dayjs('2020-01-01')}
-				maxDate={dayjs(getTodayDate(new Date()))}
+				minDate={constants.startDate}
+				maxDate={dayjs()}
 			/>
 		);
 

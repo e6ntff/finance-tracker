@@ -2,19 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getSymbol } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import {
-	Button,
-	Card,
-	Col,
-	Flex,
-	Modal,
-	Progress,
-	Row,
-	Tag,
-	Typography,
-} from 'antd';
+import { Button, Card, Col, Flex, Progress, Tag, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import Title from 'antd/es/typography/Title';
@@ -29,8 +18,7 @@ interface Props {
 
 const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 	const { id, category, date, title, price } = initialIitem;
-	const { currency, currencyRates, isSmallScreen } = userStore;
-	const { categories } = categoryStore;
+	const { currency, isSmallScreen } = userStore;
 	const { replaceItem, removeItem } = listStore;
 	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
@@ -65,15 +53,18 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		return () => clearInterval(deleteId);
 	}, [isItemDeleting, currentItem, removeItem]);
 
-	const toggleIsModalOpened = () => {
+	const toggleIsModalOpened = useCallback(() => {
 		setIsModalOpened((prevValue: boolean) => !prevValue);
-	};
+	}, [setIsModalOpened]);
 
-	const updateCurrentItem = (item: ExpenseItem) => {
-		setCurrentItem(item);
-		replaceItem(item);
-		toggleIsModalOpened();
-	};
+	const updateCurrentItem = useCallback(
+		(item: ExpenseItem) => {
+			setCurrentItem(item);
+			replaceItem(item);
+			toggleIsModalOpened();
+		},
+		[setCurrentItem, replaceItem, toggleIsModalOpened]
+	);
 
 	const TitleJSX = (
 		<Flex

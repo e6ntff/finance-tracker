@@ -1,13 +1,5 @@
 import { ExpenseItem, Sort, language } from 'settings/interfaces';
 
-export const getTodayDate = (date: Date) => {
-	const day = date.getDate().toString().padStart(2, '0');
-	const month = (date.getMonth() + 1).toString().padStart(2, '0');
-	const year = date.getFullYear();
-
-	return `${year}-${month}-${day}`;
-};
-
 export const getSymbol = (currency: string) => {
 	if (currency === 'USD') return '$';
 	if (currency === 'EUR') return '€';

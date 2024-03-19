@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { getTodayDate } from 'utils/utils';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
@@ -13,10 +12,7 @@ const NewItemButton: React.FC = observer(() => {
 	const { addItem } = listStore;
 	const { isSmallScreen } = userStore;
 
-	const emptyItem: ExpenseItem = useMemo(
-		() => constants.getEmptyItem(getTodayDate),
-		[]
-	);
+	const emptyItem: ExpenseItem = useMemo(() => constants.emptyItem, []);
 
 	const [newItem, setNewItem] = useState<ExpenseItem>(emptyItem);
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);

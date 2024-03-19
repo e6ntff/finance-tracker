@@ -2,6 +2,12 @@ import dayjs from 'dayjs';
 
 const pageSizeOptions = [20, 40, 80];
 
+const defaultCategory = {
+	id: 0,
+	color: '#cccccc',
+	name: 'Other',
+};
+
 const constants = {
 	spinDelay: 1500,
 	deleteDelay: 1000,
@@ -11,22 +17,19 @@ const constants = {
 	defaultMode: 'list',
 	pageSizeOptions: pageSizeOptions,
 	baseCurrency: 'USD',
-	defaultCategory: {
-		id: 0,
-		color: '#cccccc',
-		name: 'Other',
-	},
-	getEmptyItem: (getTodayDate: (date: Date) => string) => ({
+	startDate: dayjs(new Date(2020, 1, 1)),
+	defaultCategory: defaultCategory,
+	emptyItem: {
 		id: Math.random(),
 		title: '',
-		date: dayjs(getTodayDate(new Date())),
-		category: constants.defaultCategory,
+		date: dayjs(),
+		category: defaultCategory,
 		price: {
 			USD: 0,
 			EUR: 0,
 			RUB: 0,
 		},
-	}),
+	},
 };
 
 export default constants;

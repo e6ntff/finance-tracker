@@ -56,6 +56,26 @@ export const getListToShowOnCurrentPage = (
 	return filteredList.slice(startIndex, endIndex);
 };
 
+export const getValuesByMonthOrDay = (
+	list: ExpenseItem[],
+	currency: string,
+	year: number | null,
+	month: number | null,
+	day?: number | null
+) => {
+	const result: number[] = new Array(day === undefined ? 12 : 31).fill(0);
+	list.forEach((item: ExpenseItem) => {
+		if (day === undefined) {
+			if (item.date.year() === year)
+				result[item.date.month()] += item.price[currency];
+		} else {
+			if (item.date.year() === year && item.date.month() === month)
+				result[item.date.date()] += item.price[currency];
+		}
+	}, []);
+	return result;
+};
+
 export const getValuesForBarDiagram = (
 	interval: Interval,
 	list: ExpenseItem[],

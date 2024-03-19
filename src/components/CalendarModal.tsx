@@ -33,6 +33,14 @@ const CalendarModal: React.FC<Props> = observer(
 			setDay(date.date());
 		};
 
+		useEffect(() => {
+			if (day && valuesByDay[day]) {
+				setIsDiagramVisible(true);
+			} else {
+				setIsDiagramVisible(false);
+			}
+		}, [day]);
+
 		const valuesByMonth = useMemo(
 			() => getValuesByMonthOrDay(list, currency, year, month),
 			[year, month, currency, list]

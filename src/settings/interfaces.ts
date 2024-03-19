@@ -52,6 +52,12 @@ export interface Options {
 	mode: Mode;
 }
 
+export interface StatsOptions {
+	year: number | null;
+	month: number | null;
+	day: number | null;
+}
+
 export interface Value {
 	category: category;
 	value: number;

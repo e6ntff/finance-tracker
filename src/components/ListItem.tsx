@@ -104,14 +104,14 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		>
 			{isSmallScreen ? (
 				<Typography.Text strong>
-					{currentItem.date.format('YYYY-MM-DD')}
+					{currentItem.date.format('DD.MM.YYYY')}
 				</Typography.Text>
 			) : (
 				<Title
 					level={3}
 					style={{ margin: 0 }}
 				>
-					{currentItem.date.format('YYYY-MM-DD')}
+					{currentItem.date.format('DD.MM.YYYY')}
 				</Title>
 			)}
 		</Flex>

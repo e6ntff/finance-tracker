@@ -4,7 +4,6 @@ import {
 	Options,
 	Value,
 	category,
-	currencies,
 	language,
 } from 'settings/interfaces';
 import { sortBy } from './utils';

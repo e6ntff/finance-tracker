@@ -38,7 +38,7 @@ const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
 		const result: ExpenseItem[][] = [];
 		let row = -1;
 
-		filteredList.forEach((item: ExpenseItem, col: number) => {
+		listToShowOnCurrentPage.forEach((item: ExpenseItem, col: number) => {
 			if (col % colNumber === 0) {
 				row++;
 				result.push([]);
@@ -47,7 +47,7 @@ const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
 		});
 
 		return result;
-	}, [filteredList, colNumber]);
+	}, [colNumber, listToShowOnCurrentPage]);
 
 	return (
 		<>
@@ -74,13 +74,16 @@ const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
 			) : (
 				SplittedList.map((row: ExpenseItem[]) => (
 					<Row
+						key={row[0].id}
 						gutter={16}
 						style={{ inlineSize: '100%' }}
 					>
 						{row.map((item: ExpenseItem) => (
-							<Col span={24 / colNumber}>
+							<Col
+								key={item.id}
+								span={24 / colNumber}
+							>
 								<ListItem
-									key={item.id}
 									mode={options.mode}
 									initialIitem={item}
 								/>

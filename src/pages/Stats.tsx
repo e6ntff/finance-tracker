@@ -5,7 +5,6 @@ import { listStore } from 'utils/listStore';
 import { Button, Card, Empty, Flex, Spin, Statistic } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
-import Title from 'antd/es/typography/Title';
 import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
 import { getSymbol } from 'utils/utils';

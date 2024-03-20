@@ -11,13 +11,8 @@ import { optionsStore } from 'utils/optionsStore';
 const Expenses: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 	const { list } = listStore;
-	const {
-		listOptions,
-		userOptions,
-		handleModeChanging,
-		handlePageChanging,
-		setIsSortingReversed,
-	} = optionsStore;
+	const { listOptions, userOptions, handleModeChanging, handlePageChanging } =
+		optionsStore;
 
 	const { language } = userOptions;
 
@@ -26,10 +21,6 @@ const Expenses: React.FC = observer(() => {
 			handleModeChanging('grid');
 		}
 	}, [isSmallScreen, handleModeChanging]);
-
-	useEffect(() => {
-		setIsSortingReversed(false);
-	}, [listOptions.sortingAlgorithm, setIsSortingReversed]);
 
 	useEffect(() => {
 		handlePageChanging(1, listOptions.pageSize);

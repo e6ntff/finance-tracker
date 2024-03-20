@@ -65,6 +65,7 @@ class OptionsStore {
 
 	handleSortAlgorithmChanging = (value: Sort) => {
 		this.listOptions = { ...this.listOptions, sortingAlgorithm: value };
+		this.setIsSortingReversed(false);
 	};
 
 	handleModeChanging = (value: Mode) => {

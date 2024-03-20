@@ -12,9 +12,10 @@ const AddCategory: React.FC = observer(() => {
 	const { addCategory } = categoryStore;
 	const { isSmallScreen } = userStore;
 
-	const [currentCategory, setCurrentCategory] = useState<category>(
-		constants.defaultCategory
-	);
+	const [currentCategory, setCurrentCategory] = useState<category>({
+		...constants.defaultCategory,
+		id: Math.random(),
+	});
 
 	const handleNameChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +50,7 @@ const AddCategory: React.FC = observer(() => {
 	return (
 		<Flex
 			gap={32}
-			style={{ inlineSize: '100%' }}
+			style={{ inlineSize: 'min(100%, 560px)', margin: 'auto' }}
 		>
 			<ColorPicker
 				size={isSmallScreen ? 'small' : 'middle'}

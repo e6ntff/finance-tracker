@@ -4,10 +4,9 @@ import useDebounce from '../hooks/useDebounce';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Col, ColorPicker, Flex, Progress, Typography } from 'antd';
+import { Button, Card, ColorPicker, Flex, Progress, Typography } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
-import Item from 'antd/es/list/Item';
 import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
@@ -94,11 +93,17 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	const TitleJSX = (
 		<Flex justify='center'>
 			{isSmallScreen ? (
-				<Typography.Text strong>{currentCategory.name}</Typography.Text>
+				<Typography.Text
+					strong
+					editable={{ onChange: handleNameChange }}
+				>
+					{currentCategory.name}
+				</Typography.Text>
 			) : (
 				<Title
 					level={isSmallScreen ? 5 : 3}
 					editable={{ onChange: handleNameChange }}
+					style={{ margin: 0 }}
 				>
 					{currentCategory.name}
 				</Title>
@@ -106,7 +111,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		</Flex>
 	);
 
-	const ButtonJSX = (
+	const DeleteButtonJSX = (
 		<Button
 			size={isSmallScreen ? 'small' : 'middle'}
 			onClick={
@@ -128,17 +133,19 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	);
 
 	return (
-		<Item>
-			{!isCategoryItemDeleting ? (
-				<>
-					<Col span={1}>{ColorPickerJSX}</Col>
-					<Col span={20}>{TitleJSX}</Col>
-				</>
-			) : (
-				<Col span={21}>{ProgressJSX}</Col>
-			)}
-			<Col span={2}>{ButtonJSX}</Col>
-		</Item>
+		<Card
+			size={isSmallScreen ? 'small' : 'default'}
+			title={isCategoryItemDeleting ? ProgressJSX : TitleJSX}
+			actions={[ColorPickerJSX, DeleteButtonJSX]}
+			styles={{
+				title: {
+					padding: 10,
+				},
+				body: {
+					padding: 0,
+				},
+			}}
+		></Card>
 	);
 });
 

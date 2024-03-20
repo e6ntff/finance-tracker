@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import constants from 'settings/constants';
 import { listStore } from 'utils/listStore';
 import { getValuesForCalendar } from 'utils/transformData';
-import { getSymbol } from 'utils/utils';
+import { getSymbolAndPrice } from 'utils/utils';
 import DiagramPie from './DiagramPie';
 import { optionsStore } from 'utils/optionsStore';
 
@@ -19,7 +19,6 @@ const CalendarModal: React.FC<Props> = observer(({ opened, toggleOpened }) => {
 	const { statsOptions, userOptions, setYear, setMonth, setDay } = optionsStore;
 
 	const { currency } = userOptions;
-
 	const { year, month, day } = statsOptions;
 
 	const [isDiagramVisible, setIsDiagramVisible] = useState<boolean>(false);
@@ -59,7 +58,7 @@ const CalendarModal: React.FC<Props> = observer(({ opened, toggleOpened }) => {
 				align='center'
 			>
 				<Typography.Text strong>
-					{value ? `${getSymbol(currency)}${Math.round(value)}` : '-'}
+					{value ? getSymbolAndPrice(currency, value) : '-'}
 				</Typography.Text>
 			</Flex>
 		);

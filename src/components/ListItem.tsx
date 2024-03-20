@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getSymbol } from 'utils/utils';
+import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
 import { Card, Col, Flex, Progress, Statistic, Tag, Typography } from 'antd';
@@ -139,7 +139,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		>
 			{isSmallScreen ? (
 				<Typography.Text strong>
-					{getSymbol(currency)}
+					{getSymbolAndPrice(currency)}
 					{Math.round(currentItem.price[currency])}
 				</Typography.Text>
 			) : (
@@ -147,8 +147,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 					level={3}
 					style={{ margin: 0 }}
 				>
-					{getSymbol(currency)}
-					{Math.round(currentItem.price[currency])}
+					{getSymbolAndPrice(currency, currentItem.price[currency])}
 				</Title>
 			)}
 		</Flex>

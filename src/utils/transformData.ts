@@ -72,7 +72,7 @@ export const getValuesForCalendar = (
 				result[item.date.date()] += item.price[currency];
 		}
 	}, []);
-	return result;
+	return result.map((value: number) => Math.round(value));
 };
 
 export const getValuesForBarDiagramByYear = (
@@ -88,6 +88,11 @@ export const getValuesForBarDiagramByYear = (
 			result[key] += item.price[currency];
 		}
 	});
+
+	for (let year in result) {
+		result[year] = Math.round(result[year]);
+	}
+
 	return result;
 };
 
@@ -103,7 +108,7 @@ export const getValuesForBarDiagramByMonth = (
 			result[key] += item.price[currency];
 		}
 	});
-	return result;
+	return result.map((value: number) => Math.round(value));
 };
 
 export const getValuesForPieDiagramByYear = (
@@ -124,7 +129,10 @@ export const getValuesForPieDiagramByYear = (
 			});
 		}
 	});
-	return values;
+	return values.map((value: Value) => ({
+		...value,
+		value: Math.round(value.value),
+	}));
 };
 
 export const getValuesForPieDiagramByMonth = (
@@ -152,7 +160,10 @@ export const getValuesForPieDiagramByMonth = (
 			}
 		}
 	});
-	return values;
+	return values.map((value: Value) => ({
+		...value,
+		value: Math.round(value.value),
+	}));
 };
 
 export const getValuesForPieDiagramInCurrentDay = (
@@ -182,5 +193,8 @@ export const getValuesForPieDiagramInCurrentDay = (
 			}
 		}
 	});
-	return values;
+	return values.map((value: Value) => ({
+		...value,
+		value: Math.round(value.value),
+	}));
 };

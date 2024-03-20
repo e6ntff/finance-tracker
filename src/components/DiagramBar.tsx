@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Bar } from 'react-chartjs-2';
 import languages from 'settings/languages';
-import { getSymbol } from 'utils/utils';
+import { getSymbolAndPrice } from 'utils/utils';
 import { Flex } from 'antd';
 import {
 	Chart,
@@ -46,7 +46,7 @@ const DiagramBar: React.FC<Props> = observer(
 				interval === 'month' ? languages.months[language] : Object.keys(values),
 			datasets: [
 				{
-					label: getSymbol(currency),
+					label: getSymbolAndPrice(currency),
 					data: Object.values(values),
 					backgroundColor: '#f00',
 				},

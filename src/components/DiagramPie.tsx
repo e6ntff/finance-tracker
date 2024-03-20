@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Flex } from 'antd';
 import { Pie } from 'react-chartjs-2';
-import { getSymbol } from 'utils/utils';
+import { getSymbolAndPrice } from 'utils/utils';
 import {
 	Chart,
 	ArcElement,
@@ -51,7 +51,7 @@ const DiagramPie: React.FC<Props> = observer(({ list, interval }) => {
 		labels: names,
 		datasets: [
 			{
-				label: getSymbol(currency),
+				label: getSymbolAndPrice(currency),
 				data: values,
 				backgroundColor: colors,
 			},

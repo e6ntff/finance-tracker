@@ -7,7 +7,7 @@ import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
-import { getSymbol } from 'utils/utils';
+import { getSymbolAndPrice } from 'utils/utils';
 import { ArrowLeftOutlined, CalendarOutlined } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
 import CalendarModal from 'components/CalendarModal';
@@ -92,7 +92,7 @@ const Stats: React.FC = observer(() => {
 							year || ''
 						}`}
 						value={Math.round(year ? getTotalInCurrentInterval(month) : total)}
-						prefix={getSymbol(currency)}
+						prefix={getSymbolAndPrice(currency)}
 						valueStyle={{ color: '#f00' }}
 					/>
 				</Card>

@@ -43,7 +43,7 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 		[filteredList, debouncedOptions]
 	);
 
-	const SplittedList = useMemo(() => {
+	const splittedList = useMemo(() => {
 		const result: ExpenseItem[][] = [];
 		let row = -1;
 
@@ -81,7 +81,7 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 					))}
 				</List>
 			) : (
-				SplittedList.map((row: ExpenseItem[]) => (
+				splittedList.map((row: ExpenseItem[]) => (
 					<Row
 						key={row[0].id}
 						gutter={16}

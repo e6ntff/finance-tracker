@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import calculatePrices from '../utils/calculatePrices';
 import { ExpenseItem, category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
@@ -83,6 +83,20 @@ const ItemModal: React.FC<Props> = observer(
 			},
 			[setCurrentItem, currency, currencyRates]
 		);
+
+		useEffect(() => {
+			const submitItemWithEnter = (event: KeyboardEvent) => {
+				if (event.key === 'Enter' && opened) {
+					submitItem(currentItem);
+				}
+			};
+
+			window.addEventListener('keydown', submitItemWithEnter);
+
+			return () => {
+				window.removeEventListener('keydown', submitItemWithEnter);
+			};
+		}, [currentItem, submitItem, opened]);
 
 		const TitleJSX = (
 			<Input

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, memo } from 'react';
+import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -60,6 +60,20 @@ const Stats: React.FC = observer(() => {
 			setYear(null);
 		}
 	}, [setMonth, setYear, setDay, month, year]);
+
+	useEffect(() => {
+		const goBackWithEsc = (event: KeyboardEvent) => {
+			if (event.key === 'Escape' && !isModalOpened) {
+				goBack();
+			}
+		};
+
+		window.addEventListener('keydown', goBackWithEsc);
+
+		return () => {
+			window.removeEventListener('keydown', goBackWithEsc);
+		};
+	}, [goBack, isModalOpened]);
 
 	return listStore.loading || categoryStore.loading ? (
 		<Flex justify='center'>

@@ -8,7 +8,6 @@ import { getListToShowOnCurrentPage } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
-import constants from 'settings/constants';
 
 interface Props {
 	filteredList: ExpenseItem[];

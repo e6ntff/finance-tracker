@@ -3,7 +3,9 @@ import { category } from '../settings/interfaces';
 import constants from '../settings/constants';
 
 class CategoryStore {
-	categories: category[] = [constants.defaultCategory];
+	categories: category[] = [
+		{ ...constants.defaultCategory, id: Math.random() },
+	];
 	loading: boolean = true;
 
 	setLoading = (value: boolean) => {

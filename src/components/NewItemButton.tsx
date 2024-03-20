@@ -22,7 +22,7 @@ const NewItemButton: React.FC = observer(() => {
 	}, [setIsModalOpened]);
 
 	const clearItem = useCallback(() => {
-		setNewItem({ ...emptyItem, id: Math.random() });
+		setNewItem(emptyItem);
 	}, [setNewItem, emptyItem]);
 
 	const addNewItem = useCallback(

@@ -11,6 +11,7 @@ export const getConfig: (
 	algorithm: themeAlgorithm,
 	components: {
 		Card: {
+			padding: 10,
 			paddingLG: 10,
 		},
 		Menu: {

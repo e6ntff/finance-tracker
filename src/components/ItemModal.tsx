@@ -88,13 +88,14 @@ const ItemModal: React.FC<Props> = observer(
 			const submitItemWithEnter = (event: KeyboardEvent) => {
 				if (event.key === 'Enter' && opened) {
 					submitItem(currentItem);
+					window.removeEventListener('keyup', submitItemWithEnter);
 				}
 			};
 
-			window.addEventListener('keydown', submitItemWithEnter);
+			window.addEventListener('keyup', submitItemWithEnter);
 
 			return () => {
-				window.removeEventListener('keydown', submitItemWithEnter);
+				window.removeEventListener('keyup', submitItemWithEnter);
 			};
 		}, [currentItem, submitItem, opened]);
 

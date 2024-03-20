@@ -14,7 +14,7 @@ class ListStore {
 	};
 
 	addItem = (item: ExpenseItem) => {
-		this.list = [item, ...this.list];
+		this.list = [{ ...item, id: Math.random() }, ...this.list];
 	};
 
 	removeItem = (itemToRemove: ExpenseItem) => {

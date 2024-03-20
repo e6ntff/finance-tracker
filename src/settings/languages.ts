@@ -67,9 +67,9 @@ const languages = {
 		en: `In`,
 		ru: `За`,
 	},
-	expensesAll: {
-		en: `All expenses`,
-		ru: `Все расходы`,
+	total: {
+		en: `Total`,
+		ru: `Всего`,
 	},
 	months: {
 		en: [

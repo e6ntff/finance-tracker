@@ -139,7 +139,7 @@ const Stats: React.FC = observer(() => {
 						title={`${
 							statsOptions.year
 								? languages.In[language]
-								: languages.expensesAll[language]
+								: languages.total[language]
 						} ${
 							statsOptions.month !== null
 								? languages.months[language][statsOptions.month]

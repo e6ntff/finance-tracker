@@ -105,6 +105,10 @@ const languages = {
 		en: `● 6 - 16 symbols`,
 		ru: `● 6 - 16 символов`,
 	},
+	noTitle: {
+		en: 'No title',
+		ru: 'Нет названия',
+	},
 };
 
 export default languages;

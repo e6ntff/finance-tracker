@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getSymbol } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import { Button, Card, Col, Flex, Progress, Tag, Typography } from 'antd';
+import { Card, Col, Flex, Progress, Statistic, Tag, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
@@ -11,6 +11,7 @@ import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
+import languages from 'settings/languages';
 
 interface Props {
 	mode: Mode;
@@ -23,7 +24,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 	const { replaceItem, removeItem } = listStore;
 	const { userOptions } = optionsStore;
 
-	const { currency } = userOptions;
+	const { currency, language } = userOptions;
 
 	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
@@ -75,42 +76,32 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		<Flex
 			justify='center'
 			style={{
-				opacity: isItemDeleting ? '.5' : '1',
-			}}
-		>
-			{isSmallScreen ? (
-				<Typography.Text strong>{currentItem.title}</Typography.Text>
-			) : (
-				<Title
-					level={3}
-					style={{ margin: 0 }}
-				>
-					{currentItem.title}
-				</Title>
-			)}
-		</Flex>
-	);
-
-	const DateJSX = (
-		<Flex
-			justify='center'
-			style={{
-				opacity: isItemDeleting ? '.5' : '1',
+				opacity: isItemDeleting || !currentItem.title ? '.5' : '1',
 			}}
 		>
 			{isSmallScreen ? (
 				<Typography.Text strong>
-					{currentItem.date.format('DD.MM.YYYY')}
+					{currentItem.title || languages.noTitle[language]}
 				</Typography.Text>
 			) : (
 				<Title
 					level={3}
 					style={{ margin: 0 }}
 				>
-					{currentItem.date.format('DD.MM.YYYY')}
+					{currentItem.title || languages.noTitle[language]}
 				</Title>
 			)}
 		</Flex>
+	);
+
+	const DateJSX = (
+		<Statistic
+			value={currentItem.date.format('DD.MM.YY')}
+			style={{
+				scale: isSmallScreen ? '.75' : '1',
+				opacity: isItemDeleting ? '.5' : '1',
+			}}
+		/>
 	);
 
 	const CategoryJSX = (
@@ -124,6 +115,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 			<Tag color={currentItem.category.color}>
 				<span
 					style={{
+						margin: 'auto',
 						color: currentItem.category.color,
 						filter: 'invert(1)',
 					}}
@@ -158,13 +150,16 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		</Flex>
 	);
 
-	const DeleteButtonJSX = (
-		<Button
+	const DeleteJSX = isItemDeleting ? (
+		<CloseOutlined
 			onClick={toggleIsItemDeleting}
-			size={isSmallScreen ? 'small' : 'middle'}
-		>
-			{isItemDeleting ? <CloseOutlined /> : <DeleteOutlined />}
-		</Button>
+			style={{ scale: isSmallScreen ? '1' : '1.5' }}
+		/>
+	) : (
+		<DeleteOutlined
+			onClick={toggleIsItemDeleting}
+			style={{ scale: isSmallScreen ? '1' : '1.5' }}
+		/>
 	);
 
 	const ProgressJSX = (
@@ -175,14 +170,19 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 		/>
 	);
 
-	const EditButtonJSX = (
-		<Button
-			disabled={isItemDeleting}
-			size={isSmallScreen ? 'small' : 'middle'}
-			onClick={toggleIsModalOpened}
-		>
-			<EditOutlined />
-		</Button>
+	const EditJSX = (
+		<EditOutlined
+			onClick={!isItemDeleting ? toggleIsModalOpened : () => {}}
+			style={{ scale: isSmallScreen ? '1' : '1.5' }}
+		/>
+	);
+
+	const ActionsJSX = (
+		<Flex justify='space-evenly'>
+			{EditJSX}
+			{PriceJSX}
+			{DeleteJSX}
+		</Flex>
 	);
 
 	return (
@@ -193,42 +193,40 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 				toggleOpened={toggleIsModalOpened}
 				submitItem={updateCurrentItem}
 			/>
-
 			{mode === 'list' ? (
 				<Item>
 					{!isItemDeleting ? (
 						<>
-							<Col span={5}>{DateJSX}</Col>
-							<Col span={7}>{TitleJSX}</Col>
-							<Col span={4}>{CategoryJSX}</Col>
-							<Col span={3}>{PriceJSX}</Col>
-							<Col>{EditButtonJSX}</Col>
-							<Col>{DeleteButtonJSX}</Col>
+							<Col>{DateJSX}</Col>
+							<Col span={9}>{TitleJSX}</Col>
+							<Col span={3}>{CategoryJSX}</Col>
+							<Col span={5}>{PriceJSX}</Col>
+							<Col>{EditJSX}</Col>
+							<Col>{DeleteJSX}</Col>
 						</>
 					) : (
 						<>
 							<Col span={21}>{ProgressJSX}</Col>
-							<Col>{DeleteButtonJSX}</Col>
+							<Col>{DeleteJSX}</Col>
 						</>
 					)}
 				</Item>
 			) : (
 				<Card
 					size={isSmallScreen ? 'small' : 'default'}
-					style={{
-						flex: `1 1 ${isSmallScreen ? 10 : 15}em`,
-					}}
 					bordered
 					title={isItemDeleting ? ProgressJSX : TitleJSX}
-					actions={[EditButtonJSX, PriceJSX, DeleteButtonJSX]}
+					actions={[ActionsJSX]}
 				>
-					<Flex
-						vertical
-						align='stretch'
-						gap={8}
-					>
-						{DateJSX}
-						{CategoryJSX}
+					<Flex justify='center'>
+						<Flex
+							vertical
+							align='stretch'
+							gap={4}
+						>
+							{DateJSX}
+							{CategoryJSX}
+						</Flex>
 					</Flex>
 				</Card>
 			)}

@@ -79,8 +79,8 @@ const App: React.FC = observer(() => {
 									<Header
 										style={{
 											inlineSize: isSmallScreen
-												? 'min(100%, 560px)'
-												: 'min(100%, 960px)',
+												? `min(100%, ${constants.maxAppWidthSmall}px)`
+												: `min(100%, ${constants.maxAppWidthLarge}px)`,
 											blockSize: 'unset',
 											lineHeight: '3.5em',
 											margin: 'auto',
@@ -98,8 +98,8 @@ const App: React.FC = observer(() => {
 								<Layout
 									style={{
 										inlineSize: isSmallScreen
-											? 'min(100%, 560px)'
-											: 'min(100%, 960px)',
+											? `min(100%, ${constants.maxAppWidthSmall}px)`
+											: `min(100%, ${constants.maxAppWidthLarge}px)`,
 										blockSize: '100%',
 										margin: 'auto',
 									}}

@@ -5,7 +5,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import firebaseApp from './utils/firebase';
 import AppRoutes from './components/AppRoutes';
 import { observer } from 'mobx-react-lite';
-import { ConfigProvider, Flex, Layout, Spin, theme } from 'antd';
+import { ConfigProvider, Layout, theme } from 'antd';
 import { userStore } from 'utils/userStore';
 import getCurrencyRates from 'utils/getCurrencyRates';
 import { Content, Header } from 'antd/es/layout/layout';
@@ -13,6 +13,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import constants from 'settings/constants';
 import { getConfig } from 'settings/getConfig';
 import { optionsStore } from 'utils/optionsStore';
+import LargeSpin from 'components/LargeSpin';
 
 const auth = getAuth(firebaseApp);
 
@@ -141,13 +142,7 @@ const App: React.FC = observer(() => {
 									zIndex: 1,
 								}}
 							>
-								<Flex
-									style={{ inlineSize: '100%', blockSize: '100%' }}
-									justify='center'
-									align='center'
-								>
-									<Spin />
-								</Flex>
+								<LargeSpin />
 							</Layout>
 						)}
 					</Layout>

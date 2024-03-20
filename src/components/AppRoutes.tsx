@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import Expenses from '../pages/Expenses';
-import Stats from '../pages/Stats';
-import paths from '../settings/paths';
-import Settings from '../pages/Settings';
-import Categories from '../pages/Categories';
 import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
-import Welcome from 'pages/Welcome';
+import paths from 'settings/paths';
+import LargeSpin from './LargeSpin';
+
+const Expenses = lazy(() => import('../pages/Expenses'));
+const Stats = lazy(() => import('../pages/Stats'));
+const Settings = lazy(() => import('../pages/Settings'));
+const Welcome = lazy(() => import('../pages/Welcome'));
+const Categories = lazy(() => import('../pages/Categories'));
 
 const AppRoutes: React.FC = observer(() => {
 	const { logged } = userStore;
@@ -16,23 +18,63 @@ const AppRoutes: React.FC = observer(() => {
 		<Routes>
 			<Route
 				path='/'
-				element={logged ? <Navigate to={paths.expenses} /> : <Welcome />}
+				element={
+					logged ? (
+						<Navigate to={paths.expenses} />
+					) : (
+						<Suspense fallback={<LargeSpin />}>
+							<Welcome />
+						</Suspense>
+					)
+				}
 			/>
 			<Route
 				path={paths.stats}
-				element={logged ? <Stats /> : <Navigate to='/' />}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Stats />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
 			/>
 			<Route
 				path={paths.expenses}
-				element={logged ? <Expenses /> : <Navigate to='/' />}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Expenses />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
 			/>
 			<Route
 				path={paths.settings}
-				element={logged ? <Settings /> : <Navigate to='/' />}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Settings />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
 			/>
 			<Route
 				path={paths.categories}
-				element={logged ? <Categories /> : <Navigate to='/' />}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Categories />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
 			/>
 			<Route
 				path='/*'

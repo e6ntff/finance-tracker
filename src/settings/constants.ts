@@ -11,8 +11,8 @@ const defaultCategory = {
 const constants = {
 	spinDelay: 1500,
 	deleteDelay: 1000,
-	windowBreakpoint: 800,
-	maxAppWidthLarge: 1000,
+	windowBreakpoint: 750,
+	maxAppWidthLarge: 900,
 	maxAppWidthSmall: 500,
 	defaultPageSize: pageSizeOptions[0],
 	defaultAlgoritm: 'date',

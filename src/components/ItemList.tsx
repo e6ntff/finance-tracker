@@ -24,15 +24,15 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 	const [colNumber, setColNumber] = useState<number>(4);
 
 	useEffect(() => {
-		if (width < 360) {
+		if (width < 350) {
 			setColNumber(1);
 			return;
 		}
-		if (width < 500) {
+		if (width < 450) {
 			setColNumber(2);
 			return;
 		}
-		if (width < constants.maxAppWidthLarge) {
+		if (width < 850) {
 			setColNumber(3);
 			return;
 		}

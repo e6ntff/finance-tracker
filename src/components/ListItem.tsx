@@ -80,11 +80,15 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 			}}
 		>
 			{isSmallScreen ? (
-				<Typography.Text strong>
+				<Typography.Text
+					strong
+					ellipsis
+				>
 					{currentItem.title || languages.noTitle[language]}
 				</Typography.Text>
 			) : (
 				<Title
+					ellipsis
 					level={3}
 					style={{ margin: 0 }}
 				>

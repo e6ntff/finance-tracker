@@ -63,18 +63,16 @@ const CalendarModal: React.FC<Props> = observer(
 			const index = info.type === 'date' ? date.date() : date.month();
 			const value =
 				info.type === 'date' ? valuesByDay[index] : valuesByMonth[index];
-			return value ? (
+			return (
 				<Flex
 					vertical
 					justify='center'
 					align='center'
 				>
-					<Typography.Text strong>{`${getSymbol(
-						currency
-					)}${value}`}</Typography.Text>
+					<Typography.Text strong>
+						{value ? `${getSymbol(currency)}${Math.round(value)}` : '-'}
+					</Typography.Text>
 				</Flex>
-			) : (
-				<></>
 			);
 		};
 

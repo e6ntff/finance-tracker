@@ -12,11 +12,9 @@ const AddCategory: React.FC = observer(() => {
 	const { addCategory } = categoryStore;
 	const { isSmallScreen } = userStore;
 
-	const [currentCategory, setCurrentCategory] = useState<category>({
-		id: Math.random(),
-		color: '#fff',
-		name: '',
-	});
+	const [currentCategory, setCurrentCategory] = useState<category>(
+		constants.defaultCategory
+	);
 
 	const handleNameChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,10 +1,10 @@
 import type { ThemeConfig } from 'antd';
-import { Theme } from './interfaces';
+import { ThemeAlgorithm } from './interfaces';
 
 export const getConfig: (
 	isSmallScreen: boolean,
-	themeAlgorithm: Theme
-) => ThemeConfig = (isSmallScreen: boolean, themeAlgorithm: Theme) => ({
+	themeAlgorithm: ThemeAlgorithm
+) => ThemeConfig = (isSmallScreen: boolean, themeAlgorithm: ThemeAlgorithm) => ({
 	algorithm: themeAlgorithm,
 	components: {
 		Menu: {

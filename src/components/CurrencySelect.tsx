@@ -1,6 +1,6 @@
 import { Select } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { userStore } from 'utils/userStore';
 
 interface Props {
@@ -10,12 +10,7 @@ interface Props {
 }
 
 const CurrencySelect: React.FC<Props> = observer(({ value, onChange }) => {
-	const { setCurrency, isSmallScreen } = userStore;
-
-	useEffect(() => {
-		const localCurrency = localStorage.getItem('curr');
-		if (localCurrency !== null) setCurrency(localCurrency);
-	}, [setCurrency]);
+	const { isSmallScreen } = userStore;
 
 	return (
 		<Select

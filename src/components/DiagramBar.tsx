@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ExpenseItem, Interval, StatsOptions } from '../settings/interfaces';
+import { ExpenseItem, Interval } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Bar } from 'react-chartjs-2';
@@ -18,19 +18,22 @@ import {
 	getValuesForBarDiagramByMonth,
 	getValuesForBarDiagramByYear,
 } from 'utils/transformData';
+import { optionsStore } from 'utils/optionsStore';
 Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
 
 interface Props {
 	list: ExpenseItem[];
 	interval: Interval;
-	statsOptions: StatsOptions;
 	setInterval: (arg0: number | null) => void;
 }
 
 const DiagramBar: React.FC<Props> = observer(
-	({ list, interval, statsOptions, setInterval }) => {
+	({ list, interval, setInterval }) => {
+		const { isSmallScreen } = userStore;
+		const { statsOptions, userOptions } = optionsStore;
+		const { currency, language } = userOptions;
+
 		const { year } = statsOptions;
-		const { currency, language, isSmallScreen } = userStore;
 
 		const values: number[] | { [key: string]: number } = useMemo(() => {
 			if (interval === 'year')

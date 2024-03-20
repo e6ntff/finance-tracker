@@ -34,7 +34,9 @@ export interface AuthUser<T> {
 
 export type language = 'en' | 'ru';
 
-export type Theme = typeof darkAlgorithm | typeof defaultAlgorithm;
+export type ThemeAlgorithm = typeof darkAlgorithm | typeof defaultAlgorithm;
+
+export type Theme = 'dark' | 'default';
 
 export type Sort = 'date' | 'title' | 'price';
 
@@ -42,7 +44,9 @@ export type Mode = 'list' | 'grid';
 
 export type Interval = 'year' | 'month' | 'day';
 
-export interface Options {
+export type currency = 'USD' | 'EUR' | 'RUB';
+
+export interface ListOptions {
 	years: string[];
 	sortingAlgorithm: Sort;
 	isSortingReversed: boolean;
@@ -61,4 +65,11 @@ export interface StatsOptions {
 export interface Value {
 	category: category;
 	value: number;
+}
+
+export interface UserOptions {
+	language: language;
+	currency: currency;
+	theme: Theme;
+	themeAlgorithm: ThemeAlgorithm;
 }

@@ -4,11 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { Select, Tag } from 'antd';
 import { userStore } from 'utils/userStore';
-
-interface Props {
-	values: category[];
-	onChange: (arg0: number[]) => void;
-}
+import { optionsStore } from 'utils/optionsStore';
 
 const tagRender = (props: any, categories: category[]) => {
 	const { label, value, onClose } = props;
@@ -43,9 +39,10 @@ const tagRender = (props: any, categories: category[]) => {
 	);
 };
 
-const CategoriesSelect: React.FC<Props> = observer(({ values, onChange }) => {
+const CategoriesSelect: React.FC = observer(() => {
 	const { categories } = categoryStore;
 	const { isSmallScreen } = userStore;
+	const { listOptions, handleCategoriesToFilterChange } = optionsStore;
 
 	return (
 		<Select
@@ -54,8 +51,8 @@ const CategoriesSelect: React.FC<Props> = observer(({ values, onChange }) => {
 			showSearch={false}
 			tagRender={(props) => tagRender(props, categories)}
 			style={{ minInlineSize: '10em' }}
-			value={values.map((value: category) => value.id)}
-			onChange={onChange}
+			value={listOptions.categoriesToFilter.map((value: category) => value.id)}
+			onChange={handleCategoriesToFilterChange}
 		>
 			{categories.map((category: category) => (
 				<Select.Option

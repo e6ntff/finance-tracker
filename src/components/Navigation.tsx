@@ -11,11 +11,14 @@ import {
 	SettingOutlined,
 	ShoppingCartOutlined,
 } from '@ant-design/icons';
+import { optionsStore } from 'utils/optionsStore';
 
 const Navigation: React.FC = observer(() => {
 	const location = useLocation();
+	const { isSmallScreen } = userStore;
+	const { userOptions } = optionsStore;
 
-	const { language, isSmallScreen } = userStore;
+	const { language } = userOptions;
 
 	const items = [
 		{

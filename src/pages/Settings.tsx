@@ -2,12 +2,14 @@ import React from 'react';
 import LanguageSelect from '../components/LanguageSelect';
 import CurrencySelect from '../components/CurrencySelect';
 import { Flex, Typography } from 'antd';
-import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
+import { optionsStore } from 'utils/optionsStore';
 
 const Settings: React.FC = observer(() => {
-	const { language, setLanguage, currency, setCurrency } = userStore;
+	const { userOptions, setCurrency } = optionsStore;
+
+	const { language, currency } = userOptions;
 
 	return (
 		<Flex justify='center'>
@@ -23,10 +25,7 @@ const Settings: React.FC = observer(() => {
 					gap={8}
 				>
 					<Typography.Text>{languages.language[language]}</Typography.Text>
-					<LanguageSelect
-						value={language}
-						onChange={setLanguage}
-					/>
+					<LanguageSelect />
 				</Flex>
 				<Flex
 					vertical

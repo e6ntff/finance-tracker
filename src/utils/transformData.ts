@@ -1,6 +1,6 @@
 import {
 	ExpenseItem,
-	Options,
+	ListOptions,
 	Value,
 	category,
 	language,
@@ -8,7 +8,7 @@ import {
 import { sortBy } from './utils';
 
 export const getFilteredList = (
-	options: Options,
+	options: ListOptions,
 	list: ExpenseItem[],
 	language: language
 ) => {
@@ -46,7 +46,7 @@ export const getFilteredList = (
 };
 
 export const getListToShowOnCurrentPage = (
-	options: Options,
+	options: ListOptions,
 	filteredList: ExpenseItem[]
 ) => {
 	const { currentPage, pageSize } = options;

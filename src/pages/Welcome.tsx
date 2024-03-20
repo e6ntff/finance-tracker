@@ -18,11 +18,15 @@ import {
 	QuestionCircleOutlined,
 	WarningOutlined,
 } from '@ant-design/icons';
+import { optionsStore } from 'utils/optionsStore';
 
 const auth = getAuth(firebaseApp);
 
 const Welcome: React.FC = observer(() => {
-	const { language, setLogged } = userStore;
+	const { setLogged } = userStore;
+	const { userOptions } = optionsStore;
+
+	const { language } = userOptions;
 
 	const emptyFields = useMemo(
 		() => ({

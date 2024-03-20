@@ -5,15 +5,12 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { listStore } from 'utils/listStore';
 import { ExpenseItem } from 'settings/interfaces';
 import { userStore } from 'utils/userStore';
+import { optionsStore } from 'utils/optionsStore';
 
-interface Props {
-	values: string[];
-	onChange: (arg0: string[]) => void;
-}
-
-const YearSelect: React.FC<Props> = observer(({ values, onChange }) => {
+const YearSelect: React.FC = observer(() => {
 	const { list } = listStore;
 	const { isSmallScreen } = userStore;
+	const { listOptions, handleYearChanging } = optionsStore;
 
 	const years = useMemo(
 		() =>
@@ -36,8 +33,8 @@ const YearSelect: React.FC<Props> = observer(({ values, onChange }) => {
 				size={isSmallScreen ? 'small' : 'middle'}
 				mode='multiple'
 				showSearch={false}
-				value={values}
-				onChange={onChange}
+				value={listOptions.years}
+				onChange={handleYearChanging}
 				style={{ minInlineSize: '7em' }}
 			>
 				{years.reverse().map((year: string) => (

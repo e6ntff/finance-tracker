@@ -6,9 +6,12 @@ import { Flex, FloatButton } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { BgColorsOutlined } from '@ant-design/icons';
+import { optionsStore } from 'utils/optionsStore';
 
 const AppHeader: React.FC = observer(() => {
-	const { isSmallScreen, theme, toggleTheme } = userStore;
+	const { isSmallScreen } = userStore;
+	const { userOptions, toggleTheme } = optionsStore;
+	const { theme } = userOptions;
 
 	return (
 		<Flex

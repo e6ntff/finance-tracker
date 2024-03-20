@@ -10,6 +10,7 @@ import Title from 'antd/es/typography/Title';
 import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
 import ItemModal from './ItemModal';
+import { optionsStore } from 'utils/optionsStore';
 
 interface Props {
 	mode: Mode;
@@ -18,8 +19,12 @@ interface Props {
 
 const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 	const { id, category, date, title, price } = initialIitem;
-	const { currency, isSmallScreen } = userStore;
+	const { isSmallScreen } = userStore;
 	const { replaceItem, removeItem } = listStore;
+	const { userOptions } = optionsStore;
+
+	const { currency } = userOptions;
+
 	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);

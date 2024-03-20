@@ -1,10 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-	ExpenseItem,
-	Interval,
-	StatsOptions,
-	Value,
-} from '../settings/interfaces';
+import { ExpenseItem, Interval, Value } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Flex } from 'antd';
@@ -23,72 +18,67 @@ import {
 	getValuesForPieDiagramByMonth,
 	getValuesForPieDiagramByYear,
 } from 'utils/transformData';
+import { optionsStore } from 'utils/optionsStore';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 interface Props {
 	list: ExpenseItem[];
 	interval: Interval;
-	statsOptions: StatsOptions;
 }
 
-const DiagramPie: React.FC<Props> = observer(
-	({ list, interval, statsOptions }) => {
-		const { year, month, day } = statsOptions;
-		const { currency, isSmallScreen } = userStore;
+const DiagramPie: React.FC<Props> = observer(({ list, interval }) => {
+	const { isSmallScreen } = userStore;
+	const { statsOptions, userOptions } = optionsStore;
+	const { currency } = userOptions;
 
-		const valuesByCategory: Value[] = useMemo(() => {
-			if (interval === 'year')
-				return getValuesForPieDiagramByYear(list, currency);
-			if (interval === 'month')
-				return getValuesForPieDiagramByMonth(list, year, month, currency);
-			return getValuesForPieDiagramInCurrentDay(
-				list,
-				year,
-				month,
-				day,
-				currency
-			);
-		}, [list, currency, interval, year, month, day]);
+	const { year, month, day } = statsOptions;
 
-		const [names, colors, values] = [
-			valuesByCategory.map((value: Value) => value.category.name),
-			valuesByCategory.map((value: Value) => value.category.color),
-			valuesByCategory.map((value: Value) => Math.round(value.value)),
-		];
+	const valuesByCategory: Value[] = useMemo(() => {
+		if (interval === 'year')
+			return getValuesForPieDiagramByYear(list, currency);
+		if (interval === 'month')
+			return getValuesForPieDiagramByMonth(list, year, month, currency);
+		return getValuesForPieDiagramInCurrentDay(list, year, month, day, currency);
+	}, [list, currency, interval, year, month, day]);
 
-		const data = {
-			labels: names,
-			datasets: [
-				{
-					label: getSymbol(currency),
-					data: values,
-					backgroundColor: colors,
-				},
-			],
-		};
+	const [names, colors, values] = [
+		valuesByCategory.map((value: Value) => value.category.name),
+		valuesByCategory.map((value: Value) => value.category.color),
+		valuesByCategory.map((value: Value) => Math.round(value.value)),
+	];
 
-		const options = {
-			plugins: {
-				legend: {
-					display: true,
-					position: 'right' as const,
-				},
+	const data = {
+		labels: names,
+		datasets: [
+			{
+				label: getSymbol(currency),
+				data: values,
+				backgroundColor: colors,
 			},
-		};
+		],
+	};
 
-		return (
-			<Flex
-				style={{
-					inlineSize: isSmallScreen || interval === 'day' ? 'unset' : '40%',
-				}}
-			>
-				<Pie
-					data={data}
-					options={options}
-				/>
-			</Flex>
-		);
-	}
-);
+	const options = {
+		plugins: {
+			legend: {
+				display: true,
+				position: 'right' as const,
+			},
+		},
+	};
+
+	return (
+		<Flex
+			style={{
+				inlineSize: isSmallScreen || interval === 'day' ? 'unset' : '40%',
+			}}
+		>
+			<Pie
+				data={data}
+				options={options}
+			/>
+		</Flex>
+	);
+});
 
 export default DiagramPie;

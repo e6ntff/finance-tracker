@@ -2,16 +2,12 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Flex, Segmented } from 'antd';
 import { MenuOutlined, TableOutlined } from '@ant-design/icons';
-import { Mode } from 'settings/interfaces';
 import { userStore } from 'utils/userStore';
+import { optionsStore } from 'utils/optionsStore';
 
-interface Props {
-	value: Mode;
-	onChange: (arg0: Mode) => void;
-}
-
-const ModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
+const ModeSelect: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
+	const { listOptions, handleModeChanging } = optionsStore;
 
 	return (
 		<Flex
@@ -20,8 +16,8 @@ const ModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 		>
 			<Segmented
 				size={isSmallScreen ? 'small' : 'middle'}
-				value={value}
-				onChange={onChange}
+				value={listOptions.mode}
+				onChange={handleModeChanging}
 				options={[
 					{ label: <MenuOutlined />, value: 'list', disabled: isSmallScreen },
 					{ label: <TableOutlined />, value: 'grid' },

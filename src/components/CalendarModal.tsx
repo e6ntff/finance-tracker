@@ -5,114 +5,101 @@ import dayjs from 'dayjs';
 import constants from 'settings/constants';
 import { listStore } from 'utils/listStore';
 import { getValuesForCalendar } from 'utils/transformData';
-import { userStore } from 'utils/userStore';
 import { getSymbol } from 'utils/utils';
 import DiagramPie from './DiagramPie';
-import { StatsOptions } from 'settings/interfaces';
+import { optionsStore } from 'utils/optionsStore';
 
 interface Props {
-	statsOptions: StatsOptions;
-	setStatsOptions: (arg0: StatsOptions) => void;
 	opened: boolean;
 	toggleOpened: () => void;
 }
 
-const CalendarModal: React.FC<Props> = observer(
-	({ opened, toggleOpened, statsOptions, setStatsOptions }) => {
-		const { year, month, day } = statsOptions;
-		const { list } = listStore;
-		const { currency } = userStore;
+const CalendarModal: React.FC<Props> = observer(({ opened, toggleOpened }) => {
+	const { list } = listStore;
+	const { statsOptions, userOptions, setYear, setMonth, setDay } = optionsStore;
 
-		const [isDiagramVisible, setIsDiagramVisible] = useState<boolean>(false);
+	const { currency } = userOptions;
 
-		const handleDateChange = (date: dayjs.Dayjs) => {
-			setStatsOptions({
-				year: date.year(),
-				month: date.month(),
-				day: date.date(),
-			});
-		};
+	const { year, month, day } = statsOptions;
 
-		const valuesByMonth = useMemo(
-			() => getValuesForCalendar(list, currency, year, month),
-			[year, month, currency, list]
-		);
+	const [isDiagramVisible, setIsDiagramVisible] = useState<boolean>(false);
 
-		const valuesByDay = useMemo(
-			() => getValuesForCalendar(list, currency, year, month, day),
-			[year, month, day, currency, list]
-		);
+	const handleDateChange = (date: dayjs.Dayjs) => {
+		setYear(date.year());
+		setMonth(date.month());
+		setDay(date.date());
+	};
 
-		useEffect(() => {
-			if (day && valuesByDay[day]) {
-				setIsDiagramVisible(true);
-			} else {
-				setIsDiagramVisible(false);
-			}
-		}, [day, valuesByDay]);
+	const valuesByMonth = useMemo(
+		() => getValuesForCalendar(list, currency, year, month),
+		[year, month, currency, list]
+	);
 
-		useEffect(() => {
-			if (day && valuesByDay[day]) {
-				setIsDiagramVisible(true);
-			} else {
-				setIsDiagramVisible(false);
-			}
-		}, [day, valuesByDay]);
+	const valuesByDay = useMemo(
+		() => getValuesForCalendar(list, currency, year, month, day),
+		[year, month, day, currency, list]
+	);
 
-		const cellRender = (date: dayjs.Dayjs, info: any) => {
-			const index = info.type === 'date' ? date.date() : date.month();
-			const value =
-				info.type === 'date' ? valuesByDay[index] : valuesByMonth[index];
-			return (
-				<Flex
-					vertical
-					justify='center'
-					align='center'
-				>
-					<Typography.Text strong>
-						{value ? `${getSymbol(currency)}${Math.round(value)}` : '-'}
-					</Typography.Text>
-				</Flex>
-			);
-		};
+	useEffect(() => {
+		if (day && valuesByDay[day]) {
+			setIsDiagramVisible(true);
+		} else {
+			setIsDiagramVisible(false);
+		}
+	}, [day, valuesByDay]);
 
+	const cellRender = (date: dayjs.Dayjs, info: any) => {
+		const index = info.type === 'date' ? date.date() : date.month();
+		const value =
+			info.type === 'date' ? valuesByDay[index] : valuesByMonth[index];
 		return (
-			<Modal
-				open={opened}
-				onCancel={toggleOpened}
-				okButtonProps={{
-					style: {
-						display: 'none',
-					},
-				}}
-				cancelButtonProps={{
-					style: {
-						display: 'none',
-					},
-				}}
+			<Flex
+				vertical
+				justify='center'
+				align='center'
 			>
-				<Flex
-					vertical
-					align='center'
-				>
-					<Calendar
-						cellRender={cellRender}
-						fullscreen={false}
-						validRange={[constants.startDate, dayjs()]}
-						value={dayjs(new Date(year as number, month || 0, day || 1))}
-						onChange={handleDateChange}
-					/>
-					{isDiagramVisible && (
-						<DiagramPie
-							list={list}
-							interval='day'
-							statsOptions={statsOptions}
-						/>
-					)}
-				</Flex>
-			</Modal>
+				<Typography.Text strong>
+					{value ? `${getSymbol(currency)}${Math.round(value)}` : '-'}
+				</Typography.Text>
+			</Flex>
 		);
-	}
-);
+	};
+
+	return (
+		<Modal
+			open={opened}
+			onCancel={toggleOpened}
+			okButtonProps={{
+				style: {
+					display: 'none',
+				},
+			}}
+			cancelButtonProps={{
+				style: {
+					display: 'none',
+				},
+			}}
+		>
+			<Flex
+				vertical
+				align='center'
+			>
+				<Calendar
+					cellRender={cellRender}
+					fullscreen={false}
+					validRange={[constants.startDate, dayjs()]}
+					value={dayjs(new Date(year as number, month || 0, day || 1))}
+					onChange={handleDateChange}
+				/>
+				{isDiagramVisible && (
+					<DiagramPie
+						list={list}
+						interval='day'
+					/>
+				)}
+			</Flex>
+		</Modal>
+	);
+});
 
 export default CalendarModal;

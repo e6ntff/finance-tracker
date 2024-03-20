@@ -12,13 +12,17 @@ import { Content, Header } from 'antd/es/layout/layout';
 import { Scrollbars } from 'react-custom-scrollbars';
 import constants from 'settings/constants';
 import { getConfig } from 'settings/getConfig';
+import { optionsStore } from 'utils/optionsStore';
 
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const { logged, setTheme, isSmallScreen, setWidth } = userStore;
-	const { themeAlgorithm } = userStore;
-	const { setCurrencyRates, setCurrency, setUser } = userStore;
+	const { logged, isSmallScreen, setWidth, setCurrencyRates, setUser } =
+		userStore;
+	const { userOptions, setCurrency, setTheme } = optionsStore;
+
+	const { themeAlgorithm, currency } = userOptions;
+
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -47,7 +51,7 @@ const App: React.FC = observer(() => {
 
 	useEffect(() => {
 		getCurrencyRates().then(setCurrencyRates);
-		setCurrency(localStorage.getItem('currency') || 'USD');
+		setCurrency(currency || 'USD');
 		setTheme(
 			(localStorage.getItem('theme') as 'default' | 'dark') || 'default'
 		);
@@ -57,7 +61,7 @@ const App: React.FC = observer(() => {
 		});
 
 		return () => unsubscribe();
-	}, [setCurrency, setCurrencyRates, setUser, setTheme]);
+	}, [setCurrency, setCurrencyRates, setUser, setTheme, currency]);
 
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 
@@ -79,8 +83,12 @@ const App: React.FC = observer(() => {
 									<Header
 										style={{
 											inlineSize: isSmallScreen
-												? `min(100%, ${constants.maxAppWidthSmall}px)`
-												: `min(100%, ${constants.maxAppWidthLarge}px)`,
+												? `min(100%, ${
+														constants.maxAppWidthSmall - paddingLG
+												  }px)`
+												: `min(100%, ${
+														constants.maxAppWidthLarge - paddingLG
+												  }px)`,
 											blockSize: 'unset',
 											lineHeight: '3.5em',
 											margin: 'auto',
@@ -98,8 +106,10 @@ const App: React.FC = observer(() => {
 								<Layout
 									style={{
 										inlineSize: isSmallScreen
-											? `min(100%, ${constants.maxAppWidthSmall}px)`
-											: `min(100%, ${constants.maxAppWidthLarge}px)`,
+											? `min(100%, ${constants.maxAppWidthSmall - paddingLG}px)`
+											: `min(100%, ${
+													constants.maxAppWidthLarge - paddingLG
+											  }px)`,
 										blockSize: '100%',
 										margin: 'auto',
 									}}

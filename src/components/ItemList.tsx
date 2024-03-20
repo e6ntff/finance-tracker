@@ -1,37 +1,47 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import ListItem from './ListItem';
-import { ExpenseItem, Options } from '../settings/interfaces';
+import { ExpenseItem, ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { Col, Empty, List, Row, Spin } from 'antd';
 import { getListToShowOnCurrentPage } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
+import { optionsStore } from 'utils/optionsStore';
+import useDebounce from 'hooks/useDebounce';
+import constants from 'settings/constants';
 
 interface Props {
-	options: Options;
 	filteredList: ExpenseItem[];
 }
 
-const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
+const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 	const { loading } = listStore;
 	const { width } = userStore;
-	const [colNumber, setColNumber] = useState<number>(3);
+	const { listOptions } = optionsStore;
+
+	const debouncedOptions: ListOptions = useDebounce(listOptions);
+
+	const [colNumber, setColNumber] = useState<number>(4);
 
 	useEffect(() => {
-		if (width < 380) {
+		if (width < 360) {
 			setColNumber(1);
 			return;
 		}
-		if (width < 577) {
+		if (width < 500) {
 			setColNumber(2);
 			return;
 		}
-		setColNumber(3);
+		if (width < constants.maxAppWidthLarge) {
+			setColNumber(3);
+			return;
+		}
+		setColNumber(4);
 	}, [setColNumber, width]);
 
 	const listToShowOnCurrentPage = useMemo(
-		() => getListToShowOnCurrentPage(options, filteredList),
-		[filteredList, options]
+		() => getListToShowOnCurrentPage(debouncedOptions, filteredList),
+		[filteredList, debouncedOptions]
 	);
 
 	const SplittedList = useMemo(() => {
@@ -61,12 +71,12 @@ const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
 					/>
 				)
 			)}
-			{options.mode === 'list' ? (
+			{debouncedOptions.mode === 'list' ? (
 				<List style={{ inlineSize: '100%' }}>
 					{listToShowOnCurrentPage.map((item: ExpenseItem) => (
 						<ListItem
 							key={item.id}
-							mode={options.mode}
+							mode={debouncedOptions.mode}
 							initialIitem={item}
 						/>
 					))}
@@ -84,7 +94,7 @@ const ItemList: React.FC<Props> = observer(({ options, filteredList }) => {
 								span={24 / colNumber}
 							>
 								<ListItem
-									mode={options.mode}
+									mode={debouncedOptions.mode}
 									initialIitem={item}
 								/>
 							</Col>

@@ -11,6 +11,7 @@ import constants from 'settings/constants';
 import dayjs from 'dayjs';
 import CategorySelect from './CategorySelect';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { optionsStore } from 'utils/optionsStore';
 
 interface Props {
 	opened: boolean;
@@ -23,7 +24,11 @@ const ItemModal: React.FC<Props> = observer(
 	({ opened, initialItem, toggleOpened, submitItem }) => {
 		const [currency, setCurrency] = useState(constants.baseCurrency);
 		const { categories } = categoryStore;
-		const { language, currencyRates, isSmallScreen } = userStore;
+		const { currencyRates, isSmallScreen } = userStore;
+		const { userOptions } = optionsStore;
+
+		const { language } = userOptions;
+
 		const [currentItem, setCurrentItem] = useState<ExpenseItem>(initialItem);
 
 		const handleTitleChange = useCallback(

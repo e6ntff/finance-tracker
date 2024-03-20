@@ -175,7 +175,9 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 
 	const EditJSX = (
 		<EditOutlined
-			onClick={!isItemDeleting ? toggleIsModalOpened : () => {}}
+			onClick={
+				!isItemDeleting ? () => updateCurrentItem({ ...initialItem }) : () => {}
+			}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
 		/>
 	);

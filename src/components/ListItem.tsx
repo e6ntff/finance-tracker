@@ -15,11 +15,11 @@ import languages from 'settings/languages';
 
 interface Props {
 	mode: Mode;
-	initialIitem: ExpenseItem;
+	initialItem: ExpenseItem;
 }
 
-const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
-	const { id, category, date, title, price } = initialIitem;
+const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
+	const { id, category, date, title, price } = initialItem;
 	const { isSmallScreen } = userStore;
 	const { replaceItem, removeItem } = listStore;
 	const { userOptions } = optionsStore;
@@ -175,7 +175,9 @@ const ListItem: React.FC<Props> = observer(({ mode, initialIitem }) => {
 
 	const EditJSX = (
 		<EditOutlined
-			onClick={!isItemDeleting ? toggleIsModalOpened : () => {}}
+			onClick={
+				!isItemDeleting ? () => updateCurrentItem({ ...initialItem }) : () => {}
+			}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
 		/>
 	);

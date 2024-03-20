@@ -76,7 +76,7 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 						<ListItem
 							key={item.id}
 							mode={debouncedOptions.mode}
-							initialIitem={item}
+							initialItem={item}
 						/>
 					))}
 				</List>
@@ -94,7 +94,7 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 							>
 								<ListItem
 									mode={debouncedOptions.mode}
-									initialIitem={item}
+									initialItem={item}
 								/>
 							</Col>
 						))}

@@ -58,8 +58,12 @@ class OptionsStore {
 		this.userOptions = { ...this.userOptions, currency: currency };
 	};
 
-	handleYearChanging = (values: string[]) => {
-		this.listOptions = { ...this.listOptions, years: values };
+	setRange = (values: number[]) => {
+		this.listOptions = { ...this.listOptions, range: values };
+	};
+
+	setDefaultRange = (values: number[]) => {
+		this.listOptions = { ...this.listOptions, defaultRange: values };
 	};
 
 	handleSortAlgorithmChanging = (value: Sort) => {
@@ -72,7 +76,12 @@ class OptionsStore {
 	};
 
 	resetSettings = () => {
-		this.listOptions = defaultListOptions;
+		this.listOptions = {
+			...defaultListOptions,
+			mode: this.listOptions.mode,
+			defaultRange: this.listOptions.defaultRange,
+			range: this.listOptions.defaultRange,
+		};
 	};
 
 	setIsSortingReversed = (value: boolean) => {

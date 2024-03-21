@@ -6,43 +6,33 @@ import {
 	language,
 } from 'settings/interfaces';
 import { sortBy } from './utils';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+
+dayjs.extend(isBetween);
 
 export const getFilteredList = (
 	options: ListOptions,
 	list: ExpenseItem[],
 	language: language
 ) => {
-	const { years, categoriesToFilter, sortingAlgorithm, isSortingReversed } =
+	const { range, categoriesToFilter, sortingAlgorithm, isSortingReversed } =
 		options;
-	if (years || categoriesToFilter) {
-		return sortBy(
-			list.filter((item: ExpenseItem) => {
-				if (!categoriesToFilter.length && years.length)
-					return years.some(
-						(year: string) => item.date.year().toString() === year
-					);
-				if (!years.length && categoriesToFilter.length)
-					return categoriesToFilter.some(
+	return sortBy(
+		list.filter((item: ExpenseItem) => {
+			if (!categoriesToFilter.length) {
+				return item.date.isBetween(dayjs(range[0]), dayjs(range[1]), 'day', '[]');
+			} else {
+				return item.date.isBetween(dayjs(range[0]), dayjs(range[1]), 'day', '[]') &&
+					categoriesToFilter.some(
 						(category: category) => item.category.id === category.id
 					);
-				if (years.length && categoriesToFilter.length)
-					return (
-						years.some(
-							(year: string) => item.date.year().toString() === year
-						) &&
-						categoriesToFilter.some(
-							(category: category) => item.category.id === category.id
-						)
-					);
-				return item;
-			}),
-			sortingAlgorithm,
-			isSortingReversed,
-			language
-		);
-	} else {
-		return sortBy(list, sortingAlgorithm, isSortingReversed, language);
-	}
+			}
+		}),
+		sortingAlgorithm,
+		isSortingReversed,
+		language
+	);
 };
 
 export const getListToShowOnCurrentPage = (

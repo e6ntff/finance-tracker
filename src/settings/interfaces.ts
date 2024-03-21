@@ -47,7 +47,8 @@ export type Interval = 'year' | 'month' | 'day';
 export type currency = 'USD' | 'EUR' | 'RUB';
 
 export interface ListOptions {
-	years: string[];
+	defaultRange: number[];
+	range: number[];
 	sortingAlgorithm: Sort;
 	isSortingReversed: boolean;
 	pageSize: number;
@@ -72,5 +73,5 @@ export interface UserOptions {
 	currency: currency;
 	theme: Theme;
 	themeAlgorithm: ThemeAlgorithm;
-	deleteDelay: number
+	deleteDelay: number;
 }

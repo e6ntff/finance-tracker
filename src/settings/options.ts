@@ -11,7 +11,8 @@ import { theme } from 'antd';
 const { defaultAlgorithm } = theme;
 
 export const defaultListOptions: ListOptions = {
-	years: [],
+	defaultRange: [],
+	range: [],
 	sortingAlgorithm: constants.defaultAlgoritm as Sort,
 	isSortingReversed: false,
 	pageSize: constants.defaultPageSize,

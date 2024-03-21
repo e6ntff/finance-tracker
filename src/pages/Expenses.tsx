@@ -16,6 +16,14 @@ const Expenses: React.FC = observer(() => {
 
 	const { language } = userOptions;
 
+	const {
+		range,
+		sortingAlgorithm,
+		isSortingReversed,
+		categoriesToFilter,
+		pageSize,
+	} = listOptions;
+
 	useEffect(() => {
 		if (isSmallScreen) {
 			handleModeChanging('grid');
@@ -23,13 +31,13 @@ const Expenses: React.FC = observer(() => {
 	}, [isSmallScreen, handleModeChanging]);
 
 	useEffect(() => {
-		handlePageChanging(1, listOptions.pageSize);
+		handlePageChanging(1, pageSize);
 	}, [
-		listOptions.years,
-		listOptions.sortingAlgorithm,
-		listOptions.isSortingReversed,
-		listOptions.categoriesToFilter,
-		listOptions.pageSize,
+		range,
+		sortingAlgorithm,
+		isSortingReversed,
+		categoriesToFilter,
+		pageSize,
 		handlePageChanging,
 	]);
 

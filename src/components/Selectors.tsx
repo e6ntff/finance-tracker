@@ -2,7 +2,7 @@ import { Button, Divider, Flex, Pagination } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useMemo } from 'react';
 import NewItemButton from './NewItemButton';
-import YearSelect from './YearSelect';
+import YearSlider from './YearSlider';
 import CategoriesSelect from './CategoriesSelect';
 import SortSelect from './SortSelect';
 import ModeSelect from './ModeSelect';
@@ -21,15 +21,35 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 	const { isSmallScreen } = userStore;
 	const { listOptions, resetSettings, handlePageChanging } = optionsStore;
 
+	const {
+		isSortingReversed,
+		range,
+		defaultRange,
+		categoriesToFilter,
+		pageSize,
+		currentPage,
+		sortingAlgorithm,
+	} = listOptions;
+
 	const isSettingsChanged = useMemo(
 		() =>
-			listOptions.isSortingReversed ||
-			listOptions.years.length > 0 ||
-			listOptions.categoriesToFilter.length > 0 ||
-			listOptions.pageSize !== constants.defaultPageSize ||
-			listOptions.currentPage !== 1 ||
-			listOptions.sortingAlgorithm !== 'date',
-		[listOptions]
+			isSortingReversed ||
+			categoriesToFilter.length > 0 ||
+			pageSize !== constants.defaultPageSize ||
+			currentPage !== 1 ||
+			(range[0] &&
+				range[1] &&
+				(range[0] !== defaultRange[0] || range[1]) !== defaultRange[1]) ||
+			sortingAlgorithm !== 'date',
+		[
+			range,
+			defaultRange,
+			isSortingReversed,
+			categoriesToFilter,
+			pageSize,
+			currentPage,
+			sortingAlgorithm,
+		]
 	);
 
 	return (
@@ -39,27 +59,31 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 			gap={16}
 		>
 			<Flex
-				style={{ inlineSize: '100%' }}
+				vertical
 				gap={16}
-				vertical={isSmallScreen}
 			>
-				<Flex gap={16}>
-					<NewItemButton />
-					<YearSelect />
-					<CategoriesSelect />
+				<Flex
+					gap={16}
+					vertical={isSmallScreen}
+				>
+					<Flex gap={16}>
+						<NewItemButton />
+						<CategoriesSelect />
+					</Flex>
+					<Flex gap={16}>
+						<SortSelect />
+						<ModeSelect />
+						{isSettingsChanged && (
+							<Button
+								onClick={resetSettings}
+								size={isSmallScreen ? 'small' : 'middle'}
+							>
+								<ReloadOutlined />
+							</Button>
+						)}
+					</Flex>
 				</Flex>
-				<Flex gap={16}>
-					<SortSelect />
-					<ModeSelect />
-					{isSettingsChanged && (
-						<Button
-							onClick={resetSettings}
-							size={isSmallScreen ? 'small' : 'middle'}
-						>
-							<ReloadOutlined />
-						</Button>
-					)}
-				</Flex>
+				{!loading && <YearSlider />}
 			</Flex>
 			<Divider />
 			{!loading && (

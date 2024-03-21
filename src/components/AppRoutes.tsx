@@ -7,7 +7,6 @@ import LargeSpin from './LargeSpin';
 
 const Expenses = lazy(() => import('../pages/Expenses'));
 const Stats = lazy(() => import('../pages/Stats'));
-const Settings = lazy(() => import('../pages/Settings'));
 const Welcome = lazy(() => import('../pages/Welcome'));
 const Categories = lazy(() => import('../pages/Categories'));
 
@@ -46,18 +45,6 @@ const AppRoutes: React.FC = observer(() => {
 					logged ? (
 						<Suspense fallback={<LargeSpin />}>
 							<Expenses />
-						</Suspense>
-					) : (
-						<Navigate to='/' />
-					)
-				}
-			/>
-			<Route
-				path={paths.settings}
-				element={
-					logged ? (
-						<Suspense fallback={<LargeSpin />}>
-							<Settings />
 						</Suspense>
 					) : (
 						<Navigate to='/' />

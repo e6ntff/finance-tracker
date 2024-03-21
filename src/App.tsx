@@ -14,6 +14,7 @@ import constants from 'settings/constants';
 import { getConfig } from 'settings/getConfig';
 import { optionsStore } from 'utils/optionsStore';
 import LargeSpin from 'components/LargeSpin';
+import SettingsPanel from 'components/SettingsPanel';
 
 const auth = getAuth(firebaseApp);
 
@@ -146,6 +147,7 @@ const App: React.FC = observer(() => {
 							</Layout>
 						)}
 					</Layout>
+					<SettingsPanel />
 				</Router>
 			</Scrollbars>
 		</ConfigProvider>

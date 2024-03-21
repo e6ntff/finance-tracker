@@ -8,7 +8,6 @@ import languages from 'settings/languages';
 import {
 	FolderOpenOutlined,
 	LineChartOutlined,
-	SettingOutlined,
 	ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
@@ -50,16 +49,6 @@ const Navigation: React.FC = observer(() => {
 			key: paths.categories,
 			title: '',
 			icon: <FolderOpenOutlined />,
-		},
-		{
-			label: (
-				<NavLink to={paths.settings}>
-					{!isSmallScreen && languages.settings[language]}
-				</NavLink>
-			),
-			key: paths.settings,
-			title: '',
-			icon: <SettingOutlined />,
 		},
 	];
 	return (

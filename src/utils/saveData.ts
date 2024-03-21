@@ -1,33 +1,23 @@
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, doc, updateDoc } from 'firebase/firestore';
 import firebaseApp from './firebase';
 import { ExpenseItem, category } from 'settings/interfaces';
-import constants from 'settings/constants';
 
 const firestore = getFirestore(firebaseApp);
 const usersCollection = collection(firestore, 'users');
 
-const pushDataToServer = async (uid: string, data: any) => {
-	const userDocRef = doc(usersCollection, uid);
-	if (userDocRef) {
-		await setDoc(userDocRef, data);
-	}
-};
-
-const saveData = (
+const saveData = async (
 	user: any,
 	data: {
-		list: ExpenseItem[];
-		categories: category[];
+		list?: ExpenseItem[];
+		categories?: category[];
 	}
 ) => {
 	try {
-		if (Object.keys(user).length) {
-			pushDataToServer(user.uid, {
-				list: data.list.map((el) => JSON.parse(JSON.stringify(el))) || [],
-				categories: data.categories.map((el) =>
-					JSON.parse(JSON.stringify(el))
-				) || [constants.defaultCategory],
-			});
+		if (user.uid) {
+			const userDocRef = doc(usersCollection, user.uid);
+			if (userDocRef) {
+				await updateDoc(userDocRef, data);
+			}
 		}
 	} catch (error: any) {
 		alert(`Saving error: ${error}`);

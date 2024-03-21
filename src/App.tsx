@@ -15,6 +15,9 @@ import { getConfig } from 'settings/getConfig';
 import { optionsStore } from 'utils/optionsStore';
 import LargeSpin from 'components/LargeSpin';
 import SettingsPanel from 'components/SettingsPanel';
+import getData from 'utils/getData';
+import { categoryStore } from 'utils/categoryStore';
+import { listStore } from 'utils/listStore';
 
 const auth = getAuth(firebaseApp);
 
@@ -60,6 +63,16 @@ const App: React.FC = observer(() => {
 
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
+			getData(authUser).then((data) => {
+				if (data) {
+					listStore.setList(data.list || []);
+					categoryStore.setCategories(
+						data.categories || [constants.defaultCategory]
+					);
+					categoryStore.setLoading(false);
+					listStore.setLoading(false);
+				}
+			});
 		});
 
 		return () => unsubscribe();

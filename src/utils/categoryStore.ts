@@ -1,11 +1,12 @@
 import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import constants from '../settings/constants';
+import saveData from './saveData';
+import { userStore } from './userStore';
 
 class CategoryStore {
-	categories: category[] = [
-		{ ...constants.defaultCategory, id: Math.random() },
-	];
+	userStore;
+	categories: category[] = [constants.defaultCategory];
 	loading: boolean = true;
 
 	setLoading = (value: boolean) => {
@@ -14,27 +15,33 @@ class CategoryStore {
 
 	setCategories = (categories: category[]) => {
 		this.categories = categories;
+		saveData(this.userStore.user, { categories: categories });
 	};
 
 	addCategory = (category: category) => {
-		this.categories = [...this.categories, category];
+		this.setCategories([...this.categories, category]);
 	};
 
 	removeCategory = (categoryToDelete: category) => {
-		this.categories = this.categories.filter(
-			(category: category) => category.id !== categoryToDelete.id
+		this.setCategories(
+			this.categories.filter(
+				(category: category) => category.id !== categoryToDelete.id
+			)
 		);
 	};
 
 	replaceCategory = (category: category) => {
-		this.categories = this.categories.map((cat: category) =>
-			cat.id === category.id ? category : cat
+		this.setCategories(
+			this.categories.map((cat: category) =>
+				cat.id === category.id ? category : cat
+			)
 		);
 	};
 
-	constructor() {
+	constructor(userStore: any) {
+		this.userStore = userStore;
 		makeAutoObservable(this);
 	}
 }
 
-export const categoryStore = new CategoryStore();
+export const categoryStore = new CategoryStore(userStore);

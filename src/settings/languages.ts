@@ -11,9 +11,13 @@ const languages = {
 		en: 'Categories',
 		ru: 'Категории',
 	},
-	settings: {
-		en: 'Settings',
-		ru: 'Настройки',
+	theme: {
+		en: 'Theme',
+		ru: 'Тема',
+	},
+	deleteDelay: {
+		en: 'Delete delay',
+		ru: 'Задержка при удалении',
 	},
 	title: {
 		en: 'Title',

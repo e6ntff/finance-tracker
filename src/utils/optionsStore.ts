@@ -35,20 +35,19 @@ class OptionsStore {
 		this.userOptions = defaultUserOptions;
 	};
 
+	setDeleteDelay = (value: number) => {
+		this.userOptions = {
+			...this.userOptions,
+			deleteDelay: value,
+		};
+	};
+
 	setTheme = (theme: Theme) => {
 		this.userOptions = {
 			...this.userOptions,
 			theme: theme,
 			themeAlgorithm: theme === 'default' ? defaultAlgorithm : darkAlgorithm,
 		};
-	};
-
-	toggleTheme = () => {
-		if (this.userOptions.theme === 'default') {
-			this.setTheme('dark');
-		} else if (this.userOptions.theme === 'dark') {
-			this.setTheme('default');
-		}
 	};
 
 	setLanguage = (language: language) => {

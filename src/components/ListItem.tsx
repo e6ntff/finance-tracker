@@ -8,7 +8,6 @@ import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import Title from 'antd/es/typography/Title';
 import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import constants from 'settings/constants';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
@@ -46,7 +45,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 		const deleteId = setInterval(() => {
 			setDeleteValue((prevValue: number) => {
 				const newValue = prevValue + 10;
-				if (newValue >= constants.deleteDelay && isItemDeleting) {
+				if (newValue >= userOptions.deleteDelay && isItemDeleting) {
 					removeItem(currentItem);
 				}
 				return newValue;
@@ -57,7 +56,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 			setDeleteValue(0);
 		}
 		return () => clearInterval(deleteId);
-	}, [isItemDeleting, currentItem, removeItem]);
+	}, [isItemDeleting, currentItem, removeItem, userOptions.deleteDelay]);
 
 	const toggleIsModalOpened = useCallback(() => {
 		setIsModalOpened((prevValue: boolean) => !prevValue);
@@ -168,7 +167,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 	const ProgressJSX = (
 		<Progress
 			showInfo={false}
-			percent={(deleteValue / constants.deleteDelay) * 100}
+			percent={(deleteValue / userOptions.deleteDelay) * 100}
 			status='exception'
 		/>
 	);

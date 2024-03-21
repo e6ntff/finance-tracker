@@ -1,45 +1,61 @@
 import React from 'react';
 import LanguageSelect from '../components/LanguageSelect';
 import CurrencySelect from '../components/CurrencySelect';
-import { Flex, Typography } from 'antd';
+import { Flex, Form, Segmented, Slider } from 'antd';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
+import { userStore } from 'utils/userStore';
+import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 
 const Settings: React.FC = observer(() => {
-	const { userOptions, setCurrency } = optionsStore;
+	const { userOptions, setCurrency, setTheme, setDeleteDelay } = optionsStore;
+	const { isSmallScreen } = userStore;
 
-	const { language, currency } = userOptions;
+	const { language, currency, theme } = userOptions;
 
 	return (
 		<Flex justify='center'>
-			<Flex
-				vertical
-				gap={16}
-				style={{ inlineSize: '10em' }}
+			<Form
+				size={isSmallScreen ? 'small' : 'middle'}
+				layout='vertical'
+				style={{ inlineSize: '50%' }}
 			>
-				<Flex
-					vertical
-					justify='space-between'
-					align='stretch'
-					gap={8}
-				>
-					<Typography.Text>{languages.language[language]}</Typography.Text>
+				<Form.Item label={languages.theme[language]}>
+					<Segmented
+						size={isSmallScreen ? 'small' : 'middle'}
+						value={theme}
+						onChange={setTheme}
+						options={[
+							{ label: <BulbOutlined />, value: 'default' },
+							{ label: <BulbFilled />, value: 'dark' },
+						]}
+					/>
+				</Form.Item>
+				<Form.Item label={languages.language[language]}>
 					<LanguageSelect />
-				</Flex>
-				<Flex
-					vertical
-					justify='space-between'
-					align='stretch'
-					gap={8}
-				>
-					<Typography.Text>{languages.currency[language]}</Typography.Text>
+				</Form.Item>
+				<Form.Item label={languages.currency[language]}>
 					<CurrencySelect
 						value={currency}
 						onChange={setCurrency}
 					/>
-				</Flex>
-			</Flex>
+				</Form.Item>
+				<Form.Item label={languages.deleteDelay[language]}>
+					<Slider
+						defaultValue={userOptions.deleteDelay}
+						step={100}
+						min={0}
+						max={1000}
+						marks={{
+							0: 0,
+							500: 500,
+							1000: 1000,
+						}}
+						onChangeComplete={setDeleteDelay}
+					></Slider>
+				</Form.Item>
+			</Form>
 		</Flex>
 	);
 });

@@ -72,4 +72,5 @@ export interface UserOptions {
 	currency: currency;
 	theme: Theme;
 	themeAlgorithm: ThemeAlgorithm;
+	deleteDelay: number
 }

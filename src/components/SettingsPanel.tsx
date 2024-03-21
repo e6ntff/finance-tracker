@@ -18,8 +18,7 @@ const SettingsPanel: React.FC = observer(() => {
 		<>
 			<Drawer
 				destroyOnClose
-				// open={isMenuOpened}
-				open
+				open={isMenuOpened}
 				onClose={toggleIsMenuOpened}
 			>
 				<Settings />

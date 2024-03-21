@@ -8,8 +8,8 @@ import { Button, Card, ColorPicker, Flex, Progress, Typography } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
 import { CloseOutlined, DeleteOutlined } from '@ant-design/icons';
-import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
+import { optionsStore } from 'utils/optionsStore';
 
 interface Props {
 	initialCategory: category;
@@ -20,6 +20,8 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	const { replaceCategory, removeCategory } = categoryStore;
 	const { refreshItemByCategory, clearListFromCategory } = listStore;
 	const { isSmallScreen } = userStore;
+	const { userOptions } = optionsStore;
+
 	const [isCategoryItemDeleting, setIsCategoryItemDeleting] =
 		useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
@@ -47,7 +49,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		const deleteId = setInterval(() => {
 			setDeleteValue((prevValue: number) => {
 				const newValue = prevValue + 10;
-				if (newValue >= constants.deleteDelay && isCategoryItemDeleting) {
+				if (newValue >= userOptions.deleteDelay && isCategoryItemDeleting) {
 					deleteCategory();
 				}
 				return newValue;
@@ -58,7 +60,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 			setDeleteValue(0);
 		}
 		return () => clearInterval(deleteId);
-	}, [isCategoryItemDeleting, deleteCategory]);
+	}, [isCategoryItemDeleting, deleteCategory, userOptions.deleteDelay]);
 
 	const handleNameChange = useCallback((value: string) => {
 		setCurrentCategory((prevCategory) => ({
@@ -127,7 +129,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	const ProgressJSX = (
 		<Progress
 			showInfo={false}
-			percent={(deleteValue / constants.deleteDelay) * 100}
+			percent={(deleteValue / userOptions.deleteDelay) * 100}
 			status='exception'
 		/>
 	);

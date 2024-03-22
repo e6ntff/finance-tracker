@@ -80,14 +80,13 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 					<Flex gap={16}>
 						<SortSelect />
 						<ModeSelect />
-						{isSettingsChanged && (
-							<Button
-								onClick={resetSettings}
-								size={isSmallScreen ? 'small' : 'middle'}
-							>
-								<ReloadOutlined />
-							</Button>
-						)}
+						<Button
+							disabled={!isSettingsChanged}
+							onClick={resetSettings}
+							size={isSmallScreen ? 'small' : 'middle'}
+						>
+							<ReloadOutlined />
+						</Button>
 					</Flex>
 				</Flex>
 				{!loading && (

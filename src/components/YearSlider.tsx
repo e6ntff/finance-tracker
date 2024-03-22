@@ -102,6 +102,7 @@ const YearSlider: React.FC<Props> = observer(
 		return (
 			<Flex gap={16}>
 				<Segmented
+					size={isSmallScreen ? 'small' : 'middle'}
 					defaultValue={isAccurate}
 					value={isAccurate}
 					onChange={setIsAccurate}

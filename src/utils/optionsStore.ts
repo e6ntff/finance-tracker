@@ -145,7 +145,7 @@ export const optionsStore = new OptionsStore(categoryStore);
 reaction(
 	() => optionsStore.listOptions,
 	() => {
-		localStorage.setItem(
+		sessionStorage.setItem(
 			'listOptions',
 			JSON.stringify(optionsStore.listOptions)
 		);
@@ -155,7 +155,7 @@ reaction(
 reaction(
 	() => optionsStore.statsOptions,
 	() => {
-		localStorage.setItem(
+		sessionStorage.setItem(
 			'statsOptions',
 			JSON.stringify(optionsStore.statsOptions)
 		);
@@ -165,7 +165,7 @@ reaction(
 reaction(
 	() => optionsStore.userOptions,
 	() => {
-		localStorage.setItem(
+		sessionStorage.setItem(
 			'userOptions',
 			JSON.stringify(optionsStore.userOptions)
 		);

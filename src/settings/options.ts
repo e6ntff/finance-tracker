@@ -23,7 +23,7 @@ export const defaultListOptions: ListOptions = {
 };
 
 export const initialListOptions: ListOptions = JSON.parse(
-	localStorage.getItem('listOptions') || JSON.stringify(defaultListOptions)
+	sessionStorage.getItem('listOptions') || JSON.stringify(defaultListOptions)
 );
 
 export const defaultStatsOptions: StatsOptions = {
@@ -33,7 +33,7 @@ export const defaultStatsOptions: StatsOptions = {
 };
 
 export const initialStatsOptions: StatsOptions = JSON.parse(
-	localStorage.getItem('statsOptions') || JSON.stringify(defaultStatsOptions)
+	sessionStorage.getItem('statsOptions') || JSON.stringify(defaultStatsOptions)
 );
 
 export const defaultUserOptions: UserOptions = {
@@ -45,5 +45,5 @@ export const defaultUserOptions: UserOptions = {
 };
 
 export const initialUserOptions: UserOptions = JSON.parse(
-	localStorage.getItem('userOptions') || JSON.stringify(defaultUserOptions)
+	sessionStorage.getItem('userOptions') || JSON.stringify(defaultUserOptions)
 );

@@ -108,19 +108,30 @@ class OptionsStore {
 	};
 
 	handlePageChanging = (value: number, size: number) => {
-		this.listOptions = { ...this.listOptions, currentPage: value };
-		this.listOptions = { ...this.listOptions, pageSize: size };
+		this.listOptions = {
+			...this.listOptions,
+			currentPage: value,
+			pageSize: size,
+		};
 	};
 
-	setMonth = (value: number | null) => {
-		this.statsOptions = { ...this.statsOptions, month: value };
-	};
-	setYear = (value: number | null) => {
-		this.statsOptions = { ...this.statsOptions, year: value };
+	setStatsRange = (values: number[]) => {
+		this.statsOptions = { ...this.statsOptions, range: values };
 	};
 
-	setDay = (value: number | null) => {
-		this.statsOptions = { ...this.statsOptions, day: value };
+	setIsAccurate = (value: boolean) => {
+		this.listOptions = { ...this.listOptions, isAccurate: value };
+	};
+
+	setIsStatsAccurate = (value: boolean) => {
+		this.statsOptions = { ...this.statsOptions, isAccurate: value };
+	};
+
+	setDefaultStatsRange = (values: number[]) => {
+		this.statsOptions = {
+			...this.statsOptions,
+			defaultRange: values,
+		};
 	};
 
 	constructor(categoryStore: any) {

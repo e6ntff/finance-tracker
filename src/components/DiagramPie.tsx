@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ExpenseItem, Interval, Value } from '../settings/interfaces';
+import { Value } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { Flex } from 'antd';
@@ -13,33 +13,23 @@ import {
 	Legend,
 	Title,
 } from 'chart.js';
-import {
-	getValuesForPieDiagramInCurrentDay,
-	getValuesForPieDiagramByMonth,
-	getValuesForPieDiagramByYear,
-} from 'utils/transformData';
+import { getValuesForPieDiagram } from 'utils/transformData';
 import { optionsStore } from 'utils/optionsStore';
+import { listStore } from 'utils/listStore';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
-interface Props {
-	list: ExpenseItem[];
-	interval: Interval;
-}
-
-const DiagramPie: React.FC<Props> = observer(({ list, interval }) => {
+const DiagramPie: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
-	const { statsOptions, userOptions } = optionsStore;
+	const { list } = listStore;
+	const { userOptions, statsOptions } = optionsStore;
 	const { currency } = userOptions;
 
-	const { year, month, day } = statsOptions;
+	const { range, isAccurate } = statsOptions;
 
-	const valuesByCategory: Value[] = useMemo(() => {
-		if (interval === 'year')
-			return getValuesForPieDiagramByYear(list, currency);
-		if (interval === 'month')
-			return getValuesForPieDiagramByMonth(list, year, month, currency);
-		return getValuesForPieDiagramInCurrentDay(list, year, month, day, currency);
-	}, [list, currency, interval, year, month, day]);
+	const valuesByCategory: Value[] = useMemo(
+		() => getValuesForPieDiagram(list, range, currency, isAccurate),
+		[list, currency, range, isAccurate]
+	);
 
 	const [names, colors, values] = [
 		valuesByCategory.map((value: Value) => value.category.name),
@@ -70,7 +60,7 @@ const DiagramPie: React.FC<Props> = observer(({ list, interval }) => {
 	return (
 		<Flex
 			style={{
-				inlineSize: isSmallScreen || interval === 'day' ? 'unset' : '40%',
+				inlineSize: isSmallScreen ? 'unset' : '40%',
 			}}
 		>
 			<Pie

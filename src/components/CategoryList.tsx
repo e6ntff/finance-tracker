@@ -3,8 +3,9 @@ import CategoryItem from './CategoryItem';
 import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
-import { Col, Flex, Row, Spin } from 'antd';
+import { Col, Flex, Row } from 'antd';
 import { userStore } from 'utils/userStore';
+import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
 	const { categories, loading } = categoryStore;
@@ -53,7 +54,7 @@ const CategoryList: React.FC = observer(() => {
 			gap={16}
 		>
 			{loading ? (
-				<Spin />
+				<LargeSpin />
 			) : (
 				splittedCategories.map((categories: category[]) => (
 					<Row

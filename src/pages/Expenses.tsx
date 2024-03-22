@@ -22,6 +22,7 @@ const Expenses: React.FC = observer(() => {
 		isSortingReversed,
 		categoriesToFilter,
 		pageSize,
+		isAccurate,
 	} = listOptions;
 
 	useEffect(() => {
@@ -42,8 +43,8 @@ const Expenses: React.FC = observer(() => {
 	]);
 
 	const filteredList = useMemo(
-		() => getFilteredList(listOptions, list, language),
-		[list, language, listOptions]
+		() => getFilteredList(listOptions, list, language, isAccurate),
+		[list, language, listOptions, isAccurate]
 	);
 
 	return (

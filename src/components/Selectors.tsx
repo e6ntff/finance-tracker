@@ -19,7 +19,14 @@ interface Props {
 const Selectors: React.FC<Props> = observer(({ total }) => {
 	const { loading } = listStore;
 	const { isSmallScreen } = userStore;
-	const { listOptions, resetSettings, handlePageChanging } = optionsStore;
+	const {
+		listOptions,
+		resetSettings,
+		handlePageChanging,
+		setRange,
+		setDefaultRange,
+		setIsAccurate,
+	} = optionsStore;
 
 	const {
 		isSortingReversed,
@@ -29,6 +36,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 		pageSize,
 		currentPage,
 		sortingAlgorithm,
+		isAccurate,
 	} = listOptions;
 
 	const isSettingsChanged = useMemo(
@@ -54,13 +62,12 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 
 	return (
 		<Flex
-			style={{ inlineSize: '100%' }}
 			vertical
-			gap={16}
+			style={{ inlineSize: '100%' }}
 		>
 			<Flex
 				vertical
-				gap={16}
+				gap={32}
 			>
 				<Flex
 					gap={16}
@@ -83,7 +90,16 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 						)}
 					</Flex>
 				</Flex>
-				{!loading && <YearSlider />}
+				{!loading && (
+					<YearSlider
+						setIsAccurate={setIsAccurate}
+						isAccurate={isAccurate}
+						range={range}
+						defaultRange={defaultRange}
+						setRange={setRange}
+						setDefaultRange={setDefaultRange}
+					/>
+				)}
 			</Flex>
 			<Divider />
 			{!loading && (

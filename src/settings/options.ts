@@ -11,6 +11,7 @@ import { theme } from 'antd';
 const { defaultAlgorithm } = theme;
 
 export const defaultListOptions: ListOptions = {
+	isAccurate: false,
 	defaultRange: [],
 	range: [],
 	sortingAlgorithm: constants.defaultAlgoritm as Sort,
@@ -26,9 +27,9 @@ export const initialListOptions: ListOptions = JSON.parse(
 );
 
 export const defaultStatsOptions: StatsOptions = {
-	year: null,
-	month: null,
-	day: null,
+	isAccurate: false,
+	defaultRange: [],
+	range: [],
 };
 
 export const initialStatsOptions: StatsOptions = JSON.parse(

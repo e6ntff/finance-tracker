@@ -3,11 +3,12 @@ import ListItem from './ListItem';
 import { ExpenseItem, ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Col, Empty, List, Row, Spin } from 'antd';
+import { Col, Empty, List, Row } from 'antd';
 import { getListToShowOnCurrentPage } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
+import LargeSpin from './LargeSpin';
 
 interface Props {
 	filteredList: ExpenseItem[];
@@ -61,7 +62,7 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 	return (
 		<>
 			{loading ? (
-				<Spin />
+				<LargeSpin />
 			) : (
 				!filteredList.length && (
 					<Empty

@@ -47,6 +47,7 @@ export type Interval = 'year' | 'month' | 'day';
 export type currency = 'USD' | 'EUR' | 'RUB';
 
 export interface ListOptions {
+	isAccurate: boolean;
 	defaultRange: number[];
 	range: number[];
 	sortingAlgorithm: Sort;
@@ -58,9 +59,9 @@ export interface ListOptions {
 }
 
 export interface StatsOptions {
-	year: number | null;
-	month: number | null;
-	day: number | null;
+	isAccurate: boolean;
+	defaultRange: number[];
+	range: number[];
 }
 
 export interface Value {

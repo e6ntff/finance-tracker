@@ -1,152 +1,126 @@
-import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
-import { ExpenseItem } from '../settings/interfaces';
+import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Card, Empty, Flex, Spin, Statistic } from 'antd';
+import { Button, Card, Empty, Flex, Statistic } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
-import languages from 'settings/languages';
 import { userStore } from 'utils/userStore';
 import { getSymbolAndPrice } from 'utils/utils';
-import { ArrowLeftOutlined, CalendarOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
-import CalendarModal from 'components/CalendarModal';
 import { optionsStore } from 'utils/optionsStore';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+import YearSlider from 'components/YearSlider';
+import { Interval } from 'settings/interfaces';
+import LargeSpin from 'components/LargeSpin';
+import { getTotalInCurrentRange } from 'utils/transformData';
+
+dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
 	const { isSmallScreen } = userStore;
-	const { statsOptions, userOptions, setYear, setMonth, setDay } = optionsStore;
-	const { language, currency } = userOptions;
+	const {
+		statsOptions,
+		userOptions,
+		setStatsRange,
+		setDefaultStatsRange,
+		setIsStatsAccurate,
+	} = optionsStore;
+	const { currency } = userOptions;
+	const { range, defaultRange, isAccurate } = statsOptions;
 
-	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+	const [mode, setMode] = useState<Interval>('year');
 
-	const { year, month } = statsOptions;
-
-	const toggleIsModalOpened = useCallback(() => {
-		setIsModalOpened((prevValue: boolean) => !prevValue);
-	}, [setIsModalOpened]);
-
-	const total = useMemo(
-		() =>
-			list.reduce(
-				(acc: number, item: ExpenseItem) => acc + item.price[currency],
-				0
-			),
-		[list, currency]
-	);
-
-	const filteredList = useMemo(
-		() => list.filter((item: ExpenseItem) => item.date.year() === year),
-		[year, list]
-	);
-
-	const getTotalInCurrentInterval = useCallback(
-		(month?: number | null) =>
-			filteredList.reduce((acc: number, item: ExpenseItem) => {
-				if (item.date.month() === month || !month) {
-					return acc + item.price[currency];
-				}
-				return acc;
-			}, 0),
-		[filteredList, currency]
-	);
-
-	const goBack = useCallback(() => {
-		if (month) {
-			setMonth(null);
-			setDay(null);
-		} else if (year) {
-			setYear(null);
-		}
-	}, [setMonth, setYear, setDay, month, year]);
+	const resetRange = useCallback(() => {
+		setMode('year');
+		setStatsRange(defaultRange);
+	}, [setMode, defaultRange, setStatsRange]);
 
 	useEffect(() => {
-		const goBackWithEsc = (event: KeyboardEvent) => {
-			if (event.key === 'Escape' && !isModalOpened) {
-				goBack();
+		const resetRangeWithEsc = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				resetRange();
 			}
 		};
 
-		window.addEventListener('keydown', goBackWithEsc);
+		window.addEventListener('keydown', resetRangeWithEsc);
 
 		return () => {
-			window.removeEventListener('keydown', goBackWithEsc);
+			window.removeEventListener('keydown', resetRangeWithEsc);
 		};
-	}, [goBack, isModalOpened]);
+	}, [resetRange]);
 
-	return listStore.loading || categoryStore.loading ? (
-		<Flex justify='center'>
-			<Spin />
-		</Flex>
-	) : list.length ? (
-		<>
-			<Flex gap={16}>
-				{year && (
-					<Flex
-						vertical
-						justify='space-between'
-					>
-						<Button onClick={goBack}>
-							<ArrowLeftOutlined />
-						</Button>
-						<Button onClick={toggleIsModalOpened}>
-							<CalendarOutlined />
-						</Button>
-					</Flex>
-				)}
-				<Card
-					bordered={false}
-					size='small'
-				>
-					<Statistic
-						title={`${
-							year ? languages.In[language] : languages.total[language]
-						} ${month !== null ? languages.months[language][month] : ''} ${
-							year || ''
-						}`}
-						value={Math.round(year ? getTotalInCurrentInterval(month) : total)}
-						prefix={getSymbolAndPrice(currency)}
-						valueStyle={{ color: '#f00' }}
-					/>
-				</Card>
-				<CalendarModal
-					opened={isModalOpened}
-					toggleOpened={toggleIsModalOpened}
+	const isRangeChanged = useMemo(
+		() => range[0] !== defaultRange[0] || range[1] !== defaultRange[1],
+		[range, defaultRange]
+	);
+
+	const cardTitle = useMemo(() => {
+		const format = isAccurate ? 'DD.MM.YY' : 'MM.YY';
+		return `${dayjs(range[0]).format(format)}${
+			range[0] !== range[1] ? `-${dayjs(range[1]).format(format)}` : ''
+		}`;
+	}, [isAccurate, range]);
+
+	const PanelJSX = (
+		<Flex gap={16}>
+			<Card bordered>
+				<Statistic
+					title={cardTitle}
+					value={getTotalInCurrentRange(list, range, currency, isAccurate)}
+					prefix={getSymbolAndPrice(currency)}
+					valueStyle={{ color: '#f00' }}
 				/>
-			</Flex>
+			</Card>
+			<Button
+				size={isSmallScreen ? 'small' : 'middle'}
+				onClick={resetRange}
+				disabled={!isRangeChanged}
+			>
+				<ReloadOutlined />
+			</Button>
+		</Flex>
+	);
+
+	const DiagramsJSX = (
+		<Flex
+			vertical
+			align='stretch'
+		>
+			<YearSlider
+				setIsAccurate={setIsStatsAccurate}
+				isAccurate={isAccurate}
+				range={range}
+				defaultRange={defaultRange}
+				setRange={setStatsRange}
+				setDefaultRange={setDefaultStatsRange}
+			/>
 			<Flex
 				align='center'
 				justify='space-between'
-				style={{ flexDirection: isSmallScreen ? 'column-reverse' : 'row' }}
+				vertical={isSmallScreen}
 			>
-				{year ? (
-					<>
-						<DiagramBar
-							list={filteredList}
-							interval='month'
-							setInterval={setMonth}
-						/>
-						<DiagramPie
-							list={filteredList}
-							interval='month'
-						/>
-					</>
-				) : (
-					<>
-						<DiagramBar
-							list={list}
-							interval='year'
-							setInterval={setYear}
-						/>
-						<DiagramPie
-							list={list}
-							interval='year'
-						/>
-					</>
-				)}
+				<DiagramBar
+					mode={mode}
+					setMode={setMode}
+				/>
+				<DiagramPie />
 			</Flex>
-		</>
+		</Flex>
+	);
+
+	return listStore.loading || categoryStore.loading ? (
+		<LargeSpin />
+	) : list.length ? (
+		<Flex
+			vertical
+			gap={32}
+		>
+			{PanelJSX}
+			{DiagramsJSX}
+		</Flex>
 	) : (
 		<Empty
 			image={Empty.PRESENTED_IMAGE_SIMPLE}

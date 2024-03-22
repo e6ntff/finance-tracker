@@ -1,7 +1,7 @@
 import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Card, Empty, Flex, Statistic } from 'antd';
+import { Button, Card, Empty, Flex, Statistic, Typography } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import { userStore } from 'utils/userStore';
@@ -59,10 +59,16 @@ const Stats: React.FC = observer(() => {
 
 	const cardTitle = useMemo(() => {
 		const format = isAccurate ? 'DD.MM.YY' : 'MM.YY';
-		return `${dayjs(range[0]).format(format)}${
-			range[0] !== range[1] ? `-${dayjs(range[1]).format(format)}` : ''
-		}`;
-	}, [isAccurate, range]);
+		return (
+			<Typography.Text
+				type='secondary'
+				style={{ fontSize: isSmallScreen ? '.8em' : '1em' }}
+			>
+				{dayjs(range[0]).format(format)}
+				{range[0] !== range[1] ? `-${dayjs(range[1]).format(format)}` : ''}
+			</Typography.Text>
+		);
+	}, [isAccurate, range, isSmallScreen]);
 
 	const PanelJSX = (
 		<Flex gap={16}>
@@ -71,7 +77,10 @@ const Stats: React.FC = observer(() => {
 					title={cardTitle}
 					value={getTotalInCurrentRange(list, range, currency, isAccurate)}
 					prefix={getSymbolAndPrice(currency)}
-					valueStyle={{ color: '#f00' }}
+					valueStyle={{
+						color: '#f00',
+						fontSize: isSmallScreen ? '1em' : '1.5em',
+					}}
 				/>
 			</Card>
 			<Button
@@ -87,6 +96,7 @@ const Stats: React.FC = observer(() => {
 	const DiagramsJSX = (
 		<Flex
 			vertical
+			gap={16}
 			align='stretch'
 		>
 			<YearSlider

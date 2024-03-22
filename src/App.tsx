@@ -63,16 +63,18 @@ const App: React.FC = observer(() => {
 
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
-			getData(authUser).then((data) => {
-				if (data) {
-					listStore.setList(data.list || []);
-					categoryStore.setCategories(
-						data.categories || [constants.defaultCategory]
-					);
-					categoryStore.setLoading(false);
-					listStore.setLoading(false);
-				}
-			});
+			if (authUser && authUser.uid) {
+				getData(authUser).then((data) => {
+					if (data) {
+						listStore.setList(data.list || []);
+						categoryStore.setCategories(
+							data.categories || [constants.defaultCategory]
+						);
+						categoryStore.setLoading(false);
+						listStore.setLoading(false);
+					}
+				});
+			}
 		});
 
 		return () => unsubscribe();

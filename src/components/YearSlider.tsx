@@ -69,8 +69,11 @@ const YearSlider: React.FC<Props> = observer(
 
 		useEffect(() => {
 			setDefaultRange(sliderRange);
-			setRange(sliderRange);
-		}, [sliderRange, setDefaultRange, setRange]);
+		}, [sliderRange, setDefaultRange]);
+
+		useEffect(() => {
+			setRange(defaultRange);
+		}, [defaultRange, setRange]);
 
 		const handleRangeChanging = useCallback(
 			(values: number[]) => {

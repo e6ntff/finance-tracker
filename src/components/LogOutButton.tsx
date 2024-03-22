@@ -26,7 +26,7 @@ const LogOutButton: React.FC = observer(() => {
 			categoryStore.setLoading(true);
 			listStore.setLoading(true);
 			resetOptions();
-			localStorage.clear();
+			sessionStorage.clear();
 		} catch (error: any) {
 			alert(error.message);
 		}

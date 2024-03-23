@@ -7,6 +7,25 @@ import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
 import { ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
+import {
+	Chart,
+	Tooltip,
+	CategoryScale,
+	LinearScale,
+	LineElement,
+	LineController,
+	PointElement,
+} from 'chart.js';
+import { getValuesByMonth } from 'utils/transformData';
+import { Line } from 'react-chartjs-2';
+Chart.register(
+	Tooltip,
+	LineElement,
+	LineController,
+	CategoryScale,
+	LinearScale,
+	PointElement
+);
 
 dayjs.extend(minMax);
 
@@ -109,9 +128,60 @@ const YearSlider: React.FC<Props> = observer(
 			// eslint-disable-next-line
 		}, [isAccurate]);
 
+		const valuesByMonth: number[] | { [key: string]: number } = useMemo(
+			() => getValuesByMonth(list, defaultRange),
+			[list, defaultRange]
+		);
+
+		const data = {
+			labels: new Array(valuesByMonth.length).fill(''),
+			datasets: [
+				{
+					data: valuesByMonth,
+				},
+			],
+		};
+
+		const options = {
+			plugins: {
+				legend: {
+					display: false,
+				},
+				tooltip: {
+					enabled: false,
+				},
+			},
+			scales: {
+				x: {
+					display: false,
+					grid: {
+						display: false,
+					},
+				},
+				y: {
+					display: false,
+					grid: {
+						display: false,
+					},
+				},
+			},
+			elements: {
+				point: {
+					radius: 0,
+				},
+				line: {
+					cubicInterpolationMode: 'monotone' as 'monotone',
+				},
+			},
+			aspectRatio: 25,
+		};
+
 		return dayjs(defaultRange[1]).diff(dayjs(defaultRange[0]), 'hours') >=
 			48 ? (
-			<Flex gap={16}>
+			<Flex
+				gap={16}
+				align='center'
+			>
 				<Segmented
 					size={isSmallScreen ? 'small' : 'middle'}
 					defaultValue={isAccurate}
@@ -126,24 +196,33 @@ const YearSlider: React.FC<Props> = observer(
 						},
 					]}
 				/>
-				<Slider
-					range
-					value={value}
-					marks={marks}
-					step={null}
-					dots={true}
-					tooltip={{
-						formatter: (value: number | undefined) => (
-							<>{dayjs(value).format(isAccurate ? 'DD.MM.YY' : 'MM.YY')}</>
-						),
-					}}
-					min={sliderRange[0]}
-					max={sliderRange[1]}
-					defaultValue={defaultRange}
-					onChange={setValue}
-					onChangeComplete={handleRangeChanging}
+				<Flex
+					vertical
 					style={{ inlineSize: '100%' }}
-				/>
+				>
+					<Line
+						data={data}
+						options={options}
+					/>
+					<Slider
+						range
+						value={value}
+						marks={marks}
+						step={null}
+						dots={true}
+						tooltip={{
+							formatter: (value: number | undefined) => (
+								<>{dayjs(value).format(isAccurate ? 'DD.MM.YY' : 'MM.YY')}</>
+							),
+						}}
+						min={sliderRange[0]}
+						max={sliderRange[1]}
+						defaultValue={defaultRange}
+						onChange={setValue}
+						onChangeComplete={handleRangeChanging}
+						style={{ inlineSize: '100%' }}
+					/>
+				</Flex>
 			</Flex>
 		) : (
 			<></>

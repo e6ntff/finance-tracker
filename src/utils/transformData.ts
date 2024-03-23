@@ -145,3 +145,26 @@ export const getTotalInCurrentRange = (
 			return acc;
 		}, 0)
 	);
+
+export const getValuesByMonth = (list: ExpenseItem[], range: number[]) => {
+	const values: number[] = [];
+	const end = dayjs(range[1]);
+	let startDate = dayjs(range[0]);
+	let endDate = dayjs(range[0]).add(1, 'month');
+
+	while (!endDate.isAfter(end, 'day')) {
+		// eslint-disable-next-line
+		const itemsInMonth = list.filter((item) =>
+			item.date.isBetween(startDate, endDate, 'day', '[]')
+		);
+		const valueForMonth = itemsInMonth.reduce(
+			(acc, item) => acc + item.price.USD,
+			0
+		);
+		values.push(valueForMonth);
+		startDate = startDate.add(1, 'month');
+		endDate = endDate.add(1, 'month');
+	}
+
+	return values;
+};

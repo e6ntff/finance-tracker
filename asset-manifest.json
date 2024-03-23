@@ -1,31 +1,31 @@
 {
   "files": {
     "main.css": "/expenses-manager/static/css/main.6b3fe3e5.css",
-    "main.js": "/expenses-manager/static/js/main.ec70eec4.js",
-    "static/js/781.ea464dab.chunk.js": "/expenses-manager/static/js/781.ea464dab.chunk.js",
-    "static/js/538.925613ed.chunk.js": "/expenses-manager/static/js/538.925613ed.chunk.js",
+    "main.js": "/expenses-manager/static/js/main.03d569df.js",
+    "static/js/781.ebde06d0.chunk.js": "/expenses-manager/static/js/781.ebde06d0.chunk.js",
+    "static/js/538.25670a71.chunk.js": "/expenses-manager/static/js/538.25670a71.chunk.js",
     "static/js/474.4ee3b8f4.chunk.js": "/expenses-manager/static/js/474.4ee3b8f4.chunk.js",
     "static/js/12.40324051.chunk.js": "/expenses-manager/static/js/12.40324051.chunk.js",
     "static/js/915.be3a5f02.chunk.js": "/expenses-manager/static/js/915.be3a5f02.chunk.js",
+    "static/js/463.990ae1c2.chunk.js": "/expenses-manager/static/js/463.990ae1c2.chunk.js",
     "static/js/822.29d80018.chunk.js": "/expenses-manager/static/js/822.29d80018.chunk.js",
-    "static/js/620.92419485.chunk.js": "/expenses-manager/static/js/620.92419485.chunk.js",
+    "static/js/219.dd5bff8f.chunk.js": "/expenses-manager/static/js/219.dd5bff8f.chunk.js",
     "static/js/522.d58e2028.chunk.js": "/expenses-manager/static/js/522.d58e2028.chunk.js",
-    "static/js/463.61ab298b.chunk.js": "/expenses-manager/static/js/463.61ab298b.chunk.js",
     "index.html": "/expenses-manager/index.html",
     "main.6b3fe3e5.css.map": "/expenses-manager/static/css/main.6b3fe3e5.css.map",
-    "main.ec70eec4.js.map": "/expenses-manager/static/js/main.ec70eec4.js.map",
-    "781.ea464dab.chunk.js.map": "/expenses-manager/static/js/781.ea464dab.chunk.js.map",
-    "538.925613ed.chunk.js.map": "/expenses-manager/static/js/538.925613ed.chunk.js.map",
+    "main.03d569df.js.map": "/expenses-manager/static/js/main.03d569df.js.map",
+    "781.ebde06d0.chunk.js.map": "/expenses-manager/static/js/781.ebde06d0.chunk.js.map",
+    "538.25670a71.chunk.js.map": "/expenses-manager/static/js/538.25670a71.chunk.js.map",
     "474.4ee3b8f4.chunk.js.map": "/expenses-manager/static/js/474.4ee3b8f4.chunk.js.map",
     "12.40324051.chunk.js.map": "/expenses-manager/static/js/12.40324051.chunk.js.map",
     "915.be3a5f02.chunk.js.map": "/expenses-manager/static/js/915.be3a5f02.chunk.js.map",
+    "463.990ae1c2.chunk.js.map": "/expenses-manager/static/js/463.990ae1c2.chunk.js.map",
     "822.29d80018.chunk.js.map": "/expenses-manager/static/js/822.29d80018.chunk.js.map",
-    "620.92419485.chunk.js.map": "/expenses-manager/static/js/620.92419485.chunk.js.map",
-    "522.d58e2028.chunk.js.map": "/expenses-manager/static/js/522.d58e2028.chunk.js.map",
-    "463.61ab298b.chunk.js.map": "/expenses-manager/static/js/463.61ab298b.chunk.js.map"
+    "219.dd5bff8f.chunk.js.map": "/expenses-manager/static/js/219.dd5bff8f.chunk.js.map",
+    "522.d58e2028.chunk.js.map": "/expenses-manager/static/js/522.d58e2028.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6b3fe3e5.css",
-    "static/js/main.ec70eec4.js"
+    "static/js/main.03d569df.js"
   ]
 }

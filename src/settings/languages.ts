@@ -113,6 +113,18 @@ const languages = {
 		en: 'No title',
 		ru: 'Нет названия',
 	},
+	success: {
+		en: 'Changes saved',
+		ru: 'Изменения сохранены',
+	},
+	error: {
+		en: 'Saving error',
+		ru: 'Ошибка сохранения',
+	},
+	loading: {
+		en: 'Saving changes',
+		ru: 'Сохранение изменений',
+	},
 };
 
 export default languages;

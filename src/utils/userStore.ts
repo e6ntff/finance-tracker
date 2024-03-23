@@ -1,18 +1,30 @@
-import { makeAutoObservable, reaction } from 'mobx';
-import { currencies } from 'settings/interfaces';
+import { makeAutoObservable } from 'mobx';
+import { AllData, Status, currencies } from 'settings/interfaces';
 import constants from 'settings/constants';
-import { listStore } from './listStore';
-import { categoryStore } from './categoryStore';
 import saveData from './saveData';
 
 class UserStore {
-	listStore;
-	categoryStore;
+	allData: AllData = {
+		list: [],
+		categories: [],
+	};
 	user: any = {};
 	width: number = window.innerWidth;
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
+	notificationStatus: Status = null;
+
+	setAllData = (data: AllData, save: boolean = true) => {
+		this.allData = Object.assign(this.allData, data);
+		if (userStore.user.uid && save) {
+			saveData(userStore.user, this.allData, userStore.setStatus);
+		}
+	};
+
+	setStatus = (status: Status) => {
+		this.notificationStatus = status;
+	};
 
 	setWidth = (width: number, value: boolean) => {
 		this.width = width;
@@ -34,23 +46,9 @@ class UserStore {
 		this.currencyRates = rates;
 	};
 
-	constructor(listStore: any, categoryStore: any) {
-		this.listStore = listStore;
-		this.categoryStore = categoryStore;
+	constructor() {
 		makeAutoObservable(this);
 	}
 }
 
-export const userStore = new UserStore(listStore, categoryStore);
-
-const save = () => {
-	if (userStore.user.uid) {
-		saveData(userStore.user, {
-			list: userStore.listStore.list,
-			categories: userStore.categoryStore.categories,
-		});
-	}
-};
-
-reaction(() => categoryStore.categories, save);
-reaction(() => listStore.list, save);
+export const userStore = new UserStore();

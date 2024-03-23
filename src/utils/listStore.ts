@@ -2,8 +2,10 @@ import constants from '../settings/constants';
 import { ExpenseItem } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 import { categoryStore } from './categoryStore';
+import { userStore } from './userStore';
 
 class ListStore {
+	userStore;
 	categoryStore;
 	list: ExpenseItem[] = [];
 	loading: boolean = true;
@@ -12,8 +14,9 @@ class ListStore {
 		this.loading = value;
 	};
 
-	setList = (list: ExpenseItem[]) => {
+	setList = (list: ExpenseItem[], save: boolean = true) => {
 		this.list = list || [];
+		this.userStore.setAllData({ list: this.list }, save);
 	};
 
 	addItem = (item: ExpenseItem) => {
@@ -47,12 +50,13 @@ class ListStore {
 		);
 	};
 
-	constructor(categoryStore: any) {
+	constructor(userStore: any, categoryStore: any) {
+		this.userStore = userStore;
 		this.categoryStore = categoryStore;
 		makeAutoObservable(this);
 	}
 }
 
-export const listStore = new ListStore(categoryStore);
+export const listStore = new ListStore(userStore, categoryStore);
 
 // reaction

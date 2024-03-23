@@ -76,3 +76,10 @@ export interface UserOptions {
 	themeAlgorithm: ThemeAlgorithm;
 	deleteDelay: number;
 }
+
+export type Status = 'loading' | 'success' | 'error' | null;
+
+export interface AllData {
+	list: ExpenseItem[];
+	categories: category[];
+}

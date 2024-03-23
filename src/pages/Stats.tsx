@@ -70,6 +70,14 @@ const Stats: React.FC = observer(() => {
 		);
 	}, [isAccurate, range, isSmallScreen]);
 
+	useEffect(() => {
+		if (dayjs(range[0]).year() !== dayjs(range[1]).year()) {
+			setMode('year');
+		} else {
+			setMode('month');
+		}
+	}, [range]);
+
 	const PanelJSX = (
 		<Flex gap={16}>
 			<Card bordered>

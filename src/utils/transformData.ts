@@ -1,5 +1,6 @@
 import {
 	ExpenseItem,
+	Interval,
 	ListOptions,
 	Value,
 	category,
@@ -55,23 +56,36 @@ export const getListToShowOnCurrentPage = (
 
 export const getValuesForBarDiagram = (
 	list: ExpenseItem[],
-	currency: string
+	currency: string,
+	mode: Interval,
+	year: number
 ) => {
-	const result: { [key: number]: number } = {};
-	list.forEach((item: ExpenseItem) => {
-		const key: number = item.date.year();
-		if (result[key] === undefined) {
-			result[key] = 0;
-		} else {
-			result[key] += item.price[currency];
+	if (mode === 'year') {
+		const result: { [key: number]: number } = {};
+		list.forEach((item: ExpenseItem) => {
+			const key: number = item.date.year();
+			if (result[key] === undefined) {
+				result[key] = 0;
+			} else {
+				result[key] += item.price[currency];
+			}
+		});
+		for (let year in result) {
+			result[year] = Math.round(result[year]);
 		}
-	});
+		return result;
+	} else if (mode === 'month') {
+		const result: number[] = new Array(12).fill(0);
+		list.forEach((item: ExpenseItem) => {
+			if (item.date.year() === year) {
+				const index: number = item.date.month();
+				result[index] += item.price[currency];
+			}
+		});
 
-	for (let year in result) {
-		result[year] = Math.round(result[year]);
+		return result.map((item: number) => Math.round(item));
 	}
-
-	return result;
+	return [];
 };
 
 export const getValuesForPieDiagram = (
@@ -122,8 +136,8 @@ export const getTotalInCurrentRange = (
 				item.date.isBetween(
 					dayjs(range[0]),
 					dayjs(range[1]),
-					isAccurate ? 'day' : 'month',
-					'[]'
+					isAccurate ? 'hour' : 'day',
+					'()'
 				)
 			) {
 				return acc + item.price[currency];

@@ -34,8 +34,8 @@ const DiagramBar: React.FC<Props> = observer(({ mode, setMode }) => {
 	const { range } = statsOptions;
 
 	const values: number[] | { [key: string]: number } = useMemo(() => {
-		return getValuesForBarDiagram(list, currency);
-	}, [currency, list]);
+		return getValuesForBarDiagram(list, currency, mode, dayjs(range[0]).year());
+	}, [currency, list, mode, range]);
 
 	const data = {
 		labels: mode === 'month' ? languages.months[language] : Object.keys(values),

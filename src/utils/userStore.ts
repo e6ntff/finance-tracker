@@ -24,7 +24,7 @@ class UserStore {
 
 	increaseRecentChanges = (value: number = 1) => {
 		this.recentChanges += value;
-		console.log('increase')
+		console.log('increase');
 	};
 
 	decreaseRecentChanges = (value: number = 1) => {
@@ -49,7 +49,6 @@ class UserStore {
 		this.allData = Object.assign(this.allData, data);
 		save && this.debouncedSaveData();
 		save && this.increaseRecentChanges();
-		console.log('setting data')
 	};
 
 	setStatus = (status: Status) => {

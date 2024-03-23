@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { category } from '../settings/interfaces';
-import useDebounce from '../hooks/useDebounce';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -62,31 +61,37 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		return () => clearInterval(deleteId);
 	}, [isCategoryItemDeleting, deleteCategory, userOptions.deleteDelay]);
 
-	const handleNameChange = useCallback((value: string) => {
-		setCurrentCategory((prevCategory) => {
-			const newCategory: category = {
-				...prevCategory,
-				name: value,
-			};
+	const handleNameChange = useCallback(
+		(value: string) => {
+			setCurrentCategory((prevCategory) => {
+				const newCategory: category = {
+					...prevCategory,
+					name: value,
+				};
 
-			replaceCategory(newCategory);
+				replaceCategory(newCategory);
 
-			return newCategory;
-		});
-	}, []);
+				return newCategory;
+			});
+		},
+		[replaceCategory, setCurrentCategory]
+	);
 
-	const handleColorChange = useCallback((value: Color) => {
-		setCurrentCategory((prevCategory) => {
-			const newCategory: category = {
-				...prevCategory,
-				color: `#${value.toHex()}`,
-			};
+	const handleColorChange = useCallback(
+		(value: Color) => {
+			setCurrentCategory((prevCategory) => {
+				const newCategory: category = {
+					...prevCategory,
+					color: `#${value.toHex()}`,
+				};
 
-			replaceCategory(newCategory);
+				replaceCategory(newCategory);
 
-			return newCategory;
-		});
-	}, []);
+				return newCategory;
+			});
+		},
+		[replaceCategory, setCurrentCategory]
+	);
 
 	const ColorPickerJSX = (
 		<ColorPicker

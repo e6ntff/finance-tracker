@@ -12,7 +12,7 @@ const Settings: React.FC = observer(() => {
 	const { userOptions, setCurrency, setTheme, setDeleteDelay } = optionsStore;
 	const { isSmallScreen } = userStore;
 
-	const { language, currency, theme } = userOptions;
+	const { language, currency, theme, deleteDelay } = userOptions;
 
 	return (
 		<Flex justify='center'>
@@ -43,7 +43,7 @@ const Settings: React.FC = observer(() => {
 				</Form.Item>
 				<Form.Item label={languages.deleteDelay[language]}>
 					<Slider
-						defaultValue={userOptions.deleteDelay}
+						defaultValue={deleteDelay}
 						step={100}
 						min={0}
 						max={1000}

@@ -66,8 +66,13 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 
 	const updateCurrentItem = useCallback(
 		(item: ExpenseItem) => {
-			setCurrentItem(item);
-			replaceItem(item);
+			setCurrentItem((prevItem: ExpenseItem) => {
+				if (JSON.stringify(prevItem) !== JSON.stringify(item)) {
+					replaceItem(item);
+					return item;
+				}
+				return prevItem;
+			});
 			toggleIsModalOpened();
 		},
 		[setCurrentItem, replaceItem, toggleIsModalOpened]
@@ -181,9 +186,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 
 	const EditJSX = (
 		<EditOutlined
-			onClick={
-				!isItemDeleting ? () => updateCurrentItem({ ...initialItem }) : () => {}
-			}
+			onClick={!isItemDeleting ? () => toggleIsModalOpened() : () => {}}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
 		/>
 	);

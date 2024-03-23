@@ -77,7 +77,8 @@ const App: React.FC = observer(() => {
 		});
 
 		return () => unsubscribe();
-	}, [setCurrency, setCurrencyRates, setUser, setTheme, currency]);
+		// eslint-disable-next-line
+	}, [setCurrency, setCurrencyRates, setUser, setTheme]);
 
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 

@@ -24,6 +24,7 @@ class UserStore {
 
 	setStatus = (status: Status) => {
 		this.notificationStatus = status;
+		if (status) setTimeout(() => this.setStatus(null));
 	};
 
 	setWidth = (width: number, value: boolean) => {

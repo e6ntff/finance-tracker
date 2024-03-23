@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Selectors: React.FC<Props> = observer(({ total }) => {
-	const { loading, list } = listStore;
+	const { loading } = listStore;
 	const { isSmallScreen } = userStore;
 	const {
 		listOptions,

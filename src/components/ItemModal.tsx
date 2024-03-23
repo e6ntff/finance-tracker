@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import calculatePrices from '../utils/calculatePrices';
-import { ExpenseItem, category } from '../settings/interfaces';
-import { categoryStore } from 'utils/categoryStore';
+import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
@@ -23,7 +22,6 @@ interface Props {
 const ItemModal: React.FC<Props> = observer(
 	({ opened, initialItem, toggleOpened, submitItem }) => {
 		const [currency, setCurrency] = useState(constants.baseCurrency);
-		const { categories } = categoryStore;
 		const { currencyRates, isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
 
@@ -60,7 +58,7 @@ const ItemModal: React.FC<Props> = observer(
 					categoryId: id,
 				}));
 			},
-			[setCurrentItem, categories]
+			[setCurrentItem]
 		);
 
 		const handlePriceChange = useCallback(
@@ -145,7 +143,6 @@ const ItemModal: React.FC<Props> = observer(
 
 		return (
 			<Modal
-				style={{ inlineSize: '' }}
 				open={opened}
 				okButtonProps={{ size: isSmallScreen ? 'small' : 'middle' }}
 				cancelButtonProps={{ size: isSmallScreen ? 'small' : 'middle' }}

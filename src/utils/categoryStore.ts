@@ -18,7 +18,7 @@ class CategoryStore {
 	};
 
 	addCategory = (category: category) => {
-		this.setCategories([...this.categories, category]);
+		this.setCategories([category, ...this.categories]);
 	};
 
 	removeCategory = (categoryToDelete: category) => {

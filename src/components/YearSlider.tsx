@@ -42,8 +42,8 @@ const YearSlider: React.FC<Props> = observer(
 		}, [list]);
 
 		const marks: { [key: number]: string } = useMemo(() => {
-			const start = dayjs(sliderRange[0]).startOf('month');
-			const end = dayjs(sliderRange[1]).endOf('month');
+			const start = dayjs(sliderRange[0]).startOf('day');
+			const end = dayjs(sliderRange[1]).endOf('day');
 			const marks: { [key: number]: string } = {};
 			let currentDate = start;
 			if (isAccurate) {
@@ -93,13 +93,24 @@ const YearSlider: React.FC<Props> = observer(
 		useEffect(() => {
 			!isAccurate &&
 				setRange([
-					dayjs(range[0]).startOf('month').valueOf(),
-					dayjs(range[1]).endOf('month').valueOf(),
+					(
+						dayjs.max([
+							dayjs(range[0]).startOf('month'),
+							dayjs(defaultRange[0]),
+						]) as dayjs.Dayjs
+					).valueOf(),
+					(
+						dayjs.min([
+							dayjs(range[1]).endOf('month'),
+							dayjs(defaultRange[1]),
+						]) as dayjs.Dayjs
+					).valueOf(),
 				]);
 			// eslint-disable-next-line
 		}, [isAccurate]);
 
-		return (
+		return dayjs(defaultRange[1]).diff(dayjs(defaultRange[0]), 'hours') >=
+			48 ? (
 			<Flex gap={16}>
 				<Segmented
 					size={isSmallScreen ? 'small' : 'middle'}
@@ -108,7 +119,11 @@ const YearSlider: React.FC<Props> = observer(
 					onChange={setIsAccurate}
 					options={[
 						{ label: <ZoomOutOutlined />, value: false },
-						{ label: <ZoomInOutlined />, value: true, disabled: isSmallScreen },
+						{
+							label: <ZoomInOutlined />,
+							value: true,
+							disabled: isSmallScreen,
+						},
 					]}
 				/>
 				<Slider
@@ -130,6 +145,8 @@ const YearSlider: React.FC<Props> = observer(
 					style={{ inlineSize: '100%' }}
 				/>
 			</Flex>
+		) : (
+			<></>
 		);
 	}
 );

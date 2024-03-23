@@ -89,18 +89,14 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 						</Button>
 					</Flex>
 				</Flex>
-				{!loading && list.length ? (
-					<YearSlider
-						setIsAccurate={setIsAccurate}
-						isAccurate={isAccurate}
-						range={range}
-						defaultRange={defaultRange}
-						setRange={setRange}
-						setDefaultRange={setDefaultRange}
-					/>
-				) : (
-					<></>
-				)}
+				<YearSlider
+					setIsAccurate={setIsAccurate}
+					isAccurate={isAccurate}
+					range={range}
+					defaultRange={defaultRange}
+					setRange={setRange}
+					setDefaultRange={setDefaultRange}
+				/>
 			</Flex>
 			<Divider />
 			{!loading && (

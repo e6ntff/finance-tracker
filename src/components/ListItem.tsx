@@ -49,6 +49,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 				const newValue = prevValue + 10;
 				if (newValue >= userOptions.deleteDelay && isItemDeleting) {
 					removeItem(currentItem);
+					clearInterval(deleteId);
 				}
 				return newValue;
 			});

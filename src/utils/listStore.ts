@@ -3,11 +3,11 @@ import { ExpenseItem } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 import { categoryStore } from './categoryStore';
 import { userStore } from './userStore';
-import { configure } from "mobx"
+import { configure } from 'mobx';
 
 configure({
-    enforceActions: "never",
-})
+	enforceActions: 'never',
+});
 
 class ListStore {
 	userStore;
@@ -43,16 +43,18 @@ class ListStore {
 	};
 
 	clearListFromCategory = (categoryId: number) => {
-		this.setList(
-			this.list.map((item: ExpenseItem) =>
-				item.categoryId === categoryId
-					? {
-							...item,
-							categoryId: constants.defaultCategory.id,
-					  }
-					: item
-			)
-		);
+		if (this.list.find((item: ExpenseItem) => item.categoryId === categoryId)) {
+			this.setList(
+				this.list.map((item: ExpenseItem) =>
+					item.categoryId === categoryId
+						? {
+								...item,
+								categoryId: constants.defaultCategory.id,
+						  }
+						: item
+				)
+			);
+		}
 	};
 
 	constructor(userStore: any, categoryStore: any) {
@@ -63,5 +65,3 @@ class ListStore {
 }
 
 export const listStore = new ListStore(userStore, categoryStore);
-
-// reaction

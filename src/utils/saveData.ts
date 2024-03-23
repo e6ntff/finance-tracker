@@ -12,7 +12,9 @@ const saveData = async (
 		list: ExpenseItem[];
 		categories: category[];
 	},
-	setStatus: (arg0: Status) => void
+	setStatus: (arg0: Status) => void,
+	decreaseRecentChanges: (value: number) => void,
+	initialRecentChanges: number
 ) => {
 	data = {
 		list: data.list.map((el) => JSON.parse(JSON.stringify(el))) || [],
@@ -28,6 +30,7 @@ const saveData = async (
 				await setDoc(userDocRef, data, { merge: true });
 				setStatus('success');
 			}
+			decreaseRecentChanges(initialRecentChanges);
 		} catch (error: any) {
 			try {
 				const userDocRef = doc(usersCollection, user.uid);
@@ -35,6 +38,7 @@ const saveData = async (
 					await setDoc(userDocRef, data);
 					setStatus('success');
 				}
+				decreaseRecentChanges(initialRecentChanges);
 			} catch (error: any) {
 				setStatus('error');
 				alert(`Saving error: ${error}`);

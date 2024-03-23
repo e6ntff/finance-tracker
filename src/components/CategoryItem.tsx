@@ -50,6 +50,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 				const newValue = prevValue + 10;
 				if (newValue >= userOptions.deleteDelay && isCategoryItemDeleting) {
 					deleteCategory();
+					clearInterval(deleteId);
 				}
 				return newValue;
 			});
@@ -61,6 +62,19 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		return () => clearInterval(deleteId);
 	}, [isCategoryItemDeleting, deleteCategory, userOptions.deleteDelay]);
 
+	const updateCurrentCategory = useCallback(
+		(category: category) => {
+			setCurrentCategory((precCategory: category) => {
+				if (JSON.stringify(precCategory) !== JSON.stringify(category)) {
+					replaceCategory(category);
+					return category;
+				}
+				return precCategory;
+			});
+		},
+		[setCurrentCategory, replaceCategory]
+	);
+
 	const handleNameChange = useCallback(
 		(value: string) => {
 			setCurrentCategory((prevCategory) => {
@@ -68,13 +82,11 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 					...prevCategory,
 					name: value,
 				};
-
-				replaceCategory(newCategory);
-
+				updateCurrentCategory(newCategory);
 				return newCategory;
 			});
 		},
-		[replaceCategory, setCurrentCategory]
+		[setCurrentCategory, updateCurrentCategory]
 	);
 
 	const handleColorChange = useCallback(
@@ -84,13 +96,11 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 					...prevCategory,
 					color: `#${value.toHex()}`,
 				};
-
-				replaceCategory(newCategory);
-
+				updateCurrentCategory(newCategory);
 				return newCategory;
 			});
 		},
-		[replaceCategory, setCurrentCategory]
+		[setCurrentCategory, updateCurrentCategory]
 	);
 
 	const ColorPickerJSX = (

@@ -24,7 +24,6 @@ class UserStore {
 
 	increaseRecentChanges = (value: number = 1) => {
 		this.recentChanges += value;
-		console.log('increase');
 	};
 
 	decreaseRecentChanges = (value: number = 1) => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Flex, Segmented, Slider } from 'antd';
 import { listStore } from 'utils/listStore';
@@ -171,6 +171,7 @@ const YearSlider: React.FC<Props> = observer(
 				},
 				line: {
 					cubicInterpolationMode: 'monotone' as 'monotone',
+					borderColor: '#7775',
 				},
 			},
 			aspectRatio: 25,
@@ -198,6 +199,7 @@ const YearSlider: React.FC<Props> = observer(
 				/>
 				<Flex
 					vertical
+					align='stretch'
 					style={{ inlineSize: '100%' }}
 				>
 					<Line
@@ -220,7 +222,6 @@ const YearSlider: React.FC<Props> = observer(
 						defaultValue={defaultRange}
 						onChange={setValue}
 						onChangeComplete={handleRangeChanging}
-						style={{ inlineSize: '100%' }}
 					/>
 				</Flex>
 			</Flex>
@@ -230,4 +231,4 @@ const YearSlider: React.FC<Props> = observer(
 	}
 );
 
-export default YearSlider;
+export default memo(YearSlider);

@@ -66,10 +66,8 @@ const App: React.FC = observer(() => {
 			if (authUser && authUser.uid) {
 				getData(authUser).then((data) => {
 					if (data) {
-						listStore.setList(data.list || []);
-						categoryStore.setCategories(
-							data.categories || [constants.defaultCategory]
-						);
+						listStore.setList(data.list);
+						categoryStore.setCategories(data.categories);
 						categoryStore.setLoading(false);
 						listStore.setLoading(false);
 					}

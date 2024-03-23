@@ -1,11 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import constants from '../settings/constants';
-import saveData from './saveData';
-import { userStore } from './userStore';
 
 class CategoryStore {
-	userStore;
 	categories: category[] = [constants.defaultCategory];
 	loading: boolean = true;
 
@@ -14,8 +11,7 @@ class CategoryStore {
 	};
 
 	setCategories = (categories: category[]) => {
-		this.categories = categories;
-		saveData(this.userStore.user, { categories: categories });
+		this.categories = categories || [constants.defaultCategory];
 	};
 
 	addCategory = (category: category) => {
@@ -38,10 +34,9 @@ class CategoryStore {
 		);
 	};
 
-	constructor(userStore: any) {
-		this.userStore = userStore;
+	constructor() {
 		makeAutoObservable(this);
 	}
 }
 
-export const categoryStore = new CategoryStore(userStore);
+export const categoryStore = new CategoryStore();

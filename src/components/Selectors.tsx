@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Selectors: React.FC<Props> = observer(({ total }) => {
-	const { loading } = listStore;
+	const { loading, list } = listStore;
 	const { isSmallScreen } = userStore;
 	const {
 		listOptions,
@@ -89,7 +89,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 						</Button>
 					</Flex>
 				</Flex>
-				{!loading && (
+				{!loading && list.length ? (
 					<YearSlider
 						setIsAccurate={setIsAccurate}
 						isAccurate={isAccurate}
@@ -98,6 +98,8 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 						setRange={setRange}
 						setDefaultRange={setDefaultRange}
 					/>
+				) : (
+					<></>
 				)}
 			</Flex>
 			<Divider />

@@ -3,7 +3,7 @@ import CategoryItem from './CategoryItem';
 import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
-import { Col, Flex, Row } from 'antd';
+import { Col, Empty, Flex, Row } from 'antd';
 import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
@@ -55,7 +55,7 @@ const CategoryList: React.FC = observer(() => {
 		>
 			{loading ? (
 				<LargeSpin />
-			) : (
+			) : categories.length > 1 ? (
 				splittedCategories.map((categories: category[]) => (
 					<Row
 						style={{ inlineSize: '100%' }}
@@ -72,6 +72,11 @@ const CategoryList: React.FC = observer(() => {
 						))}
 					</Row>
 				))
+			) : (
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={''}
+				/>
 			)}
 		</Flex>
 	);

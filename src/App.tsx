@@ -18,6 +18,7 @@ import SettingsPanel from 'components/SettingsPanel';
 import getData from 'utils/getData';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
+import Notification from 'components/Notification';
 
 const auth = getAuth(firebaseApp);
 
@@ -66,10 +67,10 @@ const App: React.FC = observer(() => {
 			if (authUser && authUser.uid) {
 				getData(authUser).then((data) => {
 					if (data) {
-						listStore.setList(data.list);
-						categoryStore.setCategories(data.categories);
-						categoryStore.setLoading(false);
+						listStore.setList(data.list, false);
+						categoryStore.setCategories(data.categories, false);
 						listStore.setLoading(false);
+						categoryStore.setLoading(false);
 					}
 				});
 			}
@@ -84,6 +85,7 @@ const App: React.FC = observer(() => {
 		<ConfigProvider theme={getConfig(isSmallScreen, themeAlgorithm)}>
 			<Scrollbars autoHide>
 				<Router>
+					<Notification />
 					<Layout
 						style={{
 							margin: 'auto',

@@ -16,6 +16,7 @@ import {
 import { getValuesForPieDiagram } from 'utils/transformData';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
+import { categoryStore } from 'utils/categoryStore';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 const DiagramPie: React.FC = observer(() => {
@@ -23,12 +24,20 @@ const DiagramPie: React.FC = observer(() => {
 	const { list } = listStore;
 	const { userOptions, statsOptions } = optionsStore;
 	const { currency } = userOptions;
+	const { getCategoryById } = categoryStore;
 
 	const { range, isAccurate } = statsOptions;
 
 	const valuesByCategory: Value[] = useMemo(
-		() => getValuesForPieDiagram(list, range, currency, isAccurate),
-		[list, currency, range, isAccurate]
+		() =>
+			getValuesForPieDiagram(
+				list,
+				range,
+				currency,
+				isAccurate,
+				getCategoryById
+			),
+		[list, currency, range, isAccurate, getCategoryById]
 	);
 
 	const [names, colors, values] = [

@@ -1,8 +1,10 @@
 import constants from '../settings/constants';
-import { ExpenseItem, category } from '../settings/interfaces';
+import { ExpenseItem } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
+import { categoryStore } from './categoryStore';
 
 class ListStore {
+	categoryStore;
 	list: ExpenseItem[] = [];
 	loading: boolean = true;
 
@@ -32,32 +34,25 @@ class ListStore {
 		);
 	};
 
-	clearListFromCategory = (category: category) => {
+	clearListFromCategory = (categoryId: number) => {
 		this.setList(
 			this.list.map((item: ExpenseItem) =>
-				item.category.id === category.id
+				item.categoryId === categoryId
 					? {
 							...item,
-							category: constants.defaultCategory,
+							categoryId: constants.defaultCategory.id,
 					  }
 					: item
 			)
 		);
 	};
 
-	refreshItemByCategory = (category: category) => {
-		this.setList(
-			this.list.map((item: ExpenseItem) =>
-				item.category.id === category.id
-					? { ...item, category: category }
-					: item
-			)
-		);
-	};
-
-	constructor() {
+	constructor(categoryStore: any) {
+		this.categoryStore = categoryStore;
 		makeAutoObservable(this);
 	}
 }
 
-export const listStore = new ListStore();
+export const listStore = new ListStore(categoryStore);
+
+// reaction

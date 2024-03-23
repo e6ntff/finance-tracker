@@ -25,7 +25,7 @@ const constants = {
 		id: Math.random(),
 		title: '',
 		date: dayjs(),
-		category: defaultCategory,
+		categoryId: defaultCategory.id,
 		price: {
 			USD: 0,
 			EUR: 0,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
@@ -11,6 +11,7 @@ import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
+import { categoryStore } from 'utils/categoryStore';
 
 interface Props {
 	mode: Mode;
@@ -18,10 +19,11 @@ interface Props {
 }
 
 const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
-	const { id, category, date, title, price } = initialItem;
+	const { id, categoryId, date, title, price } = initialItem;
 	const { isSmallScreen } = userStore;
 	const { replaceItem, removeItem } = listStore;
 	const { userOptions } = optionsStore;
+	const { getCategoryById } = categoryStore;
 
 	const { currency, language } = userOptions;
 
@@ -33,7 +35,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 		id: id,
 		date: date,
 		title: title,
-		category: category,
+		categoryId: categoryId,
 		price: price,
 	});
 
@@ -107,6 +109,11 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 		/>
 	);
 
+	const itemCategory = useMemo(
+		() => getCategoryById(currentItem.categoryId),
+		[currentItem, getCategoryById]
+	);
+
 	const CategoryJSX = (
 		<Flex
 			vertical
@@ -115,15 +122,15 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 				opacity: isItemDeleting ? '.5' : '1',
 			}}
 		>
-			<Tag color={currentItem.category.color}>
+			<Tag color={itemCategory.color}>
 				<span
 					style={{
 						margin: 'auto',
-						color: currentItem.category.color,
+						color: itemCategory.color,
 						filter: 'invert(1)',
 					}}
 				>
-					{currentItem.category.name}
+					{itemCategory.name}
 				</span>
 			</Tag>
 		</Flex>

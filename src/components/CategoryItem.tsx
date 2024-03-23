@@ -18,7 +18,7 @@ interface Props {
 const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	const { id, color, name } = initialCategory;
 	const { replaceCategory, removeCategory } = categoryStore;
-	const { refreshItemByCategory, clearListFromCategory } = listStore;
+	const { clearListFromCategory } = listStore;
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
 
@@ -34,7 +34,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 
 	const deleteCategory = useCallback(() => {
 		removeCategory(currentCategory);
-		clearListFromCategory(currentCategory);
+		clearListFromCategory(currentCategory.id);
 	}, [currentCategory, removeCategory, clearListFromCategory]);
 
 	const startCategoryItemDeleting = useCallback(() => {
@@ -80,8 +80,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 
 	useEffect(() => {
 		replaceCategory(debouncedCategory);
-		refreshItemByCategory(debouncedCategory);
-	}, [debouncedCategory, replaceCategory, refreshItemByCategory]);
+	}, [debouncedCategory, replaceCategory]);
 
 	const ColorPickerJSX = (
 		<ColorPicker

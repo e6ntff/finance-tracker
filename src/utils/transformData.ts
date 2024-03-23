@@ -32,7 +32,7 @@ export const getFilteredList = (
 				return (
 					item.date.isBetween(dayjs(range[0]), dayjs(range[1]), 'day', '[]') &&
 					categoriesToFilter.some(
-						(category: category) => item.category.id === category.id
+						(category: category) => item.categoryId === category.id
 					)
 				);
 			}
@@ -78,7 +78,8 @@ export const getValuesForPieDiagram = (
 	list: ExpenseItem[],
 	range: number[],
 	currency: string,
-	isAccurate: boolean
+	isAccurate: boolean,
+	getCategoryById: (id: number) => category
 ) => {
 	const values: Value[] = [];
 	list.forEach((item: ExpenseItem) => {
@@ -91,13 +92,13 @@ export const getValuesForPieDiagram = (
 			)
 		) {
 			const indexOfCategory: number = values.findIndex(
-				(value: Value) => value.category.id === item.category.id
+				(value: Value) => value.category.id === item.categoryId
 			);
 			if (indexOfCategory !== -1) {
 				values[indexOfCategory].value += item.price[currency];
 			} else {
 				values.push({
-					category: item.category,
+					category: getCategoryById(item.categoryId),
 					value: item.price[currency],
 				});
 			}

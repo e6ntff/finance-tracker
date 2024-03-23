@@ -34,6 +34,10 @@ class CategoryStore {
 		);
 	};
 
+	getCategoryById = (id: number) =>
+		this.categories.find((item: category) => item.id === id) ||
+		constants.defaultCategory;
+
 	constructor() {
 		makeAutoObservable(this);
 	}

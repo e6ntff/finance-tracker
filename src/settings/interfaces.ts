@@ -11,7 +11,7 @@ export interface ExpenseItem {
 	id: number;
 	date: dayjs.Dayjs;
 	title: string;
-	category: category;
+	categoryId: number;
 	price: currencies;
 }
 

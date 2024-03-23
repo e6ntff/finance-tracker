@@ -7,12 +7,12 @@ import { EditFilled } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
 
 interface Props {
-	value: category;
+	id: number;
 	onChange: (arg0: number) => void;
 }
 
-const CategorySelect: React.FC<Props> = observer(({ value, onChange }) => {
-	const { categories } = categoryStore;
+const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
+	const { categories, getCategoryById } = categoryStore;
 	const { isSmallScreen } = userStore;
 
 	return (
@@ -21,8 +21,8 @@ const CategorySelect: React.FC<Props> = observer(({ value, onChange }) => {
 			allowClear
 			style={{ minInlineSize: '7em' }}
 			onChange={onChange}
-			value={value?.id}
-			suffixIcon={<EditFilled style={{ color: value?.color }} />}
+			value={id}
+			suffixIcon={<EditFilled style={{ color: getCategoryById(id).color }} />}
 		>
 			{categories.map((category: category) => (
 				<Select.Option

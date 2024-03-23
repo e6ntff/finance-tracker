@@ -55,10 +55,9 @@ const ItemModal: React.FC<Props> = observer(
 
 		const handleCategoryChange = useCallback(
 			(id: number) => {
-				const foundCategory = categories.find((cat: category) => cat.id === id);
 				setCurrentItem((prevItem: ExpenseItem) => ({
 					...prevItem,
-					category: foundCategory || prevItem.category,
+					categoryId: id,
 				}));
 			},
 			[setCurrentItem, categories]
@@ -139,7 +138,7 @@ const ItemModal: React.FC<Props> = observer(
 
 		const CategoryJSX = (
 			<CategorySelect
-				value={currentItem.category}
+				id={currentItem.categoryId}
 				onChange={handleCategoryChange}
 			/>
 		);

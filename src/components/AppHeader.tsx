@@ -5,6 +5,7 @@ import LogOutButton from './LogOutButton';
 import { Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
+import SyncIcon from './SyncIcon';
 
 const AppHeader: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
@@ -20,6 +21,7 @@ const AppHeader: React.FC = observer(() => {
 				justify='space-between'
 				align='center'
 			>
+				<SyncIcon />
 				<LogOutButton />
 				<Links />
 			</Flex>

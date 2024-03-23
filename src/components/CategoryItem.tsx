@@ -63,31 +63,37 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 	}, [isCategoryItemDeleting, deleteCategory, userOptions.deleteDelay]);
 
 	const handleNameChange = useCallback((value: string) => {
-		setCurrentCategory((prevCategory) => ({
-			...prevCategory,
-			name: value,
-		}));
+		setCurrentCategory((prevCategory) => {
+			const newCategory: category = {
+				...prevCategory,
+				name: value,
+			};
+
+			replaceCategory(newCategory);
+
+			return newCategory;
+		});
 	}, []);
 
 	const handleColorChange = useCallback((value: Color) => {
-		setCurrentCategory((prevCategory) => ({
-			...prevCategory,
-			color: `#${value.toHex()}`,
-		}));
+		setCurrentCategory((prevCategory) => {
+			const newCategory: category = {
+				...prevCategory,
+				color: `#${value.toHex()}`,
+			};
+
+			replaceCategory(newCategory);
+
+			return newCategory;
+		});
 	}, []);
-
-	const debouncedCategory = useDebounce(currentCategory);
-
-	useEffect(() => {
-		replaceCategory(debouncedCategory);
-	}, [debouncedCategory, replaceCategory]);
 
 	const ColorPickerJSX = (
 		<ColorPicker
 			size={isSmallScreen ? 'small' : 'middle'}
 			value={currentCategory.color}
 			format='hex'
-			onChange={handleColorChange}
+			onChangeComplete={handleColorChange}
 		/>
 	);
 

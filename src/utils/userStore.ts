@@ -2,6 +2,12 @@ import { makeAutoObservable } from 'mobx';
 import { AllData, Status, currencies } from 'settings/interfaces';
 import constants from 'settings/constants';
 import saveData from './saveData';
+import { configure } from 'mobx';
+import { debounce } from 'lodash';
+
+configure({
+	enforceActions: 'never',
+});
 
 class UserStore {
 	allData: AllData = {
@@ -15,10 +21,12 @@ class UserStore {
 	logged: boolean = false;
 	notificationStatus: Status = null;
 
+	debouncedSaveData = debounce(saveData, constants.savingDelay);
+
 	setAllData = (data: AllData, save: boolean = true) => {
 		this.allData = Object.assign(this.allData, data);
 		if (userStore.user.uid && save) {
-			saveData(userStore.user, this.allData, userStore.setStatus);
+			this.debouncedSaveData(userStore.user, this.allData, userStore.setStatus);
 		}
 	};
 

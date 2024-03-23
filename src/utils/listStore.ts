@@ -3,6 +3,11 @@ import { ExpenseItem } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 import { categoryStore } from './categoryStore';
 import { userStore } from './userStore';
+import { configure } from "mobx"
+
+configure({
+    enforceActions: "never",
+})
 
 class ListStore {
 	userStore;

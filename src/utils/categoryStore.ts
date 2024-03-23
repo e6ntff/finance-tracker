@@ -2,6 +2,11 @@ import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import constants from '../settings/constants';
 import { userStore } from './userStore';
+import { configure } from 'mobx';
+
+configure({
+	enforceActions: 'never',
+});
 
 class CategoryStore {
 	userStore;

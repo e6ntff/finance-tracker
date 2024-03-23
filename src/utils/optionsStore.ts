@@ -20,6 +20,11 @@ import {
 	initialStatsOptions,
 	initialUserOptions,
 } from 'settings/options';
+import { configure } from 'mobx';
+
+configure({
+	enforceActions: 'never',
+});
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 

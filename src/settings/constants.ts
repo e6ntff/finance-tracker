@@ -21,6 +21,7 @@ const constants = {
 	baseCurrency: 'USD',
 	startDate: dayjs(new Date(2020, 0, 1)),
 	defaultCategory: defaultCategory,
+	savingDelay: 5000,
 	emptyItem: {
 		id: Math.random(),
 		title: '',

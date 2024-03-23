@@ -108,7 +108,7 @@ const App: React.FC = observer(() => {
 														constants.maxAppWidthLarge - paddingLG
 												  }px)`,
 											blockSize: 'unset',
-											lineHeight: '3.5em',
+											lineHeight: isSmallScreen ? '3.5em' : '4.5em',
 											margin: 'auto',
 											position: 'sticky',
 											inset: 0,

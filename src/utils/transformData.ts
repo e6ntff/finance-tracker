@@ -21,28 +21,20 @@ export const getFilteredListIds = (
 		options;
 	return sortBy(
 		list,
-		Object.keys(list).filter((key: string) => {
-			if (!categoriesToFilterIds.length) {
-				return list[Number(key)].date.isBetween(
+		Object.keys(list).filter(
+			(key: string) =>
+				list[Number(key)].date.isBetween(
 					dayjs(range[0]),
 					dayjs(range[1]),
 					isAccurate ? 'day' : 'month',
 					'[]'
-				);
-			} else {
-				return (
-					list[Number(key)].date.isBetween(
-						dayjs(range[0]),
-						dayjs(range[1]),
-						'day',
-						'[]'
-					) &&
-					categoriesToFilterIds.some(
-						(id: string) => list[key].categoryId === id
-					)
-				);
-			}
-		}),
+				) &&
+				(categoriesToFilterIds.length
+					? categoriesToFilterIds.some(
+							(id: string) => list[key].categoryId === id
+					  )
+					: true)
+		),
 		sortingAlgorithm,
 		isSortingReversed,
 		language

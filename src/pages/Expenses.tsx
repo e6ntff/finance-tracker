@@ -7,10 +7,12 @@ import { userStore } from 'utils/userStore';
 import { getFilteredListIds } from 'utils/transformData';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
+import { categoryStore } from 'utils/categoryStore';
 
 const Expenses: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 	const { list } = listStore;
+	const { categories } = categoryStore;
 	const { listOptions, userOptions, handleModeChanging, handlePageChanging } =
 		optionsStore;
 

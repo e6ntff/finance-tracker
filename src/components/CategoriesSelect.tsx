@@ -12,10 +12,11 @@ const tagRender = (props: any, categories: { [key: number]: category }) => {
 		event.preventDefault();
 		event.stopPropagation();
 	};
-
+	const color =
+		Object.keys(categories).length > 1 ? categories[value].color : '';
 	return (
 		<Tag
-			color={categories[value].color}
+			color={color}
 			onMouseDown={onPreventMouseDown}
 			closable={true}
 			onClose={onClose}
@@ -25,7 +26,7 @@ const tagRender = (props: any, categories: { [key: number]: category }) => {
 		>
 			<span
 				style={{
-					color: categories[value].color,
+					color: color,
 					filter: 'invert(1)',
 				}}
 			>
@@ -52,10 +53,10 @@ const CategoriesSelect: React.FC = observer(() => {
 		>
 			{Object.keys(categories).map((key: string) => (
 				<Select.Option
-					key={Number(key)}
-					value={Number(key)}
+					key={key}
+					value={key}
 				>
-					{categories[key as unknown as number].name}
+					{categories[key].name}
 				</Select.Option>
 			))}
 		</Select>

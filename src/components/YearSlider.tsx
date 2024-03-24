@@ -205,6 +205,7 @@ const YearSlider: React.FC<Props> = observer(
 					style={{ inlineSize: '100%' }}
 				>
 					<Line
+						style={{ inlineSize: '100%' }}
 						data={data}
 						options={options}
 					/>

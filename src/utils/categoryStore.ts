@@ -2,8 +2,9 @@ import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
-import { uniqueId } from 'lodash';
+import { debounce, uniqueId } from 'lodash';
 import constants from 'settings/constants';
+import saveData from './saveData';
 
 configure({
 	enforceActions: 'never',
@@ -13,13 +14,28 @@ class CategoryStore {
 	userStore;
 	categories: { [key: string]: category } = {};
 
+	saveData = () => {
+		if (this.userStore.user.uid) {
+			saveData(
+				this.userStore.user,
+				this.userStore.setStatus,
+				this.userStore.decreaseRecentChanges,
+				this.userStore.recentChanges,
+				'categories',
+				this.categories
+			);
+		}
+	};
+
+	debouncedSaveData = debounce(this.saveData, constants.savingDelay);
+
 	setCategories = (
 		categories: { [key: string]: category },
 		save: boolean = true
 	) => {
 		this.categories = { ...categories } || { 0: constants.defaultCategory };
-		console.log(JSON.parse(JSON.stringify(this.categories)));
-		this.userStore.setAllData({ categories: this.categories }, save);
+		save && this.debouncedSaveData();
+		save && this.userStore.increaseRecentChanges();
 	};
 
 	addCategory = (payload: category) => {

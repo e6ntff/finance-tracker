@@ -21,14 +21,11 @@ const constants = {
 	startDate: dayjs(new Date(2020, 0, 1)),
 	defaultCategory: defaultCategory,
 	defaultData: {
-		userData: {
-			list: {},
-			categories: { 0: defaultCategory },
-		},
+		list: {},
+		categories: { 0: defaultCategory },
 	},
 	savingDelay: 5000,
 	emptyItem: {
-		id: Math.random(),
 		title: '',
 		date: dayjs(),
 		categoryId: '0',

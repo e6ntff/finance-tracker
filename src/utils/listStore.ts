@@ -2,6 +2,9 @@ import { ExpenseItem } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
+import saveData from './saveData';
+import { debounce, uniqueId } from 'lodash';
+import constants from 'settings/constants';
 
 configure({
 	enforceActions: 'never',
@@ -11,15 +14,36 @@ class ListStore {
 	userStore;
 	list: { [key: string]: ExpenseItem } = {};
 
+	saveData = () => {
+		const listToSave: any = { ...this.list };
+		if (this.userStore.user.uid) {
+			for (const key in listToSave) {
+				listToSave[key] = {
+					...listToSave[key],
+					date: listToSave[key].date.valueOf(),
+				};
+			}
+			saveData(
+				this.userStore.user,
+				this.userStore.setStatus,
+				this.userStore.decreaseRecentChanges,
+				this.userStore.recentChanges,
+				'list',
+				listToSave
+			);
+		}
+	};
+
+	debouncedSaveData = debounce(this.saveData, constants.savingDelay);
+
 	setList = (list: { [key: string]: ExpenseItem }, save: boolean = true) => {
-		this.list = list || {};
-		this.userStore.setAllData({ list: this.list }, save);
+		this.list = { ...list } || {};
+		save && this.debouncedSaveData();
+		save && this.userStore.increaseRecentChanges();
 	};
 
 	addItem = (payload: ExpenseItem) => {
-		const newList = this.list;
-		newList[Math.random()] = payload;
-		this.setList(newList);
+		this.setList({ ...this.list, [uniqueId()]: payload });
 	};
 
 	removeItem = (id: string) => {
@@ -29,9 +53,7 @@ class ListStore {
 	};
 
 	replaceItem = (id: string, payload: ExpenseItem) => {
-		const newList = this.list;
-		newList[id] = payload;
-		this.setList(newList);
+		this.setList({ ...this.list, [id]: payload });
 	};
 
 	clearListFromCategory = (id: string) => {

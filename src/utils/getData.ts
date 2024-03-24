@@ -1,4 +1,3 @@
-import { ExpenseItem } from 'settings/interfaces';
 import constants from '../settings/constants';
 import firebaseApp from './firebase';
 import dayjs from 'dayjs';
@@ -17,10 +16,13 @@ const getData = async (user: any) => {
 			const userDocSnapshot = await getDoc(userDocRef);
 			if (userDocSnapshot.exists()) {
 				const userData = userDocSnapshot.data();
-				userData.list = userData.list.map((item: ExpenseItem) => ({
-					...item,
-					date: dayjs(item.date),
-				}));
+				console.log(userData);
+				for (const key in userData.list) {
+					userData.list[key] = {
+						...userData.list[key],
+						date: dayjs(userData.list[key].date),
+					};
+				}
 				return userData;
 			} else {
 				return {

@@ -5,26 +5,31 @@ import {
 	setDoc,
 	updateDoc,
 } from 'firebase/firestore';
-import { AllData, Status } from 'settings/interfaces';
+import { ExpenseItem, Status, category } from 'settings/interfaces';
 import firebaseApp from './firebase';
+import constants from 'settings/constants';
 
 const firestore = getFirestore(firebaseApp);
 const usersCollection = collection(firestore, 'users');
 
 const saveData = async (
 	user: any,
-	data: { list?: {}; categories?: {} },
 	setStatus: (arg0: Status) => void,
 	decreaseRecentChanges: (value: number) => void,
-	initialRecentChanges: number
+	initialRecentChanges: number,
+	key: 'list' | 'categories',
+	data: { [key: string]: ExpenseItem } | { [key: string]: category }
 ) => {
-	data = JSON.parse(JSON.stringify(data));
 	setStatus('loading');
 	if (user.uid) {
 		try {
 			const userDocRef = doc(usersCollection, user.uid);
 			if (userDocRef) {
-				await updateDoc(userDocRef, data);
+				if (key === 'list') {
+					await updateDoc(userDocRef, { list: data });
+				} else if (key === 'categories') {
+					await updateDoc(userDocRef, { categories: data });
+				}
 				setStatus('success');
 			}
 			decreaseRecentChanges(initialRecentChanges);
@@ -32,7 +37,7 @@ const saveData = async (
 			try {
 				const userDocRef = doc(usersCollection, user.uid);
 				if (userDocRef) {
-					await setDoc(userDocRef, data);
+					await setDoc(userDocRef, constants.defaultData);
 					setStatus('success');
 				}
 				decreaseRecentChanges(initialRecentChanges);

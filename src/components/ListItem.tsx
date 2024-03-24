@@ -133,7 +133,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 				<span
 					style={{
 						margin: 'auto',
-						color: categories[currentItem.categoryId].color,
+						color: categories[currentItem.categoryId].name,
 						filter: 'invert(1)',
 					}}
 				>

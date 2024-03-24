@@ -24,34 +24,39 @@ export const getSymbolAndPrice = (currency: string, price?: number) => {
 };
 
 export const sortBy = (
-	list: ExpenseItem[],
+	list: { [key: number]: ExpenseItem },
+	listKeys: string[],
 	sortingAlgorithm: Sort,
 	reversed: boolean,
 	language?: language
 ) => {
-	let result: ExpenseItem[];
+	let result: string[];
 	switch (sortingAlgorithm) {
 		case 'date':
-			result = [...list].sort(
-				(prev: ExpenseItem, next: ExpenseItem) =>
-					next.date.valueOf() - prev.date.valueOf()
+			result = listKeys.sort(
+				(prev: string, next: string) =>
+					list[Number(next)].date.valueOf() - list[Number(prev)].date.valueOf()
 			);
 			break;
 		case 'title':
-			result = [...list].sort((prev: ExpenseItem, next: ExpenseItem) =>
-				prev.title.localeCompare(next.title, language, {
-					sensitivity: 'base',
-				})
+			result = listKeys.sort((prev: string, next: string) =>
+				list[Number(prev)].title.localeCompare(
+					list[Number(next)].title,
+					language,
+					{
+						sensitivity: 'base',
+					}
+				)
 			);
 			break;
 		case 'price':
-			result = [...list].sort(
-				(prev: ExpenseItem, next: ExpenseItem) =>
-					next.price.USD - prev.price.USD
+			result = listKeys.sort(
+				(prev: string, next: string) =>
+					list[Number(next)].price.USD - list[Number(prev)].price.USD
 			);
 			break;
 		default:
-			result = [...list];
+			result = listKeys;
 	}
 
 	return reversed ? result.reverse() : result;

@@ -11,7 +11,7 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 
 const LogOutButton: React.FC = observer(() => {
-	const { setLogged, isSmallScreen } = userStore;
+	const { setLogged, isSmallScreen, setLoading } = userStore;
 	const { setList } = listStore;
 	const { setCategories } = categoryStore;
 	const { resetOptions } = optionsStore;
@@ -21,16 +21,15 @@ const LogOutButton: React.FC = observer(() => {
 		try {
 			await signOut(auth);
 			setLogged(false);
-			setList([]);
-			setCategories([constants.defaultCategory]);
-			categoryStore.setLoading(true);
-			listStore.setLoading(true);
+			setLoading(true);
+			setList({});
+			setCategories({ 0: constants.defaultCategory });
 			resetOptions();
 			sessionStorage.clear();
 		} catch (error: any) {
 			alert(error.message);
 		}
-	}, [auth, setCategories, setList, setLogged, resetOptions]);
+	}, [auth, setCategories, setList, setLogged, resetOptions, setLoading]);
 
 	return (
 		<Button

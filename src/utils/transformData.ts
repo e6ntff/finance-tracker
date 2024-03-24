@@ -3,7 +3,6 @@ import {
 	Interval,
 	ListOptions,
 	Value,
-	category,
 	language,
 } from 'settings/interfaces';
 import { sortBy } from './utils';
@@ -12,18 +11,19 @@ import isBetween from 'dayjs/plugin/isBetween';
 
 dayjs.extend(isBetween);
 
-export const getFilteredList = (
+export const getFilteredListIds = (
 	options: ListOptions,
-	list: ExpenseItem[],
+	list: { [key: string]: ExpenseItem },
 	language: language,
 	isAccurate: boolean
 ) => {
-	const { range, categoriesToFilter, sortingAlgorithm, isSortingReversed } =
+	const { range, categoriesToFilterIds, sortingAlgorithm, isSortingReversed } =
 		options;
 	return sortBy(
-		list.filter((item: ExpenseItem) => {
-			if (!categoriesToFilter.length) {
-				return item.date.isBetween(
+		list,
+		Object.keys(list).filter((key: string) => {
+			if (!categoriesToFilterIds.length) {
+				return list[Number(key)].date.isBetween(
 					dayjs(range[0]),
 					dayjs(range[1]),
 					isAccurate ? 'day' : 'month',
@@ -31,9 +31,14 @@ export const getFilteredList = (
 				);
 			} else {
 				return (
-					item.date.isBetween(dayjs(range[0]), dayjs(range[1]), 'day', '[]') &&
-					categoriesToFilter.some(
-						(category: category) => item.categoryId === category.id
+					list[Number(key)].date.isBetween(
+						dayjs(range[0]),
+						dayjs(range[1]),
+						'day',
+						'[]'
+					) &&
+					categoriesToFilterIds.some(
+						(id: string) => list[key].categoryId === id
 					)
 				);
 			}
@@ -44,30 +49,30 @@ export const getFilteredList = (
 	);
 };
 
-export const getListToShowOnCurrentPage = (
+export const getListToShowOnCurrentPageIds = (
 	options: ListOptions,
-	filteredList: ExpenseItem[]
+	filteredListIds: string[]
 ) => {
 	const { currentPage, pageSize } = options;
 	const startIndex = (currentPage - 1) * pageSize;
 	const endIndex = startIndex + pageSize;
-	return filteredList.slice(startIndex, endIndex);
+	return filteredListIds.slice(startIndex, endIndex);
 };
 
 export const getValuesForBarDiagram = (
-	list: ExpenseItem[],
+	list: { [key: string]: ExpenseItem },
 	currency: string,
 	mode: Interval,
 	year: number
 ) => {
 	if (mode === 'year') {
 		const result: { [key: number]: number } = {};
-		list.forEach((item: ExpenseItem) => {
-			const key: number = item.date.year();
-			if (result[key] === undefined) {
-				result[key] = 0;
+		Object.keys(list).forEach((key: string) => {
+			const resultKey: number = list[key].date.year();
+			if (result[resultKey] === undefined) {
+				result[resultKey] = 0;
 			} else {
-				result[key] += item.price[currency];
+				result[resultKey] += list[key].price[currency];
 			}
 		});
 		for (let year in result) {
@@ -76,10 +81,10 @@ export const getValuesForBarDiagram = (
 		return result;
 	} else if (mode === 'month') {
 		const result: number[] = new Array(12).fill(0);
-		list.forEach((item: ExpenseItem) => {
-			if (item.date.year() === year) {
-				const index: number = item.date.month();
-				result[index] += item.price[currency];
+		Object.keys(list).forEach((key: string) => {
+			if (list[key].date.year() === year) {
+				const index: number = list[key].date.month();
+				result[index] += list[key].price[currency];
 			}
 		});
 
@@ -89,31 +94,30 @@ export const getValuesForBarDiagram = (
 };
 
 export const getValuesForPieDiagram = (
-	list: ExpenseItem[],
+	list: { [key: string]: ExpenseItem },
 	range: number[],
 	currency: string,
-	isAccurate: boolean,
-	getCategoryById: (id: number) => category
+	isAccurate: boolean
 ) => {
 	const values: Value[] = [];
-	list.forEach((item: ExpenseItem) => {
+	Object.keys(list).forEach((key: string) => {
 		if (
-			item.date.isBetween(
+			list[key].date.isBetween(
 				dayjs(range[0]),
 				dayjs(range[1]),
 				isAccurate ? 'day' : 'month',
 				'[]'
 			)
 		) {
-			const indexOfCategory: number = values.findIndex(
-				(value: Value) => value.category.id === item.categoryId
+			const categoryKey: number = Object.keys(values).findIndex(
+				(key: string) => values[Number(key)].categoryId === list[key].categoryId
 			);
-			if (indexOfCategory !== -1) {
-				values[indexOfCategory].value += item.price[currency];
+			if (categoryKey !== -1) {
+				values[categoryKey].value += list[key].price[currency];
 			} else {
 				values.push({
-					category: getCategoryById(item.categoryId),
-					value: item.price[currency],
+					categoryId: list[key].categoryId,
+					value: list[key].price[currency],
 				});
 			}
 		}
@@ -125,13 +129,13 @@ export const getValuesForPieDiagram = (
 };
 
 export const getTotalInCurrentRange = (
-	list: ExpenseItem[],
+	list: { [key: string]: ExpenseItem },
 	range: number[],
 	currency: string,
 	isAccurate: boolean
 ) =>
 	Math.floor(
-		list.reduce((acc: number, item: ExpenseItem) => {
+		Object.values(list).reduce((acc: number, item: ExpenseItem) => {
 			if (
 				item.date.isBetween(
 					dayjs(range[0]),
@@ -146,7 +150,10 @@ export const getTotalInCurrentRange = (
 		}, 0)
 	);
 
-export const getValuesByMonth = (list: ExpenseItem[], range: number[]) => {
+export const getValuesByMonth = (
+	list: { [key: string]: ExpenseItem },
+	range: number[]
+) => {
 	const values: number[] = [];
 	const end = dayjs(range[1]);
 	let startDate = dayjs(range[0]);
@@ -154,7 +161,7 @@ export const getValuesByMonth = (list: ExpenseItem[], range: number[]) => {
 
 	while (!endDate.isAfter(end, 'day')) {
 		// eslint-disable-next-line
-		const itemsInMonth = list.filter((item) =>
+		const itemsInMonth = Object.values(list).filter((item: ExpenseItem) =>
 			item.date.isBetween(startDate, endDate, 'day', '[]')
 		);
 		const valueForMonth = itemsInMonth.reduce(

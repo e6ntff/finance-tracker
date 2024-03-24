@@ -1,22 +1,20 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import ListItem from './ListItem';
-import { ExpenseItem, ListOptions } from '../settings/interfaces';
+import { ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
-import { listStore } from 'utils/listStore';
 import { Col, Empty, List, Row } from 'antd';
-import { getListToShowOnCurrentPage } from 'utils/transformData';
+import { getListToShowOnCurrentPageIds } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
 import LargeSpin from './LargeSpin';
 
 interface Props {
-	filteredList: ExpenseItem[];
+	filteredListIds: string[];
 }
 
-const ItemList: React.FC<Props> = observer(({ filteredList }) => {
-	const { loading } = listStore;
-	const { width } = userStore;
+const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
+	const { width, loading } = userStore;
 	const { listOptions } = optionsStore;
 
 	const debouncedOptions: ListOptions = useDebounce(listOptions);
@@ -39,32 +37,32 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 		setColNumber(4);
 	}, [setColNumber, width]);
 
-	const listToShowOnCurrentPage = useMemo(
-		() => getListToShowOnCurrentPage(debouncedOptions, filteredList),
-		[filteredList, debouncedOptions]
+	const listToShowOnCurrentPageIds = useMemo(
+		() => getListToShowOnCurrentPageIds(debouncedOptions, filteredListIds),
+		[filteredListIds, debouncedOptions]
 	);
 
-	const splittedList = useMemo(() => {
-		const result: ExpenseItem[][] = [];
+	const splittedListIds = useMemo(() => {
+		const result: string[][] = [];
 		let row = -1;
 
-		listToShowOnCurrentPage.forEach((item: ExpenseItem, col: number) => {
+		listToShowOnCurrentPageIds.forEach((key: string, col: number) => {
 			if (col % colNumber === 0) {
 				row++;
 				result.push([]);
 			}
-			result[row].push(item);
+			result[row].push(key);
 		});
 
 		return result;
-	}, [colNumber, listToShowOnCurrentPage]);
+	}, [colNumber, listToShowOnCurrentPageIds]);
 
 	return (
 		<>
 			{loading ? (
 				<LargeSpin />
 			) : (
-				!filteredList.length && (
+				!filteredListIds.length && (
 					<Empty
 						image={Empty.PRESENTED_IMAGE_SIMPLE}
 						description={''}
@@ -73,29 +71,29 @@ const ItemList: React.FC<Props> = observer(({ filteredList }) => {
 			)}
 			{debouncedOptions.mode === 'list' ? (
 				<List style={{ inlineSize: '100%' }}>
-					{listToShowOnCurrentPage.map((item: ExpenseItem) => (
+					{listToShowOnCurrentPageIds.map((key: string) => (
 						<ListItem
-							key={item.id}
+							key={key}
 							mode={debouncedOptions.mode}
-							initialItem={item}
+							initialItemId={key}
 						/>
 					))}
 				</List>
 			) : (
-				splittedList.map((row: ExpenseItem[]) => (
+				splittedListIds.map((keys: string[]) => (
 					<Row
-						key={row[0].id}
+						key={keys[0]}
 						gutter={16}
 						style={{ inlineSize: '100%' }}
 					>
-						{row.map((item: ExpenseItem) => (
+						{keys.map((key: string) => (
 							<Col
-								key={item.id}
+								key={key}
 								span={24 / colNumber}
 							>
 								<ListItem
 									mode={debouncedOptions.mode}
-									initialItem={item}
+									initialItemId={key}
 								/>
 							</Col>
 						))}

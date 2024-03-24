@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import CategoryItem from './CategoryItem';
-import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { Col, Empty, Flex, Row } from 'antd';
@@ -8,8 +7,8 @@ import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
-	const { categories, loading } = categoryStore;
-	const { width } = userStore;
+	const { categories } = categoryStore;
+	const { width, loading } = userStore;
 
 	const [colNumber, setColNumber] = useState<number>(4);
 
@@ -30,18 +29,17 @@ const CategoryList: React.FC = observer(() => {
 	}, [setColNumber, width]);
 
 	const splittedCategories = useMemo(() => {
-		const result: category[][] = [];
+		const result: string[][] = [];
 		let row = -1;
 
-		categories
+		Object.keys(categories)
 			.slice(1)
-			.reverse()
-			.forEach((item: category, col: number) => {
+			.forEach((key: string, col: number) => {
 				if (col % colNumber === 0) {
 					row++;
 					result.push([]);
 				}
-				result[row].push(item);
+				result[row].push(key);
 			});
 
 		return result;
@@ -55,19 +53,19 @@ const CategoryList: React.FC = observer(() => {
 		>
 			{loading ? (
 				<LargeSpin />
-			) : categories.length > 1 ? (
-				splittedCategories.map((categories: category[]) => (
+			) : Object.values(categories).length > 1 ? (
+				splittedCategories.map((keys: string[]) => (
 					<Row
 						style={{ inlineSize: '100%' }}
-						key={categories[0].id}
+						key={keys[0]}
 						gutter={16}
 					>
-						{categories.map((category: category) => (
+						{keys.map((key: string) => (
 							<Col
-								key={category.id}
+								key={key}
 								span={24 / colNumber}
 							>
-								<CategoryItem initialCategory={category} />
+								<CategoryItem initialCategoryId={key} />
 							</Col>
 						))}
 					</Row>

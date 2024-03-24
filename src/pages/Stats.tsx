@@ -7,7 +7,6 @@ import DiagramPie from 'components/DiagramPie';
 import { userStore } from 'utils/userStore';
 import { getSymbolAndPrice } from 'utils/utils';
 import { ReloadOutlined } from '@ant-design/icons';
-import { categoryStore } from 'utils/categoryStore';
 import { optionsStore } from 'utils/optionsStore';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -20,7 +19,7 @@ dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, loading } = userStore;
 	const {
 		statsOptions,
 		userOptions,
@@ -129,7 +128,7 @@ const Stats: React.FC = observer(() => {
 		</Flex>
 	);
 
-	return listStore.loading || categoryStore.loading ? (
+	return loading ? (
 		<LargeSpin />
 	) : list.length ? (
 		<Flex

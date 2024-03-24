@@ -1,5 +1,4 @@
 import React from 'react';
-import { category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { Select } from 'antd';
@@ -7,12 +6,12 @@ import { EditFilled } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
 
 interface Props {
-	id: number;
+	id: string;
 	onChange: (arg0: number) => void;
 }
 
 const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
-	const { categories, getCategoryById } = categoryStore;
+	const { categories } = categoryStore;
 	const { isSmallScreen } = userStore;
 
 	return (
@@ -21,15 +20,15 @@ const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
 			allowClear
 			style={{ minInlineSize: '7em' }}
 			onChange={onChange}
-			value={id}
-			suffixIcon={<EditFilled style={{ color: getCategoryById(id).color }} />}
+			value={Number(id)}
+			suffixIcon={<EditFilled style={{ color: categories[id].color }} />}
 		>
-			{categories.map((category: category) => (
+			{Object.keys(categories).map((key: string) => (
 				<Select.Option
-					key={category.id}
-					value={category.id}
+					key={Number(key)}
+					value={Number(key)}
 				>
-					{category.name}
+					{categories[key as unknown as number].name}
 				</Select.Option>
 			))}
 		</Select>

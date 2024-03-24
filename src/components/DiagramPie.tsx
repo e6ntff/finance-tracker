@@ -24,25 +24,18 @@ const DiagramPie: React.FC = observer(() => {
 	const { list } = listStore;
 	const { userOptions, statsOptions } = optionsStore;
 	const { currency } = userOptions;
-	const { getCategoryById } = categoryStore;
+	const { categories } = categoryStore;
 
 	const { range, isAccurate } = statsOptions;
 
 	const valuesByCategory: Value[] = useMemo(
-		() =>
-			getValuesForPieDiagram(
-				list,
-				range,
-				currency,
-				isAccurate,
-				getCategoryById
-			),
-		[list, currency, range, isAccurate, getCategoryById]
+		() => getValuesForPieDiagram(list, range, currency, isAccurate),
+		[list, currency, range, isAccurate]
 	);
 
 	const [names, colors, values] = [
-		valuesByCategory.map((value: Value) => value.category.name),
-		valuesByCategory.map((value: Value) => value.category.color),
+		valuesByCategory.map((value: Value) => categories[value.categoryId].name),
+		valuesByCategory.map((value: Value) => categories[value.categoryId].color),
 		valuesByCategory.map((value: Value) => Math.round(value.value)),
 	];
 

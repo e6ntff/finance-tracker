@@ -23,8 +23,16 @@ import Notification from 'components/Notification';
 const auth = getAuth(firebaseApp);
 
 const App: React.FC = observer(() => {
-	const { logged, isSmallScreen, setWidth, setCurrencyRates, setUser } =
-		userStore;
+	const {
+		logged,
+		isSmallScreen,
+		setWidth,
+		setCurrencyRates,
+		setUser,
+		setLoading,
+	} = userStore;
+	const { setList } = listStore;
+	const { setCategories } = categoryStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency } = userOptions;
@@ -67,10 +75,9 @@ const App: React.FC = observer(() => {
 			if (authUser && authUser.uid) {
 				getData(authUser).then((data) => {
 					if (data) {
-						listStore.setList(data.list, false);
-						categoryStore.setCategories(data.categories, false);
-						listStore.setLoading(false);
-						categoryStore.setLoading(false);
+						setList(data.list, false);
+						setCategories(data.categories, false);
+						setLoading(false);
 					}
 				});
 			}

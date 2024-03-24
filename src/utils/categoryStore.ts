@@ -1,8 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
-import constants from '../settings/constants';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
+import { uniqueId } from 'lodash';
+import constants from 'settings/constants';
 
 configure({
 	enforceActions: 'never',
@@ -10,41 +11,30 @@ configure({
 
 class CategoryStore {
 	userStore;
-	categories: category[] = [constants.defaultCategory];
-	loading: boolean = true;
+	categories: { [key: string]: category } = {};
 
-	setLoading = (value: boolean) => {
-		this.loading = value;
-	};
-
-	setCategories = (categories: category[], save: boolean = true) => {
-		this.categories = categories || [constants.defaultCategory];
+	setCategories = (
+		categories: { [key: string]: category },
+		save: boolean = true
+	) => {
+		this.categories = { ...categories } || { 0: constants.defaultCategory };
+		console.log(JSON.parse(JSON.stringify(this.categories)));
 		this.userStore.setAllData({ categories: this.categories }, save);
 	};
 
-	addCategory = (category: category) => {
-		this.setCategories([category, ...this.categories]);
+	addCategory = (payload: category) => {
+		this.setCategories({ ...this.categories, [uniqueId()]: payload });
 	};
 
-	removeCategory = (categoryToDelete: category) => {
-		this.setCategories(
-			this.categories.filter(
-				(category: category) => category.id !== categoryToDelete.id
-			)
-		);
+	removeCategory = (id: string) => {
+		const newCategories = this.categories;
+		delete newCategories[id];
+		this.setCategories(newCategories);
 	};
 
-	replaceCategory = (category: category) => {
-		this.setCategories(
-			this.categories.map((cat: category) =>
-				cat.id === category.id ? category : cat
-			)
-		);
+	replaceCategory = (id: string, payload: category) => {
+		this.setCategories({ ...this.categories, [id]: payload });
 	};
-
-	getCategoryById = (id: number) =>
-		this.categories.find((item: category) => item.id === id) ||
-		constants.defaultCategory;
 
 	constructor(userStore: any) {
 		this.userStore = userStore;

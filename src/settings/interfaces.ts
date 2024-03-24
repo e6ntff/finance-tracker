@@ -3,15 +3,13 @@ import { theme } from 'antd';
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 export interface category {
-	id: number;
 	color: string;
 	name: string;
 }
 export interface ExpenseItem {
-	id: number;
 	date: dayjs.Dayjs;
 	title: string;
-	categoryId: number;
+	categoryId: string;
 	price: currencies;
 }
 
@@ -54,7 +52,7 @@ export interface ListOptions {
 	isSortingReversed: boolean;
 	pageSize: number;
 	currentPage: number;
-	categoriesToFilter: category[];
+	categoriesToFilterIds: string[];
 	mode: Mode;
 }
 
@@ -65,7 +63,7 @@ export interface StatsOptions {
 }
 
 export interface Value {
-	category: category;
+	categoryId: string;
 	value: number;
 }
 
@@ -80,6 +78,6 @@ export interface UserOptions {
 export type Status = 'loading' | 'success' | 'error' | null;
 
 export interface AllData {
-	list: ExpenseItem[];
-	categories: category[];
+	list: { [key: string]: ExpenseItem };
+	categories: { [key: string]: category };
 }

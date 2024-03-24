@@ -53,7 +53,9 @@ const YearSlider: React.FC<Props> = observer(
 		const [value, setValue] = useState(defaultRange);
 
 		const sliderRange: [number, number] = useMemo(() => {
-			const mappedList = list.map((item: ExpenseItem) => item.date);
+			const mappedList = Object.values(list).map(
+				(item: ExpenseItem) => item.date
+			);
 			return [
 				dayjs.min(mappedList)?.valueOf() || 0,
 				dayjs.max(mappedList)?.valueOf() || 0,

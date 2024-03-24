@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import calculatePrices from '../utils/calculatePrices';
 import { ExpenseItem } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
@@ -11,21 +11,29 @@ import dayjs from 'dayjs';
 import CategorySelect from './CategorySelect';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
+import { listStore } from 'utils/listStore';
 
 interface Props {
 	opened: boolean;
-	initialItem: ExpenseItem;
+	initialItemId?: string;
 	toggleOpened: () => void;
 	submitItem: (arg0: ExpenseItem) => void;
 }
 
 const ItemModal: React.FC<Props> = observer(
-	({ opened, initialItem, toggleOpened, submitItem }) => {
+	({ opened, initialItemId, toggleOpened, submitItem }) => {
 		const [currency, setCurrency] = useState(constants.baseCurrency);
 		const { currencyRates, isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
+		const { list } = listStore;
 
 		const { language } = userOptions;
+
+		const initialItem = useMemo(
+			() =>
+				initialItemId !== undefined ? list[initialItemId] : constants.emptyItem,
+			[list, initialItemId]
+		);
 
 		const [currentItem, setCurrentItem] = useState<ExpenseItem>(initialItem);
 
@@ -55,7 +63,7 @@ const ItemModal: React.FC<Props> = observer(
 			(id: number) => {
 				setCurrentItem((prevItem: ExpenseItem) => ({
 					...prevItem,
-					categoryId: id,
+					categoryId: String(id),
 				}));
 			},
 			[setCurrentItem]

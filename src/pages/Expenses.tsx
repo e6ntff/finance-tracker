@@ -4,7 +4,7 @@ import { Flex } from 'antd';
 import Selectors from 'components/Selectors';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
-import { getFilteredList } from 'utils/transformData';
+import { getFilteredListIds } from 'utils/transformData';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
 
@@ -20,7 +20,7 @@ const Expenses: React.FC = observer(() => {
 		range,
 		sortingAlgorithm,
 		isSortingReversed,
-		categoriesToFilter,
+		categoriesToFilterIds,
 		pageSize,
 		isAccurate,
 	} = listOptions;
@@ -37,13 +37,13 @@ const Expenses: React.FC = observer(() => {
 		range,
 		sortingAlgorithm,
 		isSortingReversed,
-		categoriesToFilter,
+		categoriesToFilterIds,
 		pageSize,
 		handlePageChanging,
 	]);
 
-	const filteredList = useMemo(
-		() => getFilteredList(listOptions, list, language, isAccurate),
+	const filteredListIds = useMemo(
+		() => getFilteredListIds(listOptions, list, language, isAccurate),
 		[list, language, listOptions, isAccurate]
 	);
 
@@ -53,8 +53,8 @@ const Expenses: React.FC = observer(() => {
 			gap={16}
 			align='center'
 		>
-			<Selectors total={filteredList.length} />
-			<ItemList filteredList={filteredList} />
+			<Selectors total={filteredListIds.length} />
+			<ItemList filteredListIds={filteredListIds} />
 		</Flex>
 	);
 });

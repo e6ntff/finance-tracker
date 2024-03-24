@@ -6,20 +6,16 @@ import { Select, Tag } from 'antd';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 
-const tagRender = (props: any, categories: category[]) => {
+const tagRender = (props: any, categories: { [key: number]: category }) => {
 	const { label, value, onClose } = props;
 	const onPreventMouseDown = (event: any) => {
 		event.preventDefault();
 		event.stopPropagation();
 	};
 
-	const color = categories.find(
-		(category: category) => category.id === value
-	)?.color;
-
 	return (
 		<Tag
-			color={color}
+			color={categories[value].color}
 			onMouseDown={onPreventMouseDown}
 			closable={true}
 			onClose={onClose}
@@ -29,7 +25,7 @@ const tagRender = (props: any, categories: category[]) => {
 		>
 			<span
 				style={{
-					color: color,
+					color: categories[value].color,
 					filter: 'invert(1)',
 				}}
 			>
@@ -51,15 +47,15 @@ const CategoriesSelect: React.FC = observer(() => {
 			showSearch={false}
 			tagRender={(props) => tagRender(props, categories)}
 			style={{ minInlineSize: '10em' }}
-			value={listOptions.categoriesToFilter.map((value: category) => value.id)}
+			value={listOptions.categoriesToFilterIds}
 			onChange={handleCategoriesToFilterChange}
 		>
-			{categories.map((category: category) => (
+			{Object.keys(categories).map((key: string) => (
 				<Select.Option
-					key={category.id}
-					value={category.id}
+					key={Number(key)}
+					value={Number(key)}
 				>
-					{category.name}
+					{categories[key as unknown as number].name}
 				</Select.Option>
 			))}
 		</Select>

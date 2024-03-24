@@ -7,7 +7,6 @@ import CategoriesSelect from './CategoriesSelect';
 import SortSelect from './SortSelect';
 import ModeSelect from './ModeSelect';
 import { ReloadOutlined } from '@ant-design/icons';
-import { listStore } from 'utils/listStore';
 import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
@@ -17,8 +16,7 @@ interface Props {
 }
 
 const Selectors: React.FC<Props> = observer(({ total }) => {
-	const { loading } = listStore;
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, loading } = userStore;
 	const {
 		listOptions,
 		resetSettings,
@@ -32,7 +30,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 		isSortingReversed,
 		range,
 		defaultRange,
-		categoriesToFilter,
+		categoriesToFilterIds,
 		pageSize,
 		currentPage,
 		sortingAlgorithm,
@@ -42,7 +40,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 	const isSettingsChanged = useMemo(
 		() =>
 			isSortingReversed ||
-			categoriesToFilter.length > 0 ||
+			categoriesToFilterIds.length > 0 ||
 			pageSize !== constants.defaultPageSize ||
 			currentPage !== 1 ||
 			(range[0] &&
@@ -53,7 +51,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 			range,
 			defaultRange,
 			isSortingReversed,
-			categoriesToFilter,
+			categoriesToFilterIds,
 			pageSize,
 			currentPage,
 			sortingAlgorithm,

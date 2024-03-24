@@ -6,7 +6,6 @@ import {
 	StatsOptions,
 	Theme,
 	UserOptions,
-	category,
 	currency,
 	language,
 } from 'settings/interfaces';
@@ -93,22 +92,10 @@ class OptionsStore {
 		this.listOptions = { ...this.listOptions, isSortingReversed: value };
 	};
 
-	handleCategoriesToFilterChange = (values: number[]) => {
-		const foundCategories: category[] = values.reduce(
-			(acc: category[], value: number) => {
-				const foundCategory = this.categoryStore.categories.find(
-					(category: category) => category.id === value
-				);
-				if (foundCategory) {
-					acc.push(foundCategory);
-				}
-				return acc;
-			},
-			[]
-		);
+	handleCategoriesToFilterChange = (values: string[]) => {
 		this.listOptions = {
 			...this.listOptions,
-			categoriesToFilter: foundCategories,
+			categoriesToFilterIds: values,
 		};
 	};
 

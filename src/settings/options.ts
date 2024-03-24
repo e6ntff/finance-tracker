@@ -18,7 +18,7 @@ export const defaultListOptions: ListOptions = {
 	isSortingReversed: false,
 	pageSize: constants.defaultPageSize,
 	currentPage: 1,
-	categoriesToFilter: [],
+	categoriesToFilterIds: [],
 	mode: constants.defaultMode as Mode,
 };
 

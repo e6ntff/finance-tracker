@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
@@ -15,29 +15,23 @@ import { categoryStore } from 'utils/categoryStore';
 
 interface Props {
 	mode: Mode;
-	initialItem: ExpenseItem;
+	initialItemId: string;
 }
 
-const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
-	const { id, categoryId, date, title, price } = initialItem;
+const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 	const { isSmallScreen } = userStore;
-	const { replaceItem, removeItem } = listStore;
+	const { replaceItem, removeItem, list } = listStore;
 	const { userOptions } = optionsStore;
-	const { getCategoryById } = categoryStore;
+	const { categories } = categoryStore;
 
 	const { currency, language } = userOptions;
 
 	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
-
-	const [currentItem, setCurrentItem] = useState<ExpenseItem>({
-		id: id,
-		date: date,
-		title: title,
-		categoryId: categoryId,
-		price: price,
-	});
+	const [currentItem, setCurrentItem] = useState<ExpenseItem>(
+		list[initialItemId]
+	);
 
 	const toggleIsItemDeleting = () => {
 		setIsItemDeleting((prevValue: boolean) => !prevValue);
@@ -48,7 +42,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 			setDeleteValue((prevValue: number) => {
 				const newValue = prevValue + 10;
 				if (newValue >= userOptions.deleteDelay && isItemDeleting) {
-					removeItem(currentItem);
+					removeItem(initialItemId);
 					clearInterval(deleteId);
 				}
 				return newValue;
@@ -59,7 +53,13 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 			setDeleteValue(0);
 		}
 		return () => clearInterval(deleteId);
-	}, [isItemDeleting, currentItem, removeItem, userOptions.deleteDelay]);
+	}, [
+		isItemDeleting,
+		currentItem,
+		removeItem,
+		userOptions.deleteDelay,
+		initialItemId,
+	]);
 
 	const toggleIsModalOpened = useCallback(() => {
 		setIsModalOpened((prevValue: boolean) => !prevValue);
@@ -69,14 +69,20 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 		(item: ExpenseItem) => {
 			setCurrentItem((prevItem: ExpenseItem) => {
 				if (JSON.stringify(prevItem) !== JSON.stringify(item)) {
-					replaceItem(item);
+					replaceItem(initialItemId, currentItem);
 					return item;
 				}
 				return prevItem;
 			});
 			toggleIsModalOpened();
 		},
-		[setCurrentItem, replaceItem, toggleIsModalOpened]
+		[
+			setCurrentItem,
+			replaceItem,
+			toggleIsModalOpened,
+			initialItemId,
+			currentItem,
+		]
 	);
 
 	const TitleJSX = (
@@ -115,11 +121,6 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 		/>
 	);
 
-	const itemCategory = useMemo(
-		() => getCategoryById(currentItem.categoryId),
-		[currentItem, getCategoryById]
-	);
-
 	const CategoryJSX = (
 		<Flex
 			vertical
@@ -128,15 +129,15 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 				opacity: isItemDeleting ? '.5' : '1',
 			}}
 		>
-			<Tag color={itemCategory.color}>
+			<Tag color={categories[currentItem.categoryId].color}>
 				<span
 					style={{
 						margin: 'auto',
-						color: itemCategory.color,
+						color: categories[currentItem.categoryId].color,
 						filter: 'invert(1)',
 					}}
 				>
-					{itemCategory.name}
+					{categories[currentItem.categoryId].color}
 				</span>
 			</Tag>
 		</Flex>
@@ -204,7 +205,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItem }) => {
 		<>
 			<ItemModal
 				opened={isModalOpened}
-				initialItem={currentItem}
+				initialItemId={initialItemId}
 				toggleOpened={toggleIsModalOpened}
 				submitItem={updateCurrentItem}
 			/>

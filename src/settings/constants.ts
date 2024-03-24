@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 const pageSizeOptions = [20, 40, 80];
 
 const defaultCategory = {
-	id: 0,
 	color: '#cccccc',
 	name: 'Other',
 };
@@ -21,12 +20,18 @@ const constants = {
 	baseCurrency: 'USD',
 	startDate: dayjs(new Date(2020, 0, 1)),
 	defaultCategory: defaultCategory,
+	defaultData: {
+		userData: {
+			list: {},
+			categories: { 0: defaultCategory },
+		},
+	},
 	savingDelay: 5000,
 	emptyItem: {
 		id: Math.random(),
 		title: '',
 		date: dayjs(),
-		categoryId: defaultCategory.id,
+		categoryId: '0',
 		price: {
 			USD: 0,
 			EUR: 0,

@@ -11,12 +11,11 @@ import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 
 interface Props {
-	initialCategory: category;
+	initialCategoryId: string;
 }
 
-const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
-	const { id, color, name } = initialCategory;
-	const { replaceCategory, removeCategory } = categoryStore;
+const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
+	const { replaceCategory, removeCategory, categories } = categoryStore;
 	const { clearListFromCategory } = listStore;
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
@@ -25,16 +24,14 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		useState<boolean>(false);
 	const [deleteValue, setDeleteValue] = useState<number>(0);
 
-	const [currentCategory, setCurrentCategory] = useState<category>({
-		id: id,
-		color: color,
-		name: name,
-	});
+	const [currentCategory, setCurrentCategory] = useState<category>(
+		categories[initialCategoryId]
+	);
 
 	const deleteCategory = useCallback(() => {
-		removeCategory(currentCategory);
-		clearListFromCategory(currentCategory.id);
-	}, [currentCategory, removeCategory, clearListFromCategory]);
+		removeCategory(initialCategoryId);
+		clearListFromCategory(initialCategoryId);
+	}, [removeCategory, clearListFromCategory, initialCategoryId]);
 
 	const startCategoryItemDeleting = useCallback(() => {
 		setIsCategoryItemDeleting(true);
@@ -66,13 +63,13 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategory }) => {
 		(category: category) => {
 			setCurrentCategory((precCategory: category) => {
 				if (JSON.stringify(precCategory) !== JSON.stringify(category)) {
-					replaceCategory(category);
+					replaceCategory(initialCategoryId, category);
 					return category;
 				}
 				return precCategory;
 			});
 		},
-		[setCurrentCategory, replaceCategory]
+		[setCurrentCategory, replaceCategory, initialCategoryId]
 	);
 
 	const handleNameChange = useCallback(

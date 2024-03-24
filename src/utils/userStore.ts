@@ -4,23 +4,26 @@ import constants from 'settings/constants';
 import saveData from './saveData';
 import { configure } from 'mobx';
 import { debounce } from 'lodash';
+import getData from './getData';
 
 configure({
 	enforceActions: 'never',
 });
 
 class UserStore {
-	allData: AllData = {
-		list: [],
-		categories: [],
-	};
+	allData: AllData = { list: {}, categories: { 0: constants.defaultCategory } };
 	user: any = {};
 	width: number = window.innerWidth;
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
+	loading: boolean = true;
 	notificationStatus: Status = null;
 	recentChanges: number = 0;
+
+	setLoading = (value: boolean) => {
+		this.loading = value;
+	};
 
 	increaseRecentChanges = (value: number = 1) => {
 		this.recentChanges += value;
@@ -67,6 +70,12 @@ class UserStore {
 		this.user = user;
 		if (user.uid) {
 			this.setLogged(true);
+			getData(user).then((data) => {
+				if (data) {
+					this.setAllData(data as AllData);
+					this.setLoading(false);
+				}
+			});
 		}
 	};
 

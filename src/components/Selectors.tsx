@@ -1,6 +1,6 @@
 import { Button, Divider, Flex, Pagination } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import NewItemButton from './NewItemButton';
 import YearSlider from './YearSlider';
 import CategoriesSelect from './CategoriesSelect';
@@ -114,4 +114,4 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 	);
 });
 
-export default Selectors;
+export default memo(Selectors);

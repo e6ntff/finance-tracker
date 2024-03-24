@@ -1,11 +1,10 @@
 import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Card, Empty, Flex, Statistic, Typography } from 'antd';
+import { Button, Empty, Flex } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import { userStore } from 'utils/userStore';
-import { getSymbolAndPrice } from 'utils/utils';
 import { ReloadOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import dayjs from 'dayjs';
@@ -13,7 +12,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import YearSlider from 'components/YearSlider';
 import { Interval } from 'settings/interfaces';
 import LargeSpin from 'components/LargeSpin';
-import { getTotalInCurrentRange } from 'utils/transformData';
+import StatsCard from 'components/StatsCard';
 
 dayjs.extend(isBetween);
 
@@ -22,12 +21,11 @@ const Stats: React.FC = observer(() => {
 	const { isSmallScreen, loading } = userStore;
 	const {
 		statsOptions,
-		userOptions,
 		setStatsRange,
 		setDefaultStatsRange,
 		setIsStatsAccurate,
 	} = optionsStore;
-	const { currency } = userOptions;
+
 	const { range, defaultRange, isAccurate } = statsOptions;
 
 	const [mode, setMode] = useState<Interval>('year');
@@ -56,19 +54,6 @@ const Stats: React.FC = observer(() => {
 		[range, defaultRange]
 	);
 
-	const cardTitle = useMemo(() => {
-		const format = isAccurate ? 'DD.MM.YY' : 'MM.YY';
-		return (
-			<Typography.Text
-				type='secondary'
-				style={{ fontSize: isSmallScreen ? '.8em' : '1em' }}
-			>
-				{dayjs(range[0]).format(format)}
-				{range[0] !== range[1] ? `-${dayjs(range[1]).format(format)}` : ''}
-			</Typography.Text>
-		);
-	}, [isAccurate, range, isSmallScreen]);
-
 	useEffect(() => {
 		if (dayjs(range[0]).year() !== dayjs(range[1]).year()) {
 			setMode('year');
@@ -79,17 +64,7 @@ const Stats: React.FC = observer(() => {
 
 	const PanelJSX = (
 		<Flex gap={16}>
-			<Card bordered>
-				<Statistic
-					title={cardTitle}
-					value={getTotalInCurrentRange(list, range, currency)}
-					prefix={getSymbolAndPrice(currency)}
-					valueStyle={{
-						color: '#f00',
-						fontSize: isSmallScreen ? '1em' : '1.5em',
-					}}
-				/>
-			</Card>
+			<StatsCard />
 			<Button
 				size={isSmallScreen ? 'small' : 'middle'}
 				onClick={resetRange}

@@ -16,8 +16,6 @@ import {
 	LineController,
 	PointElement,
 } from 'chart.js';
-import { getValuesByMonth } from 'utils/transformData';
-import { Line } from 'react-chartjs-2';
 import SliderDiagram from './SliderDiagram';
 import { optionsStore } from 'utils/optionsStore';
 Chart.register(

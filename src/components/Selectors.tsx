@@ -23,7 +23,6 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 		resetListOptions: resetSettings,
 		handlePageChanging,
 		setRange,
-		setDefaultRange,
 		setIsAccurate,
 	} = optionsStore;
 

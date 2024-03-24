@@ -46,7 +46,6 @@ export type currency = 'USD' | 'EUR' | 'RUB';
 
 export interface ListOptions {
 	isAccurate: boolean;
-	defaultRange: number[];
 	range: number[];
 	sortingAlgorithm: Sort;
 	isSortingReversed: boolean;
@@ -58,7 +57,6 @@ export interface ListOptions {
 
 export interface StatsOptions {
 	isAccurate: boolean;
-	defaultRange: number[];
 	range: number[];
 }
 

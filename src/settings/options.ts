@@ -12,7 +12,6 @@ const { defaultAlgorithm } = theme;
 
 export const defaultListOptions: ListOptions = {
 	isAccurate: false,
-	defaultRange: [],
 	range: [],
 	sortingAlgorithm: constants.defaultAlgoritm as Sort,
 	isSortingReversed: false,
@@ -28,7 +27,6 @@ export const initialListOptions: ListOptions = JSON.parse(
 
 export const defaultStatsOptions: StatsOptions = {
 	isAccurate: false,
-	defaultRange: [],
 	range: [],
 };
 

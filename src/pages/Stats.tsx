@@ -19,14 +19,10 @@ dayjs.extend(isBetween);
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
 	const { isSmallScreen, loading } = userStore;
-	const {
-		statsOptions,
-		setStatsRange,
-		setDefaultStatsRange,
-		setIsStatsAccurate,
-	} = optionsStore;
+	const { statsOptions, defaultRange, setStatsRange, setIsStatsAccurate } =
+		optionsStore;
 
-	const { range, defaultRange, isAccurate } = statsOptions;
+	const { range, isAccurate } = statsOptions;
 
 	const [mode, setMode] = useState<Interval>('year');
 
@@ -85,9 +81,7 @@ const Stats: React.FC = observer(() => {
 				setIsAccurate={setIsStatsAccurate}
 				isAccurate={isAccurate}
 				range={range}
-				defaultRange={defaultRange}
 				setRange={setStatsRange}
-				setDefaultRange={setDefaultStatsRange}
 			/>
 			<Flex
 				align='center'

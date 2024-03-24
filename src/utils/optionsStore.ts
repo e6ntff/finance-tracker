@@ -32,6 +32,7 @@ class OptionsStore {
 	listOptions: ListOptions = initialListOptions;
 	statsOptions: StatsOptions = initialStatsOptions;
 	userOptions: UserOptions = initialUserOptions;
+	defaultRange: number[] = [];
 
 	resetOptions = () => {
 		this.listOptions = defaultListOptions;
@@ -67,7 +68,7 @@ class OptionsStore {
 	};
 
 	setDefaultRange = (values: number[]) => {
-		this.listOptions = { ...this.listOptions, defaultRange: values };
+		this.defaultRange = values;
 	};
 
 	handleSortAlgorithmChanging = (value: Sort) => {
@@ -79,12 +80,11 @@ class OptionsStore {
 		this.listOptions = { ...this.listOptions, mode: value };
 	};
 
-	resetSettings = () => {
+	resetListOptions = () => {
 		this.listOptions = {
 			...defaultListOptions,
 			mode: this.listOptions.mode,
-			defaultRange: this.listOptions.defaultRange,
-			range: this.listOptions.defaultRange,
+			range: this.defaultRange,
 		};
 	};
 
@@ -117,13 +117,6 @@ class OptionsStore {
 
 	setIsStatsAccurate = (value: boolean) => {
 		this.statsOptions = { ...this.statsOptions, isAccurate: value };
-	};
-
-	setDefaultStatsRange = (values: number[]) => {
-		this.statsOptions = {
-			...this.statsOptions,
-			defaultRange: values,
-		};
 	};
 
 	constructor(categoryStore: any) {

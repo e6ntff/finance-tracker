@@ -18,6 +18,8 @@ import {
 } from 'chart.js';
 import { getValuesByMonth } from 'utils/transformData';
 import { Line } from 'react-chartjs-2';
+import SliderDiagram from './SliderDiagram';
+import { optionsStore } from 'utils/optionsStore';
 Chart.register(
 	Tooltip,
 	LineElement,
@@ -31,24 +33,16 @@ dayjs.extend(minMax);
 
 interface Props {
 	range: number[];
-	defaultRange: number[];
 	setRange: (arg0: number[]) => void;
-	setDefaultRange: (arg0: number[]) => void;
 	isAccurate: boolean;
 	setIsAccurate: (arg0: boolean) => void;
 }
 
 const YearSlider: React.FC<Props> = observer(
-	({
-		range,
-		defaultRange,
-		setRange,
-		setDefaultRange,
-		isAccurate,
-		setIsAccurate,
-	}) => {
+	({ range, setRange, isAccurate, setIsAccurate }) => {
 		const { list } = listStore;
 		const { isSmallScreen } = userStore;
+		const { defaultRange, setDefaultRange } = optionsStore;
 
 		const [value, setValue] = useState(defaultRange);
 
@@ -130,55 +124,6 @@ const YearSlider: React.FC<Props> = observer(
 			// eslint-disable-next-line
 		}, [isAccurate]);
 
-		const valuesByMonth: number[] | { [key: string]: number } = useMemo(
-			() => getValuesByMonth(list, defaultRange),
-			[list, defaultRange]
-		);
-
-		const data = {
-			labels: new Array(valuesByMonth.length).fill(''),
-			datasets: [
-				{
-					data: valuesByMonth,
-				},
-			],
-		};
-
-		const options = {
-			plugins: {
-				legend: {
-					display: false,
-				},
-				tooltip: {
-					enabled: false,
-				},
-			},
-			scales: {
-				x: {
-					display: false,
-					grid: {
-						display: false,
-					},
-				},
-				y: {
-					display: false,
-					grid: {
-						display: false,
-					},
-				},
-			},
-			elements: {
-				point: {
-					radius: 0,
-				},
-				line: {
-					cubicInterpolationMode: 'monotone' as 'monotone',
-					borderColor: '#7775',
-				},
-			},
-			aspectRatio: 25,
-		};
-
 		return dayjs(defaultRange[1]).diff(dayjs(defaultRange[0]), 'hours') >=
 			48 ? (
 			<Flex
@@ -204,11 +149,7 @@ const YearSlider: React.FC<Props> = observer(
 					align='stretch'
 					style={{ inlineSize: '100%' }}
 				>
-					<Line
-						style={{ inlineSize: '100%' }}
-						data={data}
-						options={options}
-					/>
+					<SliderDiagram />
 					<Slider
 						range
 						value={value}

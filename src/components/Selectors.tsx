@@ -19,7 +19,8 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 	const { isSmallScreen, loading } = userStore;
 	const {
 		listOptions,
-		resetSettings,
+		defaultRange,
+		resetListOptions: resetSettings,
 		handlePageChanging,
 		setRange,
 		setDefaultRange,
@@ -29,7 +30,6 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 	const {
 		isSortingReversed,
 		range,
-		defaultRange,
 		categoriesToFilterIds,
 		pageSize,
 		currentPage,
@@ -91,9 +91,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 					setIsAccurate={setIsAccurate}
 					isAccurate={isAccurate}
 					range={range}
-					defaultRange={defaultRange}
 					setRange={setRange}
-					setDefaultRange={setDefaultRange}
 				/>
 			</Flex>
 			<Divider />

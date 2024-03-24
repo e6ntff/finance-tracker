@@ -16,7 +16,6 @@ const getData = async (user: any) => {
 			const userDocSnapshot = await getDoc(userDocRef);
 			if (userDocSnapshot.exists()) {
 				const userData = userDocSnapshot.data();
-				console.log(userData);
 				for (const key in userData.list) {
 					userData.list[key] = {
 						...userData.list[key],

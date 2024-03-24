@@ -26,11 +26,11 @@ const DiagramPie: React.FC = observer(() => {
 	const { currency } = userOptions;
 	const { categories } = categoryStore;
 
-	const { range, isAccurate } = statsOptions;
+	const { range } = statsOptions;
 
 	const valuesByCategory: Value[] = useMemo(
-		() => getValuesForPieDiagram(list, range, currency, isAccurate),
-		[list, currency, range, isAccurate]
+		() => getValuesForPieDiagram(list, range, currency),
+		[list, currency, range]
 	);
 
 	const [names, colors, values] = [

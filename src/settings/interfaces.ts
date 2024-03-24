@@ -7,7 +7,7 @@ export interface category {
 	name: string;
 }
 export interface ExpenseItem {
-	date: dayjs.Dayjs;
+	date: number;
 	title: string;
 	categoryId: string;
 	price: currencies;

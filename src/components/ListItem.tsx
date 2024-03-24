@@ -12,6 +12,7 @@ import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
 import { categoryStore } from 'utils/categoryStore';
+import dayjs from 'dayjs';
 
 interface Props {
 	mode: Mode;
@@ -113,7 +114,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 
 	const DateJSX = (
 		<Statistic
-			value={currentItem.date.format('DD.MM.YY')}
+			value={dayjs(currentItem.date).format('DD.MM.YY')}
 			style={{
 				scale: isSmallScreen ? '.75' : '1',
 				opacity: isItemDeleting ? '.5' : '1',

@@ -82,7 +82,7 @@ const Stats: React.FC = observer(() => {
 			<Card bordered>
 				<Statistic
 					title={cardTitle}
-					value={getTotalInCurrentRange(list, range, currency, isAccurate)}
+					value={getTotalInCurrentRange(list, range, currency)}
 					prefix={getSymbolAndPrice(currency)}
 					valueStyle={{
 						color: '#f00',

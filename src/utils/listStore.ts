@@ -17,12 +17,6 @@ class ListStore {
 	saveData = () => {
 		const listToSave: any = { ...this.list };
 		if (this.userStore.user.uid) {
-			for (const key in listToSave) {
-				listToSave[key] = {
-					...listToSave[key],
-					date: listToSave[key].date.valueOf(),
-				};
-			}
 			saveData(
 				this.userStore.user,
 				this.userStore.setStatus,

@@ -7,12 +7,10 @@ import { userStore } from 'utils/userStore';
 import { getFilteredListIds } from 'utils/transformData';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
-import { categoryStore } from 'utils/categoryStore';
 
 const Expenses: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 	const { list } = listStore;
-	const { categories } = categoryStore;
 	const { listOptions, userOptions, handleModeChanging, handlePageChanging } =
 		optionsStore;
 
@@ -24,7 +22,6 @@ const Expenses: React.FC = observer(() => {
 		isSortingReversed,
 		categoriesToFilterIds,
 		pageSize,
-		isAccurate,
 	} = listOptions;
 
 	useEffect(() => {
@@ -45,8 +42,8 @@ const Expenses: React.FC = observer(() => {
 	]);
 
 	const filteredListIds = useMemo(
-		() => getFilteredListIds(listOptions, list, language, isAccurate),
-		[list, language, listOptions, isAccurate]
+		() => getFilteredListIds(listOptions, list, language),
+		[list, language, listOptions]
 	);
 
 	return (

@@ -53,7 +53,7 @@ const ItemModal: React.FC<Props> = observer(
 				if (value)
 					setCurrentItem((prevItem: ExpenseItem) => ({
 						...prevItem,
-						date: value,
+						date: value.valueOf(),
 					}));
 			},
 			[setCurrentItem]
@@ -136,7 +136,7 @@ const ItemModal: React.FC<Props> = observer(
 			<DatePicker
 				required
 				onChange={handleDateChange}
-				value={currentItem.date}
+				value={dayjs(currentItem.date)}
 				minDate={constants.startDate}
 				maxDate={dayjs()}
 			/>

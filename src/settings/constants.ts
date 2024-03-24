@@ -27,7 +27,7 @@ const constants = {
 	savingDelay: 5000,
 	emptyItem: {
 		title: '',
-		date: dayjs(),
+		date: dayjs().valueOf(),
 		categoryId: '0',
 		price: {
 			USD: 0,

@@ -110,7 +110,7 @@ export const getValuesForPieDiagram = (
 			)
 		) {
 			const categoryKey: number = Object.keys(values).findIndex(
-				(key: string) => values[Number(key)].categoryId === list[key].categoryId
+				(n: string) => values[Number(n)].categoryId === list[key].categoryId
 			);
 			if (categoryKey !== -1) {
 				values[categoryKey].value += list[key].price[currency];

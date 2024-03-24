@@ -130,7 +130,7 @@ const Stats: React.FC = observer(() => {
 
 	return loading ? (
 		<LargeSpin />
-	) : list.length ? (
+	) : Object.keys(list).length ? (
 		<Flex
 			vertical
 			gap={32}

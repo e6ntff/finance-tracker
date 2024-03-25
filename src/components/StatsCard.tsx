@@ -11,9 +11,9 @@ import dayjs from 'dayjs';
 const StatsCard: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 	const { list } = listStore;
-	const { listOptions, userOptions } = optionsStore;
+	const { statsOptions, userOptions } = optionsStore;
 
-	const { range, isAccurate } = listOptions;
+	const { range, isAccurate } = statsOptions;
 	const { currency } = userOptions;
 
 	const value = useMemo(

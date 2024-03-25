@@ -57,7 +57,7 @@ export const getValuesForBarDiagram = (
 		Object.keys(list).forEach((key: string) => {
 			const resultKey: number = dayjs(list[key].date).year();
 			if (result[resultKey] === undefined) {
-				result[resultKey] = 0;
+				result[resultKey] = list[key].price[currency];
 			} else {
 				result[resultKey] += list[key].price[currency];
 			}

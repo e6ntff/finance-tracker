@@ -227,7 +227,6 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 					{`${languages.createdAt[language]} ${dayjs(
 						currentItem.createdAt
 					).format('HH:mm:ss DD.MM.YY')}`}
-					;
 				</>
 			);
 		} else {

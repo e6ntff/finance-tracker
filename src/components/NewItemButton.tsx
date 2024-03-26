@@ -20,7 +20,7 @@ const NewItemButton: React.FC = observer(() => {
 	const addNewItem = useCallback(
 		(item: ExpenseItem) => {
 			const date = dayjs().valueOf();
-			addItem({ ...item, createdAt: date, updatedAt: date });
+			addItem({ ...item, createdAt: date });
 			toggleIsModalOpened();
 		},
 		[addItem, toggleIsModalOpened]

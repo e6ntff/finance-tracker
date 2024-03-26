@@ -125,6 +125,14 @@ const languages = {
 		en: 'Saving changes',
 		ru: 'Сохранение изменений',
 	},
+	createdAt: {
+		en: 'Created at',
+		ru: 'Создано:',
+	},
+	updatedAt: {
+		en: 'Updated at',
+		ru: 'Обновлено:',
+	},
 };
 
 export default languages;

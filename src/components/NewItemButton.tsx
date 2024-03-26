@@ -6,6 +6,7 @@ import { listStore } from 'utils/listStore';
 import ItemModal from './ItemModal';
 import { PlusOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
+import dayjs from 'dayjs';
 
 const NewItemButton: React.FC = observer(() => {
 	const { addItem } = listStore;
@@ -18,7 +19,8 @@ const NewItemButton: React.FC = observer(() => {
 
 	const addNewItem = useCallback(
 		(item: ExpenseItem) => {
-			addItem(item);
+			const date = dayjs().valueOf();
+			addItem({ ...item, createdAt: date, updatedAt: date });
 			toggleIsModalOpened();
 		},
 		[addItem, toggleIsModalOpened]

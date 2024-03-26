@@ -57,6 +57,8 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 		return result;
 	}, [colNumber, listToShowOnCurrentPageIds]);
 
+	// console.log(listToShowOnCurrentPageIds)
+
 	return (
 		<>
 			{loading ? (

@@ -34,6 +34,8 @@ const constants = {
 			EUR: 0,
 			RUB: 0,
 		},
+		createdAt: 0,
+		updatedAt: 0,
 	},
 };
 

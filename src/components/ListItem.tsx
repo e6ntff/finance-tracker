@@ -1,13 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import { Card, Col, Flex, Progress, Statistic, Tag, Typography } from 'antd';
+import {
+	Card,
+	Col,
+	Flex,
+	Progress,
+	Statistic,
+	Tag,
+	Tooltip,
+	Typography,
+} from 'antd';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import Title from 'antd/es/typography/Title';
-import { CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {
+	CloseOutlined,
+	DeleteOutlined,
+	EditOutlined,
+	InfoCircleOutlined,
+} from '@ant-design/icons';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
@@ -70,8 +84,12 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		(item: ExpenseItem) => {
 			setCurrentItem((prevItem: ExpenseItem) => {
 				if (JSON.stringify(prevItem) !== JSON.stringify(item)) {
-					replaceItem(initialItemId, currentItem);
-					return item;
+					const newItem: ExpenseItem = {
+						...currentItem,
+						updatedAt: dayjs().valueOf(),
+					};
+					replaceItem(initialItemId, newItem);
+					return newItem;
 				}
 				return prevItem;
 			});
@@ -202,6 +220,37 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		</Flex>
 	);
 
+	const tooltipTitle = useMemo(() => {
+		if (currentItem.createdAt === currentItem.updatedAt) {
+			return (
+				<>
+					{`${languages.createdAt[language]} ${dayjs(
+						currentItem.createdAt
+					).format('HH:mm:ss DD.MM.YY')}`}
+					;
+				</>
+			);
+		} else {
+			return (
+				<>
+					{`${languages.createdAt[language]} ${dayjs(
+						currentItem.createdAt
+					).format('HH:mm:ss DD.MM.YY')}`}
+					<br></br>
+					{`${languages.updatedAt[language]} ${dayjs(
+						currentItem.updatedAt
+					).format('HH:mm:ss DD.MM.YY')}`}
+				</>
+			);
+		}
+	}, [currentItem, language]);
+
+	const TooltipJSX = (
+		<Tooltip title={tooltipTitle}>
+			<InfoCircleOutlined />
+		</Tooltip>
+	);
+
 	return (
 		<>
 			<ItemModal
@@ -219,17 +268,16 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 							<Col span={3}>{CategoryJSX}</Col>
 							<Col span={5}>{PriceJSX}</Col>
 							<Col>{EditJSX}</Col>
-							<Col>{DeleteJSX}</Col>
 						</>
 					) : (
-						<>
-							<Col span={21}>{ProgressJSX}</Col>
-							<Col>{DeleteJSX}</Col>
-						</>
+						<Col span={21}>{ProgressJSX}</Col>
 					)}
+					<Col>{DeleteJSX}</Col>
+					<Col>{TooltipJSX}</Col>
 				</Item>
 			) : (
 				<Card
+					extra={[TooltipJSX]}
 					size={isSmallScreen ? 'small' : 'default'}
 					bordered
 					title={isItemDeleting ? ProgressJSX : TitleJSX}

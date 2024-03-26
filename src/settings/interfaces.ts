@@ -11,6 +11,8 @@ export interface ExpenseItem {
 	title: string;
 	categoryId: string;
 	price: currencies;
+	createdAt: number;
+	updatedAt: number;
 }
 
 export interface currencies {

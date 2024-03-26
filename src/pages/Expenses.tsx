@@ -40,7 +40,7 @@ const Expenses: React.FC = observer(() => {
 		pageSize,
 		handlePageChanging,
 	]);
-
+	
 	const filteredListIds = useMemo(
 		() => getFilteredListIds(listOptions, list, language),
 		[list, language, listOptions]

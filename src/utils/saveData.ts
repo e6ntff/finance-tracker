@@ -34,6 +34,7 @@ const saveData = async (
 			}
 			decreaseRecentChanges(initialRecentChanges);
 		} catch (error: any) {
+			console.log(error);
 			try {
 				const userDocRef = doc(usersCollection, user.uid);
 				if (userDocRef) {

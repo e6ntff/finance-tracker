@@ -60,10 +60,10 @@ const ItemModal: React.FC<Props> = observer(
 		);
 
 		const handleCategoryChange = useCallback(
-			(id: number) => {
+			(id: string) => {
 				setCurrentItem((prevItem: ExpenseItem) => ({
 					...prevItem,
-					categoryId: String(id),
+					categoryId: id,
 				}));
 			},
 			[setCurrentItem]

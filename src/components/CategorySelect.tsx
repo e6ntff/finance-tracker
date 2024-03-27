@@ -7,7 +7,7 @@ import { userStore } from 'utils/userStore';
 
 interface Props {
 	id: string;
-	onChange: (arg0: number) => void;
+	onChange: (arg0: string) => void;
 }
 
 const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
@@ -20,15 +20,15 @@ const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
 			allowClear
 			style={{ minInlineSize: '7em' }}
 			onChange={onChange}
-			value={Number(id)}
+			value={id}
 			suffixIcon={<EditFilled style={{ color: categories[id].color }} />}
 		>
 			{Object.keys(categories).map((key: string) => (
 				<Select.Option
-					key={Number(key)}
-					value={Number(key)}
+					key={key}
+					value={key}
 				>
-					{categories[key as unknown as number].name}
+					{categories[key].name}
 				</Select.Option>
 			))}
 		</Select>

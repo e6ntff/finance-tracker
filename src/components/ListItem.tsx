@@ -85,7 +85,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			setCurrentItem((prevItem: ExpenseItem) => {
 				if (JSON.stringify(prevItem) !== JSON.stringify(item)) {
 					const newItem: ExpenseItem = {
-						...currentItem,
+						...item,
 						updatedAt: dayjs().valueOf(),
 					};
 					replaceItem(initialItemId, newItem);
@@ -95,13 +95,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			});
 			toggleIsModalOpened();
 		},
-		[
-			setCurrentItem,
-			replaceItem,
-			toggleIsModalOpened,
-			initialItemId,
-			currentItem,
-		]
+		[setCurrentItem, replaceItem, toggleIsModalOpened, initialItemId]
 	);
 
 	const TitleJSX = (

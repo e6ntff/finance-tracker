@@ -2,9 +2,10 @@ import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
-import { debounce, uniqueId } from 'lodash';
+import { debounce } from 'lodash';
 import constants from 'settings/constants';
 import saveData from './saveData';
+import uniqid from 'uniqid';
 
 configure({
 	enforceActions: 'never',
@@ -39,7 +40,7 @@ class CategoryStore {
 	};
 
 	addCategory = (payload: category) => {
-		this.setCategories({ ...this.categories, [uniqueId()]: payload });
+		this.setCategories({ ...this.categories, [uniqid()]: payload });
 	};
 
 	removeCategory = (id: string) => {

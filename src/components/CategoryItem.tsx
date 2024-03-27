@@ -61,12 +61,12 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 
 	const updateCurrentCategory = useCallback(
 		(category: category) => {
-			setCurrentCategory((precCategory: category) => {
-				if (JSON.stringify(precCategory) !== JSON.stringify(category)) {
+			setCurrentCategory((prevCategory: category) => {
+				if (JSON.stringify(prevCategory) !== JSON.stringify(category)) {
 					replaceCategory(initialCategoryId, category);
 					return category;
 				}
-				return precCategory;
+				return prevCategory;
 			});
 		},
 		[setCurrentCategory, replaceCategory, initialCategoryId]

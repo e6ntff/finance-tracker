@@ -3,7 +3,8 @@ import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
 import saveData from './saveData';
-import { debounce, uniqueId } from 'lodash';
+import { debounce } from 'lodash';
+import uniqid from 'uniqid';
 import constants from 'settings/constants';
 
 configure({
@@ -37,7 +38,7 @@ class ListStore {
 	};
 
 	addItem = (payload: ExpenseItem) => {
-		this.setList({ ...this.list, [uniqueId()]: payload });
+		this.setList({ ...this.list, [uniqid()]: payload });
 	};
 
 	removeItem = (id: string) => {

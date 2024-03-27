@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/expenses-manager/static/css/main.6b3fe3e5.css",
-    "main.js": "/expenses-manager/static/js/main.296fd048.js",
-    "static/js/781.e11aa9b0.chunk.js": "/expenses-manager/static/js/781.e11aa9b0.chunk.js",
-    "static/js/766.b5fcb9e4.chunk.js": "/expenses-manager/static/js/766.b5fcb9e4.chunk.js",
+    "main.js": "/expenses-manager/static/js/main.5e465e11.js",
+    "static/js/781.d45d982c.chunk.js": "/expenses-manager/static/js/781.d45d982c.chunk.js",
+    "static/js/766.ad25b2ca.chunk.js": "/expenses-manager/static/js/766.ad25b2ca.chunk.js",
     "static/js/474.45103b4f.chunk.js": "/expenses-manager/static/js/474.45103b4f.chunk.js",
     "static/js/12.e7f81901.chunk.js": "/expenses-manager/static/js/12.e7f81901.chunk.js",
     "static/js/915.be3a5f02.chunk.js": "/expenses-manager/static/js/915.be3a5f02.chunk.js",
@@ -13,9 +13,9 @@
     "static/js/522.d58e2028.chunk.js": "/expenses-manager/static/js/522.d58e2028.chunk.js",
     "index.html": "/expenses-manager/index.html",
     "main.6b3fe3e5.css.map": "/expenses-manager/static/css/main.6b3fe3e5.css.map",
-    "main.296fd048.js.map": "/expenses-manager/static/js/main.296fd048.js.map",
-    "781.e11aa9b0.chunk.js.map": "/expenses-manager/static/js/781.e11aa9b0.chunk.js.map",
-    "766.b5fcb9e4.chunk.js.map": "/expenses-manager/static/js/766.b5fcb9e4.chunk.js.map",
+    "main.5e465e11.js.map": "/expenses-manager/static/js/main.5e465e11.js.map",
+    "781.d45d982c.chunk.js.map": "/expenses-manager/static/js/781.d45d982c.chunk.js.map",
+    "766.ad25b2ca.chunk.js.map": "/expenses-manager/static/js/766.ad25b2ca.chunk.js.map",
     "474.45103b4f.chunk.js.map": "/expenses-manager/static/js/474.45103b4f.chunk.js.map",
     "12.e7f81901.chunk.js.map": "/expenses-manager/static/js/12.e7f81901.chunk.js.map",
     "915.be3a5f02.chunk.js.map": "/expenses-manager/static/js/915.be3a5f02.chunk.js.map",
@@ -26,6 +26,6 @@
   },
   "entrypoints": [
     "static/css/main.6b3fe3e5.css",
-    "static/js/main.296fd048.js"
+    "static/js/main.5e465e11.js"
   ]
 }

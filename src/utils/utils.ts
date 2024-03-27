@@ -48,7 +48,7 @@ export const sortBy = (
 		case 'price':
 			result = listKeys.sort(
 				(prev: string, next: string) =>
-					list[Number(next)].price.USD - list[Number(prev)].price.USD
+					list[next].price.USD - list[prev].price.USD
 			);
 			break;
 		default:

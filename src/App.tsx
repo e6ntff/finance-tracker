@@ -19,6 +19,7 @@ import getData from 'utils/getData';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import Notification from 'components/Notification';
+import DeleteNotification from 'components/DeleteNotification';
 
 const auth = getAuth(firebaseApp);
 
@@ -94,6 +95,7 @@ const App: React.FC = observer(() => {
 			<Scrollbars autoHide>
 				<Router>
 					<Notification />
+					<DeleteNotification />
 					<Layout
 						style={{
 							margin: 'auto',

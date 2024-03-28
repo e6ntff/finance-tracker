@@ -14,6 +14,10 @@ configure({
 class ListStore {
 	userStore;
 	list: { [key: string]: ExpenseItem } = {};
+	lastDeletedItem: { id: string; item: ExpenseItem } = {
+		id: '',
+		item: constants.emptyItem,
+	};
 
 	saveData = () => {
 		const listToSave: any = { ...this.list };
@@ -37,12 +41,13 @@ class ListStore {
 		save && this.userStore.increaseRecentChanges();
 	};
 
-	addItem = (payload: ExpenseItem) => {
-		this.setList({ ...this.list, [uniqid()]: payload });
+	addItem = (payload: ExpenseItem, id: string = uniqid()) => {
+		this.setList({ ...this.list, [id]: payload });
 	};
 
 	removeItem = (id: string) => {
 		const newList = this.list;
+		this.lastDeletedItem = { id: id, item: { ...newList[id] } };
 		delete newList[id];
 		this.setList(newList);
 	};

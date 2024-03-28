@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { theme } from 'antd';
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -12,7 +11,7 @@ export interface ExpenseItem {
 	categoryId: string;
 	price: currencies;
 	createdAt: number;
-	updatedAt?: number;
+	updatedAt: number;
 }
 
 export interface currencies {
@@ -72,7 +71,6 @@ export interface UserOptions {
 	currency: currency;
 	theme: Theme;
 	themeAlgorithm: ThemeAlgorithm;
-	deleteDelay: number;
 }
 
 export type Status = 'loading' | 'success' | 'error' | null;

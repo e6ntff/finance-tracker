@@ -40,13 +40,6 @@ class OptionsStore {
 		this.userOptions = defaultUserOptions;
 	};
 
-	setDeleteDelay = (value: number) => {
-		this.userOptions = {
-			...this.userOptions,
-			deleteDelay: value,
-		};
-	};
-
 	setTheme = (theme: Theme) => {
 		this.userOptions = {
 			...this.userOptions,

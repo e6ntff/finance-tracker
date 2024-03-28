@@ -1,7 +1,7 @@
 import React from 'react';
 import LanguageSelect from '../components/LanguageSelect';
 import CurrencySelect from '../components/CurrencySelect';
-import { Flex, Form, Segmented, Slider } from 'antd';
+import { Flex, Form, Segmented } from 'antd';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
@@ -9,10 +9,10 @@ import { userStore } from 'utils/userStore';
 import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 
 const Settings: React.FC = observer(() => {
-	const { userOptions, setCurrency, setTheme, setDeleteDelay } = optionsStore;
+	const { userOptions, setCurrency, setTheme } = optionsStore;
 	const { isSmallScreen } = userStore;
 
-	const { language, currency, theme, deleteDelay } = userOptions;
+	const { language, currency, theme } = userOptions;
 
 	return (
 		<Flex justify='center'>
@@ -41,20 +41,7 @@ const Settings: React.FC = observer(() => {
 						onChange={setCurrency}
 					/>
 				</Form.Item>
-				<Form.Item label={languages.deleteDelay[language]}>
-					<Slider
-						defaultValue={deleteDelay}
-						step={100}
-						min={0}
-						max={1000}
-						marks={{
-							0: 0,
-							500: 500,
-							1000: 1000,
-						}}
-						onChangeComplete={setDeleteDelay}
-					></Slider>
-				</Form.Item>
+				<Form.Item label={languages.deleteDelay[language]}></Form.Item>
 			</Form>
 		</Flex>
 	);

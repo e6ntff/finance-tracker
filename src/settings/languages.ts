@@ -133,6 +133,14 @@ const languages = {
 		en: 'Updated at',
 		ru: 'Обновлено:',
 	},
+	itemDeleted: {
+		en: 'Item deleted',
+		ru: 'Расход удален',
+	},
+	categoryDeleted: {
+		en: 'Category deleted',
+		ru: 'Категория удалена',
+	},
 };
 
 export default languages;

@@ -1,6 +1,5 @@
 import constants from '../settings/constants';
 import firebaseApp from './firebase';
-import dayjs from 'dayjs';
 
 import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
 
@@ -15,14 +14,7 @@ const getData = async (user: any) => {
 		try {
 			const userDocSnapshot = await getDoc(userDocRef);
 			if (userDocSnapshot.exists()) {
-				const userData = userDocSnapshot.data();
-				for (const key in userData.list) {
-					userData.list[key] = {
-						...userData.list[key],
-						date: dayjs(userData.list[key].date),
-					};
-				}
-				return userData;
+				return userDocSnapshot.data();
 			} else {
 				return {
 					list: [],

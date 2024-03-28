@@ -1,23 +1,13 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import {
-	Card,
-	Col,
-	Flex,
-	Progress,
-	Statistic,
-	Tag,
-	Tooltip,
-	Typography,
-} from 'antd';
+import { Card, Col, Flex, Statistic, Tag, Tooltip, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import Title from 'antd/es/typography/Title';
 import {
-	CloseOutlined,
 	DeleteOutlined,
 	EditOutlined,
 	InfoCircleOutlined,
@@ -41,40 +31,10 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 
 	const { currency, language } = userOptions;
 
-	const [isItemDeleting, setIsItemDeleting] = useState<boolean>(false);
-	const [deleteValue, setDeleteValue] = useState<number>(0);
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 	const [currentItem, setCurrentItem] = useState<ExpenseItem>(
 		list[initialItemId]
 	);
-
-	const toggleIsItemDeleting = () => {
-		setIsItemDeleting((prevValue: boolean) => !prevValue);
-	};
-
-	useEffect(() => {
-		const deleteId = setInterval(() => {
-			setDeleteValue((prevValue: number) => {
-				const newValue = prevValue + 10;
-				if (newValue >= userOptions.deleteDelay && isItemDeleting) {
-					removeItem(initialItemId);
-					clearInterval(deleteId);
-				}
-				return newValue;
-			});
-		}, 10);
-		if (!isItemDeleting) {
-			clearInterval(deleteId);
-			setDeleteValue(0);
-		}
-		return () => clearInterval(deleteId);
-	}, [
-		isItemDeleting,
-		currentItem,
-		removeItem,
-		userOptions.deleteDelay,
-		initialItemId,
-	]);
 
 	const toggleIsModalOpened = useCallback(() => {
 		setIsModalOpened((prevValue: boolean) => !prevValue);
@@ -98,11 +58,15 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		[setCurrentItem, replaceItem, toggleIsModalOpened, initialItemId]
 	);
 
+	const deleteItem = useCallback(() => {
+		removeItem(initialItemId);
+	}, [removeItem, initialItemId]);
+
 	const TitleJSX = (
 		<Flex
 			justify='center'
 			style={{
-				opacity: isItemDeleting || !currentItem.title ? '.5' : '1',
+				opacity: !currentItem.title ? '.5' : '1',
 			}}
 		>
 			{isSmallScreen ? (
@@ -129,7 +93,6 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			value={dayjs(currentItem.date).format('DD.MM.YY')}
 			style={{
 				scale: isSmallScreen ? '.75' : '1',
-				opacity: isItemDeleting ? '.5' : '1',
 			}}
 		/>
 	);
@@ -138,9 +101,6 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		<Flex
 			vertical
 			align='stretch'
-			style={{
-				opacity: isItemDeleting ? '.5' : '1',
-			}}
 		>
 			<Tag color={categories[currentItem.categoryId].color}>
 				<span
@@ -157,12 +117,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 	);
 
 	const PriceJSX = (
-		<Flex
-			justify='center'
-			style={{
-				opacity: isItemDeleting ? '.5' : '1',
-			}}
-		>
+		<Flex justify='center'>
 			{isSmallScreen ? (
 				<Typography.Text strong>
 					{getSymbolAndPrice(currency)}
@@ -179,29 +134,16 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		</Flex>
 	);
 
-	const DeleteJSX = isItemDeleting ? (
-		<CloseOutlined
-			onClick={toggleIsItemDeleting}
-			style={{ scale: isSmallScreen ? '1' : '1.5' }}
-		/>
-	) : (
+	const DeleteJSX = (
 		<DeleteOutlined
-			onClick={toggleIsItemDeleting}
+			onClick={deleteItem}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
-		/>
-	);
-
-	const ProgressJSX = (
-		<Progress
-			showInfo={false}
-			percent={(deleteValue / userOptions.deleteDelay) * 100}
-			status='exception'
 		/>
 	);
 
 	const EditJSX = (
 		<EditOutlined
-			onClick={!isItemDeleting ? () => toggleIsModalOpened() : () => {}}
+			onClick={toggleIsModalOpened}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
 		/>
 	);
@@ -215,7 +157,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 	);
 
 	const tooltipTitle = useMemo(() => {
-		if (currentItem.createdAt === currentItem.updatedAt) {
+		if (!currentItem.updatedAt) {
 			return (
 				<>
 					{`${languages.createdAt[language]} ${dayjs(
@@ -254,17 +196,11 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			/>
 			{mode === 'list' ? (
 				<Item>
-					{!isItemDeleting ? (
-						<>
-							<Col>{DateJSX}</Col>
-							<Col span={9}>{TitleJSX}</Col>
-							<Col span={3}>{CategoryJSX}</Col>
-							<Col span={5}>{PriceJSX}</Col>
-							<Col>{EditJSX}</Col>
-						</>
-					) : (
-						<Col span={21}>{ProgressJSX}</Col>
-					)}
+					<Col>{DateJSX}</Col>
+					<Col span={9}>{TitleJSX}</Col>
+					<Col span={3}>{CategoryJSX}</Col>
+					<Col span={5}>{PriceJSX}</Col>
+					<Col>{EditJSX}</Col>
 					<Col>{DeleteJSX}</Col>
 					<Col>{TooltipJSX}</Col>
 				</Item>
@@ -273,7 +209,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 					extra={[TooltipJSX]}
 					size={isSmallScreen ? 'small' : 'default'}
 					bordered
-					title={isItemDeleting ? ProgressJSX : TitleJSX}
+					title={TitleJSX}
 					actions={[ActionsJSX]}
 				>
 					<Flex justify='center'>

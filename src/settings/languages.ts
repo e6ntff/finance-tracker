@@ -141,6 +141,10 @@ const languages = {
 		en: 'Category deleted',
 		ru: 'Категория удалена',
 	},
+	itemsWithCurrentCategory: {
+		en: 'Items',
+		ru: 'Расходов',
+	},
 };
 
 export default languages;

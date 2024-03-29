@@ -1,13 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import { category } from '../settings/interfaces';
+import React, { useCallback, useMemo, useState } from 'react';
+import { ExpenseItem, category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Card, ColorPicker, Flex, Typography } from 'antd';
+import { Button, Card, ColorPicker, Flex, Tooltip, Typography } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
+import languages from 'settings/languages';
+import { optionsStore } from 'utils/optionsStore';
 
 interface Props {
 	initialCategoryId: string;
@@ -15,8 +17,11 @@ interface Props {
 
 const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 	const { replaceCategory, removeCategory, categories } = categoryStore;
-	const { clearListFromCategory } = listStore;
+	const { clearListFromCategory, list } = listStore;
 	const { isSmallScreen } = userStore;
+	const { userOptions } = optionsStore;
+
+	const { language } = userOptions;
 
 	const [currentCategory, setCurrentCategory] = useState<category>(
 		categories[initialCategoryId]
@@ -68,6 +73,16 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 		[setCurrentCategory, updateCurrentCategory]
 	);
 
+	const itemsWithCurrentCategory = useMemo(
+		() =>
+			Object.values(list).reduce(
+				(acc: number, item: ExpenseItem) =>
+					item.categoryId === initialCategoryId ? ++acc : acc,
+				0
+			),
+		[list, initialCategoryId]
+	);
+
 	const ColorPickerJSX = (
 		<ColorPicker
 			size={isSmallScreen ? 'small' : 'middle'}
@@ -98,6 +113,18 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 		</Flex>
 	);
 
+	const tooltipTitle = useMemo(
+		() =>
+			`${languages.itemsWithCurrentCategory[language]} ${itemsWithCurrentCategory}`,
+		[itemsWithCurrentCategory, language]
+	);
+
+	const TooltipJSX = (
+		<Tooltip title={tooltipTitle}>
+			<InfoCircleOutlined />
+		</Tooltip>
+	);
+
 	const DeleteButtonJSX = (
 		<Button
 			size={isSmallScreen ? 'small' : 'middle'}
@@ -109,6 +136,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 
 	return (
 		<Card
+			extra={TooltipJSX}
 			size={isSmallScreen ? 'small' : 'default'}
 			title={TitleJSX}
 			actions={[ColorPickerJSX, DeleteButtonJSX]}

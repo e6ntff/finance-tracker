@@ -1,7 +1,9 @@
 import { makeAutoObservable } from 'mobx';
-import { Status, currencies } from 'settings/interfaces';
+import { AllData, Status, currencies } from 'settings/interfaces';
 import constants from 'settings/constants';
 import { configure } from 'mobx';
+import saveData from './saveData';
+import { debounce } from 'lodash';
 
 configure({
 	enforceActions: 'never',
@@ -16,6 +18,27 @@ class UserStore {
 	loading: boolean = true;
 	notificationStatus: Status = null;
 	recentChanges: number = 0;
+	allData: AllData = constants.defaultData;
+
+	saveData = () => {
+		if (this.user.uid) {
+			saveData(
+				this.user,
+				this.setStatus,
+				this.decreaseRecentChanges,
+				this.recentChanges,
+				this.allData
+			);
+		}
+	};
+
+	debouncedSaveData = debounce(this.saveData, constants.savingDelay);
+
+	pushDataToSaving = (data: any) => {
+		this.allData = Object.assign(this.allData, { ...data });
+		this.debouncedSaveData();
+		this.increaseRecentChanges();
+	};
 
 	setLoading = (value: boolean) => {
 		this.loading = value;

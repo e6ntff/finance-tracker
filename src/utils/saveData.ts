@@ -1,11 +1,5 @@
-import {
-	getFirestore,
-	collection,
-	doc,
-	setDoc,
-	updateDoc,
-} from 'firebase/firestore';
-import { ExpenseItem, Status, category } from 'settings/interfaces';
+import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import { AllData, Status } from 'settings/interfaces';
 import firebaseApp from './firebase';
 import constants from 'settings/constants';
 
@@ -17,19 +11,14 @@ const saveData = async (
 	setStatus: (arg0: Status) => void,
 	decreaseRecentChanges: (value: number) => void,
 	initialRecentChanges: number,
-	key: 'list' | 'categories',
-	data: { [key: string]: ExpenseItem } | { [key: string]: category }
+	data: AllData
 ) => {
 	setStatus('loading');
 	if (user.uid) {
 		try {
 			const userDocRef = doc(usersCollection, user.uid);
 			if (userDocRef) {
-				if (key === 'list') {
-					await updateDoc(userDocRef, { list: data });
-				} else if (key === 'categories') {
-					await updateDoc(userDocRef, { categories: data });
-				}
+				await setDoc(userDocRef, { ...data }, { merge: true });
 				setStatus('success');
 			}
 			decreaseRecentChanges(initialRecentChanges);

@@ -2,9 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
-import { debounce } from 'lodash';
 import constants from 'settings/constants';
-import saveData from './saveData';
 import uniqid from 'uniqid';
 
 configure({
@@ -19,28 +17,12 @@ class CategoryStore {
 		category: constants.defaultCategory,
 	};
 
-	saveData = () => {
-		if (this.userStore.user.uid) {
-			saveData(
-				this.userStore.user,
-				this.userStore.setStatus,
-				this.userStore.decreaseRecentChanges,
-				this.userStore.recentChanges,
-				'categories',
-				this.categories
-			);
-		}
-	};
-
-	debouncedSaveData = debounce(this.saveData, constants.savingDelay);
-
 	setCategories = (
 		categories: { [key: string]: category },
 		save: boolean = true
 	) => {
 		this.categories = { ...categories } || { '0': constants.defaultCategory };
-		save && this.debouncedSaveData();
-		save && this.userStore.increaseRecentChanges();
+		save && this.userStore.pushDataToSaving({ categories: this.categories });
 	};
 
 	addCategory = (payload: category, id: string = uniqid()) => {
@@ -50,7 +32,6 @@ class CategoryStore {
 	removeCategory = (id: string) => {
 		const newCategories = this.categories;
 		this.lastDeletedCategory = { id: id, category: { ...newCategories[id] } };
-		console.log({ ...this.lastDeletedCategory });
 		delete newCategories[id];
 		this.setCategories(newCategories);
 	};
@@ -59,8 +40,8 @@ class CategoryStore {
 		this.setCategories({ ...this.categories, [id]: payload });
 	};
 
-	constructor(userStore: any) {
-		this.userStore = userStore;
+	constructor(store: typeof userStore) {
+		this.userStore = store;
 		makeAutoObservable(this);
 	}
 }

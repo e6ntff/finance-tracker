@@ -2,8 +2,6 @@ import { ExpenseItem } from '../settings/interfaces';
 import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
-import saveData from './saveData';
-import { debounce } from 'lodash';
 import uniqid from 'uniqid';
 import constants from 'settings/constants';
 
@@ -19,26 +17,9 @@ class ListStore {
 		item: constants.emptyItem,
 	};
 
-	saveData = () => {
-		const listToSave: any = { ...this.list };
-		if (this.userStore.user.uid) {
-			saveData(
-				this.userStore.user,
-				this.userStore.setStatus,
-				this.userStore.decreaseRecentChanges,
-				this.userStore.recentChanges,
-				'list',
-				listToSave
-			);
-		}
-	};
-
-	debouncedSaveData = debounce(this.saveData, constants.savingDelay);
-
 	setList = (list: { [key: string]: ExpenseItem }, save: boolean = true) => {
 		this.list = { ...list } || {};
-		save && this.debouncedSaveData();
-		save && this.userStore.increaseRecentChanges();
+		save && this.userStore.pushDataToSaving({ list: this.list });
 	};
 
 	addItem = (payload: ExpenseItem, id: string = uniqid()) => {
@@ -66,8 +47,8 @@ class ListStore {
 		this.setList(newList);
 	};
 
-	constructor(userStore: any) {
-		this.userStore = userStore;
+	constructor(store: typeof userStore) {
+		this.userStore = store;
 		makeAutoObservable(this);
 	}
 }

@@ -114,7 +114,7 @@ export const getTotalInCurrentRange = (
 ) =>
 	Math.floor(
 		Object.values(list).reduce((acc: number, item: ExpenseItem) => {
-			if (item.date > range[0] && item.date < range[1]) {
+			if (item.date >= range[0] && item.date <= range[1]) {
 				return acc + item.price[currency];
 			}
 			return acc;

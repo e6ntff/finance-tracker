@@ -10,6 +10,8 @@ const defaultCategory = {
 const constants = {
 	spinDelay: 1500,
 	deleteDelay: 5000,
+	savingDelay: 5000,
+	errorDelay: 5000,
 	windowBreakpoint: 750,
 	maxAppWidthLarge: 900,
 	maxAppWidthSmall: 500,
@@ -24,7 +26,6 @@ const constants = {
 		list: {},
 		categories: { 0: defaultCategory },
 	},
-	savingDelay: 5000,
 	emptyItem: {
 		title: '',
 		date: dayjs().valueOf(),

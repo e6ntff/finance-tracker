@@ -40,8 +40,11 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 	}, [setColNumber, width]);
 
 	const listToShowOnCurrentPageIds = useMemo(
-		() => getListToShowOnCurrentPageIds(debouncedOptions, filteredListIds),
-		[filteredListIds, debouncedOptions]
+		() =>
+			getListToShowOnCurrentPageIds(debouncedOptions, filteredListIds).filter(
+				(key: string) => key !== lastDeletedItemId
+			) || [],
+		[filteredListIds, debouncedOptions, lastDeletedItemId]
 	);
 
 	const splittedListIds = useMemo(() => {
@@ -88,21 +91,17 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 						gutter={16}
 						style={{ inlineSize: '100%' }}
 					>
-						{keys.map((key: string) =>
-							key !== lastDeletedItemId ? (
-								<Col
-									key={key}
-									span={24 / colNumber}
-								>
-									<ListItem
-										mode={debouncedOptions.mode}
-										initialItemId={key}
-									/>
-								</Col>
-							) : (
-								<></>
-							)
-						)}
+						{keys.map((key: string) => (
+							<Col
+								key={key}
+								span={24 / colNumber}
+							>
+								<ListItem
+									mode={debouncedOptions.mode}
+									initialItemId={key}
+								/>
+							</Col>
+						))}
 					</Row>
 				))
 			)}

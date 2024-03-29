@@ -7,7 +7,7 @@ import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
-	const { categories } = categoryStore;
+	const { categories, lastDeletedCategoryId } = categoryStore;
 	const { width, loading } = userStore;
 
 	const [colNumber, setColNumber] = useState<number>(4);
@@ -33,6 +33,7 @@ const CategoryList: React.FC = observer(() => {
 		let row = -1;
 
 		Object.keys(categories)
+			.filter((key: string) => key !== lastDeletedCategoryId)
 			.slice(1)
 			.forEach((key: string, col: number) => {
 				if (col % colNumber === 0) {
@@ -43,7 +44,7 @@ const CategoryList: React.FC = observer(() => {
 			});
 
 		return result;
-	}, [colNumber, categories]);
+	}, [colNumber, categories, lastDeletedCategoryId]);
 
 	return (
 		<Flex

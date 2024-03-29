@@ -25,7 +25,7 @@ interface Props {
 
 const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 	const { isSmallScreen } = userStore;
-	const { replaceItem, removeItem, list } = listStore;
+	const { replaceItem, list, setLastDeletedItemId } = listStore;
 	const { userOptions } = optionsStore;
 	const { categories } = categoryStore;
 
@@ -59,8 +59,8 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 	);
 
 	const deleteItem = useCallback(() => {
-		removeItem(initialItemId);
-	}, [removeItem, initialItemId]);
+		setLastDeletedItemId(initialItemId);
+	}, [setLastDeletedItemId, initialItemId]);
 
 	const TitleJSX = (
 		<Flex

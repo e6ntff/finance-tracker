@@ -8,6 +8,7 @@ import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
 import LargeSpin from './LargeSpin';
+import { listStore } from 'utils/listStore';
 
 interface Props {
 	filteredListIds: string[];
@@ -16,6 +17,7 @@ interface Props {
 const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 	const { width, loading } = userStore;
 	const { listOptions } = optionsStore;
+	const { lastDeletedItemId } = listStore;
 
 	const debouncedOptions: ListOptions = useDebounce(listOptions);
 
@@ -86,17 +88,21 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 						gutter={16}
 						style={{ inlineSize: '100%' }}
 					>
-						{keys.map((key: string) => (
-							<Col
-								key={key}
-								span={24 / colNumber}
-							>
-								<ListItem
-									mode={debouncedOptions.mode}
-									initialItemId={key}
-								/>
-							</Col>
-						))}
+						{keys.map((key: string) =>
+							key !== lastDeletedItemId ? (
+								<Col
+									key={key}
+									span={24 / colNumber}
+								>
+									<ListItem
+										mode={debouncedOptions.mode}
+										initialItemId={key}
+									/>
+								</Col>
+							) : (
+								<></>
+							)
+						)}
 					</Row>
 				))
 			)}

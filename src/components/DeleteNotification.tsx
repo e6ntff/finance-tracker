@@ -1,7 +1,7 @@
 import { UndoOutlined } from '@ant-design/icons';
 import { Button, Typography, notification } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import constants from 'settings/constants';
 import languages from 'settings/languages';
 import { categoryStore } from 'utils/categoryStore';
@@ -11,45 +11,53 @@ import { userStore } from 'utils/userStore';
 
 const DeleteNotification: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
-	const { lastDeletedItem, addItem, list, setList } = listStore;
-	const { lastDeletedCategory, addCategory } = categoryStore;
+	const {
+		lastDeletedItemId,
+		clearListFromCategory,
+		removeItem,
+		setLastDeletedItemId,
+	} = listStore;
+	const { lastDeletedCategoryId, removeCategory, setLastDeletedCategoryId } =
+		categoryStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
+
+	const [isDeleting, setIsDeleting] = useState<boolean>(true);
 
 	const [api, contextHolder] = notification.useNotification({
 		maxCount: 1,
 	});
 
-	const closeNotification = useCallback(() => {
+	const deleteCategory = useCallback(() => {
+		removeCategory(lastDeletedCategoryId);
+		clearListFromCategory(lastDeletedCategoryId);
+		setIsDeleting(true);
+	}, [removeCategory, clearListFromCategory, lastDeletedCategoryId]);
+
+	const deleteItem = useCallback(() => {
+		removeItem(lastDeletedItemId);
+		setIsDeleting(true);
+	}, [removeItem, lastDeletedItemId]);
+
+	const cancelDeleting = useCallback(() => {
+		setIsDeleting(false);
 		api.destroy();
-	}, [api]);
-
-	const restoreItem = useCallback(() => {
-		addItem(lastDeletedItem.item, lastDeletedItem.id);
-		closeNotification();
-	}, [lastDeletedItem, addItem, closeNotification]);
-
-	const restoreCategory = useCallback(() => {
-		addCategory(lastDeletedCategory.category, lastDeletedCategory.id);
-		const newList = list;
-		lastDeletedCategory.itemsWithCategoryIds.forEach((key: string) => {
-			newList[key].categoryId = lastDeletedCategory.id;
-		});
-		setList(newList);
-		closeNotification();
-	}, [lastDeletedCategory, addCategory, closeNotification, list, setList]);
+		setLastDeletedCategoryId('');
+		setLastDeletedItemId('');
+	}, [setIsDeleting, api, setLastDeletedCategoryId, setLastDeletedItemId]);
 
 	const openNotification = useCallback(
-		(text: string, title: string, restore: () => void) => {
+		(text: string, deleteFunction: () => void) => {
 			api.open({
-				message: (
-					<Typography.Text strong>{`${text}: ${title}`}</Typography.Text>
-				),
+				onClose: () => {
+					isDeleting && deleteFunction();
+				},
+				message: <Typography.Text strong>{text}</Typography.Text>,
 				description: (
 					<Button
 						size={isSmallScreen ? 'small' : 'middle'}
-						onClick={restore}
+						onClick={cancelDeleting}
 					>
 						<UndoOutlined />
 					</Button>
@@ -60,28 +68,22 @@ const DeleteNotification: React.FC = observer(() => {
 				placement: 'bottomRight',
 			});
 		},
-		[api, isSmallScreen]
+		[api, isSmallScreen, cancelDeleting, isDeleting]
 	);
 
 	useEffect(() => {
-		lastDeletedItem.id &&
-			openNotification(
-				languages.itemDeleted[language],
-				lastDeletedItem.item.title,
-				restoreItem
-			);
+		setIsDeleting(true);
+		lastDeletedItemId &&
+			openNotification(languages.itemDeleted[language], deleteItem);
 		// eslint-disable-next-line
-	}, [lastDeletedItem]);
+	}, [lastDeletedItemId]);
 
 	useEffect(() => {
-		lastDeletedCategory.id &&
-			openNotification(
-				languages.categoryDeleted[language],
-				lastDeletedCategory.category.name,
-				restoreCategory
-			);
+		setIsDeleting(true);
+		lastDeletedCategoryId &&
+			openNotification(languages.categoryDeleted[language], deleteCategory);
 		// eslint-disable-next-line
-	}, [lastDeletedCategory]);
+	}, [lastDeletedCategoryId]);
 
 	return <>{contextHolder}</>;
 });

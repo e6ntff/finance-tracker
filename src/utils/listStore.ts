@@ -3,7 +3,6 @@ import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
 import uniqid from 'uniqid';
-import constants from 'settings/constants';
 
 configure({
 	enforceActions: 'never',
@@ -12,10 +11,7 @@ configure({
 class ListStore {
 	userStore;
 	list: { [key: string]: ExpenseItem } = {};
-	lastDeletedItem: { id: string; item: ExpenseItem } = {
-		id: '',
-		item: constants.emptyItem,
-	};
+	lastDeletedItemId: string = '';
 
 	setList = (list: { [key: string]: ExpenseItem }, save: boolean = true) => {
 		this.list = { ...list } || {};
@@ -29,9 +25,13 @@ class ListStore {
 
 	removeItem = (id: string) => {
 		const newList = this.list;
-		this.lastDeletedItem = { id: id, item: { ...newList[id] } };
 		delete newList[id];
 		this.setList(newList);
+		this.setLastDeletedItemId('');
+	};
+
+	setLastDeletedItemId = (id: string) => {
+		this.lastDeletedItemId = id;
 	};
 
 	replaceItem = (id: string, payload: ExpenseItem) => {

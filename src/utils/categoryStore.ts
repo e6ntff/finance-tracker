@@ -12,9 +12,14 @@ configure({
 class CategoryStore {
 	userStore;
 	categories: { [key: string]: category } = {};
-	lastDeletedCategory: { id: string; category: category } = {
+	lastDeletedCategory: {
+		id: string;
+		category: category;
+		itemsWithCategoryIds: string[];
+	} = {
 		id: '',
 		category: constants.defaultCategory,
+		itemsWithCategoryIds: [],
 	};
 
 	setCategories = (
@@ -29,9 +34,13 @@ class CategoryStore {
 		this.setCategories({ ...this.categories, [id]: payload });
 	};
 
-	removeCategory = (id: string) => {
+	removeCategory = (id: string, items: string[]) => {
 		const newCategories = this.categories;
-		this.lastDeletedCategory = { id: id, category: { ...newCategories[id] } };
+		this.lastDeletedCategory = {
+			id: id,
+			category: { ...newCategories[id] },
+			itemsWithCategoryIds: items,
+		};
 		delete newCategories[id];
 		this.setCategories(newCategories);
 	};

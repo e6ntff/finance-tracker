@@ -11,7 +11,7 @@ import { userStore } from 'utils/userStore';
 
 const DeleteNotification: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
-	const { lastDeletedItem, addItem } = listStore;
+	const { lastDeletedItem, addItem, list, setList } = listStore;
 	const { lastDeletedCategory, addCategory } = categoryStore;
 	const { userOptions } = optionsStore;
 
@@ -32,6 +32,11 @@ const DeleteNotification: React.FC = observer(() => {
 
 	const restoreCategory = useCallback(() => {
 		addCategory(lastDeletedCategory.category, lastDeletedCategory.id);
+		const newList = list;
+		lastDeletedCategory.itemsWithCategoryIds.forEach((key: string) => {
+			newList[key].categoryId = lastDeletedCategory.id;
+		});
+		setList(newList);
 		closeNotification();
 	}, [lastDeletedCategory, addCategory, closeNotification]);
 

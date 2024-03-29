@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { ExpenseItem, category } from '../settings/interfaces';
+import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -27,10 +27,25 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 		categories[initialCategoryId]
 	);
 
+	const itemsWithCurrentCategory = useMemo(
+		() =>
+			Object.keys(list).reduce(
+				(acc: string[], key: string) =>
+					list[key].categoryId === initialCategoryId ? [...acc, key] : [...acc],
+				[]
+			),
+		[list, initialCategoryId]
+	);
+
 	const deleteCategory = useCallback(() => {
-		removeCategory(initialCategoryId);
+		removeCategory(initialCategoryId, itemsWithCurrentCategory);
 		clearListFromCategory(initialCategoryId);
-	}, [removeCategory, clearListFromCategory, initialCategoryId]);
+	}, [
+		removeCategory,
+		clearListFromCategory,
+		initialCategoryId,
+		itemsWithCurrentCategory,
+	]);
 
 	const updateCurrentCategory = useCallback(
 		(category: category) => {
@@ -73,16 +88,6 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 		[setCurrentCategory, updateCurrentCategory]
 	);
 
-	const itemsWithCurrentCategory = useMemo(
-		() =>
-			Object.values(list).reduce(
-				(acc: number, item: ExpenseItem) =>
-					item.categoryId === initialCategoryId ? ++acc : acc,
-				0
-			),
-		[list, initialCategoryId]
-	);
-
 	const ColorPickerJSX = (
 		<ColorPicker
 			size={isSmallScreen ? 'small' : 'middle'}
@@ -115,7 +120,7 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 
 	const tooltipTitle = useMemo(
 		() =>
-			`${languages.itemsWithCurrentCategory[language]} ${itemsWithCurrentCategory}`,
+			`${languages.itemsWithCurrentCategory[language]} ${itemsWithCurrentCategory.length}`,
 		[itemsWithCurrentCategory, language]
 	);
 

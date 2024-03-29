@@ -7,16 +7,13 @@ import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import Title from 'antd/es/typography/Title';
-import {
-	DeleteOutlined,
-	EditOutlined,
-	InfoCircleOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
 import { categoryStore } from 'utils/categoryStore';
 import dayjs from 'dayjs';
+import DeleteButton from './DeleteButton';
 
 interface Props {
 	mode: Mode;
@@ -134,18 +131,15 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		</Flex>
 	);
 
-	const DeleteJSX = (
-		<DeleteOutlined
-			onClick={deleteItem}
-			style={{ scale: isSmallScreen ? '1' : '1.5' }}
-		/>
-	);
+	const DeleteJSX = <DeleteButton remove={deleteItem} />;
 
 	const EditJSX = (
-		<EditOutlined
-			onClick={toggleIsModalOpened}
-			style={{ scale: isSmallScreen ? '1' : '1.5' }}
-		/>
+		<Tooltip title={languages.edit[language]}>
+			<EditOutlined
+				onClick={toggleIsModalOpened}
+				style={{ scale: isSmallScreen ? '1' : '1.5' }}
+			/>
+		</Tooltip>
 	);
 
 	const ActionsJSX = (
@@ -182,7 +176,12 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 
 	const TooltipJSX = (
 		<Tooltip title={tooltipTitle}>
-			<InfoCircleOutlined />
+			<InfoCircleOutlined
+				style={{
+					scale: isSmallScreen ? '1' : '1.5',
+					opacity: mode === 'grid' ? '.45' : '1',
+				}}
+			/>
 		</Tooltip>
 	);
 

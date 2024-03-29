@@ -15,10 +15,6 @@ const languages = {
 		en: 'Theme',
 		ru: 'Тема',
 	},
-	deleteDelay: {
-		en: 'Delete delay',
-		ru: 'Задержка при удалении',
-	},
 	title: {
 		en: 'Title',
 		ru: 'Название',
@@ -66,6 +62,18 @@ const languages = {
 	passMatch: {
 		en: 'Passwords do not match',
 		ru: 'Пароли не совпадают',
+	},
+	logIn: {
+		en: 'Log in',
+		ru: 'Войти',
+	},
+	logOut: {
+		en: 'Log out',
+		ru: 'Выйти',
+	},
+	signIn: {
+		en: 'Sign in',
+		ru: 'Зарегистрироваться',
 	},
 	In: {
 		en: `In`,
@@ -140,6 +148,82 @@ const languages = {
 	online: {
 		en: 'Back online',
 		ru: 'Интернет появился',
+	},
+	error: {
+		en: 'Error',
+		ru: 'Ошибка',
+	},
+	processing: {
+		en: 'Processing...',
+		ru: 'В процессе...',
+	},
+	success: {
+		en: 'Up to date',
+		ru: 'Обновлено',
+	},
+	gitHub: {
+		en: 'GitHub',
+		ru: 'GitHub',
+	},
+	newItem: {
+		en: 'New item',
+		ru: 'новый расход',
+	},
+	categoriesSelect: {
+		en: 'Categories select',
+		ru: 'Выбор категорий',
+	},
+	sort: {
+		reverse: {
+			en: 'Reverse',
+			ru: 'Развернуть',
+		},
+		byDate: {
+			en: 'By date',
+			ru: 'По дате',
+		},
+		byTitle: {
+			en: 'By title',
+			ru: 'По названию',
+		},
+		byPrice: {
+			en: 'By price',
+			ru: 'По цене',
+		},
+	},
+	layout: {
+		list: {
+			en: 'List',
+			ru: 'Список',
+		},
+		grid: {
+			en: 'Grid',
+			ru: 'Сетка',
+		},
+	},
+	reset: {
+		en: 'Reset',
+		ru: 'Сбросить',
+	},
+	delete: {
+		en: 'Delete',
+		ru: 'Удалить',
+	},
+	edit: {
+		en: 'Edit',
+		ru: 'Редактировать',
+	},
+	byMonth: {
+		en: 'By month',
+		ru: 'Месяцы',
+	},
+	byDay: {
+		en: 'By day',
+		ru: 'Дни',
+	},
+	undo: {
+		en: 'Undo',
+		ru: 'Отменить',
 	},
 };
 

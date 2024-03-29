@@ -2,9 +2,10 @@ import React from 'react';
 import { category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
-import { Select, Tag } from 'antd';
+import { Select, Tag, Tooltip } from 'antd';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
+import languages from 'settings/languages';
 
 const tagRender = (props: any, categories: { [key: number]: category }) => {
 	const { label, value, onClose } = props;
@@ -14,6 +15,7 @@ const tagRender = (props: any, categories: { [key: number]: category }) => {
 	};
 	const color =
 		Object.keys(categories).length > 1 ? categories[value].color : '';
+
 	return (
 		<Tag
 			color={color}
@@ -39,27 +41,25 @@ const tagRender = (props: any, categories: { [key: number]: category }) => {
 const CategoriesSelect: React.FC = observer(() => {
 	const { categories } = categoryStore;
 	const { isSmallScreen } = userStore;
-	const { listOptions, handleCategoriesToFilterChange } = optionsStore;
+	const { listOptions, handleCategoriesToFilterChange, userOptions } =
+		optionsStore;
 
 	return (
-		<Select
-			size={isSmallScreen ? 'small' : 'middle'}
-			mode='multiple'
-			showSearch={false}
-			tagRender={(props) => tagRender(props, categories)}
-			style={{ minInlineSize: '10em' }}
-			value={listOptions.categoriesToFilterIds}
-			onChange={handleCategoriesToFilterChange}
-		>
-			{Object.keys(categories).map((key: string) => (
-				<Select.Option
-					key={key}
-					value={key}
-				>
-					{categories[key].name}
-				</Select.Option>
-			))}
-		</Select>
+		<Tooltip title={languages.categoriesSelect[userOptions.language]}>
+			<Select
+				size={isSmallScreen ? 'small' : 'middle'}
+				mode='multiple'
+				showSearch={false}
+				tagRender={(props) => tagRender(props, categories)}
+				style={{ minInlineSize: '10em' }}
+				value={listOptions.categoriesToFilterIds}
+				onChange={handleCategoriesToFilterChange}
+				options={Object.keys(categories).map((key: string) => ({
+					label: categories[key].name,
+					value: key,
+				}))}
+			/>
+		</Tooltip>
 	);
 });
 

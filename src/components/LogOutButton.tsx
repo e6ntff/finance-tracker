@@ -6,15 +6,16 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
+import languages from 'settings/languages';
 
 const LogOutButton: React.FC = observer(() => {
 	const { setLogged, isSmallScreen, setLoading } = userStore;
 	const { setList } = listStore;
 	const { setCategories } = categoryStore;
-	const { resetOptions } = optionsStore;
+	const { resetOptions, userOptions } = optionsStore;
 	const auth = getAuth(firebaseApp);
 
 	const logOut = useCallback(async () => {
@@ -32,13 +33,15 @@ const LogOutButton: React.FC = observer(() => {
 	}, [auth, setCategories, setList, setLogged, resetOptions, setLoading]);
 
 	return (
-		<Button
-			size={isSmallScreen ? 'small' : 'middle'}
-			danger
-			onClick={logOut}
-		>
-			<LogoutOutlined />
-		</Button>
+		<Tooltip title={languages.logOut[userOptions.language]}>
+			<Button
+				size={isSmallScreen ? 'small' : 'middle'}
+				danger
+				onClick={logOut}
+			>
+				<LogoutOutlined />
+			</Button>
+		</Tooltip>
 	);
 });
 

@@ -1,5 +1,5 @@
 import { UndoOutlined } from '@ant-design/icons';
-import { Button, Typography, notification } from 'antd';
+import { Button, Tooltip, Typography, notification } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback, useEffect, useState } from 'react';
 import constants from 'settings/constants';
@@ -55,12 +55,18 @@ const DeleteNotification: React.FC = observer(() => {
 				},
 				message: <Typography.Text strong>{text}</Typography.Text>,
 				description: (
-					<Button
-						size={isSmallScreen ? 'small' : 'middle'}
-						onClick={cancelDeleting}
+					<Tooltip
+						title={languages.undo[language]}
+						zIndex={3000}
+						placement='right'
 					>
-						<UndoOutlined />
-					</Button>
+						<Button
+							size={isSmallScreen ? 'small' : 'middle'}
+							onClick={cancelDeleting}
+						>
+							<UndoOutlined />
+						</Button>
+					</Tooltip>
 				),
 				duration: constants.deleteDelay / 1000,
 				type: 'warning',
@@ -68,7 +74,7 @@ const DeleteNotification: React.FC = observer(() => {
 				placement: 'bottomRight',
 			});
 		},
-		[api, isSmallScreen, cancelDeleting, isDeleting]
+		[api, isSmallScreen, cancelDeleting, isDeleting, language]
 	);
 
 	useEffect(() => {

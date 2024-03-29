@@ -1,11 +1,14 @@
 import { SyncOutlined } from '@ant-design/icons';
-import { Avatar, Badge } from 'antd';
+import { Avatar, Badge, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useMemo } from 'react';
+import languages from 'settings/languages';
+import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 
 const SyncIcon: React.FC = observer(() => {
 	const { notificationStatus, isDataChanged, isSmallScreen } = userStore;
+	const { userOptions } = optionsStore;
 
 	const status = useMemo(() => {
 		if (notificationStatus.status === 'error') {
@@ -24,11 +27,13 @@ const SyncIcon: React.FC = observer(() => {
 			offset={[-5, 20]}
 			dot={notificationStatus.status !== 'loading'}
 		>
-			<Avatar
-				style={{ background: '#0000' }}
-				size={isSmallScreen ? 'small' : 'default'}
-				icon={<SyncOutlined spin={notificationStatus.status === 'loading'} />}
-			/>
+			<Tooltip title={status && languages[status][userOptions.language]}>
+				<Avatar
+					style={{ background: '#0000' }}
+					size={isSmallScreen ? 'small' : 'default'}
+					icon={<SyncOutlined spin={notificationStatus.status === 'loading'} />}
+				/>
+			</Tooltip>
 		</Badge>
 	);
 });

@@ -1,11 +1,10 @@
 import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Empty, Flex } from 'antd';
+import { Empty, Flex } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import { userStore } from 'utils/userStore';
-import { ReloadOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -13,6 +12,7 @@ import YearSlider from 'components/YearSlider';
 import { Interval } from 'settings/interfaces';
 import LargeSpin from 'components/LargeSpin';
 import StatsCard from 'components/StatsCard';
+import ResetButton from 'components/ResetButton';
 
 dayjs.extend(isBetween);
 
@@ -61,13 +61,10 @@ const Stats: React.FC = observer(() => {
 	const PanelJSX = (
 		<Flex gap={16}>
 			<StatsCard />
-			<Button
-				size={isSmallScreen ? 'small' : 'middle'}
-				onClick={resetRange}
+			<ResetButton
+				reset={resetRange}
 				disabled={!isRangeChanged}
-			>
-				<ReloadOutlined />
-			</Button>
+			/>
 		</Flex>
 	);
 

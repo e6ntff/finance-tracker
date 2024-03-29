@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Flex, Segmented, Slider } from 'antd';
+import { Flex, Segmented, Slider, Tooltip as TooltipAntd } from 'antd';
 import { listStore } from 'utils/listStore';
 import { ExpenseItem } from 'settings/interfaces';
 import dayjs from 'dayjs';
@@ -18,6 +18,7 @@ import {
 } from 'chart.js';
 import SliderDiagram from './SliderDiagram';
 import { optionsStore } from 'utils/optionsStore';
+import languages from 'settings/languages';
 Chart.register(
 	Tooltip,
 	LineElement,
@@ -40,7 +41,7 @@ const YearSlider: React.FC<Props> = observer(
 	({ range, setRange, isAccurate, setIsAccurate }) => {
 		const { list } = listStore;
 		const { isSmallScreen } = userStore;
-		const { defaultRange, setDefaultRange } = optionsStore;
+		const { defaultRange, setDefaultRange, userOptions } = optionsStore;
 
 		const [value, setValue] = useState(defaultRange);
 
@@ -129,9 +130,20 @@ const YearSlider: React.FC<Props> = observer(
 					value={isAccurate}
 					onChange={setIsAccurate}
 					options={[
-						{ label: <ZoomOutOutlined />, value: false },
 						{
-							label: <ZoomInOutlined />,
+							label: (
+								<TooltipAntd title={languages.byMonth[userOptions.language]}>
+									<ZoomOutOutlined />
+								</TooltipAntd>
+							),
+							value: false,
+						},
+						{
+							label: (
+								<TooltipAntd title={languages.byDay[userOptions.language]}>
+									<ZoomInOutlined />
+								</TooltipAntd>
+							),
 							value: true,
 							disabled: isSmallScreen,
 						},

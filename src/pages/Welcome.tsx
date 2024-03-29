@@ -253,12 +253,20 @@ const Welcome: React.FC = observer(() => {
 					align='center'
 					gap={16}
 				>
-					<Button
-						disabled={!valid}
-						onClick={mode === 'logIn' ? logIn : signIn}
+					<Tooltip
+						title={
+							mode === 'logIn'
+								? languages.logIn[language]
+								: languages.signIn[language]
+						}
 					>
-						<LoginOutlined />
-					</Button>
+						<Button
+							disabled={!valid}
+							onClick={mode === 'logIn' ? logIn : signIn}
+						>
+							<LoginOutlined />
+						</Button>
+					</Tooltip>
 					<Link onClick={changeMode}>
 						{mode === 'signIn'
 							? languages.already[language]

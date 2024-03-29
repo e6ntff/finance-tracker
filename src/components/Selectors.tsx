@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Pagination } from 'antd';
+import { Divider, Flex, Pagination } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { memo, useMemo } from 'react';
 import NewItemButton from './NewItemButton';
@@ -6,10 +6,10 @@ import YearSlider from './YearSlider';
 import CategoriesSelect from './CategoriesSelect';
 import SortSelect from './SortSelect';
 import ModeSelect from './ModeSelect';
-import { ReloadOutlined } from '@ant-design/icons';
 import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
+import ResetButton from './ResetButton';
 
 interface Props {
 	total: number;
@@ -77,13 +77,10 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 					<Flex gap={16}>
 						<SortSelect />
 						<ModeSelect />
-						<Button
+						<ResetButton
 							disabled={!isSettingsChanged}
-							onClick={resetSettings}
-							size={isSmallScreen ? 'small' : 'middle'}
-						>
-							<ReloadOutlined />
-						</Button>
+							reset={resetSettings}
+						/>
 					</Flex>
 				</Flex>
 				<YearSlider

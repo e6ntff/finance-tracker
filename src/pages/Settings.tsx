@@ -41,7 +41,6 @@ const Settings: React.FC = observer(() => {
 						onChange={setCurrency}
 					/>
 				</Form.Item>
-				<Form.Item label={languages.deleteDelay[language]}></Form.Item>
 			</Form>
 		</Flex>
 	);

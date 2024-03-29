@@ -3,13 +3,14 @@ import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Button, Card, ColorPicker, Flex, Tooltip, Typography } from 'antd';
+import { Card, ColorPicker, Flex, Tooltip, Typography } from 'antd';
 import { Color } from 'antd/es/color-picker';
 import Title from 'antd/es/typography/Title';
-import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
+import DeleteButton from './DeleteButton';
 
 interface Props {
 	initialCategoryId: string;
@@ -115,31 +116,23 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 
 	const tooltipTitle = useMemo(
 		() =>
-			`${languages.itemsWithCurrentCategory[language]} ${itemsWithCurrentCategory.length}`,
+			`${languages.itemsWithCurrentCategory[language]}: ${itemsWithCurrentCategory.length}`,
 		[itemsWithCurrentCategory, language]
 	);
 
 	const TooltipJSX = (
 		<Tooltip title={tooltipTitle}>
-			<InfoCircleOutlined />
+			<InfoCircleOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
 		</Tooltip>
 	);
 
-	const DeleteButtonJSX = (
-		<Button
-			size={isSmallScreen ? 'small' : 'middle'}
-			onClick={deleteCategory}
-		>
-			<DeleteOutlined />
-		</Button>
-	);
+	const DeleteButtonJSX = <DeleteButton remove={deleteCategory} />;
 
 	return (
 		<Card
-			extra={TooltipJSX}
 			size={isSmallScreen ? 'small' : 'default'}
 			title={TitleJSX}
-			actions={[ColorPickerJSX, DeleteButtonJSX]}
+			actions={[ColorPickerJSX, TooltipJSX, DeleteButtonJSX]}
 			styles={{
 				title: {
 					padding: 10,

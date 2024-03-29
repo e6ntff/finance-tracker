@@ -20,6 +20,7 @@ import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import Notification from 'components/Notification';
 import DeleteNotification from 'components/DeleteNotification';
+import languages from 'settings/languages';
 
 const auth = getAuth(firebaseApp);
 
@@ -31,12 +32,13 @@ const App: React.FC = observer(() => {
 		setCurrencyRates,
 		setUser,
 		setLoading,
+		setStatus,
 	} = userStore;
 	const { setList } = listStore;
 	const { setCategories } = categoryStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
-	const { themeAlgorithm, currency } = userOptions;
+	const { themeAlgorithm, currency, language } = userOptions;
 
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -48,12 +50,25 @@ const App: React.FC = observer(() => {
 			);
 		};
 
+		const handleOffline = () => {
+			setStatus({ status: 'error', text: languages.offline[language] });
+			window.addEventListener('online', handleOnline);
+		};
+
+		const handleOnline = () => {
+			setStatus({ status: 'success', text: languages.online[language] });
+		};
+
+		window.addEventListener('offline', handleOffline);
 		window.addEventListener('resize', handleResize);
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('online', handleOnline);
+			window.removeEventListener('offline', handleOffline);
 		};
-	}, [setWidth]);
+		// eslint-disable-next-line
+	}, []);
 
 	useEffect(() => {
 		if (logged) setIsLoaded(true);
@@ -74,7 +89,7 @@ const App: React.FC = observer(() => {
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
 			if (authUser && authUser.uid) {
-				getData(authUser).then((data) => {
+				getData(authUser, setStatus).then((data) => {
 					if (data) {
 						setList(data.list, false);
 						setCategories(data.categories, false);

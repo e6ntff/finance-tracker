@@ -16,40 +16,33 @@ class UserStore {
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
 	loading: boolean = true;
-	notificationStatus: Status = null;
-	recentChanges: number = 0;
+	notificationStatus: Status = { status: 'success' };
+	isDataChanged: boolean = false;
 	allData: AllData = constants.defaultData;
 
 	saveData = () => {
 		if (this.user.uid) {
-			saveData(
-				this.user,
-				this.setStatus,
-				this.decreaseRecentChanges,
-				this.recentChanges,
-				this.allData
-			);
+			saveData(this.user, this.setStatus, this.setIsDataChanged, this.allData);
 		}
 	};
 
 	debouncedSaveData = debounce(this.saveData, constants.savingDelay);
 
-	pushDataToSaving = (data: any) => {
-		this.allData = Object.assign(this.allData, { ...data });
+	pushDataToSaving = () => {
 		this.debouncedSaveData();
-		this.increaseRecentChanges();
+		this.setIsDataChanged(true);
+	};
+
+	updateAllData = (data: any) => {
+		this.allData = { ...this.allData, ...data };
 	};
 
 	setLoading = (value: boolean) => {
 		this.loading = value;
 	};
 
-	increaseRecentChanges = (value: number = 1) => {
-		this.recentChanges += value;
-	};
-
-	decreaseRecentChanges = (value: number = 1) => {
-		this.recentChanges -= value;
+	setIsDataChanged = (value: boolean) => {
+		this.isDataChanged = value;
 	};
 
 	setStatus = (status: Status) => {

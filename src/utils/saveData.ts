@@ -9,31 +9,23 @@ const usersCollection = collection(firestore, 'users');
 const saveData = async (
 	user: any,
 	setStatus: (arg0: Status) => void,
-	decreaseRecentChanges: (value: number) => void,
-	initialRecentChanges: number,
+	setIsDataChanged: (arg0: boolean) => void,
 	data: AllData
 ) => {
-	setStatus('loading');
+	setStatus({ status: 'loading' });
+	const errorId = setTimeout(() => {
+		setStatus({ status: 'error', text: 'Error saving data' });
+	}, constants.errorDelay);
 	if (user.uid) {
-		try {
-			const userDocRef = doc(usersCollection, user.uid);
-			if (userDocRef) {
-				await setDoc(userDocRef, { ...data }, { merge: true });
-				setStatus('success');
-			}
-			decreaseRecentChanges(initialRecentChanges);
-		} catch (error: any) {
-			console.log(error);
+		const userDocRef = doc(usersCollection, user.uid);
+		if (userDocRef) {
 			try {
-				const userDocRef = doc(usersCollection, user.uid);
-				if (userDocRef) {
-					await setDoc(userDocRef, constants.defaultData);
-					setStatus('success');
-				}
-				decreaseRecentChanges(initialRecentChanges);
+				await setDoc(userDocRef, { ...data });
+				clearTimeout(errorId);
+				setStatus({ status: 'success' });
+				setIsDataChanged(false);
 			} catch (error: any) {
-				setStatus('error');
-				alert(`Saving error: ${error}`);
+				setStatus({ status: 'error', text: error });
 			}
 		}
 	}

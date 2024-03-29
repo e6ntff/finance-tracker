@@ -19,7 +19,8 @@ class ListStore {
 
 	setList = (list: { [key: string]: ExpenseItem }, save: boolean = true) => {
 		this.list = { ...list } || {};
-		save && this.userStore.pushDataToSaving({ list: this.list });
+		this.userStore.updateAllData({ list: this.list });
+		save && this.userStore.pushDataToSaving();
 	};
 
 	addItem = (payload: ExpenseItem, id: string = uniqid()) => {

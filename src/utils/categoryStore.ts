@@ -27,7 +27,8 @@ class CategoryStore {
 		save: boolean = true
 	) => {
 		this.categories = { ...categories } || { '0': constants.defaultCategory };
-		save && this.userStore.pushDataToSaving({ categories: this.categories });
+		this.userStore.updateAllData({ categories: this.categories });
+		save && this.userStore.pushDataToSaving();
 	};
 
 	addCategory = (payload: category, id: string = uniqid()) => {

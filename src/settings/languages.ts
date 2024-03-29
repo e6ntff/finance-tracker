@@ -113,18 +113,6 @@ const languages = {
 		en: 'No title',
 		ru: 'Нет названия',
 	},
-	success: {
-		en: 'Changes saved',
-		ru: 'Изменения сохранены',
-	},
-	error: {
-		en: 'Saving error',
-		ru: 'Ошибка сохранения',
-	},
-	loading: {
-		en: 'Saving changes',
-		ru: 'Сохранение изменений',
-	},
 	createdAt: {
 		en: 'Created at',
 		ru: 'Создано:',
@@ -144,6 +132,14 @@ const languages = {
 	itemsWithCurrentCategory: {
 		en: 'Items',
 		ru: 'Расходов',
+	},
+	offline: {
+		en: `You're offline`,
+		ru: 'Нет интернета',
+	},
+	online: {
+		en: 'Back online',
+		ru: 'Интернет появился',
 	},
 };
 

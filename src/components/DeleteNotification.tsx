@@ -38,7 +38,7 @@ const DeleteNotification: React.FC = observer(() => {
 		});
 		setList(newList);
 		closeNotification();
-	}, [lastDeletedCategory, addCategory, closeNotification]);
+	}, [lastDeletedCategory, addCategory, closeNotification, list, setList]);
 
 	const openNotification = useCallback(
 		(text: string, title: string, restore: () => void) => {

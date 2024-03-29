@@ -1,16 +1,13 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import ListItem from './ListItem';
-import { ExpenseItem, ListOptions } from '../settings/interfaces';
+import { ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
-import { Button, Col, Empty, List, Row } from 'antd';
+import { Col, Empty, List, Row } from 'antd';
 import { getListToShowOnCurrentPageIds } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
 import LargeSpin from './LargeSpin';
-import { categoryStore } from 'utils/categoryStore';
-import calculatePrices from 'utils/calculatePrices';
-import { listStore } from 'utils/listStore';
 
 interface Props {
 	filteredListIds: string[];
@@ -62,43 +59,6 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 
 	return (
 		<>
-			<Button
-				onClick={() => {
-					const data: { [key: string]: ExpenseItem } = {};
-					new Array(500).fill(undefined).forEach(() => {
-						const categoryId = Object.keys(categoryStore.categories)[
-							Math.floor(
-								Math.random() * Object.keys(categoryStore.categories).length
-							)
-						];
-
-						const date: number =
-							Math.random() *
-								(new Date('2023-12-31').getTime() -
-									new Date('2022-01-01').getTime()) +
-							new Date('2020-01-01').getTime();
-
-						const prices = calculatePrices(
-							{ USD: Math.random() * 1501, EUR: 0, RUB: 0 },
-							userStore.currencyRates,
-							'USD'
-						);
-
-						const id = Math.random();
-
-						data[id] = {
-							title: '',
-							price: prices,
-							categoryId: categoryId,
-							date: date,
-							createdAt: date,
-						};
-					});
-
-					listStore.setList(data);
-				}}
-			></Button>
-
 			{loading ? (
 				<LargeSpin />
 			) : (

@@ -73,7 +73,10 @@ export interface UserOptions {
 	themeAlgorithm: ThemeAlgorithm;
 }
 
-export type Status = 'loading' | 'success' | 'error' | null;
+export interface Status {
+	status: 'loading' | 'success' | 'error';
+	text?: string;
+}
 
 export interface AllData {
 	list: { [key: string]: ExpenseItem };

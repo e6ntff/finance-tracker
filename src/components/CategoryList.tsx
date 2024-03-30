@@ -8,7 +8,7 @@ import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
 	const { categories, lastDeletedCategoryId } = categoryStore;
-	const { loading } = userStore;
+	const { loading, isSmallScreen } = userStore;
 
 	const categoriesToShowIds = useMemo(
 		() =>
@@ -27,7 +27,10 @@ const CategoryList: React.FC = observer(() => {
 			{loading ? (
 				<LargeSpin />
 			) : Object.values(categories).length > 1 ? (
-				<Space>
+				<Space
+					wrap
+					size={isSmallScreen ? 8 : 16}
+				>
 					{categoriesToShowIds.map((key: string) => (
 						<CategoryItem
 							key={key}

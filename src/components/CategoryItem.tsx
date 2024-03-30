@@ -130,9 +130,10 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 
 	return (
 		<Card
+			style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
 			size={isSmallScreen ? 'small' : 'default'}
 			title={TitleJSX}
-			actions={[ColorPickerJSX, TooltipJSX, DeleteButtonJSX]}
+			actions={[TooltipJSX, ColorPickerJSX, DeleteButtonJSX]}
 			styles={{
 				title: {
 					padding: 10,

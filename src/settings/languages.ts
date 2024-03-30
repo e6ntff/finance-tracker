@@ -129,9 +129,9 @@ const languages = {
 		en: 'Updated at',
 		ru: 'Обновлено:',
 	},
-	itemDeleted: {
-		en: 'Item deleted',
-		ru: 'Расход удален',
+	itemsDeleted: {
+		en: 'Items deleted',
+		ru: 'Расходов удалено',
 	},
 	categoryDeleted: {
 		en: 'Category deleted',

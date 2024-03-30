@@ -81,9 +81,9 @@ const DeleteNotification: React.FC = observer(() => {
 
 	useEffect(() => {
 		setIsDeleting(true);
-		lastDeletedItemIds.length === 1 &&
+		lastDeletedItemIds.length &&
 			openNotification(
-				`${languages.itemDeleted[language]}: ${lastDeletedItemIds.length}`,
+				`${languages.itemsDeleted[language]}: ${lastDeletedItemIds.length}`,
 				deleteItem
 			);
 		// eslint-disable-next-line

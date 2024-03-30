@@ -41,7 +41,7 @@ export type Sort = 'date' | 'title' | 'price';
 
 export type Mode = 'list' | 'grid';
 
-export type Interval = 'year' | 'month' | 'day';
+export type Interval = 'year' | 'month';
 
 export type currency = 'USD' | 'EUR' | 'RUB';
 

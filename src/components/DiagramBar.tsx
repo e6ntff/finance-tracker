@@ -37,13 +37,34 @@ const DiagramBar: React.FC<Props> = observer(({ mode, setMode }) => {
 		return getValuesForBarDiagram(list, currency, mode, dayjs(range[0]).year());
 	}, [currency, list, mode, range]);
 
+	const colors = useMemo(
+		() =>
+			mode === 'year'
+				? Object.keys(values).map((key: string) => {
+						const date = dayjs(key);
+						return date >= dayjs(range[0]).startOf('year') &&
+							date <= dayjs(range[1]).endOf('year')
+							? '#f00'
+							: '#f007';
+				  })
+				: Object.keys(values).map((key: string) => {
+						const month = Number(key);
+						return month >= dayjs(range[0]).startOf('month').month() &&
+							month <= dayjs(range[1]).endOf('month').month()
+							? '#f00'
+							: '#f005';
+				  }),
+
+		[range, values, mode]
+	);
+
 	const data = {
 		labels: mode === 'month' ? languages.months[language] : Object.keys(values),
 		datasets: [
 			{
 				label: getSymbolAndPrice(currency),
 				data: Object.values(values),
-				backgroundColor: '#f00',
+				backgroundColor: colors,
 			},
 		],
 	};

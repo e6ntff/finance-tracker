@@ -211,6 +211,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 					bordered
 					title={TitleJSX}
 					actions={[ActionsJSX]}
+					style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
 				>
 					<Flex justify='center'>
 						<Flex

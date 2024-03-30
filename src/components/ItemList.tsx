@@ -1,8 +1,8 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import ListItem from './ListItem';
 import { ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
-import { Col, Empty, List, Row } from 'antd';
+import { Empty, List, Space } from 'antd';
 import { getListToShowOnCurrentPageIds } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
@@ -15,29 +15,11 @@ interface Props {
 }
 
 const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
-	const { width, loading } = userStore;
+	const { loading, isSmallScreen } = userStore;
 	const { listOptions } = optionsStore;
 	const { lastDeletedItemIds } = listStore;
 
 	const debouncedOptions: ListOptions = useDebounce(listOptions);
-
-	const [colNumber, setColNumber] = useState<number>(4);
-
-	useEffect(() => {
-		if (width < 350) {
-			setColNumber(1);
-			return;
-		}
-		if (width < 450) {
-			setColNumber(2);
-			return;
-		}
-		if (width < 850) {
-			setColNumber(3);
-			return;
-		}
-		setColNumber(4);
-	}, [setColNumber, width]);
 
 	const listToShowOnCurrentPageIds = useMemo(
 		() =>
@@ -46,21 +28,6 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			),
 		[filteredListIds, debouncedOptions, lastDeletedItemIds]
 	);
-
-	const splittedListIds = useMemo(() => {
-		const result: string[][] = [];
-		let row = -1;
-
-		listToShowOnCurrentPageIds.forEach((key: string, col: number) => {
-			if (col % colNumber === 0) {
-				row++;
-				result.push([]);
-			}
-			result[row].push(key);
-		});
-
-		return result;
-	}, [colNumber, listToShowOnCurrentPageIds]);
 
 	return (
 		<>
@@ -85,25 +52,20 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 					))}
 				</List>
 			) : (
-				splittedListIds.map((keys: string[]) => (
-					<Row
-						key={keys[0]}
-						gutter={16}
-						style={{ inlineSize: '100%' }}
-					>
-						{keys.map((key: string) => (
-							<Col
-								key={key}
-								span={24 / colNumber}
-							>
-								<ListItem
-									mode={debouncedOptions.mode}
-									initialItemId={key}
-								/>
-							</Col>
-						))}
-					</Row>
-				))
+				<Space
+					wrap
+					size={isSmallScreen ? 8 : 16}
+					align='center'
+					style={{ justifyContent: 'center' }}
+				>
+					{listToShowOnCurrentPageIds.map((key: string) => (
+						<ListItem
+							key={key}
+							mode={debouncedOptions.mode}
+							initialItemId={key}
+						/>
+					))}
+				</Space>
 			)}
 		</>
 	);

@@ -1,50 +1,22 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import CategoryItem from './CategoryItem';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
-import { Col, Empty, Flex, Row } from 'antd';
+import { Empty, Flex, Space } from 'antd';
 import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
 	const { categories, lastDeletedCategoryId } = categoryStore;
-	const { width, loading } = userStore;
+	const { loading } = userStore;
 
-	const [colNumber, setColNumber] = useState<number>(4);
-
-	useEffect(() => {
-		if (width < 300) {
-			setColNumber(1);
-			return;
-		}
-		if (width < 400) {
-			setColNumber(2);
-			return;
-		}
-		if (width < 600) {
-			setColNumber(3);
-			return;
-		}
-		setColNumber(4);
-	}, [setColNumber, width]);
-
-	const splittedCategories = useMemo(() => {
-		const result: string[][] = [];
-		let row = -1;
-
-		Object.keys(categories)
-			.filter((key: string) => key !== lastDeletedCategoryId)
-			.slice(1)
-			.forEach((key: string, col: number) => {
-				if (col % colNumber === 0) {
-					row++;
-					result.push([]);
-				}
-				result[row].push(key);
-			});
-
-		return result;
-	}, [colNumber, categories, lastDeletedCategoryId]);
+	const categoriesToShowIds = useMemo(
+		() =>
+			Object.keys(categories)
+				.slice(1)
+				.filter((key: string) => key !== lastDeletedCategoryId),
+		[categories, lastDeletedCategoryId]
+	);
 
 	return (
 		<Flex
@@ -55,22 +27,14 @@ const CategoryList: React.FC = observer(() => {
 			{loading ? (
 				<LargeSpin />
 			) : Object.values(categories).length > 1 ? (
-				splittedCategories.map((keys: string[]) => (
-					<Row
-						style={{ inlineSize: '100%' }}
-						key={keys[0]}
-						gutter={16}
-					>
-						{keys.map((key: string) => (
-							<Col
-								key={key}
-								span={24 / colNumber}
-							>
-								<CategoryItem initialCategoryId={key} />
-							</Col>
-						))}
-					</Row>
-				))
+				<Space>
+					{categoriesToShowIds.map((key: string) => (
+						<CategoryItem
+							key={key}
+							initialCategoryId={key}
+						/>
+					))}
+				</Space>
 			) : (
 				<Empty
 					image={Empty.PRESENTED_IMAGE_SIMPLE}

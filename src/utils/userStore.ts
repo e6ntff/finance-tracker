@@ -11,7 +11,6 @@ configure({
 
 class UserStore {
 	user: any = {};
-	width: number = window.innerWidth;
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
@@ -49,8 +48,7 @@ class UserStore {
 		this.notificationStatus = status;
 	};
 
-	setWidth = (width: number, value: boolean) => {
-		this.width = width;
+	setIsSmallScreen = (value: boolean) => {
 		this.isSmallScreen = value;
 	};
 

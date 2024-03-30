@@ -28,7 +28,7 @@ const App: React.FC = observer(() => {
 	const {
 		logged,
 		isSmallScreen,
-		setWidth,
+		setIsSmallScreen,
 		setCurrencyRates,
 		setUser,
 		setLoading,
@@ -44,10 +44,7 @@ const App: React.FC = observer(() => {
 
 	useEffect(() => {
 		const handleResize = () => {
-			setWidth(
-				window.innerWidth,
-				window.innerWidth < constants.windowBreakpoint
-			);
+			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
 		};
 
 		const handleOffline = () => {

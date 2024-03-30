@@ -11,7 +11,7 @@ configure({
 class ListStore {
 	userStore;
 	list: { [key: string]: ExpenseItem } = {};
-	lastDeletedItemId: string = '';
+	lastDeletedItemIds: string[] = [];
 
 	setList = (list: { [key: string]: ExpenseItem }, save: boolean = true) => {
 		this.list = { ...list } || {};
@@ -27,11 +27,11 @@ class ListStore {
 		const newList = this.list;
 		delete newList[id];
 		this.setList(newList);
-		this.setLastDeletedItemId('');
+		this.setLastDeletedItemIds([]);
 	};
 
-	setLastDeletedItemId = (id: string) => {
-		this.lastDeletedItemId = id;
+	setLastDeletedItemIds = (ids: string[]) => {
+		this.lastDeletedItemIds = ids;
 	};
 
 	replaceItem = (id: string, payload: ExpenseItem) => {

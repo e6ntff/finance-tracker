@@ -17,7 +17,7 @@ interface Props {
 const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 	const { width, loading } = userStore;
 	const { listOptions } = optionsStore;
-	const { lastDeletedItemId } = listStore;
+	const { lastDeletedItemIds } = listStore;
 
 	const debouncedOptions: ListOptions = useDebounce(listOptions);
 
@@ -42,9 +42,9 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 	const listToShowOnCurrentPageIds = useMemo(
 		() =>
 			getListToShowOnCurrentPageIds(debouncedOptions, filteredListIds).filter(
-				(key: string) => key !== lastDeletedItemId
-			) || [],
-		[filteredListIds, debouncedOptions, lastDeletedItemId]
+				(key: string) => !lastDeletedItemIds.includes(key)
+			),
+		[filteredListIds, debouncedOptions, lastDeletedItemIds]
 	);
 
 	const splittedListIds = useMemo(() => {

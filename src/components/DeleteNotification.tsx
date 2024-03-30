@@ -12,10 +12,10 @@ import { userStore } from 'utils/userStore';
 const DeleteNotification: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 	const {
-		lastDeletedItemId,
+		lastDeletedItemIds,
 		clearListFromCategory,
 		removeItem,
-		setLastDeletedItemId,
+		setLastDeletedItemIds,
 	} = listStore;
 	const { lastDeletedCategoryId, removeCategory, setLastDeletedCategoryId } =
 		categoryStore;
@@ -36,16 +36,18 @@ const DeleteNotification: React.FC = observer(() => {
 	}, [removeCategory, clearListFromCategory, lastDeletedCategoryId]);
 
 	const deleteItem = useCallback(() => {
-		removeItem(lastDeletedItemId);
+		lastDeletedItemIds.forEach((key: string) => {
+			removeItem(key);
+		});
 		setIsDeleting(true);
-	}, [removeItem, lastDeletedItemId]);
+	}, [removeItem, lastDeletedItemIds]);
 
 	const cancelDeleting = useCallback(() => {
 		setIsDeleting(false);
 		api.destroy();
 		setLastDeletedCategoryId('');
-		setLastDeletedItemId('');
-	}, [setIsDeleting, api, setLastDeletedCategoryId, setLastDeletedItemId]);
+		setLastDeletedItemIds([]);
+	}, [setIsDeleting, api, setLastDeletedCategoryId, setLastDeletedItemIds]);
 
 	const openNotification = useCallback(
 		(text: string, deleteFunction: () => void) => {
@@ -79,10 +81,13 @@ const DeleteNotification: React.FC = observer(() => {
 
 	useEffect(() => {
 		setIsDeleting(true);
-		lastDeletedItemId &&
-			openNotification(languages.itemDeleted[language], deleteItem);
+		lastDeletedItemIds.length === 1 &&
+			openNotification(
+				`${languages.itemDeleted[language]}: ${lastDeletedItemIds.length}`,
+				deleteItem
+			);
 		// eslint-disable-next-line
-	}, [lastDeletedItemId]);
+	}, [lastDeletedItemIds]);
 
 	useEffect(() => {
 		setIsDeleting(true);

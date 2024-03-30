@@ -11,6 +11,7 @@ import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import DeleteButton from './DeleteButton';
+import ItemsModal from './ItemsModal';
 
 interface Props {
 	initialCategoryId: string;
@@ -28,6 +29,8 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 	const [currentCategory, setCurrentCategory] = useState<category>(
 		categories[initialCategoryId]
 	);
+
+	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 	const itemsWithCurrentCategory = useMemo(
 		() =>
@@ -122,27 +125,39 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 
 	const TooltipJSX = (
 		<Tooltip title={tooltipTitle}>
-			<InfoCircleOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
+			<InfoCircleOutlined
+				style={{ scale: isSmallScreen ? '1' : '1.5' }}
+				onClick={() => {
+					itemsWithCurrentCategory.length && setIsModalOpened(true);
+				}}
+			/>
 		</Tooltip>
 	);
 
 	const DeleteButtonJSX = <DeleteButton remove={deleteCategory} />;
 
 	return (
-		<Card
-			style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
-			size={isSmallScreen ? 'small' : 'default'}
-			title={TitleJSX}
-			actions={[TooltipJSX, ColorPickerJSX, DeleteButtonJSX]}
-			styles={{
-				title: {
-					padding: 10,
-				},
-				body: {
-					padding: 0,
-				},
-			}}
-		></Card>
+		<>
+			<Card
+				style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
+				size={isSmallScreen ? 'small' : 'default'}
+				title={TitleJSX}
+				actions={[TooltipJSX, ColorPickerJSX, DeleteButtonJSX]}
+				styles={{
+					title: {
+						padding: 10,
+					},
+					body: {
+						padding: 0,
+					},
+				}}
+			></Card>
+			<ItemsModal
+				opened={isModalOpened}
+				setOpened={setIsModalOpened}
+				itemIds={itemsWithCurrentCategory}
+			/>
+		</>
 	);
 });
 

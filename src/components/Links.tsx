@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Tooltip } from 'antd';
+import { Avatar, Flex, Tooltip } from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
 import Link from 'antd/es/typography/Link';
 import { userStore } from 'utils/userStore';
@@ -18,12 +18,14 @@ const Links: React.FC = observer(() => {
 					href='https://github.com/e6ntff'
 					target='_blank'
 				>
-					<GithubOutlined
-						style={{
-							color: '#fff',
-							fontSize: isSmallScreen ? '1.5em' : '2em',
-						}}
-					/>
+					<Avatar>
+						<GithubOutlined
+							style={{
+								color: '#fff',
+								fontSize: isSmallScreen ? '1.5em' : '2em',
+							}}
+						/>
+					</Avatar>
 				</Link>
 			</Tooltip>
 		</Flex>

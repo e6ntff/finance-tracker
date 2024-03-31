@@ -225,6 +225,14 @@ const languages = {
 		en: 'Undo',
 		ru: 'Отменить',
 	},
+	removeAll: {
+		en: 'Remove all',
+		ru: 'Удалить все',
+	},
+	removeAllConfirm: {
+		en: 'This will remove all your data! Are you sure?',
+		ru: 'Все данные будут удалены. Вы уверены?',
+	},
 };
 
 export default languages;

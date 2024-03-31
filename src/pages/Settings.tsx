@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import LanguageSelect from '../components/LanguageSelect';
 import CurrencySelect from '../components/CurrencySelect';
-import { Flex, Form, Segmented } from 'antd';
+import { Button, Flex, Form, Popconfirm, Segmented } from 'antd';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 import { BulbFilled, BulbOutlined } from '@ant-design/icons';
+import { listStore } from 'utils/listStore';
+import { categoryStore } from 'utils/categoryStore';
+import constants from 'settings/constants';
 
 const Settings: React.FC = observer(() => {
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 	const { isSmallScreen } = userStore;
+	const { setList, list } = listStore;
+	const { setCategories, categories } = categoryStore;
 
 	const { language, currency, theme } = userOptions;
+
+	const removeData = useCallback(() => {
+		setList({});
+		setCategories({ '0': constants.defaultCategory });
+	}, [setCategories, setList]);
+
+	const isButtonDisabled = useMemo(
+		() =>
+			Object.keys(list).length === 0 && Object.keys(categories).length === 1,
+		[list, categories]
+	);
 
 	return (
 		<Flex justify='center'>
@@ -40,6 +56,19 @@ const Settings: React.FC = observer(() => {
 						value={currency}
 						onChange={setCurrency}
 					/>
+				</Form.Item>
+				<Form.Item>
+					<Popconfirm
+						title={languages.removeAllConfirm[language]}
+						onConfirm={removeData}
+					>
+						<Button
+							size={isSmallScreen ? 'small' : 'middle'}
+							disabled={isButtonDisabled}
+						>
+							{languages.removeAll[language]}
+						</Button>
+					</Popconfirm>
 				</Form.Item>
 			</Form>
 		</Flex>

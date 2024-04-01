@@ -8,9 +8,9 @@ import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import Title from 'antd/es/typography/Title';
-import DeleteButton from './DeleteButton';
 import constants from 'settings/constants';
 import Scrollbars from 'react-custom-scrollbars';
+import { MyDelete } from './Items';
 
 interface Props {
 	opened: boolean;
@@ -23,6 +23,8 @@ const ItemsModal: React.FC<Props> = observer(
 		const { list, replaceItem } = listStore;
 		const { isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
+
+		const { language } = userOptions;
 
 		const deleteCategoryFromItem = useCallback(
 			(key: string) => {
@@ -86,11 +88,9 @@ const ItemsModal: React.FC<Props> = observer(
 									</Flex>
 								</Col>
 								<Col span={2}>
-									<DeleteButton
-										remove={() => {
-											deleteCategoryFromItem(key);
-										}}
-									/>
+									{MyDelete(languages.delete[language], isSmallScreen, () => {
+										deleteCategoryFromItem(key);
+									})}
 								</Col>
 							</Item>
 						))}

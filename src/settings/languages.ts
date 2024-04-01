@@ -259,10 +259,14 @@ const languages: { [key: string]: any } = {
 		en: 'This will delete all forever! Are you sure?',
 		ru: 'Все предметы удалятся навсегда! Вы уверены?',
 	},
-	restoreAllConfirm: { en: 'Restore all', ru: 'Восстановить все' },
+	restoreAllConfirm: { en: 'Restore all?', ru: 'Восстановить все?' },
 	deleteConfirmation: {
 		en: 'Delete confirmation',
 		ru: 'Подтверждение удаления',
+	},
+	pickColor: {
+		en: 'Pick color',
+		ru: 'Выбрать цвет',
 	},
 };
 

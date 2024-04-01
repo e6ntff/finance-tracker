@@ -24,7 +24,7 @@ const SyncIcon: React.FC = observer(() => {
 		<Badge
 			size={isSmallScreen ? 'small' : 'default'}
 			status={status}
-			offset={[-5, 20]}
+			offset={isSmallScreen ? [-3, 17] : [-5, 20]}
 			dot={notificationStatus.status !== 'loading'}
 		>
 			<Tooltip title={status && languages[status][userOptions.language]}>

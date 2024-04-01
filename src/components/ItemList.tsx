@@ -52,8 +52,8 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 				<Space
 					wrap
 					size={isSmallScreen ? 8 : 16}
-					align='center'
-					style={{ justifyContent: 'center' }}
+					// align='center'
+					// style={{ justifyContent: 'center' }}
 				>
 					{listToShowOnCurrentPageIds.map((key: string) => (
 						<ListItem

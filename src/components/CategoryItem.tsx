@@ -3,15 +3,13 @@ import { category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Card, ColorPicker, Flex, Tooltip, Typography } from 'antd';
+import { Card, ColorPicker, Flex, Tooltip } from 'antd';
 import { Color } from 'antd/es/color-picker';
-import Title from 'antd/es/typography/Title';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
-import DeleteButton from './DeleteButton';
 import ItemsModal from './ItemsModal';
+import { MyDelete, MyInfoTooltip, MyTitle } from './Items';
 
 interface Props {
 	initialCategoryId: string;
@@ -92,33 +90,14 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 	);
 
 	const ColorPickerJSX = (
-		<ColorPicker
-			size={isSmallScreen ? 'small' : 'middle'}
-			value={currentCategory.color}
-			format='hex'
-			onChangeComplete={handleColorChange}
-		/>
-	);
-
-	const TitleJSX = (
-		<Flex justify='center'>
-			{isSmallScreen ? (
-				<Typography.Text
-					strong
-					editable={{ onChange: handleNameChange }}
-				>
-					{currentCategory.name}
-				</Typography.Text>
-			) : (
-				<Title
-					level={isSmallScreen ? 5 : 3}
-					editable={{ onChange: handleNameChange }}
-					style={{ margin: 0 }}
-				>
-					{currentCategory.name}
-				</Title>
-			)}
-		</Flex>
+		<Tooltip title={languages.pickColor[language]}>
+			<ColorPicker
+				size={isSmallScreen ? 'small' : 'middle'}
+				value={currentCategory.color}
+				format='hex'
+				onChangeComplete={handleColorChange}
+			/>
+		</Tooltip>
 	);
 
 	const tooltipTitle = useMemo(
@@ -127,26 +106,32 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 		[itemsWithCurrentCategory, language]
 	);
 
-	const TooltipJSX = (
-		<Tooltip title={tooltipTitle}>
-			<InfoCircleOutlined
-				style={{ scale: isSmallScreen ? '1' : '1.5' }}
-				onClick={() => {
-					itemsWithCurrentCategory.length && setIsModalOpened(true);
-				}}
-			/>
-		</Tooltip>
+	const ActionsJSX = (
+		<Flex
+			align='center'
+			justify='space-evenly'
+		>
+			{MyInfoTooltip(tooltipTitle, isSmallScreen, () => {
+				itemsWithCurrentCategory.length && setIsModalOpened(true);
+			})}
+			{ColorPickerJSX}
+			{MyDelete(
+				languages.delete[userOptions.language],
+				isSmallScreen,
+				deleteCategory
+			)}
+		</Flex>
 	);
-
-	const DeleteButtonJSX = <DeleteButton remove={deleteCategory} />;
 
 	return (
 		<>
 			<Card
 				style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
 				size={isSmallScreen ? 'small' : 'default'}
-				title={TitleJSX}
-				actions={[TooltipJSX, ColorPickerJSX, DeleteButtonJSX]}
+				title={MyTitle(currentCategory.name, isSmallScreen, language, {
+					onChange: handleNameChange,
+				})}
+				actions={[ActionsJSX]}
 				styles={{
 					title: {
 						padding: 10,

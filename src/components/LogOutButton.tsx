@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
-import { Button, Tooltip } from 'antd';
+import { Avatar, Tooltip } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
@@ -34,13 +34,12 @@ const LogOutButton: React.FC = observer(() => {
 
 	return (
 		<Tooltip title={languages.logOut[userOptions.language]}>
-			<Button
-				size={isSmallScreen ? 'small' : 'middle'}
-				danger
+			<Avatar
+				style={{ background: '#0000', cursor: 'pointer' }}
+				size={isSmallScreen ? 'small' : 'default'}
 				onClick={logOut}
-			>
-				<LogoutOutlined />
-			</Button>
+				icon={<LogoutOutlined />}
+			/>
 		</Tooltip>
 	);
 });

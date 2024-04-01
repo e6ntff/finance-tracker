@@ -41,10 +41,7 @@ const Trash: React.FC = observer(() => {
 		);
 
 	return (
-		<Flex
-			vertical
-			align='end'
-		>
+		<Flex vertical>
 			<TrashPanel />
 			<Flex
 				vertical={isSmallScreen}

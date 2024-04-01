@@ -14,10 +14,10 @@ import {
 	InfoCircleOutlined,
 	UndoOutlined,
 } from '@ant-design/icons';
-import DeleteButton from './DeleteButton';
 import ListItem from './ListItem';
 import { categoryStore } from 'utils/categoryStore';
 import CategoryItem from './CategoryItem';
+import { MyDelete } from './Items';
 
 interface Props {
 	mode: 'item' | 'category';
@@ -47,7 +47,7 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 	);
 
 	const RestoreJSX = (key: string, restore: (arg0: string) => void) => (
-		<Tooltip title={languages.restore[userOptions.language]}>
+		<Tooltip title={languages.restore[language]}>
 			<UndoOutlined
 				onClick={() => restore(key)}
 				style={{ scale: isSmallScreen ? '1' : '1.5' }}
@@ -145,7 +145,11 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 								<Col span={2}>{TooltipJSX(currentItem.deletedAt)}</Col>
 								<Col span={2}>{RestoreJSX(key, restoreItem)}</Col>
 								<Col span={2}>
-									<DeleteButton remove={() => deleteItem(key)} />
+									{MyDelete(
+										languages.delete[userOptions.language],
+										isSmallScreen,
+										() => deleteItem(key)
+									)}
 								</Col>
 							</Item>
 						);
@@ -167,7 +171,11 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 								<Col span={2}>{TooltipJSX(currentCategory.deletedAt)}</Col>
 								<Col span={2}>{RestoreJSX(key, restoreCategory)}</Col>
 								<Col span={2}>
-									<DeleteButton remove={() => deleteCategory(key)} />
+									{MyDelete(
+										languages.delete[userOptions.language],
+										isSmallScreen,
+										() => deleteCategory(key)
+									)}
 								</Col>
 							</Item>
 						);

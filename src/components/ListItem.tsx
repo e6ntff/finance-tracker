@@ -1,33 +1,25 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import {
-	Avatar,
-	Card,
-	Col,
-	Flex,
-	Statistic,
-	Tag,
-	Image,
-	Tooltip,
-	Typography,
-} from 'antd';
+import { Card, Col, Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
-import Title from 'antd/es/typography/Title';
-import {
-	EditOutlined,
-	FrownOutlined,
-	InfoCircleOutlined,
-} from '@ant-design/icons';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
 import { categoryStore } from 'utils/categoryStore';
 import dayjs from 'dayjs';
-import DeleteButton from './DeleteButton';
+import {
+	MyCategory,
+	MyDate,
+	MyDelete,
+	MyEdit,
+	MyImage,
+	MyInfoTooltip,
+	MyPrice,
+	MyTitle,
+} from './Items';
 
 interface Props {
 	mode: Mode;
@@ -74,145 +66,18 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		setLastDeletedItemIds([...lastDeletedItemIds, initialItemId]);
 	}, [setLastDeletedItemIds, initialItemId, lastDeletedItemIds]);
 
-	const TitleJSX = (
-		<Flex
-			justify='center'
-			style={{
-				opacity: !currentItem.title ? '.5' : '1',
-			}}
-		>
-			{isSmallScreen ? (
-				<Typography.Text
-					strong
-					ellipsis
-				>
-					{currentItem.title || languages.noTitle[language]}
-				</Typography.Text>
-			) : (
-				<Title
-					ellipsis
-					level={3}
-					style={{ margin: 0 }}
-				>
-					{currentItem.title || languages.noTitle[language]}
-				</Title>
-			)}
+	const ActionsJSX = (
+		<Flex justify='space-evenly'>
+			{MyEdit(languages.edit[language], isSmallScreen, toggleIsModalOpened)}
+			{MyPrice(currentItem.price, isSmallScreen, currency)}
+			{MyDelete(languages.delete[language], isSmallScreen, deleteItem)}
 		</Flex>
 	);
 
 	const ImageAndDateJSX = (
 		<Flex align='center'>
-			{currentItem.image ? (
-				<Tooltip
-					color='#0005'
-					placement='right'
-					title={
-						<Image
-							preview={false}
-							src={currentItem.image}
-							style={{
-								borderRadius: '50%',
-								inlineSize: '100%',
-								blockSize: '100%',
-								objectFit: 'cover',
-							}}
-						/>
-					}
-				>
-					<Avatar
-						icon={
-							<Flex
-								style={{
-									inlineSize: '100%',
-									blockSize: '100%',
-									objectFit: 'cover',
-								}}
-							>
-								<Image
-									preview={false}
-									src={currentItem.image}
-									style={{
-										inlineSize: '100%',
-										blockSize: '100%',
-										objectFit: 'cover',
-									}}
-								/>
-							</Flex>
-						}
-					/>
-				</Tooltip>
-			) : (
-				<Tooltip title={languages.noImage[language]}>
-					<Avatar
-						onClick={toggleIsModalOpened}
-						icon={<FrownOutlined />}
-					/>
-				</Tooltip>
-			)}
-			<Statistic
-				value={dayjs(currentItem.date).format('DD.MM.YY')}
-				style={{
-					scale: isSmallScreen ? '.75' : '.75',
-				}}
-			/>
-		</Flex>
-	);
-
-	const CategoryJSX = (
-		<Flex
-			vertical
-			align='stretch'
-		>
-			{categories[currentItem.categoryId] && (
-				<Tag color={categories[currentItem.categoryId].color}>
-					<span
-						style={{
-							margin: 'auto',
-							color: categories[currentItem.categoryId].color,
-							filter: 'invert(1)',
-						}}
-					>
-						{categories[currentItem.categoryId].name}
-					</span>
-				</Tag>
-			)}
-		</Flex>
-	);
-
-	const PriceJSX = (
-		<Flex justify='center'>
-			{isSmallScreen ? (
-				<Typography.Text strong>
-					{getSymbolAndPrice(currency)}
-					{Math.round(currentItem.price[currency])}
-				</Typography.Text>
-			) : (
-				<Title
-					level={3}
-					style={{ margin: 0 }}
-				>
-					{getSymbolAndPrice(currency, currentItem.price[currency])}
-				</Title>
-			)}
-		</Flex>
-	);
-
-	const DeleteJSX = <DeleteButton remove={deleteItem} />;
-
-	const EditJSX = (
-		<Tooltip title={languages.edit[language]}>
-			<EditOutlined
-				onClick={toggleIsModalOpened}
-				style={{ scale: isSmallScreen ? '1' : '1.5' }}
-			/>
-		</Tooltip>
-	);
-
-	const ActionsJSX = (
-		<Flex justify='space-evenly'>
-			{EditJSX}
-			{PriceJSX}
-			{DeleteJSX}
+			{MyImage(currentItem.image, isSmallScreen, toggleIsModalOpened, language)}
+			{MyDate(currentItem.date, isSmallScreen)}
 		</Flex>
 	);
 
@@ -240,17 +105,6 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		}
 	}, [currentItem, language]);
 
-	const TooltipJSX = (
-		<Tooltip title={tooltipTitle}>
-			<InfoCircleOutlined
-				style={{
-					scale: isSmallScreen ? '1' : '1.5',
-					opacity: mode === 'grid' ? '.45' : '1',
-				}}
-			/>
-		</Tooltip>
-	);
-
 	return (
 		<>
 			<ItemModal
@@ -262,21 +116,33 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			{mode === 'list' ? (
 				<Item>
 					<Col>{ImageAndDateJSX}</Col>
-					<Col span={9}>{TitleJSX}</Col>
-					<Col span={3}>{CategoryJSX}</Col>
-					<Col span={5}>{PriceJSX}</Col>
-					<Col>{EditJSX}</Col>
-					<Col>{DeleteJSX}</Col>
-					<Col>{TooltipJSX}</Col>
+					<Col span={9}>
+						{MyTitle(currentItem.title, isSmallScreen, language)}
+					</Col>
+					<Col span={3}>{MyCategory(categories[currentItem.categoryId])}</Col>
+					<Col span={5}>
+						{MyPrice(currentItem.price, isSmallScreen, currency)}
+					</Col>
+					<Col span={1}>
+						{MyEdit(
+							languages.edit[language],
+							isSmallScreen,
+							toggleIsModalOpened
+						)}
+					</Col>
+					<Col span={1}>
+						{MyDelete(languages.delete[language], isSmallScreen, deleteItem)}
+					</Col>
+					<Col span={1}>{MyInfoTooltip(tooltipTitle, isSmallScreen)}</Col>
 				</Item>
 			) : (
 				<Card
-					extra={[TooltipJSX]}
+					extra={[MyInfoTooltip(tooltipTitle, isSmallScreen)]}
 					size={isSmallScreen ? 'small' : 'default'}
 					bordered
-					title={TitleJSX}
+					title={MyTitle(currentItem.title, isSmallScreen, language)}
 					actions={[ActionsJSX]}
-					style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
+					style={{ inlineSize: isSmallScreen ? '9em' : '12em' }}
 				>
 					<Flex justify='center'>
 						<Flex
@@ -285,7 +151,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 							gap={4}
 						>
 							{ImageAndDateJSX}
-							{CategoryJSX}
+							{MyCategory(categories[currentItem.categoryId])}
 						</Flex>
 					</Flex>
 				</Card>

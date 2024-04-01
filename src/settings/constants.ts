@@ -5,6 +5,7 @@ const pageSizeOptions = [20, 40, 80];
 const defaultCategory = {
 	color: '#cccccc',
 	name: 'Other',
+	deleted: false,
 };
 
 const constants = {
@@ -37,6 +38,7 @@ const constants = {
 		},
 		createdAt: 0,
 		updatedAt: 0,
+		deleted: false,
 	},
 };
 

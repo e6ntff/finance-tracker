@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import {
+	DeleteOutlined,
 	FolderOpenOutlined,
 	LineChartOutlined,
 	ShoppingCartOutlined,
@@ -49,6 +50,16 @@ const Navigation: React.FC = observer(() => {
 			key: paths.categories,
 			title: '',
 			icon: <FolderOpenOutlined />,
+		},
+		{
+			label: (
+				<NavLink to={paths.trash}>
+					{!isSmallScreen && languages.trash[language]}
+				</NavLink>
+			),
+			key: paths.trash,
+			title: '',
+			icon: <DeleteOutlined />,
 		},
 	];
 	return (

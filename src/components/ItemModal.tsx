@@ -13,6 +13,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
 import ImageUpload from './ImageUpload';
+import { convertToJpeg } from 'utils/utils';
 
 interface Props {
 	opened: boolean;
@@ -91,11 +92,13 @@ const ItemModal: React.FC<Props> = observer(
 		);
 
 		const handleImageChange = useCallback(
-			(link: string) => {
-				setCurrentItem((prevItem) => ({
-					...prevItem,
-					image: link,
-				}));
+			(image: string) => {
+				convertToJpeg(image as string, 0.5).then((image: string) => {
+					setCurrentItem((prevItem) => ({
+						...prevItem,
+						image: image,
+					}));
+				});
 			},
 			[setCurrentItem]
 		);
@@ -160,7 +163,12 @@ const ItemModal: React.FC<Props> = observer(
 			/>
 		);
 
-		const ImageJSX = <ImageUpload onChange={handleImageChange} />;
+		const ImageJSX = (
+			<ImageUpload
+				image={currentItem.image}
+				onChange={handleImageChange}
+			/>
+		);
 
 		return (
 			<Modal

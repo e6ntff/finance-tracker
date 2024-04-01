@@ -18,8 +18,12 @@ interface Props {
 }
 
 const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
-	const { replaceCategory, categories, setLastDeletedCategoryId } =
-		categoryStore;
+	const {
+		replaceCategory,
+		categories,
+		setLastDeletedCategoryIds,
+		lastDeletedCategoryIds,
+	} = categoryStore;
 	const { list } = listStore;
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
@@ -43,8 +47,8 @@ const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
 	);
 
 	const deleteCategory = useCallback(() => {
-		setLastDeletedCategoryId(initialCategoryId);
-	}, [setLastDeletedCategoryId, initialCategoryId]);
+		setLastDeletedCategoryIds([...lastDeletedCategoryIds, initialCategoryId]);
+	}, [setLastDeletedCategoryIds, initialCategoryId, lastDeletedCategoryIds]);
 
 	const updateCurrentCategory = useCallback(
 		(category: category) => {

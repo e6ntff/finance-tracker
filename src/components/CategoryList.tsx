@@ -7,15 +7,18 @@ import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
-	const { categories, lastDeletedCategoryId } = categoryStore;
+	const { categories, lastDeletedCategoryIds } = categoryStore;
 	const { loading, isSmallScreen } = userStore;
 
 	const categoriesToShowIds = useMemo(
 		() =>
 			Object.keys(categories)
 				.slice(1)
-				.filter((key: string) => key !== lastDeletedCategoryId),
-		[categories, lastDeletedCategoryId]
+				.filter(
+					(key: string) =>
+						!lastDeletedCategoryIds.includes(key) && !categories[key].deleted
+				),
+		[categories, lastDeletedCategoryIds]
 	);
 
 	return (

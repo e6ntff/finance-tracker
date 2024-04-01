@@ -12,6 +12,7 @@ import CategorySelect from './CategorySelect';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
+import ImageUpload from './ImageUpload';
 
 interface Props {
 	opened: boolean;
@@ -89,6 +90,16 @@ const ItemModal: React.FC<Props> = observer(
 			[setCurrentItem, currency, currencyRates]
 		);
 
+		const handleImageChange = useCallback(
+			(link: string) => {
+				setCurrentItem((prevItem) => ({
+					...prevItem,
+					image: link,
+				}));
+			},
+			[setCurrentItem]
+		);
+
 		useEffect(() => {
 			const submitItemWithEnter = (event: KeyboardEvent) => {
 				if (event.key === 'Enter' && opened) {
@@ -149,6 +160,8 @@ const ItemModal: React.FC<Props> = observer(
 			/>
 		);
 
+		const ImageJSX = <ImageUpload onChange={handleImageChange} />;
+
 		return (
 			<Modal
 				open={opened}
@@ -184,6 +197,7 @@ const ItemModal: React.FC<Props> = observer(
 							<Col span={13}>{CategoryJSX}</Col>
 						</Row>
 					</Form.Item>
+					<Form.Item label={languages.image[language]}>{ImageJSX}</Form.Item>
 				</Form>
 			</Modal>
 		);

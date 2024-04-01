@@ -2,12 +2,26 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { getSymbolAndPrice } from 'utils/utils';
 import { ExpenseItem, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
-import { Card, Col, Flex, Statistic, Tag, Tooltip, Typography } from 'antd';
+import {
+	Avatar,
+	Card,
+	Col,
+	Flex,
+	Statistic,
+	Tag,
+	Image,
+	Tooltip,
+	Typography,
+} from 'antd';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 import Title from 'antd/es/typography/Title';
-import { EditOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import {
+	EditOutlined,
+	FrownOutlined,
+	InfoCircleOutlined,
+} from '@ant-design/icons';
 import ItemModal from './ItemModal';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
@@ -86,13 +100,44 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		</Flex>
 	);
 
-	const DateJSX = (
-		<Statistic
-			value={dayjs(currentItem.date).format('DD.MM.YY')}
-			style={{
-				scale: isSmallScreen ? '.75' : '1',
-			}}
-		/>
+	const ImageAndDateJSX = (
+		<Flex align='center'>
+			{currentItem.image ? (
+				<Avatar
+					icon={
+						<Flex
+							style={{
+								inlineSize: '100%',
+								blockSize: '100%',
+								objectFit: 'cover',
+							}}
+						>
+							<Image
+								src={currentItem.image}
+								style={{
+									inlineSize: '100%',
+									blockSize: '100%',
+									objectFit: 'cover',
+								}}
+							/>
+						</Flex>
+					}
+				/>
+			) : (
+				<Tooltip title={languages.noImage[language]}>
+					<Avatar
+						onClick={toggleIsModalOpened}
+						icon={<FrownOutlined />}
+					/>
+				</Tooltip>
+			)}
+			<Statistic
+				value={dayjs(currentItem.date).format('DD.MM.YY')}
+				style={{
+					scale: isSmallScreen ? '.75' : '.75',
+				}}
+			/>
+		</Flex>
 	);
 
 	const CategoryJSX = (
@@ -196,7 +241,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			/>
 			{mode === 'list' ? (
 				<Item>
-					<Col>{DateJSX}</Col>
+					<Col>{ImageAndDateJSX}</Col>
 					<Col span={9}>{TitleJSX}</Col>
 					<Col span={3}>{CategoryJSX}</Col>
 					<Col span={5}>{PriceJSX}</Col>
@@ -219,7 +264,7 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 							align='stretch'
 							gap={4}
 						>
-							{DateJSX}
+							{ImageAndDateJSX}
 							{CategoryJSX}
 						</Flex>
 					</Flex>

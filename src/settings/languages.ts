@@ -27,6 +27,10 @@ const languages = {
 		en: 'Date and category',
 		ru: 'Дата и категория',
 	},
+	image: {
+		en: 'Image',
+		ru: 'Картинка',
+	},
 	language: {
 		en: 'Language',
 		ru: 'Язык',
@@ -232,6 +236,10 @@ const languages = {
 	removeAllConfirm: {
 		en: 'This will remove all your data! Are you sure?',
 		ru: 'Все данные будут удалены. Вы уверены?',
+	},
+	noImage: {
+		en: 'Click to upload',
+		ru: 'Нажмите, чтобы загрузить изображение',
 	},
 };
 

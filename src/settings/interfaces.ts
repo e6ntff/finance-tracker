@@ -4,14 +4,19 @@ const { defaultAlgorithm, darkAlgorithm } = theme;
 export interface category {
 	color: string;
 	name: string;
+	deleted: boolean;
+	deletedAt?: number;
 }
 export interface ExpenseItem {
 	date: number;
 	title: string;
 	categoryId: string;
 	price: currencies;
+	image?: string;
 	createdAt: number;
 	updatedAt?: number;
+	deleted: boolean;
+	deletedAt?: number;
 }
 
 export interface currencies {
@@ -71,6 +76,7 @@ export interface UserOptions {
 	currency: currency;
 	theme: Theme;
 	themeAlgorithm: ThemeAlgorithm;
+	deleteConfirmation: boolean;
 }
 
 export interface Status {

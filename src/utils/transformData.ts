@@ -22,6 +22,7 @@ export const getFilteredListIds = (
 		list,
 		Object.keys(list).filter(
 			(key: string) =>
+				!list[key].deleted &&
 				list[key].date >= range[0] &&
 				list[key].date <= range[1] &&
 				(categoriesToFilterIds.length

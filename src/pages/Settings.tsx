@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import LanguageSelect from '../components/LanguageSelect';
 import CurrencySelect from '../components/CurrencySelect';
-import { Button, Flex, Form, Popconfirm, Segmented } from 'antd';
+import { Button, Flex, Form, Popconfirm, Segmented, Switch } from 'antd';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
@@ -12,12 +12,13 @@ import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
 
 const Settings: React.FC = observer(() => {
-	const { userOptions, setCurrency, setTheme } = optionsStore;
+	const { userOptions, setCurrency, setTheme, setDeleteConfirmation } =
+		optionsStore;
 	const { isSmallScreen } = userStore;
 	const { setList, list } = listStore;
 	const { setCategories, categories } = categoryStore;
 
-	const { language, currency, theme } = userOptions;
+	const { language, currency, theme, deleteConfirmation } = userOptions;
 
 	const removeData = useCallback(() => {
 		setList({});
@@ -55,6 +56,12 @@ const Settings: React.FC = observer(() => {
 					<CurrencySelect
 						value={currency}
 						onChange={setCurrency}
+					/>
+				</Form.Item>
+				<Form.Item label={languages.deleteConfirmation[language]}>
+					<Switch
+						value={deleteConfirmation}
+						onChange={setDeleteConfirmation}
 					/>
 				</Form.Item>
 				<Form.Item>

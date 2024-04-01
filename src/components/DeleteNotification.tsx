@@ -17,11 +17,11 @@ const DeleteNotification: React.FC = observer(() => {
 		removeItem,
 		setLastDeletedItemIds,
 	} = listStore;
-	const { lastDeletedCategoryId, removeCategory, setLastDeletedCategoryId } =
+	const { lastDeletedCategoryIds, removeCategory, setLastDeletedCategoryIds } =
 		categoryStore;
 	const { userOptions } = optionsStore;
 
-	const { language } = userOptions;
+	const { language, deleteConfirmation } = userOptions;
 
 	const [isDeleting, setIsDeleting] = useState<boolean>(true);
 
@@ -30,10 +30,12 @@ const DeleteNotification: React.FC = observer(() => {
 	});
 
 	const deleteCategory = useCallback(() => {
-		removeCategory(lastDeletedCategoryId);
-		clearListFromCategory(lastDeletedCategoryId);
+		lastDeletedCategoryIds.forEach((key: string) => {
+			removeCategory(key);
+			clearListFromCategory(key);
+		});
 		setIsDeleting(true);
-	}, [removeCategory, clearListFromCategory, lastDeletedCategoryId]);
+	}, [removeCategory, clearListFromCategory, lastDeletedCategoryIds]);
 
 	const deleteItem = useCallback(() => {
 		lastDeletedItemIds.forEach((key: string) => {
@@ -45,9 +47,9 @@ const DeleteNotification: React.FC = observer(() => {
 	const cancelDeleting = useCallback(() => {
 		setIsDeleting(false);
 		api.destroy();
-		setLastDeletedCategoryId('');
+		setLastDeletedCategoryIds([]);
 		setLastDeletedItemIds([]);
-	}, [setIsDeleting, api, setLastDeletedCategoryId, setLastDeletedItemIds]);
+	}, [setIsDeleting, api, setLastDeletedCategoryIds, setLastDeletedItemIds]);
 
 	const openNotification = useCallback(
 		(text: string, deleteFunction: () => void) => {
@@ -80,21 +82,32 @@ const DeleteNotification: React.FC = observer(() => {
 	);
 
 	useEffect(() => {
-		setIsDeleting(true);
-		lastDeletedItemIds.length &&
-			openNotification(
-				`${languages.itemsDeleted[language]}: ${lastDeletedItemIds.length}`,
-				deleteItem
-			);
+		if (deleteConfirmation) {
+			setIsDeleting(true);
+			lastDeletedItemIds.length &&
+				openNotification(
+					`${languages.itemsDeleted[language]}: ${lastDeletedItemIds.length}`,
+					deleteItem
+				);
+		} else {
+			deleteItem();
+		}
 		// eslint-disable-next-line
 	}, [lastDeletedItemIds]);
 
 	useEffect(() => {
-		setIsDeleting(true);
-		lastDeletedCategoryId &&
-			openNotification(languages.categoryDeleted[language], deleteCategory);
+		if (deleteConfirmation) {
+			setIsDeleting(true);
+			lastDeletedCategoryIds.length &&
+				openNotification(
+					`${languages.categoriesDeleted[language]}: ${lastDeletedCategoryIds.length}`,
+					deleteCategory
+				);
+		} else {
+			deleteCategory();
+		}
 		// eslint-disable-next-line
-	}, [lastDeletedCategoryId]);
+	}, [lastDeletedCategoryIds]);
 
 	return <>{contextHolder}</>;
 });

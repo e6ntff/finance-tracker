@@ -39,6 +39,7 @@ export const defaultUserOptions: UserOptions = {
 	currency: 'USD',
 	theme: 'default',
 	themeAlgorithm: defaultAlgorithm,
+	deleteConfirmation: true,
 };
 
 export const initialUserOptions: UserOptions = JSON.parse(

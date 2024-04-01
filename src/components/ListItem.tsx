@@ -103,26 +103,44 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 	const ImageAndDateJSX = (
 		<Flex align='center'>
 			{currentItem.image ? (
-				<Avatar
-					icon={
-						<Flex
+				<Tooltip
+					color='#0005'
+					placement='right'
+					title={
+						<Image
+							preview={false}
+							src={currentItem.image}
 							style={{
+								borderRadius: '50%',
 								inlineSize: '100%',
 								blockSize: '100%',
 								objectFit: 'cover',
 							}}
-						>
-							<Image
-								src={currentItem.image}
+						/>
+					}
+				>
+					<Avatar
+						icon={
+							<Flex
 								style={{
 									inlineSize: '100%',
 									blockSize: '100%',
 									objectFit: 'cover',
 								}}
-							/>
-						</Flex>
-					}
-				/>
+							>
+								<Image
+									preview={false}
+									src={currentItem.image}
+									style={{
+										inlineSize: '100%',
+										blockSize: '100%',
+										objectFit: 'cover',
+									}}
+								/>
+							</Flex>
+						}
+					/>
+				</Tooltip>
 			) : (
 				<Tooltip title={languages.noImage[language]}>
 					<Avatar
@@ -145,17 +163,19 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 			vertical
 			align='stretch'
 		>
-			<Tag color={categories[currentItem.categoryId].color}>
-				<span
-					style={{
-						margin: 'auto',
-						color: categories[currentItem.categoryId].color,
-						filter: 'invert(1)',
-					}}
-				>
-					{categories[currentItem.categoryId].name}
-				</span>
-			</Tag>
+			{categories[currentItem.categoryId] && (
+				<Tag color={categories[currentItem.categoryId].color}>
+					<span
+						style={{
+							margin: 'auto',
+							color: categories[currentItem.categoryId].color,
+							filter: 'invert(1)',
+						}}
+					>
+						{categories[currentItem.categoryId].name}
+					</span>
+				</Tag>
+			)}
 		</Flex>
 	);
 

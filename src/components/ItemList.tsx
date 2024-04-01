@@ -33,15 +33,12 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 		<>
 			{loading ? (
 				<LargeSpin />
-			) : (
-				!filteredListIds.length && (
-					<Empty
-						image={Empty.PRESENTED_IMAGE_SIMPLE}
-						description={''}
-					/>
-				)
-			)}
-			{debouncedOptions.mode === 'list' ? (
+			) : !filteredListIds.length ? (
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={''}
+				/>
+			) : debouncedOptions.mode === 'list' ? (
 				<List style={{ inlineSize: '100%' }}>
 					{listToShowOnCurrentPageIds.map((key: string) => (
 						<ListItem

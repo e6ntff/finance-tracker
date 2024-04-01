@@ -20,7 +20,9 @@ const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
 			style={{ minInlineSize: '7em' }}
 			onChange={onChange}
 			value={id}
-			suffixIcon={<EditFilled style={{ color: categories[id].color }} />}
+			suffixIcon={
+				<EditFilled style={{ color: categories[id] && categories[id].color }} />
+			}
 			options={Object.keys(categories).map((key: string) => ({
 				label: categories[key].name,
 				value: key,

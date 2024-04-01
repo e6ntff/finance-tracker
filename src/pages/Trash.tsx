@@ -1,5 +1,6 @@
 import { Empty, Flex } from 'antd';
 import DeletedList from 'components/DeletedList';
+import TrashPanel from 'components/TrashPanel';
 import { observer } from 'mobx-react-lite';
 import React, { useMemo } from 'react';
 import { categoryStore } from 'utils/categoryStore';
@@ -41,18 +42,24 @@ const Trash: React.FC = observer(() => {
 
 	return (
 		<Flex
-			vertical={isSmallScreen}
-			gap={isSmallScreen ? 8 : 16}
-			style={{ inlineSize: '100%' }}
+			vertical
+			align='end'
 		>
-			<DeletedList
-				mode='item'
-				ids={deletedItemIds}
-			/>
-			<DeletedList
-				mode='category'
-				ids={deletedCategoryIds}
-			/>
+			<TrashPanel />
+			<Flex
+				vertical={isSmallScreen}
+				gap={isSmallScreen ? 16 : 32}
+				style={{ inlineSize: '100%' }}
+			>
+				<DeletedList
+					mode='item'
+					ids={deletedItemIds}
+				/>
+				<DeletedList
+					mode='category'
+					ids={deletedCategoryIds}
+				/>
+			</Flex>
 		</Flex>
 	);
 });

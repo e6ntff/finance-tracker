@@ -57,3 +57,21 @@ export const sortBy = (
 
 	return reversed ? result.reverse() : result;
 };
+
+export const convertToJpeg: (
+	base64String: string,
+	quality: number
+) => Promise<string> = (base64String: string, quality: number) =>
+	new Promise((resolve) => {
+		const img = new Image();
+		img.src = base64String;
+		img.onload = () => {
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+			canvas.width = img.width;
+			canvas.height = img.height;
+			ctx?.drawImage(img, 0, 0);
+			const jpegBase64: string = canvas.toDataURL('image/jpeg', quality);
+			resolve(jpegBase64);
+		};
+	});

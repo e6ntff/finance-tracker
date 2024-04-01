@@ -1,4 +1,4 @@
-const languages = {
+const languages: { [key: string]: any } = {
 	stats: {
 		en: 'Stats',
 		ru: 'Статистика',
@@ -10,6 +10,10 @@ const languages = {
 	categories: {
 		en: 'Categories',
 		ru: 'Категории',
+	},
+	trash: {
+		en: 'Trash',
+		ru: 'Корзина',
 	},
 	theme: {
 		en: 'Theme',
@@ -137,9 +141,9 @@ const languages = {
 		en: 'Items deleted',
 		ru: 'Расходов удалено',
 	},
-	categoryDeleted: {
-		en: 'Category deleted',
-		ru: 'Категория удалена',
+	categoriesDeleted: {
+		en: 'Categories deleted',
+		ru: 'Категорий удалено',
 	},
 	itemsWithCurrentCategory: {
 		en: 'Items',
@@ -240,6 +244,25 @@ const languages = {
 	noImage: {
 		en: 'Click to upload',
 		ru: 'Нажмите, чтобы загрузить изображение',
+	},
+	deletedAt: {
+		en: 'Deleted at',
+		ru: 'Удален:',
+	},
+	restore: {
+		en: 'Restore',
+		ru: 'Восстановить',
+	},
+	deleteAll: { en: 'Delete all', ru: 'Удалить все' },
+	restoreAll: { en: 'Restore all', ru: 'Восстановить все' },
+	deleteAllConfirm: {
+		en: 'This will delete all forever! Are you sure?',
+		ru: 'Все предметы удалятся навсегда! Вы уверены?',
+	},
+	restoreAllConfirm: { en: 'Restore all', ru: 'Восстановить все' },
+	deleteConfirmation: {
+		en: 'Delete confirmation',
+		ru: 'Подтверждение удаления',
 	},
 };
 

@@ -4,6 +4,7 @@ import { userStore } from './userStore';
 import { configure } from 'mobx';
 import constants from 'settings/constants';
 import uniqid from 'uniqid';
+import dayjs from 'dayjs';
 
 configure({
 	enforceActions: 'never',
@@ -12,7 +13,7 @@ configure({
 class CategoryStore {
 	userStore;
 	categories: { [key: string]: category } = {};
-	lastDeletedCategoryId: string = '';
+	lastDeletedCategoryIds: string[] = [];
 
 	setCategories = (
 		categories: { [key: string]: category },
@@ -29,13 +30,27 @@ class CategoryStore {
 
 	removeCategory = (id: string) => {
 		const newCategories = this.categories;
-		delete newCategories[id];
+		newCategories[id].deleted = true;
+		newCategories[id].deletedAt = dayjs().valueOf();
 		this.setCategories(newCategories);
-		this.setLastDeletedCategoryId('');
+		this.setLastDeletedCategoryIds([]);
 	};
 
-	setLastDeletedCategoryId = (id: string) => {
-		this.lastDeletedCategoryId = id;
+	restoreCategory = (id: string) => {
+		const newCategories = this.categories;
+		newCategories[id].deleted = false;
+		delete newCategories[id].deletedAt;
+		this.setCategories(newCategories);
+	};
+
+	deleteCategory = (id: string) => {
+		const newCategories = this.categories;
+		delete newCategories[id];
+		this.setCategories(newCategories);
+	};
+
+	setLastDeletedCategoryIds = (ids: string[]) => {
+		this.lastDeletedCategoryIds = ids;
 	};
 
 	replaceCategory = (id: string, payload: category) => {

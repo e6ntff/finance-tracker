@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
 import uniqid from 'uniqid';
+import dayjs from 'dayjs';
 
 configure({
 	enforceActions: 'never',
@@ -25,9 +26,23 @@ class ListStore {
 
 	removeItem = (id: string) => {
 		const newList = this.list;
-		delete newList[id];
+		newList[id].deleted = true;
+		newList[id].deletedAt = dayjs().valueOf();
 		this.setList(newList);
 		this.setLastDeletedItemIds([]);
+	};
+
+	restoreItem = (id: string) => {
+		const newList = this.list;
+		newList[id].deleted = false;
+		delete newList[id].deletedAt;
+		this.setList(newList);
+	};
+
+	deleteItem = (id: string) => {
+		const newList = this.list;
+		delete newList[id];
+		this.setList(newList);
 	};
 
 	setLastDeletedItemIds = (ids: string[]) => {

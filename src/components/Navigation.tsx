@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import paths from '../settings/paths';
-import { Menu } from 'antd';
+import { Badge, Menu } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
@@ -12,13 +12,30 @@ import {
 	ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
+import { listStore } from 'utils/listStore';
+import { categoryStore } from 'utils/categoryStore';
 
 const Navigation: React.FC = observer(() => {
 	const location = useLocation();
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
+	const { list } = listStore;
+	const { categories } = categoryStore;
 
 	const { language } = userOptions;
+
+	const count = useMemo(
+		() =>
+			Object.keys(list).reduce(
+				(acc: number, key: string) => (list[key].deleted ? ++acc : acc),
+				0
+			) +
+			Object.keys(categories).reduce(
+				(acc: number, key: string) => (categories[key].deleted ? ++acc : acc),
+				0
+			),
+		[list, categories]
+	);
 
 	const items = [
 		{
@@ -59,7 +76,15 @@ const Navigation: React.FC = observer(() => {
 			),
 			key: paths.trash,
 			title: '',
-			icon: <DeleteOutlined />,
+			icon: (
+				<Badge
+					count={count}
+					size='small'
+					offset={[3, -3]}
+				>
+					<DeleteOutlined />
+				</Badge>
+			),
 		},
 	];
 	return (

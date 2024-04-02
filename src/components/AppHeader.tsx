@@ -6,6 +6,7 @@ import { Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import SyncIcon from './SyncIcon';
+import RandomizeButton from './RandomizeButton';
 
 const AppHeader: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
@@ -21,6 +22,7 @@ const AppHeader: React.FC = observer(() => {
 				justify='space-between'
 				align='center'
 			>
+				<RandomizeButton />
 				<SyncIcon />
 				<LogOutButton />
 				<Links />

@@ -20,7 +20,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 	const {
 		listOptions,
 		defaultRange,
-		resetListOptions: resetSettings,
+		resetListOptions,
 		handlePageChanging,
 		setRange,
 		setIsAccurate,
@@ -80,7 +80,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 						<ModeSelect />
 						<ResetButton
 							disabled={!isSettingsChanged}
-							reset={resetSettings}
+							reset={resetListOptions}
 						/>
 					</Flex>
 				</Flex>

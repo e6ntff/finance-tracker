@@ -12,11 +12,11 @@ configure({
 
 class CategoryStore {
 	userStore;
-	categories: { [key: string]: category } = {};
+	userCategories: { [key: string]: category } = {};
 	lastDeletedCategoryIds: string[] = [];
-	categoriesTemplate: typeof this.categories = {};
+	categoriesTemplate: typeof this.userCategories = {};
 
-	setCategoriesTemplate = (template: typeof this.categories) => {
+	setCategoriesTemplate = (template: typeof this.userCategories) => {
 		this.categoriesTemplate = template;
 	};
 
@@ -24,17 +24,17 @@ class CategoryStore {
 		categories: { [key: string]: category },
 		save: boolean = true
 	) => {
-		this.categories = { ...categories } || { '0': constants.defaultCategory };
-		this.userStore.updateAllData({ categories: this.categories });
+		this.userCategories = { ...categories } || { '0': constants.defaultCategory };
+		this.userStore.updateAllData({ categories: this.userCategories });
 		save && this.userStore.pushDataToSaving();
 	};
 
 	addCategory = (payload: category, id: string = uniqid()) => {
-		this.setCategories({ ...this.categories, [id]: payload });
+		this.setCategories({ ...this.userCategories, [id]: payload });
 	};
 
 	removeCategory = (id: string) => {
-		const newCategories = this.categories;
+		const newCategories = this.userCategories;
 		newCategories[id].deleted = true;
 		newCategories[id].deletedAt = dayjs().valueOf();
 		this.setCategories(newCategories);
@@ -42,14 +42,14 @@ class CategoryStore {
 	};
 
 	restoreCategory = (id: string) => {
-		const newCategories = this.categories;
+		const newCategories = this.userCategories;
 		newCategories[id].deleted = false;
 		delete newCategories[id].deletedAt;
 		this.setCategories(newCategories);
 	};
 
 	deleteCategory = (id: string) => {
-		const newCategories = this.categories;
+		const newCategories = this.userCategories;
 		delete newCategories[id];
 		this.setCategories(newCategories);
 	};
@@ -59,7 +59,7 @@ class CategoryStore {
 	};
 
 	replaceCategory = (id: string, payload: category) => {
-		this.setCategories({ ...this.categories, [id]: payload });
+		this.setCategories({ ...this.userCategories, [id]: payload });
 	};
 
 	constructor(store: typeof userStore) {

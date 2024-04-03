@@ -2,7 +2,7 @@ import { Avatar, Col, Flex, Image, List, Tooltip, Typography } from 'antd';
 import Item from 'antd/es/list/Item';
 import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useMemo } from 'react';
 import languages from 'settings/languages';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
@@ -25,13 +25,23 @@ interface Props {
 }
 
 const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
-	const { list, restoreItem, deleteItem, listTemplate } = listStore;
-	const { categories, restoreCategory, deleteCategory, categoriesTemplate } =
+	const { userList, restoreItem, deleteItem, listTemplate } = listStore;
+	const { userCategories, restoreCategory, deleteCategory, categoriesTemplate } =
 		categoryStore;
 	const { isSmallScreen, isTourStarted } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, userCategories, categoriesTemplate]
+	);
 
 	const TooltipJSX = (deletedAt: number | undefined) => (
 		<Tooltip

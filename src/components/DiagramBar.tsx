@@ -27,9 +27,14 @@ interface Props {
 
 const DiagramBar: React.FC<Props> = observer(({ mode, setMode }) => {
 	const { isSmallScreen, isTourStarted } = userStore;
-	const { list, listTemplate } = listStore;
+	const { userList, listTemplate } = listStore;
 	const { statsOptions, userOptions, setStatsRange } = optionsStore;
 	const { currency, language } = userOptions;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
 
 	const { range } = statsOptions;
 

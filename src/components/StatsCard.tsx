@@ -9,12 +9,17 @@ import { getSymbolAndPrice } from 'utils/utils';
 import dayjs from 'dayjs';
 
 const StatsCard: React.FC = observer(() => {
-	const { isSmallScreen } = userStore;
-	const { list } = listStore;
+	const { isSmallScreen, isTourStarted } = userStore;
+	const { userList, listTemplate } = listStore;
 	const { statsOptions, userOptions } = optionsStore;
 
 	const { range, isAccurate } = statsOptions;
 	const { currency } = userOptions;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
 
 	const value = useMemo(
 		() => getTotalInCurrentRange(list, range, currency),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { category } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
@@ -39,10 +39,15 @@ const tagRender = (props: any, categories: { [key: number]: category }) => {
 };
 
 const CategoriesSelect: React.FC = observer(() => {
-	const { categories } = categoryStore;
-	const { isSmallScreen } = userStore;
+	const { userCategories, categoriesTemplate } = categoryStore;
+	const { isSmallScreen, isTourStarted } = userStore;
 	const { listOptions, handleCategoriesToFilterChange, userOptions } =
 		optionsStore;
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, userCategories, categoriesTemplate]
+	);
 
 	return (
 		<Tooltip title={languages.categoriesSelect[userOptions.language]}>

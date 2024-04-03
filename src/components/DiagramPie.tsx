@@ -21,10 +21,20 @@ Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 const DiagramPie: React.FC = observer(() => {
 	const { isSmallScreen, isTourStarted } = userStore;
-	const { list, listTemplate } = listStore;
+	const { userList, listTemplate } = listStore;
 	const { userOptions, statsOptions } = optionsStore;
 	const { currency } = userOptions;
-	const { categories, categoriesTemplate } = categoryStore;
+	const { userCategories, categoriesTemplate } = categoryStore;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, userCategories, categoriesTemplate]
+	);
 
 	const { range } = statsOptions;
 

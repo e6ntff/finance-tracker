@@ -25,9 +25,14 @@ interface Props {
 const ItemModal: React.FC<Props> = observer(
 	({ opened, initialItemId, toggleOpened, submitItem }) => {
 		const [currency, setCurrency] = useState(constants.baseCurrency);
-		const { currencyRates, isSmallScreen } = userStore;
+		const { currencyRates, isSmallScreen, isTourStarted } = userStore;
 		const { userOptions } = optionsStore;
-		const { list } = listStore;
+		const { userList, listTemplate } = listStore;
+
+		const list = useMemo(
+			() => (isTourStarted ? listTemplate : userList),
+			[isTourStarted, listTemplate, userList]
+		);
 
 		const { language } = userOptions;
 

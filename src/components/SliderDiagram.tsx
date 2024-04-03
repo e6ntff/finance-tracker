@@ -4,10 +4,17 @@ import { Line } from 'react-chartjs-2';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
 import { getValuesByMonth } from 'utils/transformData';
+import { userStore } from 'utils/userStore';
 
 const SliderDiagram: React.FC = observer(() => {
-	const { list } = listStore;
+	const { userList, listTemplate } = listStore;
 	const { defaultRange } = optionsStore;
+	const { isTourStarted } = userStore;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
 
 	const valuesByMonth: number[] | { [key: string]: number } = useMemo(
 		() => getValuesByMonth(list, defaultRange),

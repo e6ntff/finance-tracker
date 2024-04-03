@@ -5,11 +5,16 @@ import { observer } from 'mobx-react-lite';
 import { Empty, Flex, Space } from 'antd';
 import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
-import Templates from './Templates';
 
 const CategoryList: React.FC = observer(() => {
-	const { categories, lastDeletedCategoryIds } = categoryStore;
+	const { userCategories, lastDeletedCategoryIds, categoriesTemplate } =
+		categoryStore;
 	const { loading, isSmallScreen, isTourStarted } = userStore;
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, categoriesTemplate, userCategories]
+	);
 
 	const categoriesToShowIds = useMemo(
 		() =>
@@ -22,7 +27,7 @@ const CategoryList: React.FC = observer(() => {
 		[categories, lastDeletedCategoryIds]
 	);
 
-	return !isTourStarted ? (
+	return (
 		<Flex
 			style={{ inlineSize: '100%' }}
 			vertical
@@ -49,8 +54,6 @@ const CategoryList: React.FC = observer(() => {
 				/>
 			)}
 		</Flex>
-	) : (
-		<Templates list='category' />
 	);
 });
 

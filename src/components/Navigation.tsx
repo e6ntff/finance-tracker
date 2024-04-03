@@ -19,8 +19,13 @@ const Navigation: React.FC = observer(() => {
 	const location = useLocation();
 	const { isSmallScreen, isTourStarted } = userStore;
 	const { userOptions } = optionsStore;
-	const { list, listTemplate } = listStore;
-	const { categories, categoriesTemplate } = categoryStore;
+	const { userList, listTemplate } = listStore;
+	const { userCategories: categories, categoriesTemplate } = categoryStore;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
 
 	const { language } = userOptions;
 

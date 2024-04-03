@@ -13,6 +13,9 @@ import tour from 'settings/tour';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 import LanguageSelect from './LanguageSelect';
+import { getRandomData } from 'utils/transformData';
+import { listStore } from 'utils/listStore';
+import { categoryStore } from 'utils/categoryStore';
 
 interface Props {
 	toggleOpened: () => void;
@@ -20,13 +23,27 @@ interface Props {
 
 const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
 	const navigate = useNavigate();
-	let stepId = useRef<NodeJS.Timeout>();
-	const { tourRefs, setTourRefs, loading, setIsTourStarted, isTourStarted } =
-		userStore;
+	const stepId = useRef<NodeJS.Timeout>();
+	const {
+		tourRefs,
+		setTourRefs,
+		loading,
+		setIsTourStarted,
+		isTourStarted,
+		currencyRates,
+	} = userStore;
 	const { userOptions } = optionsStore;
 	const { language } = userOptions;
+	const { setListTemplate } = listStore;
+	const { setCategoriesTemplate } = categoryStore;
 
 	const [currentStep, setCurrentStep] = useState<number>(-1);
+
+	useEffect(() => {
+		const data = getRandomData(10, 10, 5, 3, currencyRates);
+		setListTemplate(data.items);
+		setCategoriesTemplate(data.categories);
+	}, [currencyRates, setCategoriesTemplate, setListTemplate]);
 
 	useEffect(() => {
 		setCurrentStep(isTourStarted ? 0 : -1);

@@ -20,15 +20,26 @@ const CategoryItem: React.FC<Props> = observer(
 	({ initialCategoryId, category }) => {
 		const {
 			replaceCategory,
-			categories,
+			userCategories,
 			setLastDeletedCategoryIds,
 			lastDeletedCategoryIds,
+			categoriesTemplate,
 		} = categoryStore;
-		const { list } = listStore;
-		const { isSmallScreen } = userStore;
+		const { userList, listTemplate } = listStore;
+		const { isSmallScreen, isTourStarted } = userStore;
 		const { userOptions } = optionsStore;
 
 		const { language } = userOptions;
+
+		const list = useMemo(
+			() => (isTourStarted ? listTemplate : userList),
+			[isTourStarted, listTemplate, userList]
+		);
+
+		const categories = useMemo(
+			() => (isTourStarted ? categoriesTemplate : userCategories),
+			[isTourStarted, categoriesTemplate, userCategories]
+		);
 
 		const [currentCategory, setCurrentCategory] = useState<category>(
 			category || categories[initialCategoryId]

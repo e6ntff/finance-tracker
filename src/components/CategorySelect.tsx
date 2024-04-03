@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { Select } from 'antd';
@@ -11,8 +11,13 @@ interface Props {
 }
 
 const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
-	const { categories } = categoryStore;
-	const { isSmallScreen } = userStore;
+	const { userCategories, categoriesTemplate } = categoryStore;
+	const { isSmallScreen, isTourStarted } = userStore;
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, userCategories, categoriesTemplate]
+	);
 
 	return (
 		<Select

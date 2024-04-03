@@ -22,8 +22,8 @@ const Settings: React.FC<Props> = observer(({ toggleOpened }) => {
 	const { userOptions, setCurrency, setTheme, setDeleteConfirmation } =
 		optionsStore;
 	const { isSmallScreen, tourRefs, setIsTourStarted } = userStore;
-	const { setList, list } = listStore;
-	const { setCategories, categories } = categoryStore;
+	const { setList, userList: list } = listStore;
+	const { setCategories, userCategories: categories } = categoryStore;
 
 	const { language, currency, theme, deleteConfirmation } = userOptions;
 

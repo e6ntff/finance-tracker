@@ -17,10 +17,15 @@ import ResetButton from 'components/ResetButton';
 dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
-	const { list, listTemplate } = listStore;
+	const { userList, listTemplate } = listStore;
 	const { isSmallScreen, loading, tourRefs, isTourStarted } = userStore;
 	const { statsOptions, defaultRange, setStatsRange, setIsStatsAccurate } =
 		optionsStore;
+
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
 
 	const { range, isAccurate } = statsOptions;
 

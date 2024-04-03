@@ -1,7 +1,7 @@
 import { Col, Flex, List, Modal, Statistic, Typography } from 'antd';
 import Item from 'antd/es/list/Item';
 import { observer } from 'mobx-react-lite';
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { listStore } from 'utils/listStore';
 import dayjs from 'dayjs';
 import { userStore } from 'utils/userStore';
@@ -20,11 +20,16 @@ interface Props {
 
 const ItemsModal: React.FC<Props> = observer(
 	({ opened, setOpened, itemIds }) => {
-		const { list, replaceItem } = listStore;
-		const { isSmallScreen } = userStore;
+		const { userList, replaceItem, listTemplate } = listStore;
+		const { isSmallScreen, isTourStarted } = userStore;
 		const { userOptions } = optionsStore;
 
 		const { language } = userOptions;
+
+		const list = useMemo(
+			() => (isTourStarted ? listTemplate : userList),
+			[isTourStarted, listTemplate, userList]
+		);
 
 		const deleteCategoryFromItem = useCallback(
 			(key: string) => {

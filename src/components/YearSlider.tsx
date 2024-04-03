@@ -39,9 +39,14 @@ interface Props {
 
 const YearSlider: React.FC<Props> = observer(
 	({ range, setRange, isAccurate, setIsAccurate }) => {
-		const { list, listTemplate } = listStore;
+		const { userList, listTemplate } = listStore;
 		const { isSmallScreen, isTourStarted } = userStore;
 		const { defaultRange, setDefaultRange, userOptions } = optionsStore;
+
+		const list = useMemo(
+			() => (isTourStarted ? listTemplate : userList),
+			[isTourStarted, listTemplate, userList]
+		);
 
 		const [value, setValue] = useState(defaultRange);
 

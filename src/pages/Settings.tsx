@@ -10,11 +10,18 @@ import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
+import { useNavigate } from 'react-router-dom';
+import tour from 'settings/tour';
 
-const Settings: React.FC = observer(() => {
+interface Props {
+	toggleOpened: () => void;
+}
+
+const Settings: React.FC<Props> = observer(({ toggleOpened }) => {
+	const navigate = useNavigate();
 	const { userOptions, setCurrency, setTheme, setDeleteConfirmation } =
 		optionsStore;
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, tourRefs, setIsTourStarted } = userStore;
 	const { setList, list } = listStore;
 	const { setCategories, categories } = categoryStore;
 
@@ -31,13 +38,25 @@ const Settings: React.FC = observer(() => {
 		[list, categories]
 	);
 
+	const startTour = useCallback(() => {
+		setIsTourStarted(true);
+		toggleOpened();
+		navigate(tour[0].page);
+	}, [setIsTourStarted, toggleOpened, navigate]);
+
 	return (
-		<Flex justify='center'>
+		<Flex
+			justify='center'
+			ref={tourRefs[6]}
+		>
 			<Form
 				size={isSmallScreen ? 'small' : 'middle'}
 				layout='vertical'
 				style={{ inlineSize: '50%' }}
 			>
+				<Form.Item>
+					<Button onClick={startTour}>{languages.runTour[language]}</Button>
+				</Form.Item>
 				<Form.Item label={languages.theme[language]}>
 					<Segmented
 						size={isSmallScreen ? 'small' : 'middle'}

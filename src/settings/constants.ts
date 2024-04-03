@@ -4,11 +4,12 @@ const pageSizeOptions = [20, 40, 80];
 
 const defaultCategory = {
 	color: '#cccccc',
-	name: 'Other',
+	name: '-',
 	deleted: false,
 };
 
 const constants = {
+	tourPeriod: 5000,
 	spinDelay: 1500,
 	deleteDelay: 5000,
 	savingDelay: 5000,

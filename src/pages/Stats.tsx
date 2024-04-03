@@ -18,7 +18,7 @@ dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
-	const { isSmallScreen, loading } = userStore;
+	const { isSmallScreen, loading, tourRefs } = userStore;
 	const { statsOptions, defaultRange, setStatsRange, setIsStatsAccurate } =
 		optionsStore;
 
@@ -73,14 +73,21 @@ const Stats: React.FC = observer(() => {
 			vertical
 			gap={16}
 			align='stretch'
+			style={{ inlineSize: '100%' }}
 		>
-			<YearSlider
-				setIsAccurate={setIsStatsAccurate}
-				isAccurate={isAccurate}
-				range={range}
-				setRange={setStatsRange}
-			/>
 			<Flex
+				ref={tourRefs[8]}
+				style={{ inlineSize: '100%' }}
+			>
+				<YearSlider
+					setIsAccurate={setIsStatsAccurate}
+					isAccurate={isAccurate}
+					range={range}
+					setRange={setStatsRange}
+				/>
+			</Flex>
+			<Flex
+				ref={tourRefs[7]}
 				align='center'
 				justify='space-between'
 				vertical={isSmallScreen}

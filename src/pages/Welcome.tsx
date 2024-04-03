@@ -23,7 +23,7 @@ import { optionsStore } from 'utils/optionsStore';
 const auth = getAuth(firebaseApp);
 
 const Welcome: React.FC = observer(() => {
-	const { setLogged } = userStore;
+	const { setLogged, setIsTourStarted } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
@@ -112,11 +112,12 @@ const Welcome: React.FC = observer(() => {
 				currentUser.email,
 				currentUser.password
 			);
+			setIsTourStarted(true);
 			setLogged(true);
 		} catch (error: any) {
 			setIncorrect(true);
 		}
-	}, [currentUser, setLogged]);
+	}, [currentUser, setLogged, setIsTourStarted]);
 
 	const logIn = useCallback(async () => {
 		try {

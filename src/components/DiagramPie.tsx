@@ -20,24 +20,36 @@ import { categoryStore } from 'utils/categoryStore';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 const DiagramPie: React.FC = observer(() => {
-	const { isSmallScreen } = userStore;
-	const { list } = listStore;
+	const { isSmallScreen, isTourStarted } = userStore;
+	const { list, listTemplate } = listStore;
 	const { userOptions, statsOptions } = optionsStore;
 	const { currency } = userOptions;
-	const { categories } = categoryStore;
+	const { categories, categoriesTemplate } = categoryStore;
 
 	const { range } = statsOptions;
 
 	const valuesByCategory: Value[] = useMemo(
-		() => getValuesForPieDiagram(list, range, currency),
-		[list, currency, range]
+		() =>
+			getValuesForPieDiagram(
+				isTourStarted ? listTemplate : list,
+				range,
+				currency
+			),
+		[list, listTemplate, currency, range, isTourStarted]
 	);
 
-	const [names, colors, values] = [
-		valuesByCategory.map((value: Value) => categories[value.categoryId].name),
-		valuesByCategory.map((value: Value) => categories[value.categoryId].color),
-		valuesByCategory.map((value: Value) => Math.round(value.value)),
-	];
+	const [names, colors, values] = useMemo(() => {
+		const currentCategories = isTourStarted ? categoriesTemplate : categories;
+		return [
+			valuesByCategory.map(
+				(value: Value) => currentCategories[value.categoryId].name
+			),
+			valuesByCategory.map(
+				(value: Value) => currentCategories[value.categoryId].color
+			),
+			valuesByCategory.map((value: Value) => Math.round(value.value)),
+		];
+	}, [isTourStarted, categories, categoriesTemplate, valuesByCategory]);
 
 	const data = {
 		labels: names,

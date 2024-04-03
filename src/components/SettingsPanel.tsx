@@ -5,6 +5,7 @@ import Settings from 'pages/Settings';
 import React, { useCallback, useState } from 'react';
 import { optionsStore } from 'utils/optionsStore';
 import Ticker from './Ticker';
+import AppTour from './AppTour';
 
 const SettingsPanel: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
@@ -22,7 +23,7 @@ const SettingsPanel: React.FC = observer(() => {
 				open={isMenuOpened}
 				onClose={toggleIsMenuOpened}
 			>
-				<Settings />
+				<Settings toggleOpened={toggleIsMenuOpened} />
 			</Drawer>
 			<FloatButton.Group>
 				<Tooltip
@@ -41,6 +42,7 @@ const SettingsPanel: React.FC = observer(() => {
 					icon={<SettingOutlined />}
 				/>
 			</FloatButton.Group>
+			<AppTour toggleOpened={toggleIsMenuOpened} />
 		</>
 	);
 });

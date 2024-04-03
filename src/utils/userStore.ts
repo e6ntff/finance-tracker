@@ -18,6 +18,16 @@ class UserStore {
 	notificationStatus: Status = { status: 'success' };
 	isDataChanged: boolean = false;
 	allData: AllData = constants.defaultData;
+	tourRefs: React.MutableRefObject<null>[] = [];
+	isTourStarted: boolean = false;
+
+	setIsTourStarted = (value: boolean) => {
+		this.isTourStarted = value;
+	};
+
+	setTourRefs = (refs: React.MutableRefObject<null>[]) => {
+		this.tourRefs = refs;
+	};
 
 	saveData = () => {
 		if (this.user.uid) {

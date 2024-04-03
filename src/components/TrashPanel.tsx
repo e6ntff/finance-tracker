@@ -11,7 +11,7 @@ import { userStore } from 'utils/userStore';
 const TrashPanel: React.FC = observer(() => {
 	const { list, deleteItem, restoreItem } = listStore;
 	const { categories, deleteCategory, restoreCategory } = categoryStore;
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, tourRefs } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
@@ -37,17 +37,21 @@ const TrashPanel: React.FC = observer(() => {
 	}, [list, categories, restoreCategory, restoreItem]);
 
 	return (
-		<Flex gap={16}>
-			<Popconfirm
-				title={languages.deleteAllConfirm[language]}
-				onConfirm={deleteAll}
-			>
-				<Tooltip title={languages.deleteAll[language]}>
+		<Flex
+			gap={16}
+			ref={tourRefs[5]}
+			style={{inlineSize: 'min-content'}}
+		>
+			<Tooltip title={languages.deleteAll[language]}>
+				<Popconfirm
+					title={languages.deleteAllConfirm[language]}
+					onConfirm={deleteAll}
+				>
 					<Button size={isSmallScreen ? 'small' : 'middle'}>
 						<DeleteOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
 					</Button>
-				</Tooltip>
-			</Popconfirm>
+				</Popconfirm>
+			</Tooltip>
 			<Tooltip title={languages.restoreAll[language]}>
 				<Popconfirm
 					title={languages.restoreAllConfirm[language]}

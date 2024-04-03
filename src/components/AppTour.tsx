@@ -1,0 +1,113 @@
+import { Flex, Tour } from 'antd';
+import { observer } from 'mobx-react-lite';
+import React, {
+	useCallback,
+	useEffect,
+	useRef,
+	useMemo,
+	useState,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import constants from 'settings/constants';
+import tour from 'settings/tour';
+import { optionsStore } from 'utils/optionsStore';
+import { userStore } from 'utils/userStore';
+import LanguageSelect from './LanguageSelect';
+
+interface Props {
+	toggleOpened: () => void;
+}
+
+const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
+	const navigate = useNavigate();
+	let stepId = useRef<NodeJS.Timeout>();
+	const { tourRefs, setTourRefs, loading, setIsTourStarted, isTourStarted } =
+		userStore;
+	const { userOptions } = optionsStore;
+	const { language } = userOptions;
+
+	const [currentStep, setCurrentStep] = useState<number>(-1);
+
+	useEffect(() => {
+		setCurrentStep(isTourStarted ? 0 : -1);
+	}, [isTourStarted]);
+
+	const refs = new Array(tour.length).fill(undefined).map(() => useRef(null));
+	const steps = useMemo(
+		() =>
+			tour.map((item: any, index: number) => {
+				const description =
+					index === 0 ? (
+						<Flex
+							gap={8}
+							vertical
+							align='start'
+						>
+							{item.step[language].description}
+							<LanguageSelect />
+						</Flex>
+					) : (
+						item.step[language].description
+					);
+				return {
+					...item,
+					step: {
+						...item.step[language],
+						description,
+						target: () => (tourRefs.length ? tourRefs[index].current : null),
+						nextButtonProps: index > 0 ? { style: { display: 'none' } } : {},
+						prevButtonProps: index > 0 ? { style: { display: 'none' } } : {},
+					},
+				};
+			}),
+		[tourRefs, language]
+	);
+
+	useEffect(() => {
+		setTourRefs(refs);
+		return () => {
+			clearInterval(stepId.current);
+		};
+		// eslint-disable-next-line
+	}, []);
+
+	const endTour = useCallback(() => {
+		setIsTourStarted(false);
+		setCurrentStep(-1);
+		clearInterval(stepId.current);
+	}, [setIsTourStarted, setCurrentStep]);
+
+	const handleChange = useCallback(
+		(step: number) => {
+			if (step > 0) {
+				stepId.current = setInterval(
+					() =>
+						setCurrentStep((prevStep: number) => {
+							const nextStep = ++prevStep;
+							nextStep === steps.length && endTour();
+							navigate(tour[nextStep].page);
+							(nextStep === 6 || nextStep === 7) && toggleOpened();
+							return nextStep;
+						}),
+					constants.tourPeriod
+				);
+			}
+			setCurrentStep(step);
+		},
+		[setCurrentStep, endTour, navigate, toggleOpened, steps.length]
+	);
+
+	return (
+		<Tour
+			disabledInteraction
+			current={currentStep}
+			open={!loading && currentStep >= 0}
+			onChange={handleChange}
+			onClose={endTour}
+			onFinish={endTour}
+			steps={steps.map((item: any) => item.step)}
+		/>
+	);
+});
+
+export default AppTour;

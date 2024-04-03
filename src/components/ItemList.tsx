@@ -9,13 +9,14 @@ import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
 import LargeSpin from './LargeSpin';
 import { listStore } from 'utils/listStore';
+import Templates from './Templates';
 
 interface Props {
 	filteredListIds: string[];
 }
 
 const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
-	const { loading, isSmallScreen } = userStore;
+	const { loading, isSmallScreen, isTourStarted } = userStore;
 	const { listOptions } = optionsStore;
 	const { lastDeletedItemIds } = listStore;
 
@@ -29,7 +30,7 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 		[filteredListIds, debouncedOptions, lastDeletedItemIds]
 	);
 
-	return (
+	return !isTourStarted ? (
 		<>
 			{loading ? (
 				<LargeSpin />
@@ -52,8 +53,6 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 				<Space
 					wrap
 					size={isSmallScreen ? 8 : 16}
-					// align='center'
-					// style={{ justifyContent: 'center' }}
 				>
 					{listToShowOnCurrentPageIds.map((key: string) => (
 						<ListItem
@@ -65,6 +64,11 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 				</Space>
 			)}
 		</>
+	) : (
+		<Templates
+			list='item'
+			mode={debouncedOptions.mode}
+		/>
 	);
 });
 

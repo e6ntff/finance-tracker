@@ -14,6 +14,11 @@ class CategoryStore {
 	userStore;
 	categories: { [key: string]: category } = {};
 	lastDeletedCategoryIds: string[] = [];
+	categoriesTemplate: typeof this.categories = {};
+
+	setCategoriesTemplate = (template: typeof this.categories) => {
+		this.categoriesTemplate = template;
+	};
 
 	setCategories = (
 		categories: { [key: string]: category },

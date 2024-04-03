@@ -88,3 +88,12 @@ export interface AllData {
 	list: { [key: string]: ExpenseItem };
 	categories: { [key: string]: category };
 }
+
+export interface TourStep {
+	ref: React.MutableRefObject<null>;
+	page: string;
+	step: {
+		title: string;
+		description: string;
+	};
+}

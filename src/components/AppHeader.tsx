@@ -9,7 +9,7 @@ import SyncIcon from './SyncIcon';
 import RandomizeButton from './RandomizeButton';
 
 const AppHeader: React.FC = observer(() => {
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, tourRefs } = userStore;
 
 	return (
 		<Flex
@@ -18,6 +18,7 @@ const AppHeader: React.FC = observer(() => {
 		>
 			<Navigation />
 			<Flex
+				ref={tourRefs[9]}
 				gap={isSmallScreen ? 16 : 32}
 				justify='space-between'
 				align='center'

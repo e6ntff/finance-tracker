@@ -24,20 +24,26 @@ import {
 interface Props {
 	mode: Mode;
 	initialItemId: string;
+	item?: ExpenseItem;
 }
 
-const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
-	const { isSmallScreen } = userStore;
+const ListItem: React.FC<Props> = observer(({ mode, initialItemId, item }) => {
+	const { isSmallScreen, isTourStarted } = userStore;
 	const { replaceItem, list, setLastDeletedItemIds, lastDeletedItemIds } =
 		listStore;
 	const { userOptions } = optionsStore;
-	const { categories } = categoryStore;
+	const { categories: userCategories, categoriesTemplate } = categoryStore;
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, userCategories, categoriesTemplate]
+	);
 
 	const { currency, language } = userOptions;
 
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 	const [currentItem, setCurrentItem] = useState<ExpenseItem>(
-		list[initialItemId]
+		item || list[initialItemId]
 	);
 
 	const toggleIsModalOpened = useCallback(() => {
@@ -105,14 +111,16 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 		}
 	}, [currentItem, language]);
 
-	return (
+	return !item?.deleted ? (
 		<>
-			<ItemModal
-				opened={isModalOpened}
-				initialItemId={initialItemId}
-				toggleOpened={toggleIsModalOpened}
-				submitItem={updateCurrentItem}
-			/>
+			{!item && (
+				<ItemModal
+					opened={isModalOpened}
+					initialItemId={initialItemId}
+					toggleOpened={toggleIsModalOpened}
+					submitItem={updateCurrentItem}
+				/>
+			)}
 			{mode === 'list' ? (
 				<Item>
 					<Col>{ImageAndDateJSX}</Col>
@@ -157,6 +165,8 @@ const ListItem: React.FC<Props> = observer(({ mode, initialItemId }) => {
 				</Card>
 			)}
 		</>
+	) : (
+		<></>
 	);
 });
 

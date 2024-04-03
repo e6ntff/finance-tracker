@@ -16,7 +16,7 @@ interface Props {
 }
 
 const Selectors: React.FC<Props> = observer(({ total }) => {
-	const { isSmallScreen, loading } = userStore;
+	const { isSmallScreen, loading, tourRefs } = userStore;
 	const {
 		listOptions,
 		defaultRange,
@@ -59,6 +59,7 @@ const Selectors: React.FC<Props> = observer(({ total }) => {
 
 	return (
 		<Flex
+			ref={tourRefs[2]}
 			vertical
 			style={{ inlineSize: '100%' }}
 		>

@@ -17,25 +17,29 @@ import { categoryStore } from 'utils/categoryStore';
 
 const Navigation: React.FC = observer(() => {
 	const location = useLocation();
-	const { isSmallScreen } = userStore;
+	const { isSmallScreen, isTourStarted } = userStore;
 	const { userOptions } = optionsStore;
-	const { list } = listStore;
-	const { categories } = categoryStore;
+	const { list, listTemplate } = listStore;
+	const { categories, categoriesTemplate } = categoryStore;
 
 	const { language } = userOptions;
 
-	const count = useMemo(
-		() =>
-			Object.keys(list).reduce(
-				(acc: number, key: string) => (list[key].deleted ? ++acc : acc),
+	const count = useMemo(() => {
+		const currentList = isTourStarted ? listTemplate : list;
+		const currentCategories = isTourStarted ? categoriesTemplate : categories;
+
+		return (
+			Object.keys(currentList).reduce(
+				(acc: number, key: string) => (currentList[key].deleted ? ++acc : acc),
 				0
 			) +
-			Object.keys(categories).reduce(
-				(acc: number, key: string) => (categories[key].deleted ? ++acc : acc),
+			Object.keys(currentCategories).reduce(
+				(acc: number, key: string) =>
+					currentCategories[key].deleted ? ++acc : acc,
 				0
-			),
-		[list, categories]
-	);
+			)
+		);
+	}, [list, categories, listTemplate, categoriesTemplate, isTourStarted]);
 
 	const items = [
 		{

@@ -106,6 +106,7 @@ const App: React.FC = observer(() => {
 		<ConfigProvider theme={getConfig(isSmallScreen, themeAlgorithm)}>
 			<Scrollbars autoHide>
 				<Router>
+					<SettingsPanel />
 					<Notification />
 					<DeleteNotification />
 					<Layout
@@ -184,7 +185,6 @@ const App: React.FC = observer(() => {
 							</Layout>
 						)}
 					</Layout>
-					<SettingsPanel />
 				</Router>
 			</Scrollbars>
 		</ConfigProvider>

@@ -1,4 +1,4 @@
-import { ExpenseItem, Sort, language } from 'settings/interfaces';
+import { ExpenseItem, Sort, category, language } from 'settings/interfaces';
 
 export const getSymbolAndPrice = (currency: string, price?: number) => {
 	let result = '';
@@ -75,3 +75,22 @@ export const convertToJpeg: (
 			resolve(jpegBase64);
 		};
 	});
+
+export const getRandomColor = () => {
+	const [r, g, b] = new Array(3).fill(undefined).map(() =>
+		Math.floor(Math.random() * 256)
+			.toString(16)
+			.padStart(2, '0')
+	);
+	return `#${r}${g}${b}`;
+};
+
+export const getRandomCategoryId = (categories: {
+	[key: string]: category;
+}) => {
+	const ids = Object.keys(categories);
+
+	const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+	return categories[randomId].deleted ? '0' : randomId;
+};

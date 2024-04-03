@@ -8,29 +8,27 @@ import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 
 const Trash: React.FC = observer(() => {
-	const { list } = listStore;
-	const { categories } = categoryStore;
-	const { isSmallScreen } = userStore;
+	const { list, listTemplate } = listStore;
+	const { categories, categoriesTemplate } = categoryStore;
+	const { isSmallScreen, isTourStarted, tourRefs } = userStore;
 
-	const deletedItemIds: string[] = useMemo(
-		() =>
-			Object.keys(list).reduce(
-				(acc: string[], key: string) =>
-					list[key].deleted === true ? [...acc, key] : acc,
-				[]
-			),
-		[list]
-	);
+	const deletedItemIds: string[] = useMemo(() => {
+		const currentList = isTourStarted ? listTemplate : list;
+		return Object.keys(currentList).reduce(
+			(acc: string[], key: string) =>
+				currentList[key].deleted === true ? [...acc, key] : acc,
+			[]
+		);
+	}, [list, listTemplate, isTourStarted]);
 
-	const deletedCategoryIds: string[] = useMemo(
-		() =>
-			Object.keys(categories).reduce(
-				(acc: string[], key: string) =>
-					categories[key].deleted === true ? [...acc, key] : acc,
-				[]
-			),
-		[categories]
-	);
+	const deletedCategoryIds: string[] = useMemo(() => {
+		const currentCategories = isTourStarted ? categoriesTemplate : categories;
+		return Object.keys(currentCategories).reduce(
+			(acc: string[], key: string) =>
+				currentCategories[key].deleted === true ? [...acc, key] : acc,
+			[]
+		);
+	}, [categories, categoriesTemplate, isTourStarted]);
 
 	if (!deletedItemIds.length && !deletedCategoryIds.length)
 		return (
@@ -44,6 +42,7 @@ const Trash: React.FC = observer(() => {
 		<Flex vertical>
 			<TrashPanel />
 			<Flex
+				ref={tourRefs[4]}
 				vertical={isSmallScreen}
 				gap={isSmallScreen ? 16 : 32}
 				style={{ inlineSize: '100%' }}

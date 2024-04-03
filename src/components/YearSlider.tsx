@@ -39,16 +39,18 @@ interface Props {
 
 const YearSlider: React.FC<Props> = observer(
 	({ range, setRange, isAccurate, setIsAccurate }) => {
-		const { list } = listStore;
-		const { isSmallScreen } = userStore;
+		const { list, listTemplate } = listStore;
+		const { isSmallScreen, isTourStarted } = userStore;
 		const { defaultRange, setDefaultRange, userOptions } = optionsStore;
 
 		const [value, setValue] = useState(defaultRange);
 
 		const sliderRange: [number, number] = useMemo(() => {
-			const dates = Object.values(list).map((item: ExpenseItem) => item.date);
+			const dates = Object.values(isTourStarted ? listTemplate : list).map(
+				(item: ExpenseItem) => item.date
+			);
 			return [Math.min(...dates), Math.max(...dates)];
-		}, [list]);
+		}, [list, isTourStarted, listTemplate]);
 
 		const marks: { [key: number]: string } = useMemo(() => {
 			const start = dayjs(sliderRange[0]).startOf('day');
@@ -123,6 +125,7 @@ const YearSlider: React.FC<Props> = observer(
 			<Flex
 				gap={16}
 				align='center'
+				style={{ inlineSize: '100%' }}
 			>
 				<Segmented
 					size={isSmallScreen ? 'small' : 'middle'}

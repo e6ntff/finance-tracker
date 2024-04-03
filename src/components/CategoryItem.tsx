@@ -13,141 +13,146 @@ import { MyDelete, MyInfoTooltip, MyTitle } from './Items';
 
 interface Props {
 	initialCategoryId: string;
+	category?: category;
 }
 
-const CategoryItem: React.FC<Props> = observer(({ initialCategoryId }) => {
-	const {
-		replaceCategory,
-		categories,
-		setLastDeletedCategoryIds,
-		lastDeletedCategoryIds,
-	} = categoryStore;
-	const { list } = listStore;
-	const { isSmallScreen } = userStore;
-	const { userOptions } = optionsStore;
+const CategoryItem: React.FC<Props> = observer(
+	({ initialCategoryId, category }) => {
+		const {
+			replaceCategory,
+			categories,
+			setLastDeletedCategoryIds,
+			lastDeletedCategoryIds,
+		} = categoryStore;
+		const { list } = listStore;
+		const { isSmallScreen } = userStore;
+		const { userOptions } = optionsStore;
 
-	const { language } = userOptions;
+		const { language } = userOptions;
 
-	const [currentCategory, setCurrentCategory] = useState<category>(
-		categories[initialCategoryId]
-	);
+		const [currentCategory, setCurrentCategory] = useState<category>(
+			category || categories[initialCategoryId]
+		);
 
-	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+		const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
-	const itemsWithCurrentCategory = useMemo(
-		() =>
-			Object.keys(list).reduce(
-				(acc: string[], key: string) =>
-					list[key].categoryId === initialCategoryId ? [...acc, key] : [...acc],
-				[]
-			),
-		[list, initialCategoryId]
-	);
+		const itemsWithCurrentCategory = useMemo(
+			() =>
+				Object.keys(list).reduce(
+					(acc: string[], key: string) =>
+						list[key].categoryId === initialCategoryId
+							? [...acc, key]
+							: [...acc],
+					[]
+				),
+			[list, initialCategoryId]
+		);
 
-	const deleteCategory = useCallback(() => {
-		setLastDeletedCategoryIds([...lastDeletedCategoryIds, initialCategoryId]);
-	}, [setLastDeletedCategoryIds, initialCategoryId, lastDeletedCategoryIds]);
+		const deleteCategory = useCallback(() => {
+			setLastDeletedCategoryIds([...lastDeletedCategoryIds, initialCategoryId]);
+		}, [setLastDeletedCategoryIds, initialCategoryId, lastDeletedCategoryIds]);
 
-	const updateCurrentCategory = useCallback(
-		(category: category) => {
-			setCurrentCategory((prevCategory: category) => {
-				if (JSON.stringify(prevCategory) !== JSON.stringify(category)) {
-					replaceCategory(initialCategoryId, category);
-					return category;
-				}
-				return prevCategory;
-			});
-		},
-		[setCurrentCategory, replaceCategory, initialCategoryId]
-	);
+		const updateCurrentCategory = useCallback(
+			(category: category) => {
+				setCurrentCategory((prevCategory: category) => {
+					if (JSON.stringify(prevCategory) !== JSON.stringify(category)) {
+						replaceCategory(initialCategoryId, category);
+						return category;
+					}
+					return prevCategory;
+				});
+			},
+			[setCurrentCategory, replaceCategory, initialCategoryId]
+		);
 
-	const handleNameChange = useCallback(
-		(value: string) => {
-			setCurrentCategory((prevCategory) => {
-				const newCategory: category = {
-					...prevCategory,
-					name: value,
-				};
-				updateCurrentCategory(newCategory);
-				return newCategory;
-			});
-		},
-		[setCurrentCategory, updateCurrentCategory]
-	);
+		const handleNameChange = useCallback(
+			(value: string) => {
+				setCurrentCategory((prevCategory) => {
+					const newCategory: category = {
+						...prevCategory,
+						name: value,
+					};
+					updateCurrentCategory(newCategory);
+					return newCategory;
+				});
+			},
+			[setCurrentCategory, updateCurrentCategory]
+		);
 
-	const handleColorChange = useCallback(
-		(value: Color) => {
-			setCurrentCategory((prevCategory) => {
-				const newCategory: category = {
-					...prevCategory,
-					color: `#${value.toHex()}`,
-				};
-				updateCurrentCategory(newCategory);
-				return newCategory;
-			});
-		},
-		[setCurrentCategory, updateCurrentCategory]
-	);
+		const handleColorChange = useCallback(
+			(value: Color) => {
+				setCurrentCategory((prevCategory) => {
+					const newCategory: category = {
+						...prevCategory,
+						color: `#${value.toHex()}`,
+					};
+					updateCurrentCategory(newCategory);
+					return newCategory;
+				});
+			},
+			[setCurrentCategory, updateCurrentCategory]
+		);
 
-	const ColorPickerJSX = (
-		<Tooltip title={languages.pickColor[language]}>
-			<ColorPicker
-				size={isSmallScreen ? 'small' : 'middle'}
-				value={currentCategory.color}
-				format='hex'
-				onChangeComplete={handleColorChange}
-			/>
-		</Tooltip>
-	);
+		const ColorPickerJSX = (
+			<Tooltip title={languages.pickColor[language]}>
+				<ColorPicker
+					size={isSmallScreen ? 'small' : 'middle'}
+					value={currentCategory.color}
+					format='hex'
+					onChangeComplete={handleColorChange}
+				/>
+			</Tooltip>
+		);
 
-	const tooltipTitle = useMemo(
-		() =>
-			`${languages.itemsWithCurrentCategory[language]}: ${itemsWithCurrentCategory.length}`,
-		[itemsWithCurrentCategory, language]
-	);
+		const tooltipTitle = useMemo(
+			() =>
+				`${languages.itemsWithCurrentCategory[language]}: ${itemsWithCurrentCategory.length}`,
+			[itemsWithCurrentCategory, language]
+		);
 
-	const ActionsJSX = (
-		<Flex
-			align='center'
-			justify='space-evenly'
-		>
-			{MyInfoTooltip(tooltipTitle, isSmallScreen, () => {
-				itemsWithCurrentCategory.length && setIsModalOpened(true);
-			})}
-			{ColorPickerJSX}
-			{MyDelete(
-				languages.delete[userOptions.language],
-				isSmallScreen,
-				deleteCategory
-			)}
-		</Flex>
-	);
-
-	return (
-		<>
-			<Card
-				style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
-				size={isSmallScreen ? 'small' : 'default'}
-				title={MyTitle(currentCategory.name, isSmallScreen, language, {
-					onChange: handleNameChange,
+		const ActionsJSX = (
+			<Flex
+				align='center'
+				justify='space-evenly'
+			>
+				{MyInfoTooltip(tooltipTitle, isSmallScreen, () => {
+					itemsWithCurrentCategory.length && setIsModalOpened(true);
 				})}
-				actions={[ActionsJSX]}
-				styles={{
-					title: {
-						padding: 10,
-					},
-					body: {
-						padding: 0,
-					},
-				}}
-			></Card>
-			<ItemsModal
-				opened={isModalOpened}
-				setOpened={setIsModalOpened}
-				itemIds={itemsWithCurrentCategory}
-			/>
-		</>
-	);
-});
+				{ColorPickerJSX}
+				{MyDelete(
+					languages.delete[userOptions.language],
+					isSmallScreen,
+					deleteCategory
+				)}
+			</Flex>
+		);
+
+		return (
+			<>
+				<Card
+					style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
+					size={isSmallScreen ? 'small' : 'default'}
+					title={MyTitle(currentCategory.name, isSmallScreen, language, {
+						onChange: handleNameChange,
+					})}
+					actions={[ActionsJSX]}
+					styles={{
+						title: {
+							padding: 10,
+						},
+						body: {
+							padding: 0,
+						},
+					}}
+				></Card>
+				<ItemsModal
+					opened={isModalOpened}
+					setOpened={setIsModalOpened}
+					itemIds={itemsWithCurrentCategory}
+				/>
+			</>
+		);
+	}
+);
 
 export default CategoryItem;

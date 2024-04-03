@@ -13,8 +13,13 @@ class ListStore {
 	userStore;
 	list: { [key: string]: ExpenseItem } = {};
 	lastDeletedItemIds: string[] = [];
+	listTemplate: typeof this.list = {};
 
-	setList = (list: { [key: string]: ExpenseItem }, save: boolean = true) => {
+	setListTemplate = (template: typeof this.list) => {
+		this.listTemplate = template;
+	};
+
+	setList = (list: typeof this.list, save: boolean = true) => {
 		this.list = { ...list } || {};
 		this.userStore.updateAllData({ list: this.list });
 		save && this.userStore.pushDataToSaving();

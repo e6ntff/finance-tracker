@@ -273,13 +273,130 @@ const languages: { [key: string]: any } = {
 		ru: 'Если что-то не работает, значит я пишу код. Если есть идеи или хочешь меня на работу (O_o) пиши в телеграм: @e6ntff ',
 	},
 	randomize: {
-		en: `If you don't wanna use the app but only try for a few minutes, you can click this button and add some random data`,
-		ru: 'Если хочешь только посмотреть на приложение, можешь кликнуть сюда и добавятся случайные данные.ы'
+		en: `If you don't wanna use the app but only try it for a few minutes, you can click this button and add some random data`,
+		ru: 'Если хочешь только посмотреть на приложение, можешь кликнуть сюда и добавятся случайные данные.ы',
 	},
 	randomizeConfirm: {
 		en: 'All your data will be lost!',
 		ru: 'Все данные будут потеряны!',
 	},
+	runTour: { en: 'Run tour', ru: 'Запустить тур' },
+	tour: [
+		{
+			en: {
+				title: 'Hi there!',
+				description:
+					'This is my pet project. Here you can manage your expenses',
+			},
+			ru: {
+				title: 'Привет!',
+				description:
+					'Это мой проект, где ты можешь контролировать свои расходы',
+			},
+		},
+		{
+			en: {
+				title: 'This is expense list',
+				description: 'You can add, remove or edit items',
+			},
+			ru: {
+				title: 'Это список расходов',
+				description: 'Ты можешь добавлять, удалять и изменять элементы',
+			},
+		},
+		{
+			en: {
+				title: 'Selectors',
+				description:
+					'Choose categories, time interval, list type or change sorting method - here',
+			},
+			ru: {
+				title: 'Управление',
+				description:
+					'Выбор категорий, интервала времени, типа списка или поменять вид сортировки - все здесь',
+			},
+		},
+		{
+			en: {
+				title: 'Here are categories',
+				description:
+					'You can add, remove and edit them. They will help you manage your money more effective',
+			},
+			ru: {
+				title: 'Это категории',
+				description:
+					'Ты можешь их создавать, удалять или редактировать. Они помогут тебе управлять расходами удобнее',
+			},
+		},
+		{
+			en: {
+				title: 'This is trash',
+				description: `All deleted items you'll find there. You can delete forever or restore them`,
+			},
+			ru: {
+				title: 'Корзина',
+				description:
+					'Все удаленные предметы ты найдешь здесь. Ты можешь удалить их навсегда или восстановить',
+			},
+		},
+		{
+			en: {
+				title: 'Trash buttons',
+				description:
+					'To easily delete or restore all the items from trash there are this buttons',
+			},
+			ru: {
+				title: 'Корзина',
+				description:
+					'Это кнопки для быстрого удаления и восстановления всех предметов',
+			},
+		},
+		{
+			en: {
+				title: 'Settings',
+				description: `You can change the app options like you want. App language, currency, theme and other take place here. Also you can restart this tour if it's needed`,
+			},
+			ru: {
+				title: 'Настройки',
+				description:
+					'Ты можешь изменять настройки приложения, как хочешь. Язык, валюта, тема и другое - здесь. Здесь можно и перезапустить этот тур, если нужно',
+			},
+		},
+		{
+			en: {
+				title: `It's statistic`,
+				description:
+					'Here you can find beautiful diagrams. Left diagram will show you expenses in choosen interval and the right one will split them into categories',
+			},
+			ru: {
+				title: 'Это статистика',
+				description:
+					'Здесь ты можешь найти красивые диаграммы. Левая покажет расходы в выбранном интервале, правая - разделит их на категории',
+			},
+		},
+		{
+			en: {
+				title: 'Choose time interval',
+				description: 'With this slider by month and by day',
+			},
+			ru: {
+				title: 'Выбор временного интервала',
+				description: 'С помощью этого ползунка, по месяцам или по дням',
+			},
+		},
+		{
+			en: {
+				title: 'Header buttons',
+				description:
+					'Load the data snippet (just to look at the app), log out or check my social media',
+			},
+			ru: {
+				title: 'Кнопки наверху',
+				description:
+					'Чтобы загрузить рандомные данные (посмотреть на приложение), выйти из аккаунта или перейти по моим ссылкам',
+			},
+		},
+	],
 };
 
 export default languages;

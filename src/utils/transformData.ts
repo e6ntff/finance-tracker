@@ -3,11 +3,16 @@ import {
 	Interval,
 	ListOptions,
 	Value,
+	category,
 	language,
+	rates,
 } from 'settings/interfaces';
-import { sortBy } from './utils';
+import { getRandomCategoryId, getRandomColor, sortBy } from './utils';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
+import constants from 'settings/constants';
+import uniqid from 'uniqid';
+import calculatePrices from './calculatePrices';
 
 dayjs.extend(isBetween);
 
@@ -147,4 +152,63 @@ export const getValuesByMonth = (
 	}
 
 	return values;
+};
+
+export const getRandomData = (
+	itemsValue: number,
+	categoriesValue: number,
+	deletedItemsValue: number,
+	deletedCategoriesValue: number,
+	currencyRates: rates
+) => {
+	const newItems: { [key: string]: ExpenseItem } = {};
+	const newCategories: { [key: string]: category } = {
+		'0': constants.defaultCategory,
+	};
+
+	new Array(categoriesValue)
+		.fill(undefined)
+		.forEach((_: undefined, index: number) => {
+			const id = uniqid();
+
+			const name = `Category ${index}`;
+
+			const color = getRandomColor();
+
+			newCategories[id] = {
+				name: name,
+				color: color,
+				deleted: categoriesValue - index - 1 < deletedCategoriesValue,
+			};
+		});
+
+	new Array(itemsValue)
+		.fill(undefined)
+		.forEach((_: undefined, index: number) => {
+			const categoryId = getRandomCategoryId(newCategories);
+
+			const date: number =
+				Math.random() *
+					(dayjs('2023-12-31').valueOf() - dayjs('2021-01-01').valueOf()) +
+				dayjs('2020-01-01').valueOf();
+
+			const prices = calculatePrices(
+				{ USD: Math.random() * 1501, EUR: 0, RUB: 0 },
+				currencyRates,
+				'USD'
+			);
+
+			const id = uniqid();
+
+			newItems[id] = {
+				deleted: index < deletedItemsValue,
+				title: '',
+				price: prices,
+				categoryId: categoryId,
+				date: date,
+				createdAt: date,
+			};
+		});
+
+	return { items: newItems, categories: newCategories };
 };

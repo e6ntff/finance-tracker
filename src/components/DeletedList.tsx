@@ -25,9 +25,10 @@ interface Props {
 }
 
 const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
-	const { list, restoreItem, deleteItem } = listStore;
-	const { categories, restoreCategory, deleteCategory } = categoryStore;
-	const { isSmallScreen } = userStore;
+	const { list, restoreItem, deleteItem, listTemplate } = listStore;
+	const { categories, restoreCategory, deleteCategory, categoriesTemplate } =
+		categoryStore;
+	const { isSmallScreen, isTourStarted } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
@@ -135,14 +136,14 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 			return (
 				<List style={{ inlineSize: '100%' }}>
 					{ids.map((key: string) => {
-						const currentItem = list[key];
+						const currentItem = isTourStarted ? listTemplate[key] : list[key];
 
 						return (
 							<Item key={key}>
-								<Col span={1}>{ImageJSX(currentItem.image)}</Col>
-								<Col span={10}>{TitleJSX(currentItem.title)}</Col>
+								<Col span={1}>{ImageJSX(currentItem?.image)}</Col>
+								<Col span={10}>{TitleJSX(currentItem?.title)}</Col>
 								<Col span={2}>{ViewJSX(key)}</Col>
-								<Col span={2}>{TooltipJSX(currentItem.deletedAt)}</Col>
+								<Col span={2}>{TooltipJSX(currentItem?.deletedAt)}</Col>
 								<Col span={2}>{RestoreJSX(key, restoreItem)}</Col>
 								<Col span={2}>
 									{MyDelete(
@@ -161,7 +162,9 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 			return (
 				<List style={{ inlineSize: '100%' }}>
 					{ids.map((key: string) => {
-						const currentCategory = categories[key];
+						const currentCategory = isTourStarted
+							? categoriesTemplate[key]
+							: categories[key];
 
 						return (
 							<Item key={key}>

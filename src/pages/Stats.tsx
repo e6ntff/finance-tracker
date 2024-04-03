@@ -17,8 +17,8 @@ import ResetButton from 'components/ResetButton';
 dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
-	const { list } = listStore;
-	const { isSmallScreen, loading, tourRefs } = userStore;
+	const { list, listTemplate } = listStore;
+	const { isSmallScreen, loading, tourRefs, isTourStarted } = userStore;
 	const { statsOptions, defaultRange, setStatsRange, setIsStatsAccurate } =
 		optionsStore;
 
@@ -103,7 +103,7 @@ const Stats: React.FC = observer(() => {
 
 	return loading ? (
 		<LargeSpin />
-	) : Object.keys(list).length ? (
+	) : Object.keys(isTourStarted ? listTemplate : list).length ? (
 		<Flex
 			vertical
 			gap={32}

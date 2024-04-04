@@ -280,6 +280,8 @@ const languages: { [key: string]: any } = {
 		en: 'All your data will be lost!',
 		ru: 'Все данные будут потеряны!',
 	},
+	deleteSelected: { en: 'Delete selected', ru: 'Удалить выделенное' },
+	restoreSelected: { en: 'Restore selected', ru: 'Восстановить выделенное' },
 	runTour: { en: 'Run tour', ru: 'Запустить тур' },
 	tour: [
 		{

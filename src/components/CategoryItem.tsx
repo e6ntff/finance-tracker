@@ -14,10 +14,11 @@ import { MyDelete, MyInfoTooltip, MyTitle } from './Items';
 interface Props {
 	initialCategoryId: string;
 	category?: category;
+	disabled?: boolean;
 }
 
 const CategoryItem: React.FC<Props> = observer(
-	({ initialCategoryId, category }) => {
+	({ initialCategoryId, category, disabled }) => {
 		const {
 			replaceCategory,
 			userCategories,
@@ -141,7 +142,10 @@ const CategoryItem: React.FC<Props> = observer(
 		return (
 			<>
 				<Card
-					style={{ inlineSize: isSmallScreen ? '8em' : '12em' }}
+					style={{
+						inlineSize: isSmallScreen ? '8em' : '12em',
+						pointerEvents: disabled ? 'none' : 'auto',
+					}}
 					size={isSmallScreen ? 'small' : 'default'}
 					title={MyTitle(currentCategory.name, isSmallScreen, language, {
 						onChange: handleNameChange,

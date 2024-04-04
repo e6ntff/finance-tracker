@@ -4,12 +4,24 @@ import {
 	FrownOutlined,
 	InfoCircleOutlined,
 } from '@ant-design/icons';
-import { Avatar, Flex, Image, Statistic, Tag, Tooltip, Typography } from 'antd';
+import {
+	Avatar,
+	Button,
+	Checkbox,
+	Flex,
+	Image,
+	Statistic,
+	Tag,
+	Tooltip,
+	Typography,
+} from 'antd';
 import Title from 'antd/es/typography/Title';
 import { category, currencies, language } from 'settings/interfaces';
 import languages from 'settings/languages';
 import dayjs from 'dayjs';
 import { getSymbolAndPrice } from 'utils/utils';
+import React from 'react';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 export const MyInfoTooltip = (
 	title: string | React.JSX.Element,
@@ -30,11 +42,12 @@ export const MyTitle = (
 	title: string,
 	isSmallScreen: boolean,
 	language: language,
-	editable?: any
+	editable: any
 ) => (
 	<Flex
 		justify='center'
 		style={{
+			inlineSize: '100%',
 			opacity: !title ? '.5' : '1',
 		}}
 	>
@@ -190,6 +203,49 @@ export const MyDelete = (
 		<DeleteOutlined
 			onClick={onClick}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
+		/>
+	</Tooltip>
+);
+
+export const MyCheckbox = (
+	selected: boolean,
+	language: language,
+	isSmallScreen: boolean,
+	handleSelection: (event: CheckboxChangeEvent) => void,
+	deleteAll: () => void,
+	restoreAll?: () => void
+) => (
+	<Tooltip
+		color='#0000'
+		title={
+			selected ? (
+				<Flex
+					vertical
+					gap={isSmallScreen ? 4 : 8}
+				>
+					<Button
+						onClick={deleteAll}
+						size={isSmallScreen ? 'small' : 'middle'}
+					>
+						{languages.deleteSelected[language]}
+					</Button>
+					{restoreAll && (
+						<Button
+							onClick={restoreAll}
+							size={isSmallScreen ? 'small' : 'middle'}
+						>
+							{languages.restoreSelected[language]}
+						</Button>
+					)}
+				</Flex>
+			) : (
+				''
+			)
+		}
+	>
+		<Checkbox
+			onChange={handleSelection}
+			checked={selected}
 		/>
 	</Tooltip>
 );

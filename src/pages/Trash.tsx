@@ -8,27 +8,35 @@ import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 
 const Trash: React.FC = observer(() => {
-	const { userList: list, listTemplate } = listStore;
-	const { userCategories: categories, categoriesTemplate } = categoryStore;
+	const { userList, listTemplate } = listStore;
+	const { userCategories, categoriesTemplate } = categoryStore;
 	const { isSmallScreen, isTourStarted, tourRefs } = userStore;
 
+	const list = useMemo(
+		() => (isTourStarted ? listTemplate : userList),
+		[isTourStarted, listTemplate, userList]
+	);
+
+	const categories = useMemo(
+		() => (isTourStarted ? categoriesTemplate : userCategories),
+		[isTourStarted, userCategories, categoriesTemplate]
+	);
+
 	const deletedItemIds: string[] = useMemo(() => {
-		const currentList = isTourStarted ? listTemplate : list;
-		return Object.keys(currentList).reduce(
+		return Object.keys(list).reduce(
 			(acc: string[], key: string) =>
-				currentList[key].deleted === true ? [...acc, key] : acc,
+				list[key].deleted === true ? [...acc, key] : acc,
 			[]
 		);
-	}, [list, listTemplate, isTourStarted]);
+	}, [list]);
 
 	const deletedCategoryIds: string[] = useMemo(() => {
-		const currentCategories = isTourStarted ? categoriesTemplate : categories;
-		return Object.keys(currentCategories).reduce(
+		return Object.keys(categories).reduce(
 			(acc: string[], key: string) =>
-				currentCategories[key].deleted === true ? [...acc, key] : acc,
+				categories[key].deleted === true ? [...acc, key] : acc,
 			[]
 		);
-	}, [categories, categoriesTemplate, isTourStarted]);
+	}, [categories]);
 
 	if (!deletedItemIds.length && !deletedCategoryIds.length)
 		return (

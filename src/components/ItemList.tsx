@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import ListItem from './ListItem';
 import { ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
@@ -9,6 +9,7 @@ import { optionsStore } from 'utils/optionsStore';
 import useDebounce from 'hooks/useDebounce';
 import LargeSpin from './LargeSpin';
 import { listStore } from 'utils/listStore';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 interface Props {
 	filteredListIds: string[];
@@ -17,7 +18,28 @@ interface Props {
 const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 	const { loading, isSmallScreen, tourRefs } = userStore;
 	const { listOptions } = optionsStore;
-	const { lastDeletedItemIds } = listStore;
+	const { lastDeletedItemIds, setLastDeletedItemIds } = listStore;
+
+	const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+
+	const deleteSelectedItems = useCallback(() => {
+		setSelectedItemIds((prevSelected: string[]) => {
+			setLastDeletedItemIds([...lastDeletedItemIds, ...prevSelected]);
+			return [];
+		});
+	}, [setLastDeletedItemIds, lastDeletedItemIds]);
+
+	const handleSelection = useCallback(
+		(id: string) => (event: CheckboxChangeEvent) => {
+			const value = event.target.checked;
+			value
+				? setSelectedItemIds((prevSelected: string[]) => [...prevSelected, id])
+				: setSelectedItemIds((prevSelected: string[]) =>
+						prevSelected.filter((item: string) => item !== id)
+				  );
+		},
+		[setSelectedItemIds]
+	);
 
 	const debouncedOptions: ListOptions = useDebounce(listOptions);
 
@@ -46,7 +68,10 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 					<ListItem
 						key={key}
 						mode={debouncedOptions.mode}
+						deleteAll={deleteSelectedItems}
+						handleSelection={handleSelection(key)}
 						initialItemId={key}
+						selected={selectedItemIds.includes(key)}
 					/>
 				))}
 			</List>
@@ -61,7 +86,10 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 				<ListItem
 					key={key}
 					mode={debouncedOptions.mode}
+					deleteAll={deleteSelectedItems}
+					handleSelection={handleSelection(key)}
 					initialItemId={key}
+					selected={selectedItemIds.includes(key)}
 				/>
 			))}
 		</Space>

@@ -54,10 +54,12 @@ const CategoriesSelect: React.FC = observer(() => {
 				style={{ minInlineSize: '10em' }}
 				value={listOptions.categoriesToFilterIds}
 				onChange={handleCategoriesToFilterChange}
-				options={Object.keys(categories).map((key: string) => ({
-					label: categories[key].name,
-					value: key,
-				}))}
+				options={Object.keys(categories)
+					.filter((key: string) => !categories[key].deleted)
+					.map((key: string) => ({
+						label: categories[key].name,
+						value: key,
+					}))}
 			/>
 		</Tooltip>
 	);

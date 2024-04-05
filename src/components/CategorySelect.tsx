@@ -13,7 +13,7 @@ interface Props {
 const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
 	const { categories } = categoryStore;
 	const { isSmallScreen } = userStore;
-console.log(categories)
+
 	return (
 		<Select
 			size={isSmallScreen ? 'small' : 'middle'}
@@ -23,10 +23,12 @@ console.log(categories)
 			suffixIcon={
 				<EditFilled style={{ color: categories[id] && categories[id].color }} />
 			}
-			options={Object.keys(categories).map((key: string) => ({
-				label: categories[key].name,
-				value: key,
-			}))}
+			options={Object.keys(categories)
+				.filter((key: string) => !categories[key].deleted)
+				.map((key: string) => ({
+					label: categories[key].name,
+					value: key,
+				}))}
 		/>
 	);
 });

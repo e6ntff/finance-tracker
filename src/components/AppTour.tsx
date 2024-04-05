@@ -34,8 +34,13 @@ const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
 	} = userStore;
 	const { userOptions } = optionsStore;
 	const { language } = userOptions;
-	const { setListTemplate } = listStore;
-	const { setCategoriesTemplate } = categoryStore;
+	const { setListTemplate, setList, listTemplate, userList } = listStore;
+	const {
+		setCategoriesTemplate,
+		setCategories,
+		categoriesTemplate,
+		userCategories,
+	} = categoryStore;
 
 	const [currentStep, setCurrentStep] = useState<number>(-1);
 
@@ -48,6 +53,22 @@ const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
 	useEffect(() => {
 		setCurrentStep(isTourStarted ? 0 : -1);
 	}, [isTourStarted]);
+
+	useEffect(() => {
+		if (isTourStarted) {
+			setList(listTemplate);
+		} else {
+			setList(userList);
+		}
+	}, [isTourStarted, userList, listTemplate, setList]);
+
+	useEffect(() => {
+		if (isTourStarted) {
+			setCategories(categoriesTemplate);
+		} else {
+			setCategories(userCategories);
+		}
+	}, [isTourStarted, categoriesTemplate, userCategories, setCategories]);
 
 	const refs = new Array(tour.length).fill(undefined).map(() => useRef(null));
 	const steps = useMemo(

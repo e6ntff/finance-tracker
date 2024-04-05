@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { category } from '../settings/interfaces';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
@@ -76,14 +76,3 @@ class CategoryStore {
 }
 
 export const categoryStore = new CategoryStore(userStore);
-
-reaction(
-	() => categoryStore.userStore.isTourStarted,
-	() => {
-		if (categoryStore.userStore.isTourStarted) {
-			categoryStore.setCategories(categoryStore.categoriesTemplate);
-		} else {
-			categoryStore.setCategories(categoryStore.userCategories);
-		}
-	}
-);

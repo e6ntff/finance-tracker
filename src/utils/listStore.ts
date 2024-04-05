@@ -1,5 +1,5 @@
 import { ExpenseItem } from '../settings/interfaces';
-import { makeAutoObservable, reaction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
 import uniqid from 'uniqid';
@@ -80,14 +80,3 @@ class ListStore {
 }
 
 export const listStore = new ListStore(userStore);
-
-reaction(
-	() => listStore.userStore.isTourStarted,
-	() => {
-		if (listStore.userStore.isTourStarted) {
-			listStore.setList(listStore.listTemplate);
-		} else {
-			listStore.setList(listStore.userList);
-		}
-	}
-);

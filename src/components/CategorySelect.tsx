@@ -13,7 +13,7 @@ interface Props {
 const CategorySelect: React.FC<Props> = observer(({ id, onChange }) => {
 	const { categories } = categoryStore;
 	const { isSmallScreen } = userStore;
-
+console.log(categories)
 	return (
 		<Select
 			size={isSmallScreen ? 'small' : 'middle'}

@@ -20,6 +20,8 @@ import {
 	initialUserOptions,
 } from 'settings/options';
 import { configure } from 'mobx';
+import { debounce } from 'lodash';
+import constants from 'settings/constants';
 
 configure({
 	enforceActions: 'never',
@@ -29,35 +31,63 @@ const { defaultAlgorithm, darkAlgorithm } = theme;
 
 class OptionsStore {
 	categoryStore;
+	defaultRange: number[] = [];
 	listOptions: ListOptions = initialListOptions;
 	statsOptions: StatsOptions = initialStatsOptions;
 	userOptions: UserOptions = initialUserOptions;
-	defaultRange: number[] = [];
+	deboucedListOptions: ListOptions = this.listOptions;
+	deboucedStatsOptions: StatsOptions = this.statsOptions;
+	deboucedUserOptions: UserOptions = this.userOptions;
+
+	setListOptions = (options: ListOptions) => {
+		this.listOptions = options;
+	};
+
+	setUserOptions = (options: UserOptions) => {
+		this.userOptions = options;
+	};
+
+	setStatsOptions = (options: StatsOptions) => {
+		this.statsOptions = options;
+	};
+
+	debouncedSetListOptions = debounce(
+		this.setListOptions,
+		constants.optionsDebounceDelay
+	);
+	debouncedSetUserOptions = debounce(
+		this.setUserOptions,
+		constants.optionsDebounceDelay
+	);
+	debouncedSetStatsOptions = debounce(
+		this.setStatsOptions,
+		constants.optionsDebounceDelay
+	);
 
 	resetOptions = () => {
-		this.listOptions = defaultListOptions;
-		this.statsOptions = defaultStatsOptions;
-		this.userOptions = defaultUserOptions;
+		this.debouncedSetListOptions(defaultListOptions);
+		this.debouncedSetStatsOptions(defaultStatsOptions);
+		this.debouncedSetUserOptions(defaultUserOptions);
 	};
 
 	setTheme = (theme: Theme) => {
-		this.userOptions = {
+		this.debouncedSetUserOptions({
 			...this.userOptions,
 			theme: theme,
 			themeAlgorithm: theme === 'default' ? defaultAlgorithm : darkAlgorithm,
-		};
+		});
 	};
 
 	setLanguage = (language: language) => {
-		this.userOptions = { ...this.userOptions, language: language };
+		this.debouncedSetUserOptions({ ...this.userOptions, language: language });
 	};
 
 	setCurrency = (currency: currency) => {
-		this.userOptions = { ...this.userOptions, currency: currency };
+		this.debouncedSetUserOptions({ ...this.userOptions, currency: currency });
 	};
 
 	setRange = (values: number[]) => {
-		this.listOptions = { ...this.listOptions, range: values };
+		this.debouncedSetListOptions({ ...this.listOptions, range: values });
 	};
 
 	setDefaultRange = (values: number[]) => {
@@ -65,55 +95,64 @@ class OptionsStore {
 	};
 
 	handleSortAlgorithmChanging = (value: Sort) => {
-		this.listOptions = { ...this.listOptions, sortingAlgorithm: value };
+		this.debouncedSetListOptions({
+			...this.listOptions,
+			sortingAlgorithm: value,
+		});
 		this.setIsSortingReversed(false);
 	};
 
 	handleModeChanging = (value: Mode) => {
-		this.listOptions = { ...this.listOptions, mode: value };
+		this.debouncedSetListOptions({ ...this.listOptions, mode: value });
 	};
 
 	resetListOptions = () => {
-		this.listOptions = {
+		this.debouncedSetListOptions({
 			...defaultListOptions,
 			mode: this.listOptions.mode,
 			range: this.defaultRange,
-		};
+		});
 	};
 
 	setIsSortingReversed = (value: boolean) => {
-		this.listOptions = { ...this.listOptions, isSortingReversed: value };
+		this.debouncedSetListOptions({
+			...this.listOptions,
+			isSortingReversed: value,
+		});
 	};
 
 	handleCategoriesToFilterChange = (values: string[]) => {
-		this.listOptions = {
+		this.debouncedSetListOptions({
 			...this.listOptions,
 			categoriesToFilterIds: values,
-		};
+		});
 	};
 
 	handlePageChanging = (value: number, size: number) => {
-		this.listOptions = {
+		this.debouncedSetListOptions({
 			...this.listOptions,
 			currentPage: value,
 			pageSize: size,
-		};
+		});
 	};
 
 	setStatsRange = (values: number[]) => {
-		this.statsOptions = { ...this.statsOptions, range: values };
+		this.debouncedSetStatsOptions({ ...this.statsOptions, range: values });
 	};
 
 	setIsAccurate = (value: boolean) => {
-		this.listOptions = { ...this.listOptions, isAccurate: value };
+		this.debouncedSetListOptions({ ...this.listOptions, isAccurate: value });
 	};
 
 	setIsStatsAccurate = (value: boolean) => {
-		this.statsOptions = { ...this.statsOptions, isAccurate: value };
+		this.debouncedSetStatsOptions({ ...this.statsOptions, isAccurate: value });
 	};
 
 	setDeleteConfirmation = (value: boolean) => {
-		this.userOptions = { ...this.userOptions, deleteConfirmation: value };
+		this.debouncedSetUserOptions({
+			...this.userOptions,
+			deleteConfirmation: value,
+		});
 	};
 
 	constructor(categoryStore: any) {

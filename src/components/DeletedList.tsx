@@ -133,7 +133,7 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 					<ListItem
 						disabled
 						mode='grid'
-						initialItemId={key}
+						initialItem={{ id: key, overlaps: [] }}
 						handleSelection={handleItemSelection(key)}
 						deleteAll={deleteSelectedItems}
 						selected={selectedItemIds.list.includes(key)}

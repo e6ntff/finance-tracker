@@ -97,3 +97,8 @@ export interface TourStep {
 		description: string;
 	};
 }
+
+export interface ItemWithSearch {
+	id: string;
+	overlaps: number[][] | undefined;
+}

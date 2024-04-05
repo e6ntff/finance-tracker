@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { ExpenseItem, Mode } from '../settings/interfaces';
+import { ExpenseItem, ItemWithSearch, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
 import { Card, Col, Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
@@ -25,7 +25,7 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 interface Props {
 	mode: Mode;
-	initialItemId: string;
+	initialItem: ItemWithSearch;
 	deleteAll: () => void;
 	restoreAll?: () => void;
 	handleSelection: (event: CheckboxChangeEvent) => void;
@@ -34,15 +34,10 @@ interface Props {
 }
 
 const ListItem: React.FC<Props> = observer(
-	({ mode, initialItemId, deleteAll, handleSelection, selected, disabled }) => {
+	({ mode, initialItem, deleteAll, handleSelection, selected, disabled }) => {
 		const { isSmallScreen } = userStore;
-		const {
-			replaceItem,
-
-			setLastDeletedItemIds,
-			lastDeletedItemIds,
-			list,
-		} = listStore;
+		const { replaceItem, setLastDeletedItemIds, lastDeletedItemIds, list } =
+			listStore;
 		const { userOptions } = optionsStore;
 		const { categories } = categoryStore;
 
@@ -50,7 +45,7 @@ const ListItem: React.FC<Props> = observer(
 
 		const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 		const [currentItem, setCurrentItem] = useState<ExpenseItem>(
-			list[initialItemId]
+			list[initialItem.id]
 		);
 
 		const toggleIsModalOpened = useCallback(() => {
@@ -65,19 +60,19 @@ const ListItem: React.FC<Props> = observer(
 							...item,
 							updatedAt: dayjs().valueOf(),
 						};
-						replaceItem(initialItemId, newItem);
+						replaceItem(initialItem.id, newItem);
 						return newItem;
 					}
 					return prevItem;
 				});
 				toggleIsModalOpened();
 			},
-			[setCurrentItem, replaceItem, toggleIsModalOpened, initialItemId]
+			[setCurrentItem, replaceItem, toggleIsModalOpened, initialItem.id]
 		);
 
 		const deleteItem = useCallback(() => {
-			setLastDeletedItemIds([...lastDeletedItemIds, initialItemId]);
-		}, [setLastDeletedItemIds, initialItemId, lastDeletedItemIds]);
+			setLastDeletedItemIds([...lastDeletedItemIds, initialItem.id]);
+		}, [setLastDeletedItemIds, initialItem.id, lastDeletedItemIds]);
 
 		const ActionsJSX = (
 			<Flex justify='space-evenly'>
@@ -132,7 +127,13 @@ const ListItem: React.FC<Props> = observer(
 					handleSelection,
 					deleteAll
 				)}
-				{MyTitle(currentItem.title, isSmallScreen, language, false)}
+				{MyTitle(
+					currentItem.title,
+					isSmallScreen,
+					language,
+					false,
+					initialItem.overlaps
+				)}
 			</Flex>
 		);
 
@@ -140,7 +141,7 @@ const ListItem: React.FC<Props> = observer(
 			<>
 				<ItemModal
 					opened={isModalOpened}
-					initialItemId={initialItemId}
+					initialItemId={initialItem.id}
 					toggleOpened={toggleIsModalOpened}
 					submitItem={updateCurrentItem}
 				/>
@@ -157,7 +158,13 @@ const ListItem: React.FC<Props> = observer(
 						</Col>
 						<Col>{ImageAndDateJSX}</Col>
 						<Col span={8}>
-							{MyTitle(currentItem.title, isSmallScreen, language, false)}
+							{MyTitle(
+								currentItem.title,
+								isSmallScreen,
+								language,
+								false,
+								initialItem.overlaps
+							)}
 						</Col>
 						<Col span={3}>{MyCategory(categories[currentItem.categoryId])}</Col>
 						<Col span={5}>

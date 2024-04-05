@@ -1,13 +1,14 @@
 import {
 	ExpenseItem,
 	Interval,
+	ItemWithSearch,
 	ListOptions,
 	Value,
 	category,
 	language,
 	rates,
 } from 'settings/interfaces';
-import { getRandomCategoryId, getRandomColor, sortBy } from './utils';
+import { getRandomCategoryId, getRandomColor, search, sortBy } from './utils';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import constants from 'settings/constants';
@@ -19,23 +20,32 @@ dayjs.extend(isBetween);
 export const getFilteredListIds = (
 	options: ListOptions,
 	list: { [key: string]: ExpenseItem },
-	language: language
+	language: language,
+	query: string
 ) => {
+	console.log(query)
 	const { range, categoriesToFilterIds, sortingAlgorithm, isSortingReversed } =
 		options;
+	const filteredList: ItemWithSearch[] = Object.keys(list)
+		.map((key: string) => ({
+			id: key,
+			overlaps: search(query, list[key].title),
+		}))
+		.filter((value: ItemWithSearch) => {
+			const item = list[value.id];
+			return (
+				(value.overlaps ? value.overlaps.length : true) &&
+				!item.deleted &&
+				item.date >= range[0] &&
+				item.date <= range[1] &&
+				(categoriesToFilterIds.length
+					? categoriesToFilterIds.some((id: string) => item.categoryId === id)
+					: true)
+			);
+		});
 	return sortBy(
 		list,
-		Object.keys(list).filter(
-			(key: string) =>
-				!list[key].deleted &&
-				list[key].date >= range[0] &&
-				list[key].date <= range[1] &&
-				(categoriesToFilterIds.length
-					? categoriesToFilterIds.some(
-							(id: string) => list[key].categoryId === id
-					  )
-					: true)
-		),
+		filteredList,
 		sortingAlgorithm,
 		isSortingReversed,
 		language
@@ -44,7 +54,7 @@ export const getFilteredListIds = (
 
 export const getListToShowOnCurrentPageIds = (
 	options: ListOptions,
-	filteredListIds: string[]
+	filteredListIds: ItemWithSearch[]
 ) => {
 	const { currentPage, pageSize } = options;
 	const startIndex = (currentPage - 1) * pageSize;
@@ -154,6 +164,57 @@ export const getValuesByMonth = (
 	return values;
 };
 
+const expenses = [
+	'Rent',
+	'Groceries',
+	'Utilities',
+	'Transportation',
+	'Dining Out',
+	'Entertainment',
+	'Healthcare',
+	'Education',
+	'Clothing',
+	'Miscellaneous',
+	'Phone Bill',
+	'Internet Bill',
+	'Insurance',
+	'Gasoline',
+	'Car Maintenance',
+	'Public Transport',
+	'Coffee',
+	'Snacks',
+	'Gym Membership',
+	'Streaming Services',
+	'Books',
+	'Magazines',
+	'Home Repairs',
+	'Subscriptions',
+	'Charity Donations',
+	'Pet Expenses',
+	'Home Decor',
+	'Travel Expenses',
+	'Parking Fees',
+	'Car Loan',
+	'Credit Card Payments',
+	'Movie Tickets',
+	'Concert Tickets',
+	'Fitness Classes',
+	'Hobbies',
+	'Gifts',
+	'Eating Out',
+	'Alcohol',
+	'Tuition Fees',
+	'Stationery',
+	'Haircuts',
+	'Laundry',
+	'Taxes',
+	'Utilities',
+	'Medical Bills',
+	'Dental Care',
+	'Home Insurance',
+	'Property Taxes',
+];
+
 export const getRandomData = (
 	itemsValue: number,
 	categoriesValue: number,
@@ -187,6 +248,9 @@ export const getRandomData = (
 		.forEach((_: undefined, index: number) => {
 			const categoryId = getRandomCategoryId(newCategories);
 
+			const title: string =
+				expenses[Math.floor(Math.random() * expenses.length)];
+
 			const date: number =
 				Math.random() *
 					(dayjs('2023-12-31').valueOf() - dayjs('2021-01-01').valueOf()) +
@@ -202,7 +266,7 @@ export const getRandomData = (
 
 			newItems[id] = {
 				deleted: index < deletedItemsValue,
-				title: '',
+				title: title,
 				price: prices,
 				categoryId: categoryId,
 				date: date,

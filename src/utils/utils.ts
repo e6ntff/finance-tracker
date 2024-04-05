@@ -1,4 +1,10 @@
-import { ExpenseItem, Sort, category, language } from 'settings/interfaces';
+import {
+	ExpenseItem,
+	ItemWithSearch,
+	Sort,
+	category,
+	language,
+} from 'settings/interfaces';
 
 export const getSymbolAndPrice = (currency: string, price?: number) => {
 	let result = '';
@@ -25,30 +31,30 @@ export const getSymbolAndPrice = (currency: string, price?: number) => {
 
 export const sortBy = (
 	list: { [key: string]: ExpenseItem },
-	listKeys: string[],
+	listKeys: ItemWithSearch[],
 	sortingAlgorithm: Sort,
 	reversed: boolean,
 	language?: language
 ) => {
-	let result: string[];
+	let result: ItemWithSearch[];
 	switch (sortingAlgorithm) {
 		case 'date':
 			result = listKeys.sort(
-				(prev: string, next: string) =>
-					list[next].date.valueOf() - list[prev].date.valueOf()
+				(prev: ItemWithSearch, next: ItemWithSearch) =>
+					list[next.id].date.valueOf() - list[prev.id].date.valueOf()
 			);
 			break;
 		case 'title':
-			result = listKeys.sort((prev: string, next: string) =>
-				list[prev].title.localeCompare(list[next].title, language, {
+			result = listKeys.sort((prev: ItemWithSearch, next: ItemWithSearch) =>
+				list[prev.id].title.localeCompare(list[next.id].title, language, {
 					sensitivity: 'base',
 				})
 			);
 			break;
 		case 'price':
 			result = listKeys.sort(
-				(prev: string, next: string) =>
-					list[next].price.USD - list[prev].price.USD
+				(prev: ItemWithSearch, next: ItemWithSearch) =>
+					list[next.id].price.USD - list[prev.id].price.USD
 			);
 			break;
 		default:
@@ -93,4 +99,18 @@ export const getRandomCategoryId = (categories: {
 	const randomId = ids[Math.floor(Math.random() * ids.length)];
 
 	return categories[randomId].deleted ? '0' : randomId;
+};
+
+export const search = (query: string, string: string) => {
+	if (!query) {
+		return undefined;
+	}
+	const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+	let result = [];
+	let match;
+	while ((match = regex.exec(string)) !== null) {
+		result.push([match.index, match.index + match[0].length - 1]);
+	}
+
+	return result;
 };

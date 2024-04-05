@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ItemList from '../components/ItemList';
 import { Flex } from 'antd';
 import Selectors from 'components/Selectors';
@@ -7,6 +7,8 @@ import { userStore } from 'utils/userStore';
 import { getFilteredListIds } from 'utils/transformData';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
+import { debounce } from 'lodash';
+import constants from 'settings/constants';
 
 const Expenses: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
@@ -15,6 +17,9 @@ const Expenses: React.FC = observer(() => {
 		optionsStore;
 
 	const { language } = userOptions;
+
+	const [query, setQuery] = useState<string>('');
+	const [debouncedQuery, setDebouncedQuery] = useState<string>('');
 
 	const {
 		range,
@@ -41,9 +46,25 @@ const Expenses: React.FC = observer(() => {
 		handlePageChanging,
 	]);
 
+	const debouncedSetQuery = useMemo(
+		() =>
+			debounce(
+				(query: string) => setDebouncedQuery(query),
+				constants.optionsDebounceDelay
+			),
+		[]
+	);
+
+	useEffect(() => {
+		debouncedSetQuery(query);
+		return () => {
+			debouncedSetQuery.cancel();
+		};
+	}, [query, debouncedSetQuery]);
+
 	const filteredListIds = useMemo(
-		() => getFilteredListIds(listOptions, list, language),
-		[list, language, listOptions]
+		() => getFilteredListIds(listOptions, list, language, debouncedQuery),
+		[list, language, listOptions, debouncedQuery]
 	);
 
 	return (
@@ -52,7 +73,12 @@ const Expenses: React.FC = observer(() => {
 			gap={16}
 			align='center'
 		>
-			<Selectors total={filteredListIds.length} />
+			<Selectors
+				total={filteredListIds.length}
+				query={query}
+				setQuery={setQuery}
+				debouncedQuery={query}
+			/>
 			<ItemList filteredListIds={filteredListIds} />
 		</Flex>
 	);

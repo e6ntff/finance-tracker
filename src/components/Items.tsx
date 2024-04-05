@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { getSymbolAndPrice } from 'utils/utils';
 import React from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import Search from 'antd/es/input/Search';
 
 export const MyInfoTooltip = (
 	title: string | React.JSX.Element,
@@ -38,39 +39,73 @@ export const MyInfoTooltip = (
 	</Tooltip>
 );
 
+const getTitleComponents = (
+	title: string,
+	isInOverlaps: boolean,
+	isSmallScreen: boolean,
+	editable: any
+): React.ReactNode => {
+	if (title === ' ') return <>&nbsp;</>;
+	return isSmallScreen ? (
+		<Typography.Text
+			editable={editable}
+			ellipsis
+			strong
+			mark={isInOverlaps}
+		>
+			{title}
+		</Typography.Text>
+	) : (
+		<Title
+			editable={editable}
+			ellipsis
+			level={3}
+			style={{ margin: 0 }}
+			mark={isInOverlaps}
+		>
+			{title}
+		</Title>
+	);
+};
+
 export const MyTitle = (
 	title: string,
 	isSmallScreen: boolean,
 	language: language,
-	editable: any
-) => (
-	<Flex
-		justify='center'
-		style={{
-			inlineSize: '100%',
-			opacity: !title ? '.5' : '1',
-		}}
-	>
-		{isSmallScreen ? (
-			<Typography.Text
-				strong
-				ellipsis
-				editable={editable || false}
+	editable: any,
+	overlaps?: number[][]
+) => {
+	const markedTitles: React.ReactNode[] = overlaps
+		? title.split('').map((char, index) => {
+				const isInOverlaps = overlaps.some(
+					([start, end]) => index >= start && index <= end
+				);
+				return getTitleComponents(char, isInOverlaps, isSmallScreen, editable);
+		  })
+		: [
+				getTitleComponents(
+					title || languages.noTitle[language],
+					false,
+					isSmallScreen,
+					editable
+				),
+		  ];
+
+	return (
+		<Tooltip title={title}>
+			<Flex
+				key={Math.random()}
+				justify='center'
+				style={{
+					inlineSize: '100%',
+					opacity: !title ? '.5' : '1',
+				}}
 			>
-				{title || languages.noTitle[language]}
-			</Typography.Text>
-		) : (
-			<Title
-				editable={editable || false}
-				ellipsis
-				level={3}
-				style={{ margin: 0 }}
-			>
-				{title || languages.noTitle[language]}
-			</Title>
-		)}
-	</Flex>
-);
+				{markedTitles}
+			</Flex>
+		</Tooltip>
+	);
+};
 
 export const MyImage = (
 	image: string | undefined,
@@ -248,4 +283,19 @@ export const MyCheckbox = (
 			checked={selected}
 		/>
 	</Tooltip>
+);
+
+export const MySearch = (
+	onChange: (arg0: React.ChangeEvent<HTMLInputElement>) => void,
+	value: string,
+	loading: boolean,
+	isSmallScreen: boolean
+) => (
+	<Search
+		size={isSmallScreen ? 'small' : 'middle'}
+		allowClear
+		onChange={onChange}
+		value={value}
+		loading={loading}
+	/>
 );

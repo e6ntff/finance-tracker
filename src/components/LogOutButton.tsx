@@ -13,8 +13,8 @@ import languages from 'settings/languages';
 
 const LogOutButton: React.FC = observer(() => {
 	const { setLogged, isSmallScreen, setLoading } = userStore;
-	const { setList } = listStore;
-	const { setCategories } = categoryStore;
+	const { setUserList } = listStore;
+	const { setUserCategories } = categoryStore;
 	const { resetOptions, userOptions } = optionsStore;
 	const auth = getAuth(firebaseApp);
 
@@ -23,14 +23,21 @@ const LogOutButton: React.FC = observer(() => {
 			await signOut(auth);
 			setLogged(false);
 			setLoading(true);
-			setList({});
-			setCategories({ 0: constants.defaultCategory });
+			setUserList({});
+			setUserCategories({ 0: constants.defaultCategory });
 			resetOptions();
 			sessionStorage.clear();
 		} catch (error: any) {
 			alert(error.message);
 		}
-	}, [auth, setCategories, setList, setLogged, resetOptions, setLoading]);
+	}, [
+		auth,
+		setUserCategories,
+		setUserList,
+		setLogged,
+		resetOptions,
+		setLoading,
+	]);
 
 	return (
 		<Tooltip title={languages.logOut[userOptions.language]}>

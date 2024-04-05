@@ -1,7 +1,7 @@
 import { DeleteOutlined, UndoOutlined } from '@ant-design/icons';
 import { Button, Flex, Popconfirm, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import languages from 'settings/languages';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
@@ -9,21 +9,12 @@ import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 
 const TrashPanel: React.FC = observer(() => {
-	const { userList, deleteItem, restoreItem, listTemplate } = listStore;
-	const {
-		userCategories: categories,
-		deleteCategory,
-		restoreCategory,
-	} = categoryStore;
-	const { isSmallScreen, tourRefs ,isTourStarted} = userStore;
+	const { deleteItem, restoreItem, list } = listStore;
+	const { categories, deleteCategory, restoreCategory } = categoryStore;
+	const { isSmallScreen, tourRefs } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
-
-	const list = useMemo(
-		() => (isTourStarted ? listTemplate : userList),
-		[isTourStarted, listTemplate, userList]
-	);
 
 	const deleteAll = useCallback(() => {
 		Object.keys(list).forEach((key: string) => {

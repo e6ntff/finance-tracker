@@ -34,8 +34,8 @@ const App: React.FC = observer(() => {
 		setLoading,
 		setStatus,
 	} = userStore;
-	const { setList } = listStore;
-	const { setCategories } = categoryStore;
+	const { setUserList } = listStore;
+	const { setUserCategories } = categoryStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency, language } = userOptions;
@@ -88,8 +88,8 @@ const App: React.FC = observer(() => {
 			if (authUser && authUser.uid) {
 				getData(authUser, setStatus).then((data) => {
 					if (data) {
-						setList(data.list, false);
-						setCategories(data.categories, false);
+						setUserList(data.list, false);
+						setUserCategories(data.categories, false);
 						setLoading(false);
 					}
 				});

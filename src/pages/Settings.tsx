@@ -22,15 +22,15 @@ const Settings: React.FC<Props> = observer(({ toggleOpened }) => {
 	const { userOptions, setCurrency, setTheme, setDeleteConfirmation } =
 		optionsStore;
 	const { isSmallScreen, tourRefs, setIsTourStarted } = userStore;
-	const { setList, userList: list } = listStore;
-	const { setCategories, userCategories: categories } = categoryStore;
+	const { setUserList, list } = listStore;
+	const { setUserCategories, categories } = categoryStore;
 
 	const { language, currency, theme, deleteConfirmation } = userOptions;
 
 	const removeData = useCallback(() => {
-		setList({});
-		setCategories({ '0': constants.defaultCategory });
-	}, [setCategories, setList]);
+		setUserList({});
+		setUserCategories({ '0': constants.defaultCategory });
+	}, [setUserCategories, setUserList]);
 
 	const isButtonDisabled = useMemo(
 		() =>

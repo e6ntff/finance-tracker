@@ -35,26 +35,16 @@ interface Props {
 
 const ListItem: React.FC<Props> = observer(
 	({ mode, initialItemId, deleteAll, handleSelection, selected, disabled }) => {
-		const { isSmallScreen, isTourStarted } = userStore;
+		const { isSmallScreen } = userStore;
 		const {
 			replaceItem,
-			userList,
+
 			setLastDeletedItemIds,
 			lastDeletedItemIds,
-			listTemplate,
+			list,
 		} = listStore;
 		const { userOptions } = optionsStore;
-		const { userCategories, categoriesTemplate } = categoryStore;
-
-		const list = useMemo(
-			() => (isTourStarted ? listTemplate : userList),
-			[isTourStarted, listTemplate, userList]
-		);
-
-		const categories = useMemo(
-			() => (isTourStarted ? categoriesTemplate : userCategories),
-			[isTourStarted, userCategories, categoriesTemplate]
-		);
+		const { categories } = categoryStore;
 
 		const { currency, language } = userOptions;
 

@@ -39,23 +39,16 @@ interface Props {
 
 const YearSlider: React.FC<Props> = observer(
 	({ range, setRange, isAccurate, setIsAccurate }) => {
-		const { userList, listTemplate } = listStore;
-		const { isSmallScreen, isTourStarted } = userStore;
+		const { list } = listStore;
+		const { isSmallScreen } = userStore;
 		const { defaultRange, setDefaultRange, userOptions } = optionsStore;
-
-		const list = useMemo(
-			() => (isTourStarted ? listTemplate : userList),
-			[isTourStarted, listTemplate, userList]
-		);
 
 		const [value, setValue] = useState(defaultRange);
 
 		const sliderRange: [number, number] = useMemo(() => {
-			const dates = Object.values(isTourStarted ? listTemplate : list).map(
-				(item: ExpenseItem) => item.date
-			);
+			const dates = Object.values(list).map((item: ExpenseItem) => item.date);
 			return [Math.min(...dates), Math.max(...dates)];
-		}, [list, isTourStarted, listTemplate]);
+		}, [list]);
 
 		const marks: { [key: number]: string } = useMemo(() => {
 			const start = dayjs(sliderRange[0]).startOf('day');

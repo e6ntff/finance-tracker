@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, reaction } from 'mobx';
 import { category } from '../settings/interfaces';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
@@ -12,32 +12,39 @@ configure({
 
 class CategoryStore {
 	userStore;
-	userCategories: { [key: string]: category } = {};
+	userCategories: typeof this.categories = { '0': constants.defaultCategory };
 	lastDeletedCategoryIds: string[] = [];
-	categoriesTemplate: typeof this.userCategories = {};
+	categoriesTemplate: typeof this.categories = {};
+	categories: { [key: string]: category } = {};
+
+	setCategories = (categories: typeof this.categories) => {
+		this.categories = categories;
+	};
 
 	setCategoriesTemplate = (template: typeof this.userCategories) => {
 		this.categoriesTemplate = template;
 	};
 
-	setCategories = (
+	setUserCategories = (
 		categories: { [key: string]: category },
 		save: boolean = true
 	) => {
-		this.userCategories = { ...categories } || { '0': constants.defaultCategory };
+		this.userCategories = { ...categories } || {
+			'0': constants.defaultCategory,
+		};
 		this.userStore.updateAllData({ categories: this.userCategories });
 		save && this.userStore.pushDataToSaving();
 	};
 
 	addCategory = (payload: category, id: string = uniqid()) => {
-		this.setCategories({ ...this.userCategories, [id]: payload });
+		this.setUserCategories({ ...this.userCategories, [id]: payload });
 	};
 
 	removeCategory = (id: string) => {
 		const newCategories = this.userCategories;
 		newCategories[id].deleted = true;
 		newCategories[id].deletedAt = dayjs().valueOf();
-		this.setCategories(newCategories);
+		this.setUserCategories(newCategories);
 		this.setLastDeletedCategoryIds([]);
 	};
 
@@ -45,13 +52,13 @@ class CategoryStore {
 		const newCategories = this.userCategories;
 		newCategories[id].deleted = false;
 		delete newCategories[id].deletedAt;
-		this.setCategories(newCategories);
+		this.setUserCategories(newCategories);
 	};
 
 	deleteCategory = (id: string) => {
 		const newCategories = this.userCategories;
 		delete newCategories[id];
-		this.setCategories(newCategories);
+		this.setUserCategories(newCategories);
 	};
 
 	setLastDeletedCategoryIds = (ids: string[]) => {
@@ -59,7 +66,7 @@ class CategoryStore {
 	};
 
 	replaceCategory = (id: string, payload: category) => {
-		this.setCategories({ ...this.userCategories, [id]: payload });
+		this.setUserCategories({ ...this.userCategories, [id]: payload });
 	};
 
 	constructor(store: typeof userStore) {
@@ -69,3 +76,14 @@ class CategoryStore {
 }
 
 export const categoryStore = new CategoryStore(userStore);
+
+reaction(
+	() => categoryStore.userStore.isTourStarted,
+	() => {
+		if (categoryStore.userStore.isTourStarted) {
+			categoryStore.setCategories(categoryStore.categoriesTemplate);
+		} else {
+			categoryStore.setCategories(categoryStore.userCategories);
+		}
+	}
+);

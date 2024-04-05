@@ -20,46 +20,28 @@ import { categoryStore } from 'utils/categoryStore';
 Chart.register(ArcElement, PieController, Tooltip, Legend, Title);
 
 const DiagramPie: React.FC = observer(() => {
-	const { isSmallScreen, isTourStarted } = userStore;
-	const { userList, listTemplate } = listStore;
+	const { isSmallScreen } = userStore;
+	const { list } = listStore;
 	const { userOptions, statsOptions } = optionsStore;
 	const { currency } = userOptions;
-	const { userCategories, categoriesTemplate } = categoryStore;
-
-	const list = useMemo(
-		() => (isTourStarted ? listTemplate : userList),
-		[isTourStarted, listTemplate, userList]
-	);
-
-	const categories = useMemo(
-		() => (isTourStarted ? categoriesTemplate : userCategories),
-		[isTourStarted, userCategories, categoriesTemplate]
-	);
+	const { categories } = categoryStore;
 
 	const { range } = statsOptions;
 
 	const valuesByCategory: Value[] = useMemo(
-		() =>
-			getValuesForPieDiagram(
-				isTourStarted ? listTemplate : list,
-				range,
-				currency
-			),
-		[list, listTemplate, currency, range, isTourStarted]
+		() => getValuesForPieDiagram(list, range, currency),
+		[list, currency, range]
 	);
 
 	const [names, colors, values] = useMemo(() => {
-		const currentCategories = isTourStarted ? categoriesTemplate : categories;
 		return [
+			valuesByCategory.map((value: Value) => categories[value.categoryId].name),
 			valuesByCategory.map(
-				(value: Value) => currentCategories[value.categoryId].name
-			),
-			valuesByCategory.map(
-				(value: Value) => currentCategories[value.categoryId].color
+				(value: Value) => categories[value.categoryId].color
 			),
 			valuesByCategory.map((value: Value) => Math.round(value.value)),
 		];
-	}, [isTourStarted, categories, categoriesTemplate, valuesByCategory]);
+	}, [categories, valuesByCategory]);
 
 	const data = {
 		labels: names,

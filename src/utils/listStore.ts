@@ -1,5 +1,5 @@
 import { ExpenseItem } from '../settings/interfaces';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, reaction } from 'mobx';
 import { userStore } from './userStore';
 import { configure } from 'mobx';
 import uniqid from 'uniqid';
@@ -11,29 +11,34 @@ configure({
 
 class ListStore {
 	userStore;
-	userList: { [key: string]: ExpenseItem } = {};
+	userList: typeof this.list = {};
 	lastDeletedItemIds: string[] = [];
-	listTemplate: typeof this.userList = {};
+	listTemplate: typeof this.list = {};
+	list: { [key: string]: ExpenseItem } = {};
+
+	setList = (list: typeof this.list) => {
+		this.list = list;
+	};
 
 	setListTemplate = (template: typeof this.userList) => {
 		this.listTemplate = template;
 	};
 
-	setList = (list: typeof this.userList, save: boolean = true) => {
+	setUserList = (list: typeof this.userList, save: boolean = true) => {
 		this.userList = { ...list } || {};
 		this.userStore.updateAllData({ list: this.userList });
 		save && this.userStore.pushDataToSaving();
 	};
 
 	addItem = (payload: ExpenseItem, id: string = uniqid()) => {
-		this.setList({ ...this.userList, [id]: payload });
+		this.setUserList({ ...this.userList, [id]: payload });
 	};
 
 	removeItem = (id: string) => {
 		const newList = this.userList;
 		newList[id].deleted = true;
 		newList[id].deletedAt = dayjs().valueOf();
-		this.setList(newList);
+		this.setUserList(newList);
 		this.setLastDeletedItemIds([]);
 	};
 
@@ -41,13 +46,13 @@ class ListStore {
 		const newList = this.userList;
 		newList[id].deleted = false;
 		delete newList[id].deletedAt;
-		this.setList(newList);
+		this.setUserList(newList);
 	};
 
 	deleteItem = (id: string) => {
 		const newList = this.userList;
 		delete newList[id];
-		this.setList(newList);
+		this.setUserList(newList);
 	};
 
 	setLastDeletedItemIds = (ids: string[]) => {
@@ -55,7 +60,7 @@ class ListStore {
 	};
 
 	replaceItem = (id: string, payload: ExpenseItem) => {
-		this.setList({ ...this.userList, [id]: payload });
+		this.setUserList({ ...this.userList, [id]: payload });
 	};
 
 	clearListFromCategory = (id: string) => {
@@ -65,7 +70,7 @@ class ListStore {
 				newList[key].categoryId = '0';
 			}
 		}
-		this.setList(newList);
+		this.setUserList(newList);
 	};
 
 	constructor(store: typeof userStore) {
@@ -75,3 +80,14 @@ class ListStore {
 }
 
 export const listStore = new ListStore(userStore);
+
+reaction(
+	() => listStore.userStore.isTourStarted,
+	() => {
+		if (listStore.userStore.isTourStarted) {
+			listStore.setList(listStore.listTemplate);
+		} else {
+			listStore.setList(listStore.userList);
+		}
+	}
+);

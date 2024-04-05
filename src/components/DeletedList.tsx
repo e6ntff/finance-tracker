@@ -2,7 +2,7 @@ import { Avatar, Col, Flex, Image, List, Tooltip, Typography } from 'antd';
 import Item from 'antd/es/list/Item';
 import Title from 'antd/es/typography/Title';
 import { observer } from 'mobx-react-lite';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import languages from 'settings/languages';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
@@ -31,27 +31,12 @@ interface Props {
 }
 
 const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
-	const { userList, restoreItem, deleteItem, listTemplate } = listStore;
-	const {
-		userCategories,
-		restoreCategory,
-		deleteCategory,
-		categoriesTemplate,
-	} = categoryStore;
-	const { isSmallScreen, isTourStarted } = userStore;
+	const { list, restoreItem, deleteItem } = listStore;
+	const { restoreCategory, deleteCategory, categories } = categoryStore;
+	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
-
-	const list = useMemo(
-		() => (isTourStarted ? listTemplate : userList),
-		[isTourStarted, listTemplate, userList]
-	);
-
-	const categories = useMemo(
-		() => (isTourStarted ? categoriesTemplate : userCategories),
-		[isTourStarted, userCategories, categoriesTemplate]
-	);
 
 	const [selectedItemIds, setSelectedItemIds] = useState<DeletedItems>({
 		list: [],
@@ -226,7 +211,7 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 			return (
 				<List style={{ inlineSize: '100%' }}>
 					{ids.map((key: string) => {
-						const currentItem = isTourStarted ? listTemplate[key] : list[key];
+						const currentItem = list[key];
 
 						return (
 							<Item key={key}>
@@ -262,9 +247,7 @@ const DeletedList: React.FC<Props> = observer(({ mode, ids }) => {
 			return (
 				<List style={{ inlineSize: '100%' }}>
 					{ids.map((key: string) => {
-						const currentCategory = isTourStarted
-							? categoriesTemplate[key]
-							: categories[key];
+						const currentCategory = categories[key];
 
 						return (
 							<Item key={key}>

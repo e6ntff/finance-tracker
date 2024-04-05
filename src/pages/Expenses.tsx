@@ -9,15 +9,10 @@ import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
 
 const Expenses: React.FC = observer(() => {
-	const { isSmallScreen, isTourStarted } = userStore;
-	const { userList, listTemplate } = listStore;
+	const { isSmallScreen } = userStore;
+	const { list } = listStore;
 	const { listOptions, userOptions, handleModeChanging, handlePageChanging } =
 		optionsStore;
-
-	const list = useMemo(
-		() => (isTourStarted ? listTemplate : userList),
-		[isTourStarted, listTemplate, userList]
-	);
 
 	const { language } = userOptions;
 

@@ -26,26 +26,16 @@ interface Props {
 }
 
 const DiagramBar: React.FC<Props> = observer(({ mode, setMode }) => {
-	const { isSmallScreen, isTourStarted } = userStore;
-	const { userList, listTemplate } = listStore;
+	const { isSmallScreen } = userStore;
+	const { list } = listStore;
 	const { statsOptions, userOptions, setStatsRange } = optionsStore;
 	const { currency, language } = userOptions;
-
-	const list = useMemo(
-		() => (isTourStarted ? listTemplate : userList),
-		[isTourStarted, listTemplate, userList]
-	);
 
 	const { range } = statsOptions;
 
 	const values: number[] | { [key: string]: number } = useMemo(() => {
-		return getValuesForBarDiagram(
-			isTourStarted ? listTemplate : list,
-			currency,
-			mode,
-			dayjs(range[0]).year()
-		);
-	}, [currency, list, mode, range, isTourStarted, listTemplate]);
+		return getValuesForBarDiagram(list, currency, mode, dayjs(range[0]).year());
+	}, [currency, mode, range, list]);
 
 	const colors = useMemo(
 		() =>

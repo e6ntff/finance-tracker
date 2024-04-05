@@ -7,14 +7,8 @@ import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
 const CategoryList: React.FC = observer(() => {
-	const { userCategories, lastDeletedCategoryIds, categoriesTemplate } =
-		categoryStore;
-	const { loading, isSmallScreen, isTourStarted } = userStore;
-
-	const categories = useMemo(
-		() => (isTourStarted ? categoriesTemplate : userCategories),
-		[isTourStarted, categoriesTemplate, userCategories]
-	);
+	const { categories, lastDeletedCategoryIds } = categoryStore;
+	const { loading, isSmallScreen } = userStore;
 
 	const categoriesToShowIds = useMemo(
 		() =>

@@ -12,8 +12,8 @@ import { getRandomData } from 'utils/transformData';
 const RandomizeButton: React.FC = observer(() => {
 	const { isSmallScreen, currencyRates } = userStore;
 	const { userOptions } = optionsStore;
-	const { setList } = listStore;
-	const { setCategories } = categoryStore;
+	const { setUserList } = listStore;
+	const { setUserCategories } = categoryStore;
 
 	const { language } = userOptions;
 
@@ -31,9 +31,9 @@ const RandomizeButton: React.FC = observer(() => {
 			currencyRates
 		);
 
-		setList(data.items);
-		setCategories(data.categories);
-	}, [setList, setCategories, currencyRates]);
+		setUserList(data.items);
+		setUserCategories(data.categories);
+	}, [setUserList, setUserCategories, currencyRates]);
 
 	return (
 		<Tooltip title={languages.randomize[language]}>

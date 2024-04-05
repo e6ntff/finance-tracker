@@ -8,19 +8,9 @@ import { listStore } from 'utils/listStore';
 import { userStore } from 'utils/userStore';
 
 const Trash: React.FC = observer(() => {
-	const { userList, listTemplate } = listStore;
-	const { userCategories, categoriesTemplate } = categoryStore;
-	const { isSmallScreen, isTourStarted, tourRefs } = userStore;
-
-	const list = useMemo(
-		() => (isTourStarted ? listTemplate : userList),
-		[isTourStarted, listTemplate, userList]
-	);
-
-	const categories = useMemo(
-		() => (isTourStarted ? categoriesTemplate : userCategories),
-		[isTourStarted, userCategories, categoriesTemplate]
-	);
+	const { list } = listStore;
+	const { categories } = categoryStore;
+	const { isSmallScreen, tourRefs } = userStore;
 
 	const deletedItemIds: string[] = useMemo(() => {
 		return Object.keys(list).reduce(

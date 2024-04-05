@@ -242,8 +242,8 @@ const languages: { [key: string]: any } = {
 		ru: 'Все данные будут удалены. Вы уверены?',
 	},
 	noImage: {
-		en: 'Click to upload',
-		ru: 'Нажмите, чтобы загрузить изображение',
+		en: 'No image',
+		ru: 'Нет картинки',
 	},
 	deletedAt: {
 		en: 'Deleted at',

@@ -14,14 +14,14 @@ import {
 	MyCategory,
 	MyCheckbox,
 	MyDate,
-	MyDelete,
-	MyEdit,
+	MyIconWithTooltip,
 	MyImage,
 	MyInfoTooltip,
 	MyPrice,
 	MyTitle,
 } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 interface Props {
 	mode: Mode;
@@ -76,9 +76,19 @@ const ListItem: React.FC<Props> = observer(
 
 		const ActionsJSX = (
 			<Flex justify='space-evenly'>
-				{MyEdit(languages.edit[language], isSmallScreen, toggleIsModalOpened)}
+				{MyIconWithTooltip(
+					languages.edit[language],
+					isSmallScreen,
+					EditOutlined,
+					toggleIsModalOpened
+				)}
 				{MyPrice(currentItem.price, isSmallScreen, currency)}
-				{MyDelete(languages.delete[language], isSmallScreen, deleteItem)}
+				{MyIconWithTooltip(
+					languages.delete[language],
+					isSmallScreen,
+					DeleteOutlined,
+					deleteItem
+				)}
 			</Flex>
 		);
 
@@ -87,8 +97,8 @@ const ListItem: React.FC<Props> = observer(
 				{MyImage(
 					currentItem.image,
 					isSmallScreen,
-					toggleIsModalOpened,
-					language
+					language,
+					toggleIsModalOpened
 				)}
 				{MyDate(currentItem.date, isSmallScreen)}
 			</Flex>
@@ -171,14 +181,20 @@ const ListItem: React.FC<Props> = observer(
 							{MyPrice(currentItem.price, isSmallScreen, currency)}
 						</Col>
 						<Col span={1}>
-							{MyEdit(
+							{MyIconWithTooltip(
 								languages.edit[language],
 								isSmallScreen,
+								EditOutlined,
 								toggleIsModalOpened
 							)}
 						</Col>
 						<Col span={1}>
-							{MyDelete(languages.delete[language], isSmallScreen, deleteItem)}
+							{MyIconWithTooltip(
+								languages.delete[language],
+								isSmallScreen,
+								DeleteOutlined,
+								deleteItem
+							)}
 						</Col>
 						<Col span={1}>{MyInfoTooltip(tooltipTitle, isSmallScreen)}</Col>
 					</Item>

@@ -10,7 +10,8 @@ import { optionsStore } from 'utils/optionsStore';
 import Title from 'antd/es/typography/Title';
 import constants from 'settings/constants';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyDelete } from './Items';
+import { MyIconWithTooltip } from './Items';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
 	opened: boolean;
@@ -88,9 +89,12 @@ const ItemsModal: React.FC<Props> = observer(
 									</Flex>
 								</Col>
 								<Col span={2}>
-									{MyDelete(languages.delete[language], isSmallScreen, () => {
-										deleteCategoryFromItem(key);
-									})}
+									{MyIconWithTooltip(
+										languages.delete[language],
+										isSmallScreen,
+										DeleteOutlined,
+										() => deleteCategoryFromItem(key)
+									)}
 								</Col>
 							</Item>
 						))}

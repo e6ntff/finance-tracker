@@ -9,7 +9,8 @@ import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import ItemsModal from './ItemsModal';
-import { MyDelete, MyInfoTooltip, MyTitle } from './Items';
+import { MyIconWithTooltip, MyInfoTooltip, MyTitle } from './Items';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
 	initialCategoryId: string;
@@ -120,9 +121,10 @@ const CategoryItem: React.FC<Props> = observer(
 					itemsWithCurrentCategory.length && setIsModalOpened(true);
 				})}
 				{ColorPickerJSX}
-				{MyDelete(
+				{MyIconWithTooltip(
 					languages.delete[userOptions.language],
 					isSmallScreen,
+					DeleteOutlined,
 					deleteCategory
 				)}
 			</Flex>

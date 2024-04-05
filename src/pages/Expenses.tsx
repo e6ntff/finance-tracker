@@ -77,7 +77,7 @@ const Expenses: React.FC = observer(() => {
 				total={filteredListIds.length}
 				query={query}
 				setQuery={setQuery}
-				debouncedQuery={query}
+				debouncedQuery={debouncedQuery}
 			/>
 			<ItemList filteredListIds={filteredListIds} />
 		</Flex>

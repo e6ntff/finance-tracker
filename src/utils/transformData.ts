@@ -23,7 +23,6 @@ export const getFilteredListIds = (
 	language: language,
 	query: string
 ) => {
-	console.log(query)
 	const { range, categoriesToFilterIds, sortingAlgorithm, isSortingReversed } =
 		options;
 	const filteredList: ItemWithSearch[] = Object.keys(list)

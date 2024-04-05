@@ -1,6 +1,5 @@
 import {
-	DeleteOutlined,
-	EditOutlined,
+	ExportOutlined,
 	FrownOutlined,
 	InfoCircleOutlined,
 } from '@ant-design/icons';
@@ -20,9 +19,13 @@ import { category, currencies, language } from 'settings/interfaces';
 import languages from 'settings/languages';
 import dayjs from 'dayjs';
 import { getSymbolAndPrice } from 'utils/utils';
-import React from 'react';
+import React, { ComponentType, RefAttributes } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Search from 'antd/es/input/Search';
+import uniqid from 'uniqid';
+import ListItem from './ListItem';
+import CategoryItem from './CategoryItem';
+import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 
 export const MyInfoTooltip = (
 	title: string | React.JSX.Element,
@@ -92,9 +95,11 @@ export const MyTitle = (
 		  ];
 
 	return (
-		<Tooltip title={title}>
+		<Tooltip
+			title={title}
+			key={uniqid()}
+		>
 			<Flex
-				key={Math.random()}
 				justify='center'
 				style={{
 					inlineSize: '100%',
@@ -110,28 +115,33 @@ export const MyTitle = (
 export const MyImage = (
 	image: string | undefined,
 	isSmallScreen: boolean,
-	toggleOpened: () => void,
-	language: language
+	language: language,
+	toggleOpened?: () => void
 ) =>
 	image ? (
 		<Tooltip
 			color='#0005'
 			placement='right'
 			title={
-				<Image
-					preview={false}
-					src={image}
-					style={{
-						borderRadius: '50%',
-						inlineSize: '100%',
-						blockSize: '100%',
-						objectFit: 'cover',
-					}}
-				/>
+				!image.startsWith('#') && (
+					<Image
+						preview={false}
+						src={image}
+						style={{
+							borderRadius: '50%',
+							inlineSize: '100%',
+							blockSize: '100%',
+							objectFit: 'cover',
+						}}
+					/>
+				)
 			}
 		>
 			<Avatar
-				style={{ cursor: 'pointer' }}
+				style={{
+					cursor: 'pointer',
+					background: image.startsWith('#') ? image : 'unset',
+				}}
 				size={isSmallScreen ? 'small' : 'default'}
 				icon={
 					<Flex
@@ -141,15 +151,17 @@ export const MyImage = (
 							objectFit: 'cover',
 						}}
 					>
-						<Image
-							preview={false}
-							src={image}
-							style={{
-								inlineSize: '100%',
-								blockSize: '100%',
-								objectFit: 'cover',
-							}}
-						/>
+						{!image.startsWith('#') && (
+							<Image
+								preview={false}
+								src={image}
+								style={{
+									inlineSize: '100%',
+									blockSize: '100%',
+									objectFit: 'cover',
+								}}
+							/>
+						)}
 					</Flex>
 				}
 			/>
@@ -216,26 +228,16 @@ export const MyPrice = (
 	</Flex>
 );
 
-export const MyEdit = (
+export const MyIconWithTooltip = (
 	title: string,
 	isSmallScreen: boolean,
-	toggleOpened: () => void
+	Icon: ComponentType<
+		Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>
+	>,
+	onClick?: () => void
 ) => (
 	<Tooltip title={title}>
-		<EditOutlined
-			onClick={toggleOpened}
-			style={{ scale: isSmallScreen ? '1' : '1.5' }}
-		/>
-	</Tooltip>
-);
-
-export const MyDelete = (
-	title: string,
-	isSmallScreen: boolean,
-	onClick: () => void
-) => (
-	<Tooltip title={title}>
-		<DeleteOutlined
+		<Icon
 			onClick={onClick}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
 		/>
@@ -298,4 +300,35 @@ export const MySearch = (
 		value={value}
 		loading={loading}
 	/>
+);
+
+export const MyView = (
+	key: string,
+	mode: 'item' | 'category',
+	isSmallScreen: boolean,
+	selected: boolean
+) => (
+	<Tooltip
+		placement='left'
+		color='#0005'
+		title={
+			mode === 'item' ? (
+				<ListItem
+					disabled
+					mode='grid'
+					initialItem={{ id: key, overlaps: [] }}
+					handleSelection={() => {}}
+					deleteAll={() => {}}
+					selected={selected}
+				/>
+			) : (
+				<CategoryItem
+					initialCategoryId={key}
+					disabled
+				/>
+			)
+		}
+	>
+		<ExportOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
+	</Tooltip>
 );

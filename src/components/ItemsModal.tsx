@@ -11,7 +11,8 @@ import Title from 'antd/es/typography/Title';
 import constants from 'settings/constants';
 import Scrollbars from 'react-custom-scrollbars';
 import { MyIconWithTooltip } from './Items';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExportOutlined } from '@ant-design/icons';
+import ListItem from './ListItem';
 
 interface Props {
 	opened: boolean;
@@ -90,9 +91,20 @@ const ItemsModal: React.FC<Props> = observer(
 								</Col>
 								<Col span={2}>
 									{MyIconWithTooltip(
+										<ListItem
+											initialItem={{ id: key, overlaps: [] as number[][] }}
+											mode='grid'
+										/>,
+										isSmallScreen,
+										ExportOutlined, true
+									)}
+								</Col>
+								<Col span={2}>
+									{MyIconWithTooltip(
 										languages.delete[language],
 										isSmallScreen,
 										DeleteOutlined,
+										false,
 										() => deleteCategoryFromItem(key)
 									)}
 								</Col>

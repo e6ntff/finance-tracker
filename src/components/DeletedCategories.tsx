@@ -7,21 +7,17 @@ import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 import {
 	DeleteOutlined,
+	ExportOutlined,
 	InfoCircleOutlined,
 	UndoOutlined,
 } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
-import {
-	MyCheckbox,
-	MyIconWithTooltip,
-	MyImage,
-	MyTitle,
-	MyView,
-} from './Items';
+import { MyCheckbox, MyIconWithTooltip, MyImage, MyTitle } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { ItemWithSearch } from 'settings/interfaces';
 import { search } from 'utils/utils';
 import dayjs from 'dayjs';
+import CategoryItem from './CategoryItem';
 
 interface Props {
 	query: string;
@@ -86,6 +82,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 			languages.delete[userOptions.language],
 			isSmallScreen,
 			DeleteOutlined,
+			false,
 			callback
 		);
 
@@ -132,11 +129,11 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 							)}
 						</Col>
 						<Col span={2}>
-							{MyView(
-								id,
-								'category',
+							{MyIconWithTooltip(
+								<CategoryItem initialCategoryId={id} />,
 								isSmallScreen,
-								selectedItemIds.includes(id)
+								ExportOutlined,
+								true
 							)}
 						</Col>
 						<Col span={2}>
@@ -145,12 +142,17 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 									currentCategory.deletedAt
 								).format('HH:mm:ss DD.MM.YY')}`,
 								isSmallScreen,
-								InfoCircleOutlined
+								InfoCircleOutlined,
+								false
 							)}
 						</Col>
 						<Col span={2}>
-							{MyIconWithTooltip(id, isSmallScreen, UndoOutlined, () =>
-								restoreCategory(id)
+							{MyIconWithTooltip(
+								languages.restore[language],
+								isSmallScreen,
+								UndoOutlined,
+								false,
+								() => restoreCategory(id)
 							)}
 						</Col>
 						<Col span={2}>{DeleteJSX(() => deleteCategory(id))}</Col>

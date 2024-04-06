@@ -1,4 +1,4 @@
-import { ExportOutlined, FrownOutlined } from '@ant-design/icons';
+import { FrownOutlined } from '@ant-design/icons';
 import {
 	Avatar,
 	Button,
@@ -19,8 +19,6 @@ import React, { ComponentType, RefAttributes } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Search from 'antd/es/input/Search';
 import uniqid from 'uniqid';
-import ListItem from './ListItem';
-import CategoryItem from './CategoryItem';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 
 const getTitleComponents = (
@@ -215,9 +213,13 @@ export const MyIconWithTooltip = (
 	Icon: ComponentType<
 		Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>
 	>,
+	light: boolean,
 	onClick?: () => void
 ) => (
-	<Tooltip title={title}>
+	<Tooltip
+		title={title}
+		color={light ? '#0005' : undefined}
+	>
 		<Icon
 			onClick={onClick}
 			style={{ scale: isSmallScreen ? '1' : '1.5' }}
@@ -226,11 +228,11 @@ export const MyIconWithTooltip = (
 );
 
 export const MyCheckbox = (
-	selected: boolean,
+	selected: boolean = false,
 	language: language,
 	isSmallScreen: boolean,
-	handleSelection: (event: CheckboxChangeEvent) => void,
-	deleteAll: () => void,
+	handleSelection: (event: CheckboxChangeEvent) => void = () => {},
+	deleteAll?: () => void,
 	restoreAll?: () => void
 ) => (
 	<Tooltip
@@ -281,35 +283,4 @@ export const MySearch = (
 		value={value}
 		loading={loading}
 	/>
-);
-
-export const MyView = (
-	key: string,
-	mode: 'item' | 'category',
-	isSmallScreen: boolean,
-	selected: boolean
-) => (
-	<Tooltip
-		placement='left'
-		color='#0005'
-		title={
-			mode === 'item' ? (
-				<ListItem
-					disabled
-					mode='grid'
-					initialItem={{ id: key, overlaps: [] }}
-					handleSelection={() => {}}
-					deleteAll={() => {}}
-					selected={selected}
-				/>
-			) : (
-				<CategoryItem
-					initialCategoryId={key}
-					disabled
-				/>
-			)
-		}
-	>
-		<ExportOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
-	</Tooltip>
 );

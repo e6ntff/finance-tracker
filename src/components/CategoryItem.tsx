@@ -121,6 +121,7 @@ const CategoryItem: React.FC<Props> = observer(
 					tooltipTitle,
 					isSmallScreen,
 					InfoCircleOutlined,
+					false,
 					() => itemsWithCurrentCategory.length && setIsModalOpened(true)
 				)}
 				{ColorPickerJSX}
@@ -128,6 +129,7 @@ const CategoryItem: React.FC<Props> = observer(
 					languages.delete[userOptions.language],
 					isSmallScreen,
 					DeleteOutlined,
+					false,
 					deleteCategory
 				)}
 			</Flex>

@@ -8,20 +8,16 @@ import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 import {
 	DeleteOutlined,
+	ExportOutlined,
 	InfoCircleOutlined,
 	UndoOutlined,
 } from '@ant-design/icons';
-import {
-	MyCheckbox,
-	MyIconWithTooltip,
-	MyImage,
-	MyTitle,
-	MyView,
-} from './Items';
+import { MyCheckbox, MyIconWithTooltip, MyImage, MyTitle } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { ItemWithSearch } from 'settings/interfaces';
 import { search } from 'utils/utils';
 import dayjs from 'dayjs';
+import ListItem from './ListItem';
 
 interface Props {
 	query: string;
@@ -83,6 +79,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 			languages.delete[userOptions.language],
 			isSmallScreen,
 			DeleteOutlined,
+			false,
 			callback
 		);
 
@@ -129,7 +126,15 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 							)}
 						</Col>
 						<Col span={2}>
-							{MyView(id, 'item', isSmallScreen, selectedItemIds.includes(id))}
+							{MyIconWithTooltip(
+								<ListItem
+									initialItem={{ id, overlaps }}
+									mode='grid'
+								/>,
+								isSmallScreen,
+								ExportOutlined,
+								true
+							)}
 						</Col>
 						<Col span={2}>
 							{MyIconWithTooltip(
@@ -137,12 +142,17 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 									currentItem.deletedAt
 								).format('HH:mm:ss DD.MM.YY')}`,
 								isSmallScreen,
-								InfoCircleOutlined
+								InfoCircleOutlined,
+								false
 							)}
 						</Col>
 						<Col span={2}>
-							{MyIconWithTooltip(id, isSmallScreen, UndoOutlined, () =>
-								restoreItem(id)
+							{MyIconWithTooltip(
+								languages.restore[language],
+								isSmallScreen,
+								UndoOutlined,
+								false,
+								() => restoreItem(id)
 							)}
 						</Col>
 						<Col span={2}>{DeleteJSX(() => deleteItem(id))}</Col>

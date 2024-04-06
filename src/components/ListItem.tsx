@@ -29,10 +29,10 @@ import {
 interface Props {
 	mode: Mode;
 	initialItem: ItemWithSearch;
-	deleteAll: () => void;
+	deleteAll?: () => void;
 	restoreAll?: () => void;
-	handleSelection: (event: CheckboxChangeEvent) => void;
-	selected: boolean;
+	handleSelection?: (event: CheckboxChangeEvent) => void;
+	selected?: boolean;
 	disabled?: boolean;
 }
 
@@ -83,6 +83,7 @@ const ListItem: React.FC<Props> = observer(
 					languages.edit[language],
 					isSmallScreen,
 					EditOutlined,
+					false,
 					toggleIsModalOpened
 				)}
 				{MyPrice(currentItem.price, isSmallScreen, currency)}
@@ -90,6 +91,7 @@ const ListItem: React.FC<Props> = observer(
 					languages.delete[language],
 					isSmallScreen,
 					DeleteOutlined,
+					false,
 					deleteItem
 				)}
 			</Flex>
@@ -188,6 +190,7 @@ const ListItem: React.FC<Props> = observer(
 								languages.edit[language],
 								isSmallScreen,
 								EditOutlined,
+								false,
 								toggleIsModalOpened
 							)}
 						</Col>
@@ -196,6 +199,7 @@ const ListItem: React.FC<Props> = observer(
 								languages.delete[language],
 								isSmallScreen,
 								DeleteOutlined,
+								false,
 								deleteItem
 							)}
 						</Col>
@@ -203,7 +207,8 @@ const ListItem: React.FC<Props> = observer(
 							{MyIconWithTooltip(
 								tooltipTitle,
 								isSmallScreen,
-								InfoCircleOutlined
+								InfoCircleOutlined,
+								false
 							)}
 						</Col>
 					</Item>
@@ -213,7 +218,8 @@ const ListItem: React.FC<Props> = observer(
 							MyIconWithTooltip(
 								tooltipTitle,
 								isSmallScreen,
-								InfoCircleOutlined
+								InfoCircleOutlined,
+								false
 							),
 						]}
 						size={isSmallScreen ? 'small' : 'default'}

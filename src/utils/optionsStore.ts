@@ -143,17 +143,6 @@ class OptionsStore {
 		this.setStatsOptions({ ...this.statsOptions, range: values });
 	};
 
-	setIsAccurate = (value: boolean) => {
-		this.setListOptionsWithDebounce({ ...this.listOptions, isAccurate: value });
-	};
-
-	setIsStatsAccurate = (value: boolean) => {
-		this.setStatsOptions({
-			...this.statsOptions,
-			isAccurate: value,
-		});
-	};
-
 	setDeleteConfirmation = (value: boolean) => {
 		this.setUserOptions({
 			...this.userOptions,

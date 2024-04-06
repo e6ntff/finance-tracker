@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { Empty, Flex } from 'antd';
@@ -12,24 +12,15 @@ import YearSlider from 'components/YearSlider';
 import { Interval } from 'settings/interfaces';
 import LargeSpin from 'components/LargeSpin';
 import StatsCard from 'components/StatsCard';
-import { MyIconWithTooltip } from 'components/Items';
-import languages from 'settings/languages';
-import { ReloadOutlined } from '@ant-design/icons';
 
 dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
 	const { isSmallScreen, loading, tourRefs } = userStore;
-	const {
-		statsOptions,
-		userOptions,
-		defaultRange,
-		setStatsRange,
-		setIsStatsAccurate,
-	} = optionsStore;
+	const { statsOptions, defaultRange, setStatsRange } = optionsStore;
 
-	const { range, isAccurate } = statsOptions;
+	const { range } = statsOptions;
 
 	const [mode, setMode] = useState<Interval>('year');
 
@@ -52,11 +43,6 @@ const Stats: React.FC = observer(() => {
 		};
 	}, [resetRange]);
 
-	const isRangeChanged = useMemo(
-		() => range[0] !== defaultRange[0] || range[1] !== defaultRange[1],
-		[range, defaultRange]
-	);
-
 	useEffect(() => {
 		if (dayjs(range[0]).year() !== dayjs(range[1]).year()) {
 			setMode('year');
@@ -64,20 +50,6 @@ const Stats: React.FC = observer(() => {
 			setMode('month');
 		}
 	}, [range]);
-
-	const PanelJSX = (
-		<Flex gap={16}>
-			<StatsCard />
-			{isRangeChanged &&
-				MyIconWithTooltip(
-					languages.reset[userOptions.language],
-					isSmallScreen,
-					ReloadOutlined,
-					false,
-					resetRange
-				)}
-		</Flex>
-	);
 
 	const DiagramsJSX = (
 		<Flex
@@ -91,8 +63,6 @@ const Stats: React.FC = observer(() => {
 				style={{ inlineSize: '100%' }}
 			>
 				<YearSlider
-					setIsAccurate={setIsStatsAccurate}
-					isAccurate={isAccurate}
 					range={range}
 					setRange={setStatsRange}
 				/>
@@ -118,8 +88,9 @@ const Stats: React.FC = observer(() => {
 		<Flex
 			vertical
 			gap={32}
+			align='start'
 		>
-			{PanelJSX}
+			<StatsCard resetRange={resetRange} />
 			{DiagramsJSX}
 		</Flex>
 	) : (

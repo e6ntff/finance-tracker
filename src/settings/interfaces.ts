@@ -51,7 +51,6 @@ export type Interval = 'year' | 'month';
 export type currency = 'USD' | 'EUR' | 'RUB';
 
 export interface ListOptions {
-	isAccurate: boolean;
 	range: number[];
 	sortingAlgorithm: Sort;
 	isSortingReversed: boolean;
@@ -62,7 +61,6 @@ export interface ListOptions {
 }
 
 export interface StatsOptions {
-	isAccurate: boolean;
 	range: number[];
 }
 

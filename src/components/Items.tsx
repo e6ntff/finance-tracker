@@ -26,11 +26,13 @@ const getTitleComponents = (
 	title: string,
 	isInOverlaps: boolean,
 	isSmallScreen: boolean,
-	editable: any
+	editable: any,
+	index: number
 ): React.ReactNode => {
 	if (title === ' ') return <>&nbsp;</>;
 	return isSmallScreen ? (
 		<Typography.Text
+			key={index}
 			editable={editable}
 			ellipsis
 			strong
@@ -40,6 +42,7 @@ const getTitleComponents = (
 		</Typography.Text>
 	) : (
 		<Title
+			key={index}
 			editable={editable}
 			ellipsis
 			level={3}
@@ -63,14 +66,21 @@ export const MyTitle = (
 				const isInOverlaps = overlaps.some(
 					([start, end]) => index >= start && index <= end
 				);
-				return getTitleComponents(char, isInOverlaps, isSmallScreen, editable);
+				return getTitleComponents(
+					char,
+					isInOverlaps,
+					isSmallScreen,
+					editable,
+					index
+				);
 		  })
 		: [
 				getTitleComponents(
 					title || languages.noTitle[language],
 					false,
 					isSmallScreen,
-					editable
+					editable,
+					0
 				),
 		  ];
 

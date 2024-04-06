@@ -39,7 +39,6 @@ const Selectors: React.FC<Props> = observer(
 			resetListOptions,
 			handlePageChanging,
 			setRange,
-			setIsAccurate,
 		} = optionsStore;
 
 		const {
@@ -49,7 +48,6 @@ const Selectors: React.FC<Props> = observer(
 			pageSize,
 			currentPage,
 			sortingAlgorithm,
-			isAccurate,
 		} = listOptions;
 
 		const resetAll = useCallback(() => {
@@ -127,8 +125,6 @@ const Selectors: React.FC<Props> = observer(
 						</Flex>
 					</Flex>
 					<YearSlider
-						setIsAccurate={setIsAccurate}
-						isAccurate={isAccurate}
 						range={range}
 						setRange={setRange}
 					/>

@@ -1,5 +1,5 @@
 import { DeleteOutlined, UndoOutlined } from '@ant-design/icons';
-import { Button, Flex, Popconfirm, Tooltip } from 'antd';
+import { Button, Flex, Popconfirm, Segmented, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, {
 	ChangeEvent,
@@ -20,10 +20,12 @@ interface Props {
 	query: string;
 	setQuery: Dispatch<SetStateAction<string>>;
 	debouncedQuery: string;
+	isExpenses: boolean;
+	setIsExpenses: Dispatch<SetStateAction<boolean>>;
 }
 
 const TrashPanel: React.FC<Props> = observer(
-	({ query, setQuery, debouncedQuery }) => {
+	({ query, setQuery, debouncedQuery, isExpenses, setIsExpenses }) => {
 		const { deleteItem, restoreItem, list } = listStore;
 		const { categories, deleteCategory, restoreCategory } = categoryStore;
 		const { isSmallScreen, tourRefs } = userStore;
@@ -69,7 +71,7 @@ const TrashPanel: React.FC<Props> = observer(
 			<Flex
 				gap={16}
 				ref={tourRefs[5]}
-				style={{ inlineSize: isSmallScreen ? '100%' : '50%' }}
+				style={{ inlineSize: '100%' }}
 			>
 				<Tooltip title={languages.deleteAll[language]}>
 					<Popconfirm
@@ -92,6 +94,21 @@ const TrashPanel: React.FC<Props> = observer(
 					</Popconfirm>
 				</Tooltip>
 				{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
+				<Segmented
+					// style={{ inlineSize: '100%', background: '#0000' }}
+					onChange={setIsExpenses}
+					value={isExpenses}
+					options={[
+						{
+							label: languages.expenses[language],
+							value: true,
+						},
+						{
+							label: languages.categories[language],
+							value: false,
+						},
+					]}
+				/>
 			</Flex>
 		);
 	}

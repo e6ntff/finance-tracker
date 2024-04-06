@@ -1,4 +1,4 @@
-import { Anchor, Flex } from 'antd';
+import { Flex } from 'antd';
 import DeletedCategories from 'components/DeletedCategories';
 import DeletedList from 'components/DeletedItems';
 import TrashPanel from 'components/TrashPanel';
@@ -14,6 +14,7 @@ const Trash: React.FC = observer(() => {
 
 	const [query, setQuery] = useState<string>('');
 	const [debouncedQuery, setDebouncedQuery] = useState<string>('');
+	const [isExpenses, setIsExpenses] = useState<boolean>(true);
 
 	const debouncedSetQuery = useMemo(
 		() =>
@@ -40,6 +41,8 @@ const Trash: React.FC = observer(() => {
 				query={query}
 				setQuery={setQuery}
 				debouncedQuery={debouncedQuery}
+				isExpenses={isExpenses}
+				setIsExpenses={setIsExpenses}
 			/>
 			<Flex
 				ref={tourRefs[4]}
@@ -47,8 +50,11 @@ const Trash: React.FC = observer(() => {
 				gap={isSmallScreen ? 16 : 32}
 				style={{ inlineSize: '100%' }}
 			>
-				<DeletedList query={debouncedQuery} />
-				<DeletedCategories query={debouncedQuery} />
+				{isExpenses ? (
+					<DeletedList query={debouncedQuery} />
+				) : (
+					<DeletedCategories query={debouncedQuery} />
+				)}
 			</Flex>
 		</Flex>
 	);

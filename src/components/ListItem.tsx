@@ -16,12 +16,15 @@ import {
 	MyDate,
 	MyIconWithTooltip,
 	MyImage,
-	MyInfoTooltip,
 	MyPrice,
 	MyTitle,
 } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {
+	DeleteOutlined,
+	EditOutlined,
+	InfoCircleOutlined,
+} from '@ant-design/icons';
 
 interface Props {
 	mode: Mode;
@@ -196,11 +199,23 @@ const ListItem: React.FC<Props> = observer(
 								deleteItem
 							)}
 						</Col>
-						<Col span={1}>{MyInfoTooltip(tooltipTitle, isSmallScreen)}</Col>
+						<Col span={1}>
+							{MyIconWithTooltip(
+								tooltipTitle,
+								isSmallScreen,
+								InfoCircleOutlined
+							)}
+						</Col>
 					</Item>
 				) : (
 					<Card
-						extra={[MyInfoTooltip(tooltipTitle, isSmallScreen)]}
+						extra={[
+							MyIconWithTooltip(
+								tooltipTitle,
+								isSmallScreen,
+								InfoCircleOutlined
+							),
+						]}
 						size={isSmallScreen ? 'small' : 'default'}
 						bordered
 						title={CheckboxAndTitle}

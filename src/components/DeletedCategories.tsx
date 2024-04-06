@@ -5,19 +5,23 @@ import React, { useCallback, useMemo, useState } from 'react';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
-import { DeleteOutlined, UndoOutlined } from '@ant-design/icons';
+import {
+	DeleteOutlined,
+	InfoCircleOutlined,
+	UndoOutlined,
+} from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
 import {
 	MyCheckbox,
 	MyIconWithTooltip,
 	MyImage,
-	MyInfoTooltip,
 	MyTitle,
 	MyView,
 } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { ItemWithSearch } from 'settings/interfaces';
 import { search } from 'utils/utils';
+import dayjs from 'dayjs';
 
 interface Props {
 	query: string;
@@ -136,7 +140,13 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 							)}
 						</Col>
 						<Col span={2}>
-							{MyInfoTooltip(<>{currentCategory.deletedAt}</>, isSmallScreen)}
+							{MyIconWithTooltip(
+								`${languages.deletedAt[language]}: ${dayjs(
+									currentCategory.deletedAt
+								).format('HH:mm:ss DD.MM.YY')}`,
+								isSmallScreen,
+								InfoCircleOutlined
+							)}
 						</Col>
 						<Col span={2}>
 							{MyIconWithTooltip(id, isSmallScreen, UndoOutlined, () =>

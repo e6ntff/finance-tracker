@@ -1,8 +1,4 @@
-import {
-	ExportOutlined,
-	FrownOutlined,
-	InfoCircleOutlined,
-} from '@ant-design/icons';
+import { ExportOutlined, FrownOutlined } from '@ant-design/icons';
 import {
 	Avatar,
 	Button,
@@ -26,21 +22,6 @@ import uniqid from 'uniqid';
 import ListItem from './ListItem';
 import CategoryItem from './CategoryItem';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
-
-export const MyInfoTooltip = (
-	title: string | React.JSX.Element,
-	isSmallScreen: boolean,
-	onClick?: () => void
-) => (
-	<Tooltip title={title}>
-		<InfoCircleOutlined
-			onClick={onClick}
-			style={{
-				scale: isSmallScreen ? '1' : '1.5',
-			}}
-		/>
-	</Tooltip>
-);
 
 const getTitleComponents = (
 	title: string,
@@ -229,7 +210,7 @@ export const MyPrice = (
 );
 
 export const MyIconWithTooltip = (
-	title: string,
+	title: string | React.JSX.Element,
 	isSmallScreen: boolean,
 	Icon: ComponentType<
 		Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>

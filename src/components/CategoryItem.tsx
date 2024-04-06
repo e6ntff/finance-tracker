@@ -9,8 +9,8 @@ import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import ItemsModal from './ItemsModal';
-import { MyIconWithTooltip, MyInfoTooltip, MyTitle } from './Items';
-import { DeleteOutlined } from '@ant-design/icons';
+import { MyIconWithTooltip, MyTitle } from './Items';
+import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 interface Props {
 	initialCategoryId: string;
@@ -117,9 +117,12 @@ const CategoryItem: React.FC<Props> = observer(
 				align='center'
 				justify='space-evenly'
 			>
-				{MyInfoTooltip(tooltipTitle, isSmallScreen, () => {
-					itemsWithCurrentCategory.length && setIsModalOpened(true);
-				})}
+				{MyIconWithTooltip(
+					tooltipTitle,
+					isSmallScreen,
+					InfoCircleOutlined,
+					() => itemsWithCurrentCategory.length && setIsModalOpened(true)
+				)}
 				{ColorPickerJSX}
 				{MyIconWithTooltip(
 					languages.delete[userOptions.language],

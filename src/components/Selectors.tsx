@@ -18,8 +18,9 @@ import ModeSelect from './ModeSelect';
 import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
-import ResetButton from './ResetButton';
-import { MySearch } from './Items';
+import { MyIconWithTooltip, MySearch } from './Items';
+import { ReloadOutlined } from '@ant-design/icons';
+import languages from 'settings/languages';
 
 interface Props {
 	total: number;
@@ -33,6 +34,7 @@ const Selectors: React.FC<Props> = observer(
 		const { isSmallScreen, loading, tourRefs } = userStore;
 		const {
 			listOptions,
+			userOptions,
 			defaultRange,
 			resetListOptions,
 			handlePageChanging,
@@ -50,11 +52,17 @@ const Selectors: React.FC<Props> = observer(
 			isAccurate,
 		} = listOptions;
 
+		const resetAll = useCallback(() => {
+			resetListOptions();
+			setQuery('');
+		}, [resetListOptions, setQuery]);
+
 		const [isSearchLoading, setIsSearchLoading] = useState<boolean>(false);
 
 		const isSettingsChanged = useMemo(
 			() =>
-				(query.length && isSortingReversed) ||
+				query.length ||
+				isSortingReversed ||
 				categoriesToFilterIds.length > 0 ||
 				pageSize !== constants.defaultPageSize ||
 				currentPage !== 1 ||
@@ -107,12 +115,16 @@ const Selectors: React.FC<Props> = observer(
 						<Flex gap={16}>
 							<SortSelect />
 							<ModeSelect />
-							<ResetButton
-								disabled={!isSettingsChanged}
-								reset={resetListOptions}
-							/>
+							{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
+							{isSettingsChanged &&
+								MyIconWithTooltip(
+									languages.reset[userOptions.language],
+									false,
+									ReloadOutlined,
+									false,
+									resetAll
+								)}
 						</Flex>
-						{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
 					</Flex>
 					<YearSlider
 						setIsAccurate={setIsAccurate}

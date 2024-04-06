@@ -9,7 +9,7 @@ const defaultCategory = {
 };
 
 const constants = {
-	optionsDebounceDelay: 500,
+	optionsDebounceDelay: 250,
 	tourPeriod: 5000,
 	spinDelay: 1500,
 	deleteDelay: 5000,

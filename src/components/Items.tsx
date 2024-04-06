@@ -20,6 +20,7 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Search from 'antd/es/input/Search';
 import uniqid from 'uniqid';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
+import { TooltipPlacement } from 'antd/es/tooltip';
 
 const getTitleComponents = (
 	title: string,
@@ -214,15 +215,17 @@ export const MyIconWithTooltip = (
 		Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>
 	>,
 	light: boolean,
-	onClick?: () => void
+	onClick?: () => void,
+	placement?: TooltipPlacement
 ) => (
 	<Tooltip
+		placement={placement}
 		title={title}
 		color={light ? '#0005' : undefined}
 	>
 		<Icon
 			onClick={onClick}
-			style={{ scale: isSmallScreen ? '1' : '1.5' }}
+			style={{ scale: isSmallScreen ? '1' : '1.25' }}
 		/>
 	</Tooltip>
 );

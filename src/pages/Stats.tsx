@@ -12,15 +12,22 @@ import YearSlider from 'components/YearSlider';
 import { Interval } from 'settings/interfaces';
 import LargeSpin from 'components/LargeSpin';
 import StatsCard from 'components/StatsCard';
-import ResetButton from 'components/ResetButton';
+import { MyIconWithTooltip } from 'components/Items';
+import languages from 'settings/languages';
+import { ReloadOutlined } from '@ant-design/icons';
 
 dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
 	const { isSmallScreen, loading, tourRefs } = userStore;
-	const { statsOptions, defaultRange, setStatsRange, setIsStatsAccurate } =
-		optionsStore;
+	const {
+		statsOptions,
+		userOptions,
+		defaultRange,
+		setStatsRange,
+		setIsStatsAccurate,
+	} = optionsStore;
 
 	const { range, isAccurate } = statsOptions;
 
@@ -61,10 +68,14 @@ const Stats: React.FC = observer(() => {
 	const PanelJSX = (
 		<Flex gap={16}>
 			<StatsCard />
-			<ResetButton
-				reset={resetRange}
-				disabled={!isRangeChanged}
-			/>
+			{isRangeChanged &&
+				MyIconWithTooltip(
+					languages.reset[userOptions.language],
+					isSmallScreen,
+					ReloadOutlined,
+					false,
+					resetRange
+				)}
 		</Flex>
 	);
 

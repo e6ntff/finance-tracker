@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react';
 import CategoryItem from './CategoryItem';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
-import { Empty, Flex, Space } from 'antd';
+import { Empty, Flex } from 'antd';
 import { userStore } from 'utils/userStore';
 import LargeSpin from './LargeSpin';
 
@@ -30,9 +30,10 @@ const CategoryList: React.FC = observer(() => {
 			{loading ? (
 				<LargeSpin />
 			) : Object.values(categories).length > 1 ? (
-				<Space
-					wrap
-					size={isSmallScreen ? 8 : 16}
+				<Flex
+					wrap='wrap'
+					justify='center'
+					gap={isSmallScreen ? 8 : 16}
 				>
 					{categoriesToShowIds.map((key: string) => (
 						<CategoryItem
@@ -40,7 +41,7 @@ const CategoryList: React.FC = observer(() => {
 							initialCategoryId={key}
 						/>
 					))}
-				</Space>
+				</Flex>
 			) : (
 				<Empty
 					image={Empty.PRESENTED_IMAGE_SIMPLE}

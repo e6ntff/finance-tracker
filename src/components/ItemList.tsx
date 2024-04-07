@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo, useState } from 'react';
 import ListItem from './ListItem';
 import { ItemWithSearch, ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
-import { Empty, Flex, List, Space } from 'antd';
+import { Empty, Flex, List } from 'antd';
 import { getListToShowOnCurrentPageIds } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
@@ -52,7 +52,7 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 		[filteredListIds, debouncedOptions, lastDeletedItemIds]
 	);
 
-	const Item = (value: ItemWithSearch) => (
+	const Items = listToShowOnCurrentPageIds.map((value: ItemWithSearch) => (
 		<ListItem
 			key={value.id}
 			mode={debouncedOptions.mode}
@@ -61,7 +61,7 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			initialItem={value}
 			selected={selectedItemIds.includes(value.id)}
 		/>
-	);
+	));
 
 	return loading ? (
 		<LargeSpin />
@@ -75,18 +75,17 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			style={{ inlineSize: '100%' }}
 			ref={tourRefs[1]}
 		>
-			<List style={{ inlineSize: '100%' }}>
-				{listToShowOnCurrentPageIds.map((value: ItemWithSearch) => Item(value))}
-			</List>
+			<List style={{ inlineSize: '100%' }}>{Items}</List>
 		</Flex>
 	) : (
-		<Space
+		<Flex
 			ref={tourRefs[1]}
-			wrap
-			size={isSmallScreen ? 8 : 16}
+			wrap='wrap'
+			justify='center'
+			gap={isSmallScreen ? 8 : 16}
 		>
-			{listToShowOnCurrentPageIds.map((value: ItemWithSearch) => Item(value))}
-		</Space>
+			{Items}
+		</Flex>
 	);
 });
 

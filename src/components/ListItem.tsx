@@ -161,7 +161,11 @@ const ListItem: React.FC<Props> = observer(
 					submitItem={updateCurrentItem}
 				/>
 				{mode === 'list' ? (
-					<Item style={{ pointerEvents: disabled ? 'none' : 'auto' }}>
+					<Item
+						style={{
+							pointerEvents: disabled ? 'none' : 'auto',
+						}}
+					>
 						<Col span={1}>
 							{MyCheckbox(
 								selected,

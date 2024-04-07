@@ -310,12 +310,12 @@ const languages: { [key: string]: any } = {
 			en: {
 				title: 'Selectors',
 				description:
-					'Choose categories, time interval, list type or change sorting method - here',
+					'Choose categories, time interval, list type, change sorting method and search - here',
 			},
 			ru: {
 				title: 'Управление',
 				description:
-					'Выбор категорий, интервала времени, типа списка или поменять вид сортировки - все здесь',
+					'Выбор категорий, интервала времени, типа списка, вида сортировки или поиск - все здесь',
 			},
 		},
 		{
@@ -345,12 +345,12 @@ const languages: { [key: string]: any } = {
 			en: {
 				title: 'Trash buttons',
 				description:
-					'To easily delete or restore all the items from trash there are this buttons',
+					'To easily delete or restore all the items from trash and search there are this buttons',
 			},
 			ru: {
 				title: 'Корзина',
 				description:
-					'Это кнопки для быстрого удаления и восстановления всех предметов',
+					'Это кнопки для быстрого удаления и восстановления всех предметов и поиска по корзине',
 			},
 		},
 		{
@@ -379,11 +379,11 @@ const languages: { [key: string]: any } = {
 		{
 			en: {
 				title: 'Choose time interval',
-				description: 'With this slider by month and by day',
+				description: 'With this slider',
 			},
 			ru: {
 				title: 'Выбор временного интервала',
-				description: 'С помощью этого ползунка, по месяцам или по дням',
+				description: 'С помощью этого ползунка',
 			},
 		},
 		{

@@ -130,7 +130,10 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 						</Col>
 						<Col span={2}>
 							{MyIconWithTooltip(
-								<CategoryItem initialCategoryId={id} />,
+								<CategoryItem
+									initialCategoryId={id}
+									disabled
+								/>,
 								isSmallScreen,
 								ExportOutlined,
 								true

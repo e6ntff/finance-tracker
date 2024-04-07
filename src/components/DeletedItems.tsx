@@ -130,6 +130,8 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 								<ListItem
 									initialItem={{ id, overlaps }}
 									mode='grid'
+									selected={selectedItemIds.includes(id)}
+									disabled
 								/>,
 								isSmallScreen,
 								ExportOutlined,

@@ -9,7 +9,7 @@ import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import ItemsModal from './ItemsModal';
-import { MyIconWithTooltip, MyTitle } from './Items';
+import { MyIconWithTooltip, MyImage, MyTitle } from './Items';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 interface Props {
@@ -95,7 +95,9 @@ const CategoryItem: React.FC<Props> = observer(
 			[setCurrentCategory, updateCurrentCategory]
 		);
 
-		const ColorPickerJSX = (
+		const ColorPickerJSX = disabled ? (
+			MyImage(currentCategory.color, isSmallScreen, language)
+		) : (
 			<Tooltip title={languages.pickColor[language]}>
 				<ColorPicker
 					size={isSmallScreen ? 'small' : 'middle'}
@@ -143,9 +145,16 @@ const CategoryItem: React.FC<Props> = observer(
 						pointerEvents: disabled ? 'none' : 'auto',
 					}}
 					size={isSmallScreen ? 'small' : 'default'}
-					title={MyTitle(currentCategory.name, isSmallScreen, language, {
-						onChange: handleNameChange,
-					})}
+					title={MyTitle(
+						currentCategory.name,
+						isSmallScreen,
+						language,
+						disabled
+							? false
+							: {
+									onChange: handleNameChange,
+							  }
+					)}
 					actions={[ActionsJSX]}
 					styles={{
 						title: {

@@ -1,7 +1,7 @@
-import React, { useState, useCallback, memo, useEffect } from 'react';
+import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
-import { Empty, Flex } from 'antd';
+import { Empty, Flex, Tooltip } from 'antd';
 import DiagramBar from '../components/DiagramBar';
 import DiagramPie from 'components/DiagramPie';
 import { userStore } from 'utils/userStore';
@@ -12,6 +12,7 @@ import YearSlider from 'components/YearSlider';
 import { Interval } from 'settings/interfaces';
 import LargeSpin from 'components/LargeSpin';
 import StatsCard from 'components/StatsCard';
+import { ReloadOutlined } from '@ant-design/icons';
 
 dayjs.extend(isBetween);
 
@@ -50,6 +51,11 @@ const Stats: React.FC = observer(() => {
 			setMode('month');
 		}
 	}, [range]);
+
+	const isRangeChanged = useMemo(
+		() => range[0] !== defaultRange[0] || range[1] !== defaultRange[1],
+		[range, defaultRange]
+	);
 
 	const DiagramsJSX = (
 		<Flex
@@ -90,7 +96,22 @@ const Stats: React.FC = observer(() => {
 			gap={32}
 			align='start'
 		>
-			<StatsCard resetRange={resetRange} />
+			<Tooltip
+				placement='rightTop'
+				color='#0000'
+				open={isRangeChanged}
+				title={
+					<ReloadOutlined
+						onClick={resetRange}
+						style={{
+							scale: isSmallScreen ? '1' : '1.25',
+							filter: 'invert()',
+						}}
+					/>
+				}
+			>
+				<StatsCard resetRange={resetRange} />
+			</Tooltip>
 			{DiagramsJSX}
 		</Flex>
 	) : (

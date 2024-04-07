@@ -1,4 +1,4 @@
-import { Card, Statistic, Tooltip, Typography } from 'antd';
+import { Card, DatePicker, Statistic, Tooltip, Typography } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { memo, useMemo } from 'react';
 import { listStore } from 'utils/listStore';
@@ -7,7 +7,7 @@ import { getTotalInCurrentRange } from 'utils/transformData';
 import { userStore } from 'utils/userStore';
 import { getSymbolAndPrice } from 'utils/utils';
 import dayjs from 'dayjs';
-import { ReloadOutlined } from '@ant-design/icons';
+import constants from 'settings/constants';
 
 interface Props {
 	resetRange: () => void;
@@ -16,7 +16,7 @@ interface Props {
 const StatsCard: React.FC<Props> = observer(({ resetRange }) => {
 	const { isSmallScreen } = userStore;
 	const { list } = listStore;
-	const { statsOptions, userOptions, defaultRange } = optionsStore;
+	const { statsOptions, userOptions, setStatsRange } = optionsStore;
 
 	const { range } = statsOptions;
 	const { currency } = userOptions;
@@ -39,26 +39,24 @@ const StatsCard: React.FC<Props> = observer(({ resetRange }) => {
 		);
 	}, [range, isSmallScreen]);
 
-	const isRangeChanged = useMemo(
-		() => range[0] !== defaultRange[0] || range[1] !== defaultRange[1],
-		[range, defaultRange]
-	);
-
 	return (
 		<Card bordered>
 			<Statistic
 				title={
 					<Tooltip
-						placement='right'
 						color='#0000'
-						open={isRangeChanged}
+						trigger='click'
 						title={
-							<ReloadOutlined
-								onClick={resetRange}
-								style={{
-									scale: isSmallScreen ? '1' : '1.25',
-									filter: 'invert()',
+							<DatePicker.RangePicker
+								onChange={(values: [any, any]) => {
+									setStatsRange(
+										values.map((value: dayjs.Dayjs) => value.valueOf())
+									);
 								}}
+								value={[dayjs(range[0]), dayjs(range[1])]}
+								size={isSmallScreen ? 'small' : 'middle'}
+								minDate={constants.startDate}
+								maxDate={dayjs()}
 							/>
 						}
 					>

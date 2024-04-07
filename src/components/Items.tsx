@@ -27,30 +27,20 @@ const getTitleComponents = (
 	isInOverlaps: boolean,
 	isSmallScreen: boolean,
 	editable: any,
-	index: number
+	index?: number
 ): React.ReactNode => {
-	if (title === ' ') return <>&nbsp;</>;
-	return isSmallScreen ? (
+	return title === ' ' ? (
+		<>&nbsp;</>
+	) : (
 		<Typography.Text
-			key={index}
+			style={{ fontSize: isSmallScreen ? '1em' : '1.25em' }}
+			key={index || 0}
 			editable={editable}
 			ellipsis
-			strong
-			mark={isInOverlaps}
+			strong={isInOverlaps}
 		>
 			{title}
 		</Typography.Text>
-	) : (
-		<Title
-			key={index}
-			editable={editable}
-			ellipsis
-			level={3}
-			style={{ margin: 0 }}
-			mark={isInOverlaps}
-		>
-			{title}
-		</Title>
 	);
 };
 
@@ -79,26 +69,21 @@ export const MyTitle = (
 					title || languages.noTitle[language],
 					false,
 					isSmallScreen,
-					editable,
-					0
+					editable
 				),
 		  ];
 
 	return (
-		<Tooltip
-			title={title}
+		<Flex
 			key={uniqid()}
+			justify='center'
+			style={{
+				inlineSize: '100%',
+				opacity: !title ? '.5' : '1',
+			}}
 		>
-			<Flex
-				justify='center'
-				style={{
-					inlineSize: '100%',
-					opacity: !title ? '.5' : '1',
-				}}
-			>
-				{markedTitles}
-			</Flex>
-		</Tooltip>
+			{markedTitles}
+		</Flex>
 	);
 };
 

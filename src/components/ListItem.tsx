@@ -77,38 +77,6 @@ const ListItem: React.FC<Props> = observer(
 			setLastDeletedItemIds([...lastDeletedItemIds, initialItem.id]);
 		}, [setLastDeletedItemIds, initialItem.id, lastDeletedItemIds]);
 
-		const ActionsJSX = (
-			<Flex justify='space-evenly'>
-				{MyIconWithTooltip(
-					languages.edit[language],
-					isSmallScreen,
-					EditOutlined,
-					false,
-					toggleIsModalOpened
-				)}
-				{MyPrice(currentItem.price, isSmallScreen, currency)}
-				{MyIconWithTooltip(
-					languages.delete[language],
-					isSmallScreen,
-					DeleteOutlined,
-					false,
-					deleteItem
-				)}
-			</Flex>
-		);
-
-		const ImageAndDateJSX = (
-			<Flex align='center'>
-				{MyImage(
-					currentItem.image,
-					isSmallScreen,
-					language,
-					toggleIsModalOpened
-				)}
-				{MyDate(currentItem.date, isSmallScreen)}
-			</Flex>
-		);
-
 		const tooltipTitle = useMemo(() => {
 			if (!currentItem.updatedAt) {
 				return (
@@ -133,8 +101,8 @@ const ListItem: React.FC<Props> = observer(
 			}
 		}, [currentItem, language]);
 
-		const CheckboxAndTitle = (
-			<Flex>
+		const ActionsJSX = (
+			<Flex justify='space-evenly'>
 				{MyCheckbox(
 					selected,
 					language,
@@ -142,6 +110,44 @@ const ListItem: React.FC<Props> = observer(
 					handleSelection,
 					deleteAll
 				)}
+				{MyIconWithTooltip(
+					languages.delete[language],
+					isSmallScreen,
+					DeleteOutlined,
+					false,
+					deleteItem
+				)}
+				{MyPrice(currentItem.price, isSmallScreen, currency)}
+				{MyIconWithTooltip(
+					languages.edit[language],
+					isSmallScreen,
+					EditOutlined,
+					false,
+					toggleIsModalOpened
+				)}
+				{MyIconWithTooltip(
+					tooltipTitle,
+					isSmallScreen,
+					InfoCircleOutlined,
+					false
+				)}
+			</Flex>
+		);
+
+		const ImageAndDateJSX = (
+			<Flex align='center'>
+				{MyImage(
+					currentItem.image,
+					isSmallScreen,
+					language,
+					toggleIsModalOpened
+				)}
+				{MyDate(currentItem.date, isSmallScreen)}
+			</Flex>
+		);
+
+		const CheckboxAndTitle = (
+			<Flex>
 				{MyTitle(
 					currentItem.title,
 					isSmallScreen,
@@ -218,15 +224,8 @@ const ListItem: React.FC<Props> = observer(
 					</Item>
 				) : (
 					<Card
-						extra={[
-							MyIconWithTooltip(
-								tooltipTitle,
-								isSmallScreen,
-								InfoCircleOutlined,
-								false
-							),
-						]}
-						size={isSmallScreen ? 'small' : 'default'}
+						styles={{ title: { fontWeight: '400' } }}
+						size='small'
 						bordered
 						title={CheckboxAndTitle}
 						actions={[ActionsJSX]}

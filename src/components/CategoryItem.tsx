@@ -144,7 +144,7 @@ const CategoryItem: React.FC<Props> = observer(
 						inlineSize: isSmallScreen ? '8em' : '12em',
 						pointerEvents: disabled ? 'none' : 'auto',
 					}}
-					size={isSmallScreen ? 'small' : 'default'}
+					size='small'
 					title={MyTitle(
 						currentCategory.name,
 						isSmallScreen,

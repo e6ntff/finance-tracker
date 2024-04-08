@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import AppHeader from './components/AppHeader';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import firebaseApp from './utils/firebase';
+import { app } from './utils/firebase';
 import AppRoutes from './components/AppRoutes';
 import { observer } from 'mobx-react-lite';
 import { ConfigProvider, Layout, theme } from 'antd';
@@ -22,7 +22,7 @@ import Notification from 'components/Notification';
 import DeleteNotification from 'components/DeleteNotification';
 import languages from 'settings/languages';
 
-const auth = getAuth(firebaseApp);
+const auth = getAuth(app);
 
 const App: React.FC = observer(() => {
 	const {
@@ -86,13 +86,13 @@ const App: React.FC = observer(() => {
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
 			if (authUser && authUser.uid) {
-				getData(authUser, setStatus).then((data) => {
-					if (data) {
-						setUserList(data.list, false);
-						setUserCategories(data.categories, false);
-						setLoading(false);
-					}
-				});
+				getData(
+					authUser.uid,
+					setStatus,
+					setUserList,
+					setUserCategories,
+					setLoading
+				);
 			}
 		});
 

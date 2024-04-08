@@ -31,7 +31,12 @@ class UserStore {
 
 	saveData = () => {
 		if (this.user.uid) {
-			saveData(this.user, this.setStatus, this.setIsDataChanged, this.allData);
+			saveData(
+				this.user.uid,
+				this.setStatus,
+				this.setIsDataChanged,
+				this.allData
+			);
 		}
 	};
 

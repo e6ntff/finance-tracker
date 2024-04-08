@@ -4,7 +4,7 @@ import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from 'firebase/auth';
-import firebaseApp from '../utils/firebase';
+import { app } from '../utils/firebase';
 import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
@@ -20,7 +20,7 @@ import {
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 
-const auth = getAuth(firebaseApp);
+const auth = getAuth(app);
 
 const Welcome: React.FC = observer(() => {
 	const { setLogged, setIsTourStarted } = userStore;

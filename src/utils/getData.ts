@@ -1,30 +1,25 @@
-import { Status } from 'settings/interfaces';
-import constants from '../settings/constants';
-import firebaseApp from './firebase';
+import { ExpenseItem, Status, category } from 'settings/interfaces';
+import { onValue, ref } from 'firebase/database';
+import { database } from './firebase';
 
-import { getFirestore, collection, doc, getDoc } from 'firebase/firestore';
-
-const firestore = getFirestore(firebaseApp);
-
-const getData = async (user: any, setStatus: (arg0: Status) => void) => {
-	const uid = user.uid;
-	const usersCollection = collection(firestore, 'users');
-	if (uid) {
-		setStatus({ status: 'loading' });
-		const userDocRef = doc(usersCollection, uid);
-		try {
-			const userDocSnapshot = await getDoc(userDocRef);
-			if (userDocSnapshot.exists()) {
-				setStatus({ status: 'success' });
-				return userDocSnapshot.data();
-			} else {
-				setStatus({ status: 'success' });
-				return constants.defaultData;
-			}
-		} catch (error: any) {
-			setStatus({ status: 'error', text: error.message });
-			return constants.defaultData;
-		}
+const getData = async (
+	uid: string,
+	setStatus: (arg0: Status) => void,
+	setList: (list: { [key: string]: ExpenseItem }) => void,
+	setCategories: (list: { [key: string]: category }) => void,
+	setLoading: (value: boolean) => void
+) => {
+	setStatus({ status: 'loading' });
+	try {
+		await onValue(ref(database, uid), (snapshot) => {
+			const data = snapshot.val();
+			setList(data?.list);
+			setCategories(data?.categories);
+			setLoading(false);
+		});
+		setStatus({ status: 'success' });
+	} catch (error: any) {
+		setStatus({ status: 'error', text: error.message });
 	}
 };
 

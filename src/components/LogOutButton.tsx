@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import firebaseApp from '../utils/firebase';
+import { app } from '../utils/firebase';
 import { getAuth, signOut } from 'firebase/auth';
 import constants from '../settings/constants';
 import { observer } from 'mobx-react-lite';
@@ -16,7 +16,7 @@ const LogOutButton: React.FC = observer(() => {
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
 	const { resetOptions, userOptions } = optionsStore;
-	const auth = getAuth(firebaseApp);
+	const auth = getAuth(app);
 
 	const logOut = useCallback(async () => {
 		try {

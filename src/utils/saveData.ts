@@ -1,13 +1,10 @@
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 import { AllData, Status } from 'settings/interfaces';
-import firebaseApp from './firebase';
 import constants from 'settings/constants';
-
-const firestore = getFirestore(firebaseApp);
-const usersCollection = collection(firestore, 'users');
+import { ref, set } from 'firebase/database';
+import { database } from './firebase';
 
 const saveData = async (
-	user: any,
+	uid: string,
 	setStatus: (arg0: Status) => void,
 	setIsDataChanged: (arg0: boolean) => void,
 	data: AllData
@@ -16,17 +13,14 @@ const saveData = async (
 	const errorId = setTimeout(() => {
 		setStatus({ status: 'error', text: 'Error saving data' });
 	}, constants.errorDelay);
-	if (user.uid) {
-		const userDocRef = doc(usersCollection, user.uid);
-		if (userDocRef) {
-			try {
-				await setDoc(userDocRef, { ...data });
-				clearTimeout(errorId);
-				setStatus({ status: 'success' });
-				setIsDataChanged(false);
-			} catch (error: any) {
-				setStatus({ status: 'error', text: error });
-			}
+	if (uid) {
+		try {
+			await set(ref(database, uid), JSON.parse(JSON.stringify(data)));
+			clearTimeout(errorId);
+			setStatus({ status: 'success' });
+			setIsDataChanged(false);
+		} catch (error: any) {
+			setStatus({ status: 'error', text: error });
 		}
 	}
 };

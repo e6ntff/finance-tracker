@@ -114,11 +114,11 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 					<Item key={id}>
 						<Col span={1}>{CheckboxJSX(id, handleItemSelection)}</Col>
 						<Col span={1}>
-							{MyImage(currentItem.image, isSmallScreen, language)}
+							{MyImage(currentItem?.image, isSmallScreen, language)}
 						</Col>
 						<Col span={10}>
 							{MyTitle(
-								currentItem.title,
+								currentItem?.title,
 								isSmallScreen,
 								language,
 								false,
@@ -141,7 +141,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 						<Col span={2}>
 							{MyIconWithTooltip(
 								`${languages.deletedAt[language]}: ${dayjs(
-									currentItem.deletedAt
+									currentItem?.deletedAt
 								).format('HH:mm:ss DD.MM.YY')}`,
 								isSmallScreen,
 								InfoCircleOutlined,

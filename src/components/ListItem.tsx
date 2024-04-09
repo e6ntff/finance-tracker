@@ -230,7 +230,7 @@ const ListItem: React.FC<Props> = observer(
 						title={CheckboxAndTitle}
 						actions={[ActionsJSX]}
 						style={{
-							inlineSize: isSmallScreen ? '9em' : '12em',
+							inlineSize: isSmallScreen ? '10em' : '13em',
 							pointerEvents: disabled ? 'none' : 'auto',
 						}}
 					>

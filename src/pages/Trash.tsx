@@ -46,14 +46,23 @@ const Trash: React.FC = observer(() => {
 			/>
 			<Flex
 				ref={tourRefs[4]}
-				vertical={isSmallScreen}
 				gap={isSmallScreen ? 16 : 32}
 				style={{ inlineSize: '100%' }}
 			>
-				{isExpenses ? (
-					<DeletedList query={debouncedQuery} />
+				{isSmallScreen ? (
+					isExpenses ? (
+						<DeletedList query={debouncedQuery} />
+					) : (
+						<DeletedCategories query={debouncedQuery} />
+					)
 				) : (
-					<DeletedCategories query={debouncedQuery} />
+					<Flex
+						style={{ inlineSize: '100%' }}
+						gap={32}
+					>
+						<DeletedList query={debouncedQuery} />
+						<DeletedCategories query={debouncedQuery} />
+					</Flex>
 				)}
 			</Flex>
 		</Flex>

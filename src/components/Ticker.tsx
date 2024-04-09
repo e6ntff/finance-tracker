@@ -11,12 +11,10 @@ const Ticker: React.FC = observer(() => {
 	return (
 		<Alert
 			showIcon={false}
-			style={{background: '#0000'}}
+			// style={{ background: '#0000' }}
 			banner
 			message={
-				<Marquee pauseOnHover>
-					{languages.mayNotWorkText[userOptions.language]}
-				</Marquee>
+				<Marquee>{languages.mayNotWorkText[userOptions.language]}</Marquee>
 			}
 		/>
 	);

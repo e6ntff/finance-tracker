@@ -109,10 +109,10 @@ const Selectors: React.FC<Props> = observer(
 						<Flex gap={16}>
 							<NewItemButton />
 							<CategoriesSelect />
+							<ModeSelect />
 						</Flex>
 						<Flex gap={16}>
 							<SortSelect />
-							<ModeSelect />
 							{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
 							{isSettingsChanged &&
 								MyIconWithTooltip(

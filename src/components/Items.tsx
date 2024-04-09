@@ -36,7 +36,7 @@ const getTitleComponents = (
 			style={{ fontSize: isSmallScreen ? '1em' : '1.25em' }}
 			key={index || 0}
 			editable={editable}
-			ellipsis
+			// ellipsis
 			strong={isInOverlaps}
 		>
 			{title}

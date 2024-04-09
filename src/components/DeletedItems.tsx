@@ -113,10 +113,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 				return (
 					<Item key={id}>
 						<Col span={1}>{CheckboxJSX(id, handleItemSelection)}</Col>
-						<Col span={1}>
-							{MyImage(currentItem?.image, isSmallScreen, language)}
-						</Col>
-						<Col span={10}>
+						<Col span={16}>
 							{MyTitle(
 								currentItem?.title,
 								isSmallScreen,
@@ -125,7 +122,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 								overlaps
 							)}
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							{MyIconWithTooltip(
 								<ListItem
 									initialItem={{ id, overlaps }}
@@ -138,7 +135,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 								true
 							)}
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							{MyIconWithTooltip(
 								`${languages.deletedAt[language]}: ${dayjs(
 									currentItem?.deletedAt
@@ -148,7 +145,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 								false
 							)}
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							{MyIconWithTooltip(
 								languages.restore[language],
 								isSmallScreen,
@@ -157,7 +154,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 								() => restoreItem(id)
 							)}
 						</Col>
-						<Col span={2}>{DeleteJSX(() => deleteItem(id))}</Col>
+						<Col span={1}>{DeleteJSX(() => deleteItem(id))}</Col>
 					</Item>
 				);
 			})}

@@ -69,46 +69,57 @@ const TrashPanel: React.FC<Props> = observer(
 
 		return (
 			<Flex
-				gap={16}
-				ref={tourRefs[5]}
-				style={{ inlineSize: '100%' }}
+				vertical
+				gap={8}
+				align='end'
 			>
-				<Tooltip title={languages.deleteAll[language]}>
-					<Popconfirm
-						title={languages.deleteAllConfirm[language]}
-						onConfirm={deleteAll}
-					>
-						<Button size={isSmallScreen ? 'small' : 'middle'}>
-							<DeleteOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
-						</Button>
-					</Popconfirm>
-				</Tooltip>
-				<Tooltip title={languages.restoreAll[language]}>
-					<Popconfirm
-						title={languages.restoreAllConfirm[language]}
-						onConfirm={restoreAll}
-					>
-						<Button size={isSmallScreen ? 'small' : 'middle'}>
-							<UndoOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
-						</Button>
-					</Popconfirm>
-				</Tooltip>
-				{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
-				<Segmented
-					// style={{ inlineSize: '100%', background: '#0000' }}
-					onChange={setIsExpenses}
-					value={isExpenses}
-					options={[
-						{
-							label: languages.expenses[language],
-							value: true,
-						},
-						{
-							label: languages.categories[language],
-							value: false,
-						},
-					]}
-				/>
+				<Flex
+					gap={16}
+					ref={tourRefs[5]}
+					style={{ inlineSize: '100%' }}
+				>
+					<Tooltip title={languages.deleteAll[language]}>
+						<Popconfirm
+							title={languages.deleteAllConfirm[language]}
+							onConfirm={deleteAll}
+						>
+							<Button size={isSmallScreen ? 'small' : 'middle'}>
+								<DeleteOutlined
+									style={{ scale: isSmallScreen ? '1' : '1.5' }}
+								/>
+							</Button>
+						</Popconfirm>
+					</Tooltip>
+					<Tooltip title={languages.restoreAll[language]}>
+						<Popconfirm
+							title={languages.restoreAllConfirm[language]}
+							onConfirm={restoreAll}
+						>
+							<Button size={isSmallScreen ? 'small' : 'middle'}>
+								<UndoOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
+							</Button>
+						</Popconfirm>
+					</Tooltip>
+					<Flex style={{ inlineSize: isSmallScreen ? '100%' : '50%' }}>
+						{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
+					</Flex>
+				</Flex>
+				{isSmallScreen && (
+					<Segmented
+						onChange={setIsExpenses}
+						value={isExpenses}
+						options={[
+							{
+								label: languages.expenses[language],
+								value: true,
+							},
+							{
+								label: languages.categories[language],
+								value: false,
+							},
+						]}
+					/>
+				)}
 			</Flex>
 		);
 	}

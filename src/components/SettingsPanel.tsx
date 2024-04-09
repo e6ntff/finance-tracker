@@ -29,7 +29,7 @@ const SettingsPanel: React.FC = observer(() => {
 				<Tooltip
 					title={<Ticker />}
 					placement='left'
-					color='#aaa3'
+					color='#0000'
 				>
 					<FloatButton
 						type={userOptions.theme === 'default' ? 'default' : 'primary'}

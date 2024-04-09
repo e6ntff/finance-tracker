@@ -115,11 +115,8 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 
 				return (
 					<Item key={id}>
-						{CheckboxJSX(id, handleCategorySelection)}
-						<Col span={1}>
-							{MyImage(currentCategory.color, isSmallScreen, language)}
-						</Col>
-						<Col span={10}>
+						<Col span={1}>{CheckboxJSX(id, handleCategorySelection)}</Col>
+						<Col span={16}>
 							{MyTitle(
 								currentCategory.name,
 								isSmallScreen,
@@ -128,7 +125,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 								overlaps
 							)}
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							{MyIconWithTooltip(
 								<CategoryItem
 									initialCategoryId={id}
@@ -139,7 +136,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 								true
 							)}
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							{MyIconWithTooltip(
 								`${languages.deletedAt[language]}: ${dayjs(
 									currentCategory.deletedAt
@@ -149,7 +146,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 								false
 							)}
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							{MyIconWithTooltip(
 								languages.restore[language],
 								isSmallScreen,
@@ -158,7 +155,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 								() => restoreCategory(id)
 							)}
 						</Col>
-						<Col span={2}>{DeleteJSX(() => deleteCategory(id))}</Col>
+						<Col span={1}>{DeleteJSX(() => deleteCategory(id))}</Col>
 					</Item>
 				);
 			})}

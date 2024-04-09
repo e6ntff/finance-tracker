@@ -21,7 +21,6 @@ import {
 import { configure } from 'mobx';
 import { debounce } from 'lodash';
 import constants from 'settings/constants';
-import { userStore } from './userStore';
 
 configure({
 	enforceActions: 'never',
@@ -30,7 +29,6 @@ configure({
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
 class OptionsStore {
-	userStore;
 	defaultRange: number[] = [];
 	listOptions: ListOptions = initialListOptions;
 	debouncedListOptions: ListOptions = this.listOptions;
@@ -38,7 +36,6 @@ class OptionsStore {
 	userOptions: UserOptions = initialUserOptions;
 
 	setListOptions = (options: ListOptions) => {
-		userStore.setLoading(false);
 		this.listOptions = options;
 	};
 
@@ -57,7 +54,7 @@ class OptionsStore {
 
 	setListOptionsWithDebounce = (options: ListOptions) => {
 		this.listOptions = options;
-		this.userStore.setLoading(true);
+
 		this.setDebouncedListOptions(options);
 	};
 
@@ -150,13 +147,12 @@ class OptionsStore {
 		});
 	};
 
-	constructor(UserStore: typeof userStore) {
-		this.userStore = UserStore;
+	constructor() {
 		makeAutoObservable(this);
 	}
 }
 
-export const optionsStore = new OptionsStore(userStore);
+export const optionsStore = new OptionsStore();
 
 reaction(
 	() => optionsStore.listOptions,

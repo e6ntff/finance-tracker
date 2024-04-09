@@ -12,7 +12,7 @@ import {
 	UndoOutlined,
 } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
-import { MyCheckbox, MyIconWithTooltip, MyImage, MyTitle } from './Items';
+import { MyCheckbox, MyIconWithTooltip, MyTitle } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { ItemWithSearch } from 'settings/interfaces';
 import { search } from 'utils/utils';

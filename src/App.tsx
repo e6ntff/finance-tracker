@@ -86,12 +86,8 @@ const App: React.FC = observer(() => {
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUser(JSON.parse(JSON.stringify(authUser)) || {});
 			if (authUser && authUser.uid) {
-				getData(
-					authUser.uid,
-					setStatus,
-					setUserList,
-					setUserCategories,
-					setLoading
+				getData(authUser.uid, setStatus, setUserList, setUserCategories).then(
+					() => setLoading(false)
 				);
 			}
 		});

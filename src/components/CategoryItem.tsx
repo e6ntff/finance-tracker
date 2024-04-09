@@ -100,11 +100,12 @@ const CategoryItem: React.FC<Props> = observer(
 		) : (
 			<Tooltip title={languages.pickColor[language]}>
 				<ColorPicker
-					size={isSmallScreen ? 'small' : 'middle'}
 					value={currentCategory.color}
 					format='hex'
 					onChangeComplete={handleColorChange}
-				/>
+				>
+					{MyImage(currentCategory.color, isSmallScreen, language)}
+				</ColorPicker>
 			</Tooltip>
 		);
 

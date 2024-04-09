@@ -2,13 +2,12 @@ import React, { useCallback, useState } from 'react';
 import { category } from '../settings/interfaces';
 import constants from 'settings/constants';
 import ColorPicker, { Color } from 'antd/es/color-picker';
-import { Flex } from 'antd';
+import { Button, Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { categoryStore } from 'utils/categoryStore';
 import { BgColorsOutlined, CheckOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
 import Search from 'antd/es/input/Search';
-import { MyIconWithTooltip } from './Items';
 
 const AddCategory: React.FC = observer(() => {
 	const { addCategory } = categoryStore;
@@ -54,20 +53,20 @@ const AddCategory: React.FC = observer(() => {
 			style={{ inlineSize: 'min(100%, 560px)', margin: 'auto' }}
 		>
 			<Search
-				enterButton={<CheckOutlined />}
-				addonBefore={MyIconWithTooltip(
+				enterButton={
+					<Button style={{ background: currentCategory.color }}>
+						<CheckOutlined style={{ scale: isSmallScreen ? '1' : '1.25' }} />
+					</Button>
+				}
+				addonBefore={
 					<ColorPicker
-						size={isSmallScreen ? 'small' : 'middle'}
 						value={currentCategory.color}
 						format='hex'
 						onChange={handleColorChange}
-					/>,
-					isSmallScreen,
-					BgColorsOutlined,
-					true,
-					undefined,
-					'bottom'
-				)}
+					>
+						<BgColorsOutlined style={{ scale: isSmallScreen ? '1' : '1.25' }} />
+					</ColorPicker>
+				}
 				size={isSmallScreen ? 'small' : 'middle'}
 				type='text'
 				value={currentCategory.name}

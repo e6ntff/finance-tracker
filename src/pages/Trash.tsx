@@ -60,8 +60,12 @@ const Trash: React.FC = observer(() => {
 						style={{ inlineSize: '100%' }}
 						gap={32}
 					>
-						<DeletedList query={debouncedQuery} />
-						<DeletedCategories query={debouncedQuery} />
+						<Flex style={{ inlineSize: '50%' }}>
+							<DeletedList query={debouncedQuery} />
+						</Flex>
+						<Flex style={{ inlineSize: '50%' }}>
+							<DeletedCategories query={debouncedQuery} />
+						</Flex>
 					</Flex>
 				)}
 			</Flex>

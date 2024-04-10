@@ -118,7 +118,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 						<Col span={1}>{CheckboxJSX(id, handleCategorySelection)}</Col>
 						<Col span={16}>
 							{MyTitle(
-								currentCategory.name,
+								currentCategory?.name,
 								isSmallScreen,
 								language,
 								false,
@@ -139,7 +139,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 						<Col span={1}>
 							{MyIconWithTooltip(
 								`${languages.deletedAt[language]}: ${dayjs(
-									currentCategory.deletedAt
+									currentCategory?.deletedAt
 								).format('HH:mm:ss DD.MM.YY')}`,
 								isSmallScreen,
 								InfoCircleOutlined,

@@ -2,7 +2,8 @@ const paths = {
 	stats: '/stats',
 	list: '/list',
 	categories: '/categories',
-	trash: '/trash'
+	goals: '/goals',
+	trash: '/trash',
 };
 
 export default paths;

@@ -10,6 +10,7 @@ const Stats = lazy(() => import('../pages/Stats'));
 const Welcome = lazy(() => import('../pages/Welcome'));
 const Categories = lazy(() => import('../pages/Categories'));
 const Trash = lazy(() => import('../pages/Trash'));
+const Goals = lazy(() => import('../pages/Goals'));
 
 const AppRoutes: React.FC = observer(() => {
 	const { logged } = userStore;
@@ -58,6 +59,30 @@ const AppRoutes: React.FC = observer(() => {
 					logged ? (
 						<Suspense fallback={<LargeSpin />}>
 							<Categories />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
+			/>
+			<Route
+				path={paths.trash}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Trash />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
+			/>
+			<Route
+				path={paths.goals}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Goals />
 						</Suspense>
 					) : (
 						<Navigate to='/' />

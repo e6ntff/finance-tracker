@@ -11,6 +11,7 @@ const languages: { [key: string]: any } = {
 		en: 'Categories',
 		ru: 'Категории',
 	},
+	goals: { en: 'Goals', ru: 'Цели' },
 	trash: {
 		en: 'Trash',
 		ru: 'Корзина',
@@ -270,8 +271,8 @@ const languages: { [key: string]: any } = {
 		ru: 'Выбрать цвет',
 	},
 	randomize: {
-		en: `If you don't wanna use the app but only try it for a few minutes, you can click this button and add some random data`,
-		ru: 'Если хочешь только посмотреть на приложение, можешь кликнуть сюда и добавятся случайные данные.ы',
+		en: `Add random data`,
+		ru: 'Случайные данные',
 	},
 	randomizeConfirm: {
 		en: 'All your data will be lost!',

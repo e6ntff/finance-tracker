@@ -9,6 +9,7 @@ import {
 	DeleteOutlined,
 	FolderOpenOutlined,
 	LineChartOutlined,
+	PushpinOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
@@ -25,8 +26,8 @@ const Navigation: React.FC = observer(() => {
 
 	const { language } = userOptions;
 
-	const count = useMemo(() => {
-		return (
+	const count = useMemo(
+		() =>
 			Object.keys(list).reduce(
 				(acc: number, key: string) => (list[key].deleted ? ++acc : acc),
 				0
@@ -34,9 +35,9 @@ const Navigation: React.FC = observer(() => {
 			Object.keys(categories).reduce(
 				(acc: number, key: string) => (categories[key].deleted ? ++acc : acc),
 				0
-			)
-		);
-	}, [list, categories]);
+			),
+		[list, categories]
+	);
 
 	const items = [
 		{
@@ -68,6 +69,16 @@ const Navigation: React.FC = observer(() => {
 			key: paths.categories,
 			title: '',
 			icon: <FolderOpenOutlined />,
+		},
+		{
+			label: (
+				<NavLink to={paths.goals}>
+					{!isSmallScreen && languages.goals[language]}
+				</NavLink>
+			),
+			key: paths.goals,
+			title: '',
+			icon: <PushpinOutlined />,
 		},
 		{
 			label: (

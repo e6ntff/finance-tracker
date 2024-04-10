@@ -111,7 +111,15 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 				const currentItem = list[id];
 
 				return (
-					<Item key={id}>
+					<Item
+						key={id}
+						style={{
+							opacity:
+								selectedItemIds.length && !selectedItemIds.includes(id)
+									? '.5'
+									: '1',
+						}}
+					>
 						<Col span={1}>{CheckboxJSX(id, handleItemSelection)}</Col>
 						<Col span={16}>
 							{MyTitle(

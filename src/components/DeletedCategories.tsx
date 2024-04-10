@@ -114,7 +114,15 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 				const currentCategory = categories[id];
 
 				return (
-					<Item key={id}>
+					<Item
+						key={id}
+						style={{
+							opacity:
+								selectedItemIds.length && !selectedItemIds.includes(id)
+									? '.5'
+									: '1',
+						}}
+					>
 						<Col span={1}>{CheckboxJSX(id, handleCategorySelection)}</Col>
 						<Col span={16}>
 							{MyTitle(

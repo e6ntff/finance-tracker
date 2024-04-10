@@ -34,10 +34,19 @@ interface Props {
 	handleSelection?: (event: CheckboxChangeEvent) => void;
 	selected?: boolean;
 	disabled?: boolean;
+	transparent?: boolean;
 }
 
 const ListItem: React.FC<Props> = observer(
-	({ mode, initialItem, deleteAll, handleSelection, selected, disabled }) => {
+	({
+		mode,
+		initialItem,
+		deleteAll,
+		handleSelection,
+		selected,
+		disabled,
+		transparent,
+	}) => {
 		const { isSmallScreen } = userStore;
 		const { replaceItem, setLastDeletedItemIds, lastDeletedItemIds, list } =
 			listStore;
@@ -170,6 +179,7 @@ const ListItem: React.FC<Props> = observer(
 					<Item
 						style={{
 							pointerEvents: disabled ? 'none' : 'auto',
+							opacity: transparent ? '.5' : '1',
 						}}
 					>
 						<Col span={1}>
@@ -232,6 +242,7 @@ const ListItem: React.FC<Props> = observer(
 						style={{
 							inlineSize: isSmallScreen ? '10em' : '13em',
 							pointerEvents: disabled ? 'none' : 'auto',
+							opacity: transparent ? '.5' : '1',
 						}}
 					>
 						<Flex justify='center'>

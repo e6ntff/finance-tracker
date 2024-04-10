@@ -60,6 +60,9 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			handleSelection={handleSelection(value.id)}
 			initialItem={value}
 			selected={selectedItemIds.includes(value.id)}
+			transparent={
+				selectedItemIds.length !== 0 && !selectedItemIds.includes(value.id)
+			}
 		/>
 	));
 

@@ -268,10 +268,6 @@ const languages: { [key: string]: any } = {
 		en: 'Pick color',
 		ru: 'Выбрать цвет',
 	},
-	mayNotWorkText: {
-		en: `Sometimes app is not working, I'm still writing code and improving it. If you have an idea or even wanna hire me (!) text me on telegram: @e6ntff `,
-		ru: 'Если что-то не работает, значит я пишу код. Если есть идеи или хочешь меня на работу (O_o) пиши в телеграм: @e6ntff ',
-	},
 	randomize: {
 		en: `If you don't wanna use the app but only try it for a few minutes, you can click this button and add some random data`,
 		ru: 'Если хочешь только посмотреть на приложение, можешь кликнуть сюда и добавятся случайные данные.ы',

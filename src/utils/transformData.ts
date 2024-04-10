@@ -3,6 +3,7 @@ import {
 	Interval,
 	ItemWithSearch,
 	ListOptions,
+	ListType,
 	Value,
 	category,
 	language,
@@ -23,8 +24,14 @@ export const getFilteredListIds = (
 	language: language,
 	query: string
 ) => {
-	const { range, categoriesToFilterIds, sortingAlgorithm, isSortingReversed } =
-		options;
+	const {
+		range,
+		categoriesToFilterIds,
+		sortingAlgorithm,
+		isSortingReversed,
+		type,
+	} = options;
+
 	const filteredList: ItemWithSearch[] = Object.keys(list)
 		.map((key: string) => ({
 			id: key,
@@ -33,6 +40,7 @@ export const getFilteredListIds = (
 		.filter((value: ItemWithSearch) => {
 			const item = list[value.id];
 			return (
+				(item.type === type || type === 'all') &&
 				(value.overlaps ? value.overlaps.length : true) &&
 				!item.deleted &&
 				item.date >= range[0] &&
@@ -63,13 +71,17 @@ export const getListToShowOnCurrentPageIds = (
 
 export const getValuesForBarDiagram = (
 	list: { [key: string]: ExpenseItem },
+	type: ListType,
 	currency: string,
 	mode: Interval,
 	year: number
 ) => {
+	const keys = Object.keys(list).filter(
+		(key: string) => list[key].type === type
+	);
 	if (mode === 'year') {
 		const result: { [key: number]: number } = {};
-		Object.keys(list).forEach((key: string) => {
+		keys.forEach((key: string) => {
 			const resultKey: number = dayjs(list[key].date).year();
 			if (result[resultKey] === undefined) {
 				result[resultKey] = list[key].price[currency];
@@ -83,7 +95,7 @@ export const getValuesForBarDiagram = (
 		return result;
 	} else if (mode === 'month') {
 		const result: number[] = new Array(12).fill(0);
-		Object.keys(list).forEach((key: string) => {
+		keys.forEach((key: string) => {
 			if (dayjs(list[key].date).year() === year) {
 				const index: number = dayjs(list[key].date).month();
 				result[index] += list[key].price[currency];
@@ -97,14 +109,21 @@ export const getValuesForBarDiagram = (
 
 export const getValuesForPieDiagram = (
 	list: { [key: string]: ExpenseItem },
+	type: ListType,
 	range: number[],
 	currency: string
 ) => {
 	const values: Value[] = [];
-	Object.keys(list).forEach((key: string) => {
+
+	const keys = Object.keys(list).filter(
+		(key: string) => list[key].type === type
+	);
+
+	keys.forEach((key: string) => {
 		if (list[key].date > range[0] && list[key].date < range[1]) {
 			const categoryKey: number = Object.keys(values).findIndex(
-				(n: string) => values[Number(n)].categoryId === list[key].categoryId
+				(index: string) =>
+					values[Number(index)].categoryId === list[key].categoryId
 			);
 			if (categoryKey !== -1) {
 				values[categoryKey].value += list[key].price[currency];
@@ -124,12 +143,17 @@ export const getValuesForPieDiagram = (
 
 export const getTotalInCurrentRange = (
 	list: { [key: string]: ExpenseItem },
+	type: ListType,
 	range: number[],
 	currency: string
 ) =>
 	Math.floor(
 		Object.values(list).reduce((acc: number, item: ExpenseItem) => {
-			if (item.date >= range[0] && item.date <= range[1]) {
+			if (
+				item.date >= range[0] &&
+				item.date <= range[1] &&
+				item.type === type
+			) {
 				return acc + item.price[currency];
 			}
 			return acc;
@@ -163,7 +187,7 @@ export const getValuesByMonth = (
 	return values;
 };
 
-const expenses = [
+const expense = [
 	'Rent',
 	'Groceries',
 	'Utilities',
@@ -214,45 +238,112 @@ const expenses = [
 	'Property Taxes',
 ];
 
+const income = [
+	'Salary',
+	'Rent income',
+	'Investment income',
+	'Sales',
+	'Gifts',
+	'Freelancing',
+	'Dividends',
+	'Royalties',
+	'Commissions',
+	'Grants',
+];
+
 export const getRandomData = (
-	itemsValue: number,
-	categoriesValue: number,
-	deletedItemsValue: number,
-	deletedCategoriesValue: number,
+	itemsValue: { expense: number; income: number },
+	categoriesValue: { expense: number; income: number },
+	deletedItemsValue: { expense: number; income: number },
+	deletedCategoriesValue: { expense: number; income: number },
 	currencyRates: rates
 ) => {
-	const newItems: { [key: string]: ExpenseItem } = {};
-	const newCategories: { [key: string]: category } = {
+	const newItemsIncome: { [key: string]: ExpenseItem } = {};
+	const newItemsExpense: { [key: string]: ExpenseItem } = {};
+	const newCategoriesIncome: { [key: string]: category } = {
+		'0': constants.defaultCategory,
+	};
+	const newCategoriesExpense: { [key: string]: category } = {
 		'0': constants.defaultCategory,
 	};
 
-	new Array(categoriesValue)
+	new Array(categoriesValue.income)
 		.fill(undefined)
 		.forEach((_: undefined, index: number) => {
 			const id = uniqid();
 
-			const name = `Category ${index}`;
+			const name = `Income category ${index}`;
 
 			const color = getRandomColor();
 
-			newCategories[id] = {
+			newCategoriesIncome[id] = {
+				type: 'income',
 				name: name,
 				color: color,
-				deleted: categoriesValue - index - 1 < deletedCategoriesValue,
+				deleted:
+					categoriesValue.income - index - 1 < deletedCategoriesValue.income,
 			};
 		});
 
-	new Array(itemsValue)
+	new Array(categoriesValue.expense)
 		.fill(undefined)
 		.forEach((_: undefined, index: number) => {
-			const categoryId = getRandomCategoryId(newCategories);
+			const id = uniqid();
 
-			const title: string =
-				expenses[Math.floor(Math.random() * expenses.length)];
+			const name = `Expense category ${index}`;
+
+			const color = getRandomColor();
+
+			newCategoriesExpense[id] = {
+				type: 'expense',
+				name: name,
+				color: color,
+				deleted:
+					categoriesValue.expense - index - 1 < deletedCategoriesValue.expense,
+			};
+		});
+
+	new Array(itemsValue.expense)
+		.fill(undefined)
+		.forEach((_: undefined, index: number) => {
+			const categoryId = getRandomCategoryId(newCategoriesExpense);
+
+			const title: string = expense[Math.floor(Math.random() * expense.length)];
 
 			const date: number =
 				Math.random() *
 					(dayjs('2023-12-31').valueOf() - dayjs('2021-01-01').valueOf()) +
+				dayjs('2021-01-01').valueOf();
+
+			const prices = calculatePrices(
+				{ USD: Math.random() * 1501, EUR: 0, RUB: 0 },
+				currencyRates,
+				'USD'
+			);
+
+			const id = uniqid();
+
+			newItemsExpense[id] = {
+				type: 'expense',
+				deleted: index < deletedItemsValue.expense,
+				title: title,
+				price: prices,
+				categoryId: categoryId,
+				date: date,
+				createdAt: date,
+			};
+		});
+
+	new Array(itemsValue.income)
+		.fill(undefined)
+		.forEach((_: undefined, index: number) => {
+			const categoryId = getRandomCategoryId(newCategoriesIncome);
+
+			const title: string = income[Math.floor(Math.random() * income.length)];
+
+			const date: number =
+				Math.random() *
+					(dayjs('2023-12-31').valueOf() - dayjs('2020-01-01').valueOf()) +
 				dayjs('2020-01-01').valueOf();
 
 			const prices = calculatePrices(
@@ -263,8 +354,9 @@ export const getRandomData = (
 
 			const id = uniqid();
 
-			newItems[id] = {
-				deleted: index < deletedItemsValue,
+			newItemsIncome[id] = {
+				type: 'income',
+				deleted: index < deletedItemsValue.income,
 				title: title,
 				price: prices,
 				categoryId: categoryId,
@@ -273,5 +365,8 @@ export const getRandomData = (
 			};
 		});
 
-	return { items: newItems, categories: newCategories };
+	return {
+		items: { ...newItemsExpense, ...newItemsIncome },
+		categories: { ...newCategoriesExpense, ...newCategoriesIncome },
+	};
 };

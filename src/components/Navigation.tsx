@@ -10,6 +10,7 @@ import {
 	FolderOpenOutlined,
 	LineChartOutlined,
 	ShoppingCartOutlined,
+	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
@@ -51,13 +52,13 @@ const Navigation: React.FC = observer(() => {
 		},
 		{
 			label: (
-				<NavLink to={paths.expenses}>
-					{!isSmallScreen && languages.expenses[language]}
+				<NavLink to={paths.list}>
+					{!isSmallScreen && languages.list[language]}
 				</NavLink>
 			),
-			key: paths.expenses,
+			key: paths.list,
 			title: '',
-			icon: <ShoppingCartOutlined />,
+			icon: <UnorderedListOutlined />,
 		},
 		{
 			label: (

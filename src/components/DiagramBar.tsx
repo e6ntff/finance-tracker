@@ -18,6 +18,7 @@ import { getValuesForBarDiagram } from 'utils/transformData';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
 import { Interval } from 'settings/interfaces';
+import constants from 'settings/constants';
 Chart.register(Tooltip, BarController, BarElement, CategoryScale, LinearScale);
 
 interface Props {
@@ -31,31 +32,45 @@ const DiagramBar: React.FC<Props> = observer(({ mode, setMode }) => {
 	const { statsOptions, userOptions, setStatsRange } = optionsStore;
 	const { currency, language } = userOptions;
 
-	const { range } = statsOptions;
+	const { range, type } = statsOptions;
 
 	const values: number[] | { [key: string]: number } = useMemo(() => {
-		return getValuesForBarDiagram(list, currency, mode, dayjs(range[0]).year());
-	}, [currency, mode, range, list]);
+		return getValuesForBarDiagram(
+			list,
+			type,
+			currency,
+			mode,
+			dayjs(range[0]).year()
+		);
+	}, [currency, type, mode, range, list]);
 
 	const colors = useMemo(
 		() =>
-			mode === 'year'
-				? Object.keys(values).map((key: string) => {
-						const date = dayjs(key);
-						return date >= dayjs(range[0]).startOf('year') &&
-							date <= dayjs(range[1]).endOf('year')
-							? '#f00'
-							: '#f007';
-				  })
-				: Object.keys(values).map((key: string) => {
-						const month = Number(key);
-						return month >= dayjs(range[0]).startOf('month').month() &&
-							month <= dayjs(range[1]).endOf('month').month()
-							? '#f00'
-							: '#f005';
-				  }),
-
-		[range, values, mode]
+			Object.keys(values).map((key: string) => {
+				let period: number | dayjs.Dayjs = 0;
+				let isInRange: boolean = false;
+				if (mode === 'month') {
+					period = Number(key);
+					isInRange =
+						period >= dayjs(range[0]).startOf('month').month() &&
+						period <= dayjs(range[1]).endOf('month').month();
+				} else if (mode === 'year') {
+					period = dayjs(key);
+					isInRange =
+						period >= dayjs(range[0]).startOf('year') &&
+						period <= dayjs(range[1]).endOf('year');
+				}
+				if (type === 'expense') {
+					return isInRange
+						? constants.colors.expense
+						: constants.colors.expenseLight;
+				} else {
+					return isInRange
+						? constants.colors.income
+						: constants.colors.incomeLight;
+				}
+			}),
+		[range, values, mode, type]
 	);
 
 	const data = {

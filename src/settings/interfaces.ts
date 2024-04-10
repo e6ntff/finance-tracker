@@ -1,13 +1,19 @@
 import { theme } from 'antd';
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
+
+export type ListType = 'income' | 'expense' | 'all';
+
 export interface category {
+	type: ListType;
 	color: string;
 	name: string;
 	deleted: boolean;
 	deletedAt?: number;
 }
+
 export interface ExpenseItem {
+	type: ListType;
 	date: number;
 	title: string;
 	categoryId: string;
@@ -51,6 +57,7 @@ export type Interval = 'year' | 'month';
 export type currency = 'USD' | 'EUR' | 'RUB';
 
 export interface ListOptions {
+	type: ListType;
 	range: number[];
 	sortingAlgorithm: Sort;
 	isSortingReversed: boolean;
@@ -61,6 +68,7 @@ export interface ListOptions {
 }
 
 export interface StatsOptions {
+	type: ListType;
 	range: number[];
 }
 

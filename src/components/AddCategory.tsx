@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { category } from '../settings/interfaces';
+import { ListType, category } from '../settings/interfaces';
 import constants from 'settings/constants';
 import ColorPicker, { Color } from 'antd/es/color-picker';
 import { Button, Flex } from 'antd';
@@ -8,6 +8,7 @@ import { categoryStore } from 'utils/categoryStore';
 import { BgColorsOutlined, CheckOutlined } from '@ant-design/icons';
 import { userStore } from 'utils/userStore';
 import Search from 'antd/es/input/Search';
+import TypeSelect from './TypeSelect';
 
 const AddCategory: React.FC = observer(() => {
 	const { addCategory } = categoryStore;
@@ -38,6 +39,16 @@ const AddCategory: React.FC = observer(() => {
 		[setCurrentCategory]
 	);
 
+	const handleTypeChange = useCallback(
+		(value: ListType) => {
+			setCurrentCategory((prevCategory) => ({
+				...prevCategory,
+				type: value,
+			}));
+		},
+		[setCurrentCategory]
+	);
+
 	const clearCurrentCategory = useCallback(() => {
 		setCurrentCategory(constants.defaultCategory);
 	}, [setCurrentCategory]);
@@ -59,13 +70,21 @@ const AddCategory: React.FC = observer(() => {
 					</Button>
 				}
 				addonBefore={
-					<ColorPicker
-						value={currentCategory.color}
-						format='hex'
-						onChange={handleColorChange}
-					>
-						<BgColorsOutlined style={{ scale: isSmallScreen ? '1' : '1.25' }} />
-					</ColorPicker>
+					<Flex gap={isSmallScreen ? 8 : 16}>
+						<TypeSelect
+							type={currentCategory.type}
+							onChange={handleTypeChange}
+						/>
+						<ColorPicker
+							value={currentCategory.color}
+							format='hex'
+							onChange={handleColorChange}
+						>
+							<BgColorsOutlined
+								style={{ scale: isSmallScreen ? '1' : '1.25' }}
+							/>
+						</ColorPicker>
+					</Flex>
 				}
 				size={isSmallScreen ? 'small' : 'middle'}
 				type='text'

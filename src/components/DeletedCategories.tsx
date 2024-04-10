@@ -127,6 +127,7 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 						<Col span={16}>
 							{MyTitle(
 								currentCategory?.name,
+								currentCategory?.type,
 								isSmallScreen,
 								language,
 								false,

@@ -1,6 +1,7 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import {
 	ListOptions,
+	ListType,
 	Mode,
 	Sort,
 	StatsOptions,
@@ -70,6 +71,14 @@ class OptionsStore {
 			theme: theme,
 			themeAlgorithm: theme === 'default' ? defaultAlgorithm : darkAlgorithm,
 		});
+	};
+
+	setListType = (type: ListType) => {
+		this.setListOptions({ ...this.listOptions, type: type });
+	};
+
+	setStatsType = (type: ListType) => {
+		this.setStatsOptions({ ...this.statsOptions, type: type });
 	};
 
 	setLanguage = (language: language) => {

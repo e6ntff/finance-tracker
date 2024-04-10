@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import calculatePrices from '../utils/calculatePrices';
-import { ExpenseItem } from '../settings/interfaces';
+import { ExpenseItem, ListType } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
@@ -14,6 +14,7 @@ import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
 import ImageUpload from './ImageUpload';
 import { convertToJpeg } from 'utils/utils';
+import TypeSelect from './TypeSelect';
 
 interface Props {
 	opened: boolean;
@@ -103,6 +104,16 @@ const ItemModal: React.FC<Props> = observer(
 			[setCurrentItem]
 		);
 
+		const handleTypeChange = useCallback(
+			(type: ListType) => {
+				setCurrentItem((prevItem: ExpenseItem) => ({
+					...prevItem,
+					type: type,
+				}));
+			},
+			[setCurrentItem]
+		);
+
 		useEffect(() => {
 			const submitItemWithEnter = (event: KeyboardEvent) => {
 				if (event.key === 'Enter' && opened) {
@@ -159,6 +170,7 @@ const ItemModal: React.FC<Props> = observer(
 		const CategoryJSX = (
 			<CategorySelect
 				id={currentItem.categoryId}
+				type={currentItem.type}
 				onChange={handleCategoryChange}
 			/>
 		);
@@ -190,6 +202,12 @@ const ItemModal: React.FC<Props> = observer(
 					layout='vertical'
 					style={{ inlineSize: '100%' }}
 				>
+					<Form.Item label={languages.type[language]}>
+						<TypeSelect
+							type={currentItem.type}
+							onChange={handleTypeChange}
+						/>
+					</Form.Item>
 					<Form.Item label={languages.title[language]}>{TitleJSX}</Form.Item>
 					<Form.Item label={languages.price[language]}>
 						<Row>

@@ -10,7 +10,7 @@ import { optionsStore } from 'utils/optionsStore';
 import { debounce } from 'lodash';
 import constants from 'settings/constants';
 
-const Expenses: React.FC = observer(() => {
+const List: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 	const { list } = listStore;
 	const { listOptions, userOptions, handleModeChanging, handlePageChanging } =
@@ -84,4 +84,4 @@ const Expenses: React.FC = observer(() => {
 	);
 });
 
-export default Expenses;
+export default List;

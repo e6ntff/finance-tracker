@@ -45,7 +45,13 @@ const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
 	const [currentStep, setCurrentStep] = useState<number>(-1);
 
 	useEffect(() => {
-		const data = getRandomData(10, 10, 5, 3, currencyRates);
+		const data = getRandomData(
+			{ expense: 5, income: 3 },
+			{ expense: 5, income: 3 },
+			{ expense: 3, income: 1 },
+			{ expense: 3, income: 1 },
+			currencyRates
+		);
 		setListTemplate(data.items);
 		setCategoriesTemplate(data.categories);
 	}, [currencyRates, setCategoriesTemplate, setListTemplate]);

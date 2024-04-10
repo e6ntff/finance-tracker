@@ -11,7 +11,7 @@ import {
 	Typography,
 } from 'antd';
 import Title from 'antd/es/typography/Title';
-import { category, currencies, language } from 'settings/interfaces';
+import { ListType, category, currencies, language } from 'settings/interfaces';
 import languages from 'settings/languages';
 import dayjs from 'dayjs';
 import { getSymbolAndPrice } from 'utils/utils';
@@ -24,6 +24,7 @@ import { TooltipPlacement } from 'antd/es/tooltip';
 
 const getTitleComponents = (
 	title: string,
+	type: ListType,
 	isInOverlaps: boolean,
 	isSmallScreen: boolean,
 	editable: any,
@@ -33,10 +34,11 @@ const getTitleComponents = (
 		<>&nbsp;</>
 	) : (
 		<Typography.Text
+			type={type === 'expense' ? 'danger' : 'success'}
 			style={{ fontSize: isSmallScreen ? '1em' : '1.25em' }}
 			key={index || 0}
 			editable={editable}
-			// ellipsis
+			ellipsis
 			strong={isInOverlaps}
 		>
 			{title}
@@ -46,6 +48,7 @@ const getTitleComponents = (
 
 export const MyTitle = (
 	title: string,
+	type: ListType,
 	isSmallScreen: boolean,
 	language: language,
 	editable: any,
@@ -58,6 +61,7 @@ export const MyTitle = (
 				);
 				return getTitleComponents(
 					char,
+					type,
 					isInOverlaps,
 					isSmallScreen,
 					editable,
@@ -67,6 +71,7 @@ export const MyTitle = (
 		: [
 				getTitleComponents(
 					title || languages.noTitle[language],
+					type,
 					false,
 					isSmallScreen,
 					editable

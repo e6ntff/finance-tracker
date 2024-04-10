@@ -1,4 +1,4 @@
-import { Col, Flex, List, Modal, Statistic, Typography } from 'antd';
+import { Col, Flex, List, Modal, Statistic } from 'antd';
 import Item from 'antd/es/list/Item';
 import { observer } from 'mobx-react-lite';
 import React, { memo, useCallback } from 'react';
@@ -7,10 +7,9 @@ import dayjs from 'dayjs';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
-import Title from 'antd/es/typography/Title';
 import constants from 'settings/constants';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyIconWithTooltip } from './Items';
+import { MyIconWithTooltip, MyTitle } from './Items';
 import { DeleteOutlined, ExportOutlined } from '@ant-design/icons';
 import ListItem from './ListItem';
 
@@ -69,23 +68,12 @@ const ItemsModal: React.FC<Props> = observer(
 											opacity: !list[key].title ? '.5' : '1',
 										}}
 									>
-										{isSmallScreen ? (
-											<Typography.Text
-												strong
-												ellipsis
-											>
-												{list[key].title ||
-													languages.noTitle[userOptions.language]}
-											</Typography.Text>
-										) : (
-											<Title
-												ellipsis
-												level={3}
-												style={{ margin: 0 }}
-											>
-												{list[key].title ||
-													languages.noTitle[userOptions.language]}
-											</Title>
+										{MyTitle(
+											list[key].title,
+											list[key].type,
+											isSmallScreen,
+											language,
+											false
 										)}
 									</Flex>
 								</Col>
@@ -96,7 +84,8 @@ const ItemsModal: React.FC<Props> = observer(
 											mode='grid'
 										/>,
 										isSmallScreen,
-										ExportOutlined, true
+										ExportOutlined,
+										true
 									)}
 								</Col>
 								<Col span={2}>

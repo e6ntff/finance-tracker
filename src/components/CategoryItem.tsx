@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { category } from '../settings/interfaces';
+import { ListType, category } from '../settings/interfaces';
 import { categoryStore } from 'utils/categoryStore';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
@@ -10,7 +10,13 @@ import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import ItemsModal from './ItemsModal';
 import { MyIconWithTooltip, MyImage, MyTitle } from './Items';
-import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import {
+	DeleteOutlined,
+	FallOutlined,
+	InfoCircleOutlined,
+	RiseOutlined,
+} from '@ant-design/icons';
+import constants from 'settings/constants';
 
 interface Props {
 	initialCategoryId: string;
@@ -26,7 +32,7 @@ const CategoryItem: React.FC<Props> = observer(
 			setLastDeletedCategoryIds,
 			lastDeletedCategoryIds,
 		} = categoryStore;
-		const { list } = listStore;
+		const { list, setUserList } = listStore;
 		const { isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
 
@@ -95,6 +101,34 @@ const CategoryItem: React.FC<Props> = observer(
 			[setCurrentCategory, updateCurrentCategory]
 		);
 
+		const fixList = useCallback(
+			(categoryId: string, type: ListType) => {
+				const fixedList = list;
+				Object.keys(list).forEach((key: string) => {
+					if (list[key].categoryId === categoryId && list[key].type !== type) {
+						fixedList[key].categoryId = '0';
+					}
+				});
+				setUserList(fixedList);
+			},
+			[list, setUserList]
+		);
+
+		const handleTypeChange = useCallback(
+			(value: ListType) => {
+				setCurrentCategory((prevCategory) => {
+					const newCategory: category = {
+						...prevCategory,
+						type: value,
+					};
+					fixList(initialCategoryId, newCategory.type);
+					updateCurrentCategory(newCategory);
+					return newCategory;
+				});
+			},
+			[setCurrentCategory, initialCategoryId, updateCurrentCategory, fixList]
+		);
+
 		const ColorPickerJSX = disabled ? (
 			MyImage(currentCategory.color, isSmallScreen, language)
 		) : (
@@ -138,6 +172,19 @@ const CategoryItem: React.FC<Props> = observer(
 			</Flex>
 		);
 
+		const TypeChangeIconJSX =
+			currentCategory.type === 'income' ? (
+				<RiseOutlined
+					style={{ color: constants.colors.income }}
+					onClick={() => handleTypeChange('expense')}
+				/>
+			) : (
+				<FallOutlined
+					style={{ color: constants.colors.expense }}
+					onClick={() => handleTypeChange('income')}
+				/>
+			);
+
 		return (
 			<>
 				<Card
@@ -145,9 +192,11 @@ const CategoryItem: React.FC<Props> = observer(
 						inlineSize: isSmallScreen ? '8em' : '12em',
 						pointerEvents: disabled ? 'none' : 'auto',
 					}}
+					extra={TypeChangeIconJSX}
 					size='small'
 					title={MyTitle(
 						currentCategory.name,
+						currentCategory.type,
 						isSmallScreen,
 						language,
 						disabled

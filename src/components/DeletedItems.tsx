@@ -124,6 +124,7 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 						<Col span={16}>
 							{MyTitle(
 								currentItem?.title,
+								currentItem?.type,
 								isSmallScreen,
 								language,
 								false,

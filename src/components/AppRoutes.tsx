@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import paths from 'settings/paths';
 import LargeSpin from './LargeSpin';
 
-const Expenses = lazy(() => import('../pages/Expenses'));
+const Expenses = lazy(() => import('../pages/List'));
 const Stats = lazy(() => import('../pages/Stats'));
 const Welcome = lazy(() => import('../pages/Welcome'));
 const Categories = lazy(() => import('../pages/Categories'));
@@ -20,7 +20,7 @@ const AppRoutes: React.FC = observer(() => {
 				path='/'
 				element={
 					logged ? (
-						<Navigate to={paths.expenses} />
+						<Navigate to={paths.list} />
 					) : (
 						<Suspense fallback={<LargeSpin />}>
 							<Welcome />
@@ -41,7 +41,7 @@ const AppRoutes: React.FC = observer(() => {
 				}
 			/>
 			<Route
-				path={paths.expenses}
+				path={paths.list}
 				element={
 					logged ? (
 						<Suspense fallback={<LargeSpin />}>

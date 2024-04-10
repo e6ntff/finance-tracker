@@ -3,13 +3,13 @@ import paths from './paths';
 
 const tour = [
 	{
-		page: paths.expenses,
+		page: paths.list,
 	},
 	{
-		page: paths.expenses,
+		page: paths.list,
 	},
 	{
-		page: paths.expenses,
+		page: paths.list,
 	},
 	{ page: paths.categories },
 	{ page: paths.trash },
@@ -17,7 +17,7 @@ const tour = [
 	{ page: paths.trash },
 	{ page: paths.stats },
 	{ page: paths.stats },
-	{ page: paths.expenses },
+	{ page: paths.list },
 ].map((item: any, index: number) => ({
 	...item,
 	step: languages.tour[index],

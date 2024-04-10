@@ -3,9 +3,9 @@ const languages: { [key: string]: any } = {
 		en: 'Stats',
 		ru: 'Статистика',
 	},
-	expenses: {
-		en: 'Expenses',
-		ru: 'Расходы',
+	list: {
+		en: 'List',
+		ru: 'Список',
 	},
 	categories: {
 		en: 'Categories',
@@ -125,6 +125,7 @@ const languages: { [key: string]: any } = {
 		en: `● 6 - 16 symbols`,
 		ru: `● 6 - 16 символов`,
 	},
+	type: { en: 'Type', ru: 'Тип' },
 	noTitle: {
 		en: 'No title',
 		ru: 'Нет названия',

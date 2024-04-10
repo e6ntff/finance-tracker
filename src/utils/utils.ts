@@ -91,14 +91,16 @@ export const getRandomColor = () => {
 	return `#${r}${g}${b}`;
 };
 
-export const getRandomCategoryId = (categories: {
+export const getRandomCategoryId: (categories: {
 	[key: string]: category;
-}) => {
+}) => string = (categories: { [key: string]: category }) => {
 	const ids = Object.keys(categories);
 
 	const randomId = ids[Math.floor(Math.random() * ids.length)];
 
-	return categories[randomId].deleted ? '0' : randomId;
+	return categories[randomId].deleted || randomId === '0'
+		? getRandomCategoryId(categories)
+		: randomId;
 };
 
 export const search = (query: string, string: string) => {

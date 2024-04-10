@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Flex, Slider } from 'antd';
 import { listStore } from 'utils/listStore';
-import { ExpenseItem } from 'settings/interfaces';
+import { ExpenseItem, ListType } from 'settings/interfaces';
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
 
@@ -31,19 +31,22 @@ dayjs.extend(minMax);
 
 interface Props {
 	range: number[];
+	type: ListType;
 	setRange: (arg0: number[]) => void;
 }
 
-const YearSlider: React.FC<Props> = observer(({ range, setRange }) => {
+const YearSlider: React.FC<Props> = observer(({ range, type, setRange }) => {
 	const { list } = listStore;
 	const { defaultRange, setDefaultRange } = optionsStore;
 
 	const [value, setValue] = useState(defaultRange);
 
 	const sliderRange: [number, number] = useMemo(() => {
-		const dates = Object.values(list).map((item: ExpenseItem) => item.date);
+		const dates = Object.values(list)
+			.filter((item: ExpenseItem) => item.type === type || type === 'all')
+			.map((item: ExpenseItem) => item.date);
 		return [Math.min(...dates), Math.max(...dates)];
-	}, [list]);
+	}, [list, type]);
 
 	const marks: { [key: number]: string } = useMemo(() => {
 		const start = dayjs(sliderRange[0]).startOf('day');

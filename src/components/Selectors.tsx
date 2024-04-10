@@ -21,6 +21,7 @@ import { optionsStore } from 'utils/optionsStore';
 import { MyIconWithTooltip, MySearch } from './Items';
 import { ReloadOutlined } from '@ant-design/icons';
 import languages from 'settings/languages';
+import TypeSelect from './TypeSelect';
 
 interface Props {
 	total: number;
@@ -39,6 +40,7 @@ const Selectors: React.FC<Props> = observer(
 			resetListOptions,
 			handlePageChanging,
 			setRange,
+			setListType,
 		} = optionsStore;
 
 		const {
@@ -48,6 +50,7 @@ const Selectors: React.FC<Props> = observer(
 			pageSize,
 			currentPage,
 			sortingAlgorithm,
+			type,
 		} = listOptions;
 
 		const resetAll = useCallback(() => {
@@ -110,6 +113,11 @@ const Selectors: React.FC<Props> = observer(
 							<NewItemButton />
 							<CategoriesSelect />
 							<ModeSelect />
+							<TypeSelect
+								type={type}
+								onChange={setListType}
+								extra
+							/>
 						</Flex>
 						<Flex gap={16}>
 							<SortSelect />
@@ -126,6 +134,7 @@ const Selectors: React.FC<Props> = observer(
 					</Flex>
 					<YearSlider
 						range={range}
+						type={type}
 						setRange={setRange}
 					/>
 				</Flex>

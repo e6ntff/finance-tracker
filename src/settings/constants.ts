@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
+import { ListType } from './interfaces';
 
 const pageSizeOptions = [20, 40, 80];
 
 const defaultCategory = {
+	type: 'all' as ListType,
 	color: '#cccccc',
 	name: '-',
 	deleted: false,
@@ -27,9 +29,10 @@ const constants = {
 	defaultCategory: defaultCategory,
 	defaultData: {
 		list: {},
-		categories: { 0: defaultCategory },
+		categories: { '0': defaultCategory },
 	},
 	emptyItem: {
+		type: 'expense' as ListType,
 		title: '',
 		date: dayjs().valueOf(),
 		categoryId: '0',
@@ -41,6 +44,12 @@ const constants = {
 		createdAt: 0,
 		updatedAt: 0,
 		deleted: false,
+	},
+	colors: {
+		expense: '#f00',
+		income: '#0a0',
+		expenseLight: '#f005',
+		incomeLight: '#0a05',
 	},
 };
 

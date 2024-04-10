@@ -1,6 +1,6 @@
 const paths = {
 	stats: '/stats',
-	expenses: '/expenses',
+	list: '/list',
 	categories: '/categories',
 	trash: '/trash'
 };

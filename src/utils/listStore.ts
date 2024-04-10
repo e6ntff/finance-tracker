@@ -20,11 +20,11 @@ class ListStore {
 		this.list = list;
 	};
 
-	setListTemplate = (template: typeof this.userList) => {
+	setListTemplate = (template: typeof this.list) => {
 		this.listTemplate = template;
 	};
 
-	setUserList = (list: typeof this.userList, save: boolean = true) => {
+	setUserList = (list: typeof this.list, save: boolean = true) => {
 		this.userList = { ...list } || {};
 		this.userStore.updateAllData({ list: this.userList });
 		save && this.userStore.pushDataToSaving();

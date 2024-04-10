@@ -143,30 +143,6 @@ const ListItem: React.FC<Props> = observer(
 			</Flex>
 		);
 
-		const ImageAndDateJSX = (
-			<Flex align='center'>
-				{MyImage(
-					currentItem.image,
-					isSmallScreen,
-					language,
-					toggleIsModalOpened
-				)}
-				{MyDate(currentItem.date, isSmallScreen)}
-			</Flex>
-		);
-
-		const CheckboxAndTitle = (
-			<Flex>
-				{MyTitle(
-					currentItem.title,
-					isSmallScreen,
-					language,
-					false,
-					initialItem.overlaps
-				)}
-			</Flex>
-		);
-
 		return (
 			<>
 				<ItemModal
@@ -191,18 +167,27 @@ const ListItem: React.FC<Props> = observer(
 								deleteAll
 							)}
 						</Col>
-						<Col>{ImageAndDateJSX}</Col>
-						<Col span={8}>
+						<Col span={1}>
+							{MyImage(
+								currentItem.image,
+								isSmallScreen,
+								language,
+								toggleIsModalOpened
+							)}
+						</Col>
+						<Col span={3}>{MyDate(currentItem.date, isSmallScreen)}</Col>
+						<Col span={7}>
 							{MyTitle(
 								currentItem.title,
+								currentItem.type,
 								isSmallScreen,
 								language,
 								false,
 								initialItem.overlaps
 							)}
 						</Col>
-						<Col span={3}>{MyCategory(categories[currentItem.categoryId])}</Col>
-						<Col span={5}>
+						<Col span={4}>{MyCategory(categories[currentItem.categoryId])}</Col>
+						<Col span={4}>
 							{MyPrice(currentItem.price, isSmallScreen, currency)}
 						</Col>
 						<Col span={1}>
@@ -237,7 +222,14 @@ const ListItem: React.FC<Props> = observer(
 						styles={{ title: { fontWeight: '400' } }}
 						size='small'
 						bordered
-						title={CheckboxAndTitle}
+						title={MyTitle(
+							currentItem.title,
+							currentItem.type,
+							isSmallScreen,
+							language,
+							false,
+							initialItem.overlaps
+						)}
 						actions={[ActionsJSX]}
 						style={{
 							inlineSize: isSmallScreen ? '10em' : '13em',
@@ -251,7 +243,15 @@ const ListItem: React.FC<Props> = observer(
 								align='stretch'
 								gap={4}
 							>
-								{ImageAndDateJSX}
+								<Flex align='center'>
+									{MyImage(
+										currentItem.image,
+										isSmallScreen,
+										language,
+										toggleIsModalOpened
+									)}
+									{MyDate(currentItem.date, isSmallScreen)}
+								</Flex>
 								{MyCategory(categories[currentItem.categoryId])}
 							</Flex>
 						</Flex>

@@ -1,5 +1,10 @@
-import { DeleteOutlined, UndoOutlined } from '@ant-design/icons';
-import { Button, Flex, Popconfirm, Segmented, Tooltip } from 'antd';
+import {
+	DeleteOutlined,
+	FolderOpenOutlined,
+	UndoOutlined,
+	UnorderedListOutlined,
+} from '@ant-design/icons';
+import { Flex, Popconfirm, Segmented } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, {
 	ChangeEvent,
@@ -14,7 +19,7 @@ import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
-import { MySearch } from './Items';
+import { MyIconWithTooltip, MySearch } from './Items';
 
 interface Props {
 	query: string;
@@ -69,57 +74,53 @@ const TrashPanel: React.FC<Props> = observer(
 
 		return (
 			<Flex
-				vertical
-				gap={8}
-				align='end'
+				align='center'
+				gap={16}
+				ref={tourRefs[5]}
+				style={{ inlineSize: '100%' }}
 			>
-				<Flex
-					gap={16}
-					ref={tourRefs[5]}
-					style={{ inlineSize: '100%' }}
+				<Popconfirm
+					title={languages.deleteAllConfirm[language]}
+					onConfirm={deleteAll}
 				>
-					<Tooltip title={languages.deleteAll[language]}>
-						<Popconfirm
-							title={languages.deleteAllConfirm[language]}
-							onConfirm={deleteAll}
-						>
-							<Button size={isSmallScreen ? 'small' : 'middle'}>
-								<DeleteOutlined
-									style={{ scale: isSmallScreen ? '1' : '1.5' }}
-								/>
-							</Button>
-						</Popconfirm>
-					</Tooltip>
-					<Tooltip title={languages.restoreAll[language]}>
-						<Popconfirm
-							title={languages.restoreAllConfirm[language]}
-							onConfirm={restoreAll}
-						>
-							<Button size={isSmallScreen ? 'small' : 'middle'}>
-								<UndoOutlined style={{ scale: isSmallScreen ? '1' : '1.5' }} />
-							</Button>
-						</Popconfirm>
-					</Tooltip>
-					<Flex style={{ inlineSize: isSmallScreen ? '100%' : '50%' }}>
-						{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
-					</Flex>
-				</Flex>
+					{MyIconWithTooltip(
+						languages.deleteAll[language],
+						isSmallScreen,
+						DeleteOutlined,
+						false
+					)}
+				</Popconfirm>
+
+				<Popconfirm
+					title={languages.restoreAllConfirm[language]}
+					onConfirm={restoreAll}
+				>
+					{MyIconWithTooltip(
+						languages.restoreAll[language],
+						isSmallScreen,
+						UndoOutlined,
+						false
+					)}
+				</Popconfirm>
 				{isSmallScreen && (
 					<Segmented
 						onChange={setIsExpenses}
 						value={isExpenses}
 						options={[
 							{
-								label: languages.expenses[language],
+								label: <UnorderedListOutlined />,
 								value: true,
 							},
 							{
-								label: languages.categories[language],
+								label: <FolderOpenOutlined />,
 								value: false,
 							},
 						]}
 					/>
 				)}
+				<Flex style={{ inlineSize: isSmallScreen ? '100%' : '50%' }}>
+					{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
+				</Flex>
 			</Flex>
 		);
 	}

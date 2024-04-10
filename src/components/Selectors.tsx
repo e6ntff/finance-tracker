@@ -103,13 +103,13 @@ const Selectors: React.FC<Props> = observer(
 			>
 				<Flex
 					vertical
-					gap={32}
+					gap={16}
 				>
 					<Flex
-						gap={16}
+						gap={isSmallScreen ? 8 : 16}
 						vertical={isSmallScreen}
 					>
-						<Flex gap={16}>
+						<Flex gap={isSmallScreen ? 8 : 16}>
 							<NewItemButton />
 							<CategoriesSelect />
 							<ModeSelect />
@@ -119,7 +119,7 @@ const Selectors: React.FC<Props> = observer(
 								extra
 							/>
 						</Flex>
-						<Flex gap={16}>
+						<Flex gap={isSmallScreen ? 8 : 16}>
 							<SortSelect />
 							{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
 							{isSettingsChanged &&

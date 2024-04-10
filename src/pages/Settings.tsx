@@ -12,12 +12,14 @@ import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
 import { useNavigate } from 'react-router-dom';
 import tour from 'settings/tour';
+import RandomizeButton from 'components/RandomizeButton';
+import LogOutButton from 'components/LogOutButton';
 
 interface Props {
-	toggleOpened: () => void;
+	close: () => void;
 }
 
-const Settings: React.FC<Props> = observer(({ toggleOpened }) => {
+const Settings: React.FC<Props> = observer(({ close }) => {
 	const navigate = useNavigate();
 	const { userOptions, setCurrency, setTheme, setDeleteConfirmation } =
 		optionsStore;
@@ -40,9 +42,9 @@ const Settings: React.FC<Props> = observer(({ toggleOpened }) => {
 
 	const startTour = useCallback(() => {
 		setIsTourStarted(true);
-		toggleOpened();
+		close();
 		navigate(tour[0].page);
-	}, [setIsTourStarted, toggleOpened, navigate]);
+	}, [setIsTourStarted, close, navigate]);
 
 	return (
 		<Flex
@@ -95,6 +97,12 @@ const Settings: React.FC<Props> = observer(({ toggleOpened }) => {
 							{languages.removeAll[language]}
 						</Button>
 					</Popconfirm>
+				</Form.Item>
+				<Form.Item>
+					<RandomizeButton />
+				</Form.Item>
+				<Form.Item>
+					<LogOutButton close={close}/>
 				</Form.Item>
 			</Form>
 		</Flex>

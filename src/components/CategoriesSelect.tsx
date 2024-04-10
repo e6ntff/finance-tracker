@@ -51,7 +51,7 @@ const CategoriesSelect: React.FC = observer(() => {
 				mode='multiple'
 				showSearch={false}
 				tagRender={(props) => tagRender(props, categories)}
-				style={{ minInlineSize: '10em' }}
+				style={{ minInlineSize: '7.5em' }}
 				value={listOptions.categoriesToFilterIds}
 				onChange={handleCategoriesToFilterChange}
 				options={Object.keys(categories)

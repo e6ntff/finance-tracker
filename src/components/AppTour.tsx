@@ -18,10 +18,11 @@ import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
 
 interface Props {
-	toggleOpened: () => void;
+	open: () => void;
+	close: () => void;
 }
 
-const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
+const AppTour: React.FC<Props> = observer(({ open, close }) => {
 	const navigate = useNavigate();
 	const stepId = useRef<NodeJS.Timeout>();
 	const {
@@ -130,7 +131,9 @@ const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
 							const nextStep = ++prevStep;
 							nextStep === steps.length && endTour();
 							navigate(tour[nextStep].page);
-							(nextStep === 6 || nextStep === 7) && toggleOpened();
+							nextStep === 6 && open();
+							nextStep === 7 && close();
+
 							return nextStep;
 						}),
 					constants.tourPeriod
@@ -138,7 +141,7 @@ const AppTour: React.FC<Props> = observer(({ toggleOpened }) => {
 			}
 			setCurrentStep(step);
 		},
-		[setCurrentStep, endTour, navigate, toggleOpened, steps.length]
+		[setCurrentStep, endTour, navigate, open, close, steps.length]
 	);
 
 	return (

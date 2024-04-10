@@ -11,8 +11,12 @@ const SettingsPanel: React.FC = observer(() => {
 
 	const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
 
-	const toggleIsMenuOpened = useCallback(() => {
-		setIsMenuOpened((prevValue: boolean) => !prevValue);
+	const openMenu = useCallback(() => {
+		setIsMenuOpened(true);
+	}, [setIsMenuOpened]);
+
+	const closeMenu = useCallback(() => {
+		setIsMenuOpened(false);
 	}, [setIsMenuOpened]);
 
 	return (
@@ -20,16 +24,19 @@ const SettingsPanel: React.FC = observer(() => {
 			<Drawer
 				destroyOnClose
 				open={isMenuOpened}
-				onClose={toggleIsMenuOpened}
+				onClose={closeMenu}
 			>
-				<Settings toggleOpened={toggleIsMenuOpened} />
+				<Settings close={closeMenu} />
 			</Drawer>
 			<FloatButton
 				type={userOptions.theme === 'default' ? 'default' : 'primary'}
-				onClick={toggleIsMenuOpened}
+				onClick={openMenu}
 				icon={<SettingOutlined />}
 			/>
-			<AppTour toggleOpened={toggleIsMenuOpened} />
+			<AppTour
+				open={openMenu}
+				close={closeMenu}
+			/>
 		</>
 	);
 });

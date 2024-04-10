@@ -6,12 +6,15 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
-import { Avatar, Tooltip } from 'antd';
-import { LogoutOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
 
-const LogOutButton: React.FC = observer(() => {
+interface Props {
+	close: () => void;
+}
+
+const LogOutButton: React.FC<Props> = observer(({ close }) => {
 	const { setLogged, isSmallScreen, setLoading } = userStore;
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
@@ -26,6 +29,7 @@ const LogOutButton: React.FC = observer(() => {
 			setUserList({});
 			setUserCategories({ 0: constants.defaultCategory });
 			resetOptions();
+			close();
 			sessionStorage.clear();
 		} catch (error: any) {
 			alert(error.message);
@@ -37,17 +41,16 @@ const LogOutButton: React.FC = observer(() => {
 		setLogged,
 		resetOptions,
 		setLoading,
+		close,
 	]);
 
 	return (
-		<Tooltip title={languages.logOut[userOptions.language]}>
-			<Avatar
-				style={{ background: '#0000', cursor: 'pointer' }}
-				size={isSmallScreen ? 'small' : 'default'}
-				onClick={logOut}
-				icon={<LogoutOutlined />}
-			/>
-		</Tooltip>
+		<Button
+			size={isSmallScreen ? 'small' : 'middle'}
+			onClick={logOut}
+		>
+			{languages.logOut[userOptions.language]}
+		</Button>
 	);
 });
 

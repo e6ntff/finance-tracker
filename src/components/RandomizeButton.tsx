@@ -1,5 +1,4 @@
-import { DatabaseOutlined } from '@ant-design/icons';
-import { Avatar, Popconfirm, Tooltip } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback } from 'react';
 import languages from 'settings/languages';
@@ -36,19 +35,14 @@ const RandomizeButton: React.FC = observer(() => {
 	}, [setUserList, setUserCategories, currencyRates]);
 
 	return (
-		<Tooltip title={languages.randomize[language]}>
-			<Popconfirm
-				title={languages.randomizeConfirm[language]}
-				onConfirm={addRandomData}
-			>
-				<Avatar
-					size={isSmallScreen ? 'small' : 'default'}
-					style={{ cursor: 'pointer', background: '#0000' }}
-				>
-					<DatabaseOutlined />
-				</Avatar>
-			</Popconfirm>
-		</Tooltip>
+		<Popconfirm
+			title={languages.randomizeConfirm[language]}
+			onConfirm={addRandomData}
+		>
+			<Button size={isSmallScreen ? 'small' : 'middle'}>
+				{languages.randomize[language]}
+			</Button>
+		</Popconfirm>
 	);
 });
 

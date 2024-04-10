@@ -9,7 +9,6 @@ import {
 	DeleteOutlined,
 	FolderOpenOutlined,
 	LineChartOutlined,
-	ShoppingCartOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';

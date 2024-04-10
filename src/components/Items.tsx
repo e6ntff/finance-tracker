@@ -10,7 +10,6 @@ import {
 	Tooltip,
 	Typography,
 } from 'antd';
-import Title from 'antd/es/typography/Title';
 import { ListType, category, currencies, language } from 'settings/interfaces';
 import languages from 'settings/languages';
 import dayjs from 'dayjs';
@@ -188,23 +187,19 @@ export const MyCategory = (category: category) => (
 
 export const MyPrice = (
 	price: currencies,
+	type: ListType,
 	isSmallScreen: boolean,
 	currency: string
 ) => (
 	<Flex justify='center'>
-		{isSmallScreen ? (
-			<Typography.Text strong>
-				{getSymbolAndPrice(currency)}
-				{Math.round(price[currency])}
-			</Typography.Text>
-		) : (
-			<Title
-				level={3}
-				style={{ margin: 0 }}
-			>
-				{getSymbolAndPrice(currency, price[currency])}
-			</Title>
-		)}
+		<Typography.Text
+			strong
+			type={type === 'expense' ? 'danger' : 'success'}
+			style={{ fontSize: isSmallScreen ? '1.25em' : '1.5em' }}
+		>
+			{getSymbolAndPrice(currency)}
+			{Math.round(price[currency])}
+		</Typography.Text>
 	</Flex>
 );
 

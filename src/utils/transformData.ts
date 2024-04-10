@@ -272,7 +272,7 @@ export const getRandomData = (
 		.forEach((_: undefined, index: number) => {
 			const id = uniqid();
 
-			const name = `Income category ${index}`;
+			const name = `Income ${index}`;
 
 			const color = getRandomColor();
 
@@ -290,7 +290,7 @@ export const getRandomData = (
 		.forEach((_: undefined, index: number) => {
 			const id = uniqid();
 
-			const name = `Expense category ${index}`;
+			const name = `Expense ${index}`;
 
 			const color = getRandomColor();
 

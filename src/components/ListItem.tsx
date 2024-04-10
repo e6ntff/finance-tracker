@@ -126,7 +126,7 @@ const ListItem: React.FC<Props> = observer(
 					false,
 					deleteItem
 				)}
-				{MyPrice(currentItem.price, isSmallScreen, currency)}
+				{MyPrice(currentItem.price, currentItem.type, isSmallScreen, currency)}
 				{MyIconWithTooltip(
 					languages.edit[language],
 					isSmallScreen,
@@ -188,7 +188,12 @@ const ListItem: React.FC<Props> = observer(
 						</Col>
 						<Col span={4}>{MyCategory(categories[currentItem.categoryId])}</Col>
 						<Col span={4}>
-							{MyPrice(currentItem.price, isSmallScreen, currency)}
+							{MyPrice(
+								currentItem.price,
+								currentItem.type,
+								isSmallScreen,
+								currency
+							)}
 						</Col>
 						<Col span={1}>
 							{MyIconWithTooltip(

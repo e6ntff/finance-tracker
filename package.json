@@ -1,6 +1,6 @@
 {
-	"name": "expenses-manager",
-	"homepage": "https://e6ntff.github.io/expenses-manager/",
+	"name": "finance-tracker",
+	"homepage": "https://e6ntff.github.io/finance-tracker/",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {

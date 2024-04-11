@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ExpenseItem, ItemWithSearch, Mode } from '../settings/interfaces';
 import Item from 'antd/es/list/Item';
 import { Card, Col, Flex } from 'antd';
@@ -18,6 +18,7 @@ import {
 	MyImage,
 	MyPrice,
 	MyTitle,
+	tooltipTitle,
 } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import {
@@ -60,6 +61,17 @@ const ListItem: React.FC<Props> = observer(
 			list[initialItem.id]
 		);
 
+		const {
+			type,
+			date,
+			title,
+			categoryId,
+			price,
+			image,
+			createdAt,
+			updatedAt,
+		} = currentItem;
+
 		const toggleIsModalOpened = useCallback(() => {
 			setIsModalOpened((prevValue: boolean) => !prevValue);
 		}, [setIsModalOpened]);
@@ -86,30 +98,6 @@ const ListItem: React.FC<Props> = observer(
 			setLastDeletedItemIds([...lastDeletedItemIds, initialItem.id]);
 		}, [setLastDeletedItemIds, initialItem.id, lastDeletedItemIds]);
 
-		const tooltipTitle = useMemo(() => {
-			if (!currentItem.updatedAt) {
-				return (
-					<>
-						{`${languages.createdAt[language]} ${dayjs(
-							currentItem.createdAt
-						).format('HH:mm:ss DD.MM.YY')}`}
-					</>
-				);
-			} else {
-				return (
-					<>
-						{`${languages.createdAt[language]} ${dayjs(
-							currentItem.createdAt
-						).format('HH:mm:ss DD.MM.YY')}`}
-						<br></br>
-						{`${languages.updatedAt[language]} ${dayjs(
-							currentItem.updatedAt
-						).format('HH:mm:ss DD.MM.YY')}`}
-					</>
-				);
-			}
-		}, [currentItem, language]);
-
 		const ActionsJSX = (
 			<Flex justify='space-evenly'>
 				{MyCheckbox(
@@ -126,7 +114,7 @@ const ListItem: React.FC<Props> = observer(
 					false,
 					deleteItem
 				)}
-				{MyPrice(currentItem.price, currentItem.type, isSmallScreen, currency)}
+				{MyPrice(price, type, isSmallScreen, currency)}
 				{MyIconWithTooltip(
 					languages.edit[language],
 					isSmallScreen,
@@ -135,7 +123,7 @@ const ListItem: React.FC<Props> = observer(
 					toggleIsModalOpened
 				)}
 				{MyIconWithTooltip(
-					tooltipTitle,
+					tooltipTitle(createdAt, updatedAt, language),
 					isSmallScreen,
 					InfoCircleOutlined,
 					false
@@ -168,33 +156,21 @@ const ListItem: React.FC<Props> = observer(
 							)}
 						</Col>
 						<Col span={1}>
-							{MyImage(
-								currentItem.image,
-								isSmallScreen,
-								language,
-								toggleIsModalOpened
-							)}
+							{MyImage(image, isSmallScreen, language, toggleIsModalOpened)}
 						</Col>
-						<Col span={3}>{MyDate(currentItem.date, isSmallScreen)}</Col>
+						<Col span={3}>{MyDate(date, isSmallScreen)}</Col>
 						<Col span={7}>
 							{MyTitle(
-								currentItem.title,
-								currentItem.type,
+								title,
+								type,
 								isSmallScreen,
 								language,
 								false,
 								initialItem.overlaps
 							)}
 						</Col>
-						<Col span={4}>{MyCategory(categories[currentItem.categoryId])}</Col>
-						<Col span={4}>
-							{MyPrice(
-								currentItem.price,
-								currentItem.type,
-								isSmallScreen,
-								currency
-							)}
-						</Col>
+						<Col span={4}>{MyCategory(categories[categoryId])}</Col>
+						<Col span={4}>{MyPrice(price, type, isSmallScreen, currency)}</Col>
 						<Col span={1}>
 							{MyIconWithTooltip(
 								languages.edit[language],
@@ -215,7 +191,7 @@ const ListItem: React.FC<Props> = observer(
 						</Col>
 						<Col span={1}>
 							{MyIconWithTooltip(
-								tooltipTitle,
+								tooltipTitle(createdAt, updatedAt, language),
 								isSmallScreen,
 								InfoCircleOutlined,
 								false
@@ -228,8 +204,8 @@ const ListItem: React.FC<Props> = observer(
 						size='small'
 						bordered
 						title={MyTitle(
-							currentItem.title,
-							currentItem.type,
+							title,
+							type,
 							isSmallScreen,
 							language,
 							false,
@@ -249,15 +225,10 @@ const ListItem: React.FC<Props> = observer(
 								gap={4}
 							>
 								<Flex align='center'>
-									{MyImage(
-										currentItem.image,
-										isSmallScreen,
-										language,
-										toggleIsModalOpened
-									)}
-									{MyDate(currentItem.date, isSmallScreen)}
+									{MyImage(image, isSmallScreen, language, toggleIsModalOpened)}
+									{MyDate(date, isSmallScreen)}
 								</Flex>
-								{MyCategory(categories[currentItem.categoryId])}
+								{MyCategory(categories[categoryId])}
 							</Flex>
 						</Flex>
 					</Card>

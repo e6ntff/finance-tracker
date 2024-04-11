@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { userStore } from './userStore';
 import uniqid from 'uniqid';
-import dayjs from 'dayjs';
 import { Goal } from 'settings/interfaces';
 
 class GoalStore {
@@ -21,7 +20,7 @@ class GoalStore {
 
 	setUserGoals = (goals: typeof this.goals, save: boolean = true) => {
 		this.userGoals = { ...goals } || {};
-		this.userStore.updateAllData({ list: this.userGoals });
+		this.userStore.updateAllData({ goals: this.userGoals });
 		save && this.userStore.pushDataToSaving();
 	};
 
@@ -30,24 +29,9 @@ class GoalStore {
 	};
 
 	removeGoal = (id: string) => {
-		const newList = this.userGoals;
-		newList[id].deleted = true;
-		newList[id].deletedAt = dayjs().valueOf();
-		this.setUserGoals(newList);
-		this.setLastDeletedGoalIds([]);
-	};
-
-	restoreGoal = (id: string) => {
-		const newList = this.userGoals;
-		newList[id].deleted = false;
-		delete newList[id].deletedAt;
-		this.setUserGoals(newList);
-	};
-
-	deleteGoal = (id: string) => {
-		const newList = this.userGoals;
-		delete newList[id];
-		this.setUserGoals(newList);
+		const newGoals = this.userGoals;
+		delete newGoals[id];
+		this.setUserGoals(newGoals);
 	};
 
 	setLastDeletedGoalIds = (ids: string[]) => {

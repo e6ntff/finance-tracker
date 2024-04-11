@@ -21,6 +21,7 @@ import { listStore } from 'utils/listStore';
 import Notification from 'components/Notification';
 import DeleteNotification from 'components/DeleteNotification';
 import languages from 'settings/languages';
+import goalStore from 'utils/GoalStore';
 
 const auth = getAuth(app);
 
@@ -36,6 +37,7 @@ const App: React.FC = observer(() => {
 	} = userStore;
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
+	const { setUserGoals } = goalStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency, language } = userOptions;
@@ -91,6 +93,7 @@ const App: React.FC = observer(() => {
 					setStatus,
 					setUserList,
 					setUserCategories,
+					setUserGoals,
 					setLoading
 				);
 			}

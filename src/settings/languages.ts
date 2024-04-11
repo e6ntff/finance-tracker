@@ -147,6 +147,10 @@ const languages: { [key: string]: any } = {
 		en: 'Categories deleted',
 		ru: 'Категорий удалено',
 	},
+	goalsDeleted: {
+		en: 'Goals deleted',
+		ru: 'Целей удалено',
+	},
 	itemsWithCurrentCategory: {
 		en: 'Items',
 		ru: 'Расходов',
@@ -397,6 +401,7 @@ const languages: { [key: string]: any } = {
 			},
 		},
 	],
+	newGoal: { en: 'New Goal', ru: 'Новая цель' },
 };
 
 export default languages;

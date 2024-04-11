@@ -16,6 +16,7 @@ import LanguageSelect from './LanguageSelect';
 import { getRandomData } from 'utils/transformData';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
+import goalStore from 'utils/GoalStore';
 
 interface Props {
 	open: () => void;
@@ -42,6 +43,7 @@ const AppTour: React.FC<Props> = observer(({ open, close }) => {
 		categoriesTemplate,
 		userCategories,
 	} = categoryStore;
+	const { setGoals, goalsTemplate, setGoalsTemplate, userGoals } = goalStore;
 
 	const [currentStep, setCurrentStep] = useState<number>(-1);
 
@@ -55,7 +57,8 @@ const AppTour: React.FC<Props> = observer(({ open, close }) => {
 		);
 		setListTemplate(data.items);
 		setCategoriesTemplate(data.categories);
-	}, [currencyRates, setCategoriesTemplate, setListTemplate]);
+		setGoalsTemplate(data.goals);
+	}, [currencyRates, setCategoriesTemplate, setListTemplate, setGoalsTemplate]);
 
 	useEffect(() => {
 		setCurrentStep(isTourStarted ? 0 : -1);
@@ -76,6 +79,14 @@ const AppTour: React.FC<Props> = observer(({ open, close }) => {
 			setCategories(userCategories);
 		}
 	}, [isTourStarted, categoriesTemplate, userCategories, setCategories]);
+
+	useEffect(() => {
+		if (isTourStarted) {
+			setGoals(goalsTemplate);
+		} else {
+			setGoals(userGoals);
+		}
+	}, [isTourStarted, goalsTemplate, userGoals, setGoals]);
 
 	const refs = new Array(tour.length).fill(undefined).map(() => useRef(null));
 	const steps = useMemo(

@@ -4,8 +4,7 @@ import { ExpenseItem, ListType } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
-import { Col, DatePicker, Form, Input, Modal, Row } from 'antd';
-import CurrencySelect from 'components/CurrencySelect';
+import { Col, DatePicker, Form, Input, InputNumber, Modal, Row } from 'antd';
 import constants from 'settings/constants';
 import dayjs from 'dayjs';
 import CategorySelect from './CategorySelect';
@@ -13,7 +12,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
 import ImageUpload from './ImageUpload';
-import { convertToJpeg } from 'utils/utils';
+import { convertToJpeg, getSymbolAndPrice } from 'utils/utils';
 import TypeSelect from './TypeSelect';
 
 interface Props {
@@ -25,12 +24,11 @@ interface Props {
 
 const ItemModal: React.FC<Props> = observer(
 	({ opened, initialItemId, toggleOpened, submitItem }) => {
-		const [currency, setCurrency] = useState(constants.baseCurrency);
 		const { currencyRates, isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
 		const { list } = listStore;
 
-		const { language } = userOptions;
+		const { language, currency } = userOptions;
 
 		const initialItem = useMemo(
 			() =>
@@ -73,8 +71,7 @@ const ItemModal: React.FC<Props> = observer(
 		);
 
 		const handlePriceChange = useCallback(
-			(event: React.ChangeEvent<HTMLInputElement>) => {
-				const { value } = event.target;
+			(value: number | null) => {
 				setCurrentItem((prevItem) => {
 					const updatedItem = {
 						...prevItem,
@@ -139,21 +136,14 @@ const ItemModal: React.FC<Props> = observer(
 		);
 
 		const PriceJSX = (
-			<Input
+			<InputNumber
+				style={{ inlineSize: '50%' }}
+				formatter={(price?: number) => `${getSymbolAndPrice(currency)}${price}`}
 				required
-				type='number'
-				min='1'
-				step='1'
+				min={1}
+				step={1}
 				value={Math.round(currentItem.price[currency])}
-				onInput={handlePriceChange}
-			/>
-		);
-
-		const CurrencyJSX = (
-			<CurrencySelect
-				value={currency}
-				setCurrency={setCurrency}
-				onChange={setCurrency}
+				onChange={handlePriceChange}
 			/>
 		);
 
@@ -213,7 +203,6 @@ const ItemModal: React.FC<Props> = observer(
 						<Row>
 							<Col span={16}>{PriceJSX}</Col>
 							<Col span={1}></Col>
-							<Col span={7}>{CurrencyJSX}</Col>
 						</Row>
 					</Form.Item>
 					<Form.Item label={languages.dateAndCat[language]}>

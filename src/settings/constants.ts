@@ -26,10 +26,12 @@ const constants = {
 	pageSizeOptions: pageSizeOptions,
 	baseCurrency: 'USD',
 	startDate: dayjs(new Date(2020, 0, 1)),
+	endDate: dayjs(new Date(2029, 11, 31)),
 	defaultCategory: defaultCategory,
 	defaultData: {
 		list: {},
 		categories: { '0': defaultCategory },
+		goals: {},
 	},
 	emptyItem: {
 		type: 'expense' as ListType,
@@ -42,9 +44,30 @@ const constants = {
 			RUB: 0,
 		},
 		createdAt: 0,
-		updatedAt: 0,
+
 		deleted: false,
 	},
+	emptyGoal: {
+		title: '',
+		date: {
+			start: dayjs().valueOf(),
+			end: dayjs().valueOf(),
+		},
+		money: {
+			collected: {
+				USD: 0,
+				RUB: 0,
+				EUR: 0,
+			},
+			total: {
+				USD: 0,
+				RUB: 0,
+				EUR: 0,
+			},
+		},
+		createdAt: dayjs().valueOf(),
+	},
+
 	colors: {
 		expense: '#f00',
 		income: '#0a0',

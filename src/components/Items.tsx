@@ -189,7 +189,8 @@ export const MyPrice = (
 	price: currencies,
 	type: ListType,
 	isSmallScreen: boolean,
-	currency: string
+	currency: string,
+	extra?: currencies
 ) => (
 	<Flex justify='center'>
 		<Typography.Text
@@ -200,6 +201,25 @@ export const MyPrice = (
 			{getSymbolAndPrice(currency)}
 			{Math.round(price[currency])}
 		</Typography.Text>
+		{extra && (
+			<>
+				<Typography.Text
+					strong
+					type={type === 'expense' ? 'danger' : 'success'}
+					style={{ fontSize: isSmallScreen ? '1.25em' : '1.5em' }}
+				>
+					/
+				</Typography.Text>
+				<Typography.Text
+					strong
+					type={type === 'expense' ? 'danger' : 'success'}
+					style={{ fontSize: isSmallScreen ? '1.25em' : '1.5em' }}
+				>
+					{getSymbolAndPrice(currency)}
+					{Math.round(extra[currency])}
+				</Typography.Text>
+			</>
+		)}
 	</Flex>
 );
 
@@ -282,3 +302,31 @@ export const MySearch = (
 		loading={loading}
 	/>
 );
+
+export const tooltipTitle = (
+	createdAt: number | undefined,
+	updatedAt: number | undefined,
+	language: language
+) => {
+	if (!updatedAt) {
+		return (
+			<>
+				{`${languages.createdAt[language]} ${dayjs(createdAt).format(
+					'HH:mm:ss DD.MM.YY'
+				)}`}
+			</>
+		);
+	} else {
+		return (
+			<>
+				{`${languages.createdAt[language]} ${dayjs(createdAt).format(
+					'HH:mm:ss DD.MM.YY'
+				)}`}
+				<br></br>
+				{`${languages.updatedAt[language]} ${dayjs(updatedAt).format(
+					'HH:mm:ss DD.MM.YY'
+				)}`}
+			</>
+		);
+	}
+};

@@ -93,6 +93,7 @@ export interface Status {
 export interface AllData {
 	list: { [key: string]: ExpenseItem };
 	categories: { [key: string]: category };
+	goals: { [key: string]: Goal };
 }
 
 export interface TourStep {
@@ -111,13 +112,8 @@ export interface ItemWithSearch {
 
 export interface Goal {
 	title: string;
-	image?: string;
-	startDate: number;
-	endDate: number
-	collected: currencies;
-	amount: currencies;
+	date: { start: number; end: number };
+	money: { collected: currencies; total: currencies };
 	createdAt: number;
 	updatedAt?: number;
-	deleted?: boolean;
-	deletedAt?: number;
 }

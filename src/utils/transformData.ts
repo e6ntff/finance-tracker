@@ -1,5 +1,6 @@
 import {
 	ExpenseItem,
+	Goal,
 	Interval,
 	ItemWithSearch,
 	ListOptions,
@@ -266,6 +267,7 @@ export const getRandomData = (
 	const newCategoriesExpense: { [key: string]: category } = {
 		'0': constants.defaultCategory,
 	};
+	const newGoals: { [key: string]: Goal } = {};
 
 	new Array(categoriesValue.income)
 		.fill(undefined)
@@ -368,5 +370,6 @@ export const getRandomData = (
 	return {
 		items: { ...newItemsExpense, ...newItemsIncome },
 		categories: { ...newCategoriesExpense, ...newCategoriesIncome },
+		goals: { ...newGoals },
 	};
 };

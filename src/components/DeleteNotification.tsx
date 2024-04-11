@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useCallback, useEffect, useState } from 'react';
 import constants from 'settings/constants';
 import languages from 'settings/languages';
+import goalStore from 'utils/GoalStore';
 import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
@@ -19,6 +20,7 @@ const DeleteNotification: React.FC = observer(() => {
 	} = listStore;
 	const { lastDeletedCategoryIds, removeCategory, setLastDeletedCategoryIds } =
 		categoryStore;
+	const { lastDeletedGoalIds, setLastDeletedGoalIds, removeGoal } = goalStore;
 	const { userOptions } = optionsStore;
 
 	const { language, deleteConfirmation } = userOptions;
@@ -44,12 +46,26 @@ const DeleteNotification: React.FC = observer(() => {
 		setIsDeleting(true);
 	}, [removeItem, lastDeletedItemIds]);
 
+	const deleteGoal = useCallback(() => {
+		lastDeletedGoalIds.forEach((key: string) => {
+			removeGoal(key);
+		});
+		setIsDeleting(true);
+	}, [removeGoal, lastDeletedGoalIds]);
+
 	const cancelDeleting = useCallback(() => {
 		setIsDeleting(false);
 		api.destroy();
 		setLastDeletedCategoryIds([]);
 		setLastDeletedItemIds([]);
-	}, [setIsDeleting, api, setLastDeletedCategoryIds, setLastDeletedItemIds]);
+		setLastDeletedGoalIds([]);
+	}, [
+		setIsDeleting,
+		api,
+		setLastDeletedCategoryIds,
+		setLastDeletedItemIds,
+		setLastDeletedGoalIds,
+	]);
 
 	const openNotification = useCallback(
 		(text: string, deleteFunction: () => void) => {
@@ -108,6 +124,20 @@ const DeleteNotification: React.FC = observer(() => {
 		}
 		// eslint-disable-next-line
 	}, [lastDeletedCategoryIds]);
+
+	useEffect(() => {
+		if (deleteConfirmation) {
+			setIsDeleting(true);
+			lastDeletedGoalIds.length &&
+				openNotification(
+					`${languages.goalsDeleted[language]}: ${lastDeletedGoalIds.length}`,
+					deleteGoal
+				);
+		} else {
+			deleteGoal();
+		}
+		// eslint-disable-next-line
+	}, [lastDeletedGoalIds]);
 
 	return <>{contextHolder}</>;
 });

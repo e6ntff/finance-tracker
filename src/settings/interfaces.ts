@@ -108,3 +108,16 @@ export interface ItemWithSearch {
 	id: string;
 	overlaps: number[][] | undefined;
 }
+
+export interface Goal {
+	title: string;
+	image?: string;
+	startDate: number;
+	endDate: number
+	collected: currencies;
+	amount: currencies;
+	createdAt: number;
+	updatedAt?: number;
+	deleted?: boolean;
+	deletedAt?: number;
+}

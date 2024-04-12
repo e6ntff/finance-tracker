@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/finance-tracker/static/css/main.6b3fe3e5.css",
-    "main.js": "/finance-tracker/static/js/main.e58c1f61.js",
+    "main.js": "/finance-tracker/static/js/main.df17c81f.js",
     "static/js/418.2f15e252.chunk.js": "/finance-tracker/static/js/418.2f15e252.chunk.js",
     "static/js/766.47eff5cc.chunk.js": "/finance-tracker/static/js/766.47eff5cc.chunk.js",
     "static/js/474.f920c8c7.chunk.js": "/finance-tracker/static/js/474.f920c8c7.chunk.js",
@@ -19,7 +19,7 @@
     "static/js/650.333b71aa.chunk.js": "/finance-tracker/static/js/650.333b71aa.chunk.js",
     "index.html": "/finance-tracker/index.html",
     "main.6b3fe3e5.css.map": "/finance-tracker/static/css/main.6b3fe3e5.css.map",
-    "main.e58c1f61.js.map": "/finance-tracker/static/js/main.e58c1f61.js.map",
+    "main.df17c81f.js.map": "/finance-tracker/static/js/main.df17c81f.js.map",
     "418.2f15e252.chunk.js.map": "/finance-tracker/static/js/418.2f15e252.chunk.js.map",
     "766.47eff5cc.chunk.js.map": "/finance-tracker/static/js/766.47eff5cc.chunk.js.map",
     "474.f920c8c7.chunk.js.map": "/finance-tracker/static/js/474.f920c8c7.chunk.js.map",
@@ -38,6 +38,6 @@
   },
   "entrypoints": [
     "static/css/main.6b3fe3e5.css",
-    "static/js/main.e58c1f61.js"
+    "static/js/main.df17c81f.js"
   ]
 }

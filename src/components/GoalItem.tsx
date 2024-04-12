@@ -7,13 +7,7 @@ import {
 	Typography,
 } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, {
-	Dispatch,
-	SetStateAction,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import {
 	MyDate,
 	MyIconWithTooltip,
@@ -74,14 +68,16 @@ const GoalItem: React.FC<Props> = observer(
 
 		const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
+		const toggleMode = useCallback(() => {
+			setIsEditMode((prevMode: boolean) => {
+				prevMode && replaceGoal(initialGoalId, currentGoal);
+				return !prevMode;
+			});
+		}, [setIsEditMode, replaceGoal, currentGoal, initialGoalId]);
+
 		const deleteGoal = useCallback(() => {
 			setLastDeletedGoalIds([...lastDeletedGoalIds, initialGoalId]);
 		}, [setLastDeletedGoalIds, initialGoalId, lastDeletedGoalIds]);
-
-		useEffect(() => {
-			!isEditMode && replaceGoal(initialGoalId, currentGoal);
-			// eslint-disable-next-line
-		}, [currentGoal, isEditMode]);
 
 		const GoalBody = () => {
 			const started = date.start < dayjs().valueOf();
@@ -117,16 +113,30 @@ const GoalItem: React.FC<Props> = observer(
 
 			const datePicker = () => {
 				return (
-					<DatePicker.RangePicker
-						onChange={(values: [any, any]) => {
-							handleDateChange(values[0].valueOf(), 'start', setCurrentGoal);
-							handleDateChange(values[1].valueOf(), 'end', setCurrentGoal);
-						}}
-						value={[dayjs(date.start), dayjs(date.end)]}
-						size={isSmallScreen ? 'small' : 'middle'}
-						minDate={constants.startDate}
-						maxDate={constants.endDate}
-					/>
+					<Flex
+						align='center'
+						gap={4}
+					>
+						<DatePicker
+							onChange={(value: dayjs.Dayjs) => {
+								handleDateChange(value, 'start', setCurrentGoal);
+							}}
+							value={dayjs(date.start)}
+							size={isSmallScreen ? 'small' : 'middle'}
+							minDate={constants.startDate}
+							maxDate={constants.endDate}
+						/>
+						<Typography.Text strong>-</Typography.Text>
+						<DatePicker
+							onChange={(value: dayjs.Dayjs) => {
+								handleDateChange(value, 'end', setCurrentGoal);
+							}}
+							value={dayjs(date.end)}
+							size={isSmallScreen ? 'small' : 'middle'}
+							minDate={dayjs(date.start)}
+							maxDate={constants.endDate}
+						/>
+					</Flex>
 				);
 			};
 
@@ -146,16 +156,10 @@ const GoalItem: React.FC<Props> = observer(
 							percent={(money.collected.USD / money.total.USD) * 100}
 							format={(percent) => `${Math.round(percent as number)}%`}
 						/>
-						<Flex align='center'>
-							{isEditMode ? (
-								datePicker()
-							) : (
-								<>
-									{MyDate(date.start, isSmallScreen)}
-									<Typography.Text strong>-</Typography.Text>
-									{MyDate(date.end, isSmallScreen)}
-								</>
-							)}
+						<Flex>
+							{isEditMode
+								? datePicker()
+								: MyDate(date.start, isSmallScreen, date.end)}
 						</Flex>
 					</Flex>
 					<Progress
@@ -241,7 +245,7 @@ const GoalItem: React.FC<Props> = observer(
 					isSmallScreen,
 					isEditMode ? CheckOutlined : EditOutlined,
 					false,
-					() => setIsEditMode((prevMode: boolean) => !prevMode)
+					toggleMode
 				)}
 				styles={{ actions: { alignItems: 'center' } }}
 				actions={[ActionsJSX]}

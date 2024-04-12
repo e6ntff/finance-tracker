@@ -155,13 +155,30 @@ export const MyImage = (
 		</Tooltip>
 	);
 
-export const MyDate = (date: number, isSmallScreen: boolean) => (
-	<Statistic
-		value={dayjs(date).format('DD.MM.YY')}
-		style={{
-			scale: isSmallScreen ? '.67' : '.75',
-		}}
-	/>
+export const MyDate = (
+	date: number,
+	isSmallScreen: boolean,
+	extra?: number
+) => (
+	<Flex align='center'>
+		<Statistic
+			value={dayjs(date).format('DD.MM.YY')}
+			style={{
+				scale: isSmallScreen ? '.67' : '.75',
+			}}
+		/>
+		{extra && (
+			<>
+				<Typography.Text strong>-</Typography.Text>
+				<Statistic
+					value={dayjs(extra).format('DD.MM.YY')}
+					style={{
+						scale: isSmallScreen ? '.67' : '.75',
+					}}
+				/>
+			</>
+		)}
+	</Flex>
 );
 
 export const MyCategory = (category: category) => (

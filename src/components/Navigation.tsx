@@ -18,6 +18,7 @@ import {
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
+import { communityStore } from 'utils/communityStore';
 
 const Navigation: React.FC = observer(() => {
 	const location = useLocation();
@@ -26,6 +27,7 @@ const Navigation: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
 	const { list } = listStore;
 	const { categories } = categoryStore;
+	const { friendRequests } = communityStore;
 
 	const { language } = userOptions;
 
@@ -119,7 +121,14 @@ const Navigation: React.FC = observer(() => {
 					),
 					key: paths.community + paths.friends,
 					title: '',
-					icon: <TeamOutlined />,
+					icon: (
+						<Badge
+							size='small'
+							count={Object.keys(friendRequests).length}
+						>
+							<TeamOutlined />,
+						</Badge>
+					),
 				},
 				{
 					label: (
@@ -129,7 +138,14 @@ const Navigation: React.FC = observer(() => {
 					),
 					key: paths.community + paths.chats,
 					title: '',
-					icon: <CommentOutlined />,
+					icon: (
+						<Badge
+							size='small'
+							count={Object.keys([]).length}
+						>
+							<CommentOutlined />,
+						</Badge>
+					),
 				},
 			],
 		},

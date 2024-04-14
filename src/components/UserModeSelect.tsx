@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Drawer, Flex, Segmented } from 'antd';
+import { Badge, Drawer, Flex, Segmented } from 'antd';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
@@ -8,6 +8,7 @@ import { UserMode } from 'settings/interfaces';
 import { MyIconWithTooltip } from './Items';
 import { SearchOutlined } from '@ant-design/icons';
 import UserSelect from './UserSelect';
+import { communityStore } from 'utils/communityStore';
 
 interface Props {
 	value: UserMode;
@@ -17,6 +18,7 @@ interface Props {
 const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
+	const { friendRequests } = communityStore;
 
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
@@ -39,7 +41,14 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 				onChange={onChange}
 				options={[
 					{
-						label: languages.requests[userOptions.language],
+						label: (
+							<Badge
+								size='small'
+								count={Object.keys(friendRequests).length}
+							>
+								{languages.requests[userOptions.language]}
+							</Badge>
+						),
 						value: 'requests',
 					},
 					{

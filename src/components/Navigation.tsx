@@ -6,10 +6,13 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import {
+	CommentOutlined,
 	DeleteOutlined,
 	FolderOpenOutlined,
+	GlobalOutlined,
 	LineChartOutlined,
 	PushpinOutlined,
+	TeamOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
@@ -98,11 +101,44 @@ const Navigation: React.FC = observer(() => {
 				</Badge>
 			),
 		},
+		{
+			label: (
+				<NavLink to={paths.community}>
+					{!isSmallScreen && languages.community[language]}
+				</NavLink>
+			),
+			key: paths.community,
+			title: '',
+			icon: <GlobalOutlined />,
+			children: [
+				{
+					label: (
+						<NavLink to={paths.community + paths.friends}>
+							{!isSmallScreen && languages.friends[language]}
+						</NavLink>
+					),
+					key: paths.community + paths.friends,
+					title: '',
+					icon: <TeamOutlined />,
+				},
+				{
+					label: (
+						<NavLink to={paths.community + paths.chats}>
+							{!isSmallScreen && languages.chats[language]}
+						</NavLink>
+					),
+					key: paths.community + paths.chats,
+					title: '',
+					icon: <CommentOutlined />,
+				},
+			],
+		},
 	];
+
 	return (
 		<Menu
 			style={{ inlineSize: '100%' }}
-			selectedKeys={[location.pathname]}
+			selectedKeys={[`/${location.pathname.split('/')[1]}`]}
 			mode='horizontal'
 			theme='dark'
 			items={items}

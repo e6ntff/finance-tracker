@@ -23,7 +23,7 @@ import { optionsStore } from 'utils/optionsStore';
 const auth = getAuth(app);
 
 const Welcome: React.FC = observer(() => {
-	const { setLogged, setIsTourStarted } = userStore;
+	const { setLogged, setIsNicknameModalOpened } = userStore;
 	const { userOptions } = optionsStore;
 
 	const { language } = userOptions;
@@ -112,12 +112,11 @@ const Welcome: React.FC = observer(() => {
 				currentUser.email,
 				currentUser.password
 			);
-			setIsTourStarted(true);
-			setLogged(true);
+			setIsNicknameModalOpened(true);
 		} catch (error: any) {
 			setIncorrect(true);
 		}
-	}, [currentUser, setLogged, setIsTourStarted]);
+	}, [currentUser, setIsNicknameModalOpened]);
 
 	const logIn = useCallback(async () => {
 		try {

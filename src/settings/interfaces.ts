@@ -25,6 +25,14 @@ export interface ExpenseItem {
 	deletedAt?: number;
 }
 
+export interface User {
+	nickname: string;
+	createdAt: number;
+	image?: string;
+	friends?: { [key: string]: '' };
+	friendRequests?: { [key: string]: '' };
+}
+
 export interface currencies {
 	[key: string]: number;
 	USD: number;
@@ -82,7 +90,6 @@ export interface UserOptions {
 	currency: currency;
 	theme: Theme;
 	themeAlgorithm: ThemeAlgorithm;
-	deleteConfirmation: boolean;
 }
 
 export interface Status {

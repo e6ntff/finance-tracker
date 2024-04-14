@@ -22,11 +22,19 @@ import Notification from 'components/Notification';
 import DeleteNotification from 'components/DeleteNotification';
 import languages from 'settings/languages';
 import goalStore from 'utils/GoalStore';
+import { communityStore } from 'utils/communityStore';
+import NicknameModal from 'components/NicknameModal';
+import {
+	getFriendRequests,
+	getFriends,
+	getSentFriendRequests,
+} from 'utils/community';
 
 const auth = getAuth(app);
 
 const App: React.FC = observer(() => {
 	const {
+		user,
 		logged,
 		isSmallScreen,
 		setIsSmallScreen,
@@ -38,6 +46,8 @@ const App: React.FC = observer(() => {
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
 	const { setUserGoals } = goalStore;
+	const { setUsers, setFriends, setFriendRequests, setSentFriendRequests } =
+		communityStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency, language } = userOptions;
@@ -45,6 +55,10 @@ const App: React.FC = observer(() => {
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
+		getFriends(user.uid, setFriends);
+		getFriendRequests(user.uid, setFriendRequests);
+		getSentFriendRequests(user.uid, setSentFriendRequests);
+
 		const handleResize = () => {
 			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
 		};
@@ -94,6 +108,7 @@ const App: React.FC = observer(() => {
 					setUserList,
 					setUserCategories,
 					setUserGoals,
+					setUsers,
 					setLoading
 				);
 			}
@@ -112,6 +127,7 @@ const App: React.FC = observer(() => {
 					<SettingsPanel />
 					<Notification />
 					<DeleteNotification />
+					<NicknameModal />
 					<Layout
 						style={{
 							margin: 'auto',

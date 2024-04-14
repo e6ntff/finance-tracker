@@ -5,7 +5,7 @@ import { Alert, Flex, Typography } from 'antd';
 import { userStore } from 'utils/userStore';
 
 const RatesTicker: React.FC = observer(() => {
-	const { currencyRates } = userStore;
+	const { currencyRates, logged } = userStore;
 
 	const { EURUSD, EURRUB, USDRUB } = useMemo(() => {
 		const { EUR, USD, RUB } = currencyRates;
@@ -39,12 +39,16 @@ const RatesTicker: React.FC = observer(() => {
 	}, [EURUSD, EURRUB, USDRUB]);
 
 	return (
-		<Alert
-			style={{ color: '#fffa', background: '#0000' }}
-			showIcon={false}
-			banner
-			message={<Marquee>{text}</Marquee>}
-		/>
+		<>
+			{logged && (
+				<Alert
+					style={{ color: '#fffa', background: '#0000' }}
+					showIcon={false}
+					banner
+					message={<Marquee>{text}</Marquee>}
+				/>
+			)}
+		</>
 	);
 });
 

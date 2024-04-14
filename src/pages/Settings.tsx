@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import LanguageSelect from '../components/LanguageSelect';
 import CurrencySelect from '../components/CurrencySelect';
-import { Button, Flex, Form, Popconfirm, Segmented, Switch } from 'antd';
+import { Button, Flex, Form, Popconfirm, Segmented } from 'antd';
 import { observer } from 'mobx-react-lite';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import tour from 'settings/tour';
 import RandomizeButton from 'components/RandomizeButton';
 import LogOutButton from 'components/LogOutButton';
+import Links from 'components/Links';
 
 interface Props {
 	close: () => void;
@@ -21,13 +22,12 @@ interface Props {
 
 const Settings: React.FC<Props> = observer(({ close }) => {
 	const navigate = useNavigate();
-	const { userOptions, setCurrency, setTheme, setDeleteConfirmation } =
-		optionsStore;
+	const { userOptions, setCurrency, setTheme } = optionsStore;
 	const { isSmallScreen, tourRefs, setIsTourStarted } = userStore;
 	const { setUserList, list } = listStore;
 	const { setUserCategories, categories } = categoryStore;
 
-	const { language, currency, theme, deleteConfirmation } = userOptions;
+	const { language, currency, theme } = userOptions;
 
 	const removeData = useCallback(() => {
 		setUserList({});
@@ -79,12 +79,6 @@ const Settings: React.FC<Props> = observer(({ close }) => {
 						onChange={setCurrency}
 					/>
 				</Form.Item>
-				<Form.Item label={languages.deleteConfirmation[language]}>
-					<Switch
-						value={deleteConfirmation}
-						onChange={setDeleteConfirmation}
-					/>
-				</Form.Item>
 				<Form.Item>
 					<Popconfirm
 						title={languages.removeAllConfirm[language]}
@@ -102,7 +96,10 @@ const Settings: React.FC<Props> = observer(({ close }) => {
 					<RandomizeButton />
 				</Form.Item>
 				<Form.Item>
-					<LogOutButton close={close}/>
+					<LogOutButton close={close} />
+				</Form.Item>
+				<Form.Item>
+					<Links />
 				</Form.Item>
 			</Form>
 		</Flex>

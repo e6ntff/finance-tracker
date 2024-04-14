@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useCallback, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { userStore } from 'utils/userStore';
 import { observer } from 'mobx-react-lite';
@@ -11,6 +11,8 @@ const Welcome = lazy(() => import('../pages/Welcome'));
 const Categories = lazy(() => import('../pages/Categories'));
 const Trash = lazy(() => import('../pages/Trash'));
 const Goals = lazy(() => import('../pages/Goals'));
+const Friends = lazy(() => import('../pages/Friends'));
+const Chats = lazy(() => import('../pages/Chats'));
 
 const AppRoutes: React.FC = observer(() => {
 	const { logged } = userStore;
@@ -100,6 +102,34 @@ const AppRoutes: React.FC = observer(() => {
 						<Navigate to='/' />
 					)
 				}
+			/>
+			<Route
+				path={paths.community + paths.friends}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Friends />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
+			/>
+			<Route
+				path={paths.community + paths.chats}
+				element={
+					logged ? (
+						<Suspense fallback={<LargeSpin />}>
+							<Chats />
+						</Suspense>
+					) : (
+						<Navigate to='/' />
+					)
+				}
+			/>
+			<Route
+				path={paths.community}
+				element={<Navigate to={paths.community + paths.chats} />}
 			/>
 			<Route
 				path='/*'

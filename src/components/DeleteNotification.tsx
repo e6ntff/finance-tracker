@@ -23,7 +23,7 @@ const DeleteNotification: React.FC = observer(() => {
 	const { lastDeletedGoalIds, setLastDeletedGoalIds, removeGoal } = goalStore;
 	const { userOptions } = optionsStore;
 
-	const { language, deleteConfirmation } = userOptions;
+	const { language } = userOptions;
 
 	const [isDeleting, setIsDeleting] = useState<boolean>(true);
 
@@ -98,44 +98,32 @@ const DeleteNotification: React.FC = observer(() => {
 	);
 
 	useEffect(() => {
-		if (deleteConfirmation) {
-			setIsDeleting(true);
-			lastDeletedItemIds.length &&
-				openNotification(
-					`${languages.itemsDeleted[language]}: ${lastDeletedItemIds.length}`,
-					deleteItem
-				);
-		} else {
-			deleteItem();
-		}
+		setIsDeleting(true);
+		lastDeletedItemIds.length &&
+			openNotification(
+				`${languages.itemsDeleted[language]}: ${lastDeletedItemIds.length}`,
+				deleteItem
+			);
 		// eslint-disable-next-line
 	}, [lastDeletedItemIds]);
 
 	useEffect(() => {
-		if (deleteConfirmation) {
-			setIsDeleting(true);
-			lastDeletedCategoryIds.length &&
-				openNotification(
-					`${languages.categoriesDeleted[language]}: ${lastDeletedCategoryIds.length}`,
-					deleteCategory
-				);
-		} else {
-			deleteCategory();
-		}
+		setIsDeleting(true);
+		lastDeletedCategoryIds.length &&
+			openNotification(
+				`${languages.categoriesDeleted[language]}: ${lastDeletedCategoryIds.length}`,
+				deleteCategory
+			);
 		// eslint-disable-next-line
 	}, [lastDeletedCategoryIds]);
 
 	useEffect(() => {
-		if (deleteConfirmation) {
-			setIsDeleting(true);
-			lastDeletedGoalIds.length &&
-				openNotification(
-					`${languages.goalsDeleted[language]}: ${lastDeletedGoalIds.length}`,
-					deleteGoal
-				);
-		} else {
-			deleteGoal();
-		}
+		setIsDeleting(true);
+		lastDeletedGoalIds.length &&
+			openNotification(
+				`${languages.goalsDeleted[language]}: ${lastDeletedGoalIds.length}`,
+				deleteGoal
+			);
 		// eslint-disable-next-line
 	}, [lastDeletedGoalIds]);
 

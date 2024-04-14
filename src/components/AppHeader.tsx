@@ -1,6 +1,5 @@
 import React from 'react';
 import Navigation from './Navigation';
-import Links from './Links';
 import { Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
@@ -20,7 +19,7 @@ const AppHeader: React.FC = observer(() => {
 			<Navigation />
 			{!isSmallScreen && (
 				<Flex
-					style={{ inlineSize: '25%' }}
+					style={{ inlineSize: '10%' }}
 					vertical
 					align='stretch'
 				>
@@ -34,7 +33,6 @@ const AppHeader: React.FC = observer(() => {
 				align='center'
 			>
 				<SyncIcon />
-				<Links />
 			</Flex>
 		</Flex>
 	);

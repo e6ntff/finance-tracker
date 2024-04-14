@@ -4,12 +4,14 @@ import constants from 'settings/constants';
 import { configure } from 'mobx';
 import saveData from './saveData';
 import { debounce } from 'lodash';
+import { communityStore } from './communityStore';
 
 configure({
 	enforceActions: 'never',
 });
 
 class UserStore {
+	communityStore;
 	user: any = {};
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
@@ -20,9 +22,15 @@ class UserStore {
 	allData: AllData = constants.defaultData;
 	tourRefs: React.MutableRefObject<null>[] = [];
 	isTourStarted: boolean = false;
+	isNicknameModalOpened: boolean = false;
+
+	setIsNicknameModalOpened = (value: boolean) => {
+		this.isNicknameModalOpened = value;
+	};
 
 	setIsTourStarted = (value: boolean) => {
-		this.isTourStarted = value;
+		if (this.communityStore.users[this.user?.uid]?.nickname)
+			this.isTourStarted = value;
 	};
 
 	setTourRefs = (refs: React.MutableRefObject<null>[]) => {
@@ -82,9 +90,10 @@ class UserStore {
 		this.currencyRates = rates;
 	};
 
-	constructor() {
+	constructor(CommunityStore: typeof communityStore) {
+		this.communityStore = CommunityStore;
 		makeAutoObservable(this);
 	}
 }
 
-export const userStore = new UserStore();
+export const userStore = new UserStore(communityStore);

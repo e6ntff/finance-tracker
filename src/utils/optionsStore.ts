@@ -149,13 +149,6 @@ class OptionsStore {
 		this.setStatsOptions({ ...this.statsOptions, range: values });
 	};
 
-	setDeleteConfirmation = (value: boolean) => {
-		this.setUserOptions({
-			...this.userOptions,
-			deleteConfirmation: value,
-		});
-	};
-
 	constructor() {
 		makeAutoObservable(this);
 	}

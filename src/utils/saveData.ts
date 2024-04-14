@@ -15,7 +15,7 @@ const saveData = async (
 	}, constants.errorDelay);
 	if (uid) {
 		try {
-			await set(ref(database, uid), JSON.parse(JSON.stringify(data)));
+			await set(ref(database, `data/${uid}`), JSON.parse(JSON.stringify(data)));
 			clearTimeout(errorId);
 			setStatus({ status: 'success' });
 			setIsDataChanged(false);

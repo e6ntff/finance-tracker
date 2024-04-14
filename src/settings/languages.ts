@@ -12,6 +12,9 @@ const languages: { [key: string]: any } = {
 		ru: 'Категории',
 	},
 	goals: { en: 'Goals', ru: 'Цели' },
+	community: { en: 'Community', ru: 'Сообщество' },
+	friends: { en: 'Friends', ru: 'Друзья' },
+	chats: { en: 'Chats', ru: 'Чаты' },
 	trash: {
 		en: 'Trash',
 		ru: 'Корзина',
@@ -402,6 +405,8 @@ const languages: { [key: string]: any } = {
 		},
 	],
 	newGoal: { en: 'New Goal', ru: 'Новая цель' },
+	sendRequest: { en: 'Send Request', ru: 'Пригласить' },
+	cancelRequest: { en: 'Cancel Request', ru: 'Отменить приглашение' },
 };
 
 export default languages;

@@ -406,7 +406,14 @@ const languages: { [key: string]: any } = {
 	],
 	newGoal: { en: 'New Goal', ru: 'Новая цель' },
 	sendRequest: { en: 'Send Request', ru: 'Пригласить' },
-	cancelRequest: { en: 'Cancel Request', ru: 'Отменить приглашение' },
+	cancelRequest: { en: 'Cancel', ru: 'Отменить' },
+	requests: { en: 'Requests', ru: 'Приглашения' },
+	myRequests: { en: 'My requests', ru: 'Мои приглашения' },
+	acceptRequest: { en: 'Accept', ru: 'Принять' },
+	declineRequest: { en: 'Decline', ru: 'Отклонить' },
+	removeFriend: { en: 'Remove', ru: 'Удалить' },
+	alreadyFriends: { en: `You're friends`, ru: 'Вы друзья' },
+	searchFriends: { en: 'Search friends', ru: 'Искать друзей' },
 };
 
 export default languages;

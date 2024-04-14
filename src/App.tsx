@@ -55,10 +55,6 @@ const App: React.FC = observer(() => {
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
-		getFriends(user.uid, setFriends);
-		getFriendRequests(user.uid, setFriendRequests);
-		getSentFriendRequests(user.uid, setSentFriendRequests);
-
 		const handleResize = () => {
 			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
 		};
@@ -82,6 +78,15 @@ const App: React.FC = observer(() => {
 		};
 		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		if (user.uid) {
+			getFriends(user.uid, setFriends);
+			getFriendRequests(user.uid, setFriendRequests);
+			getSentFriendRequests(user.uid, setSentFriendRequests);
+		}
+		// eslint-disable-next-line
+	}, [user.uid]);
 
 	useEffect(() => {
 		if (logged) setIsLoaded(true);

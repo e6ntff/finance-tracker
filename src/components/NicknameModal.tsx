@@ -38,6 +38,7 @@ const NicknameModal: React.FC = observer(() => {
 			onOk={handleSubmit}
 		>
 			<Input
+				placeholder='Nickname'
 				onChange={(event: ChangeEvent<HTMLInputElement>) =>
 					setNickname(event.target.value)
 				}

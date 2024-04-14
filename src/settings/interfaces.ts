@@ -124,3 +124,5 @@ export interface Goal {
 	createdAt: number;
 	updatedAt?: number;
 }
+
+export type UserMode = 'requests' | 'myRequests' | 'friends';

@@ -1,4 +1,8 @@
-import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import {
+	CheckOutlined,
+	UserAddOutlined,
+	UserDeleteOutlined,
+} from '@ant-design/icons';
 import { Flex, Select } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback, useState } from 'react';
@@ -12,7 +16,7 @@ import { optionsStore } from 'utils/optionsStore';
 const UserSelect: React.FC = observer(() => {
 	const { isSmallScreen, user } = userStore;
 	const { userOptions } = optionsStore;
-	const { users, sentFriendRequests } = communityStore;
+	const { users, sentFriendRequests, friends, friendRequests } = communityStore;
 
 	const [open, setOpen] = useState<boolean>(false);
 
@@ -21,14 +25,20 @@ const UserSelect: React.FC = observer(() => {
 			return (
 				<Flex justify='space-between'>
 					{users[key]?.nickname}
-					{sentFriendRequests && Object.keys(sentFriendRequests).includes(key)
+					{Object.keys(sentFriendRequests).includes(key) ||
+					Object.keys(friends).includes(key)
 						? MyIconWithTooltip(
-								languages.sendRequest[userOptions.language],
+								Object.keys(friends).includes(key)
+									? languages.alreadyFriends[userOptions.language]
+									: languages.cancelRequest[userOptions.language],
 								isSmallScreen,
-								UserDeleteOutlined,
+								Object.keys(friends).includes(key)
+									? CheckOutlined
+									: UserDeleteOutlined,
 								false,
 								() => {
-									cancelRequest(user.uid, key);
+									!Object.keys(friends).includes(key) &&
+										cancelRequest(user.uid, key);
 								}
 						  )
 						: MyIconWithTooltip(
@@ -37,13 +47,21 @@ const UserSelect: React.FC = observer(() => {
 								UserAddOutlined,
 								false,
 								() => {
-									sendRequest(user.uid, key);
+									sendRequest(user.uid, key, friendRequests);
 								}
 						  )}
 				</Flex>
 			);
 		},
-		[users, isSmallScreen, user.uid, userOptions.language, sentFriendRequests]
+		[
+			users,
+			isSmallScreen,
+			user.uid,
+			userOptions.language,
+			sentFriendRequests,
+			friendRequests,
+			friends,
+		]
 	);
 
 	return (

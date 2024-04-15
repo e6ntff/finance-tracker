@@ -78,7 +78,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 					false,
 					undefined
 				)}
-				{chatId && (
+				{chatId && chatInfo && (
 					<Tooltip
 						trigger='click'
 						title={
@@ -92,6 +92,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 								options={Object.keys(friends)
 									.filter(
 										(key: string) =>
+											chatInfo.members &&
 											!Object.keys(chatInfo?.members).includes(key)
 									)
 									.map((key: string) => ({

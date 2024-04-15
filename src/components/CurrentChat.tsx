@@ -2,14 +2,15 @@ import { Flex, Tag } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { Unsubscribe } from 'firebase/database';
 import { observer } from 'mobx-react-lite';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Chat, Message } from 'settings/interfaces';
-import { getChatMessages } from 'utils/community';
+import React, { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
+import { Message } from 'settings/interfaces';
+import { deleteMessage, getChatMessages } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyImage } from './Items';
+import { MyIconWithTooltip, MyImage } from './Items';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
 	chatId: string | null;
@@ -28,6 +29,7 @@ const CurrentChat: React.FC<Props> = observer(
 			setMessages(null);
 			if (chatId) unsubscribe = getChatMessages(chatId, setMessages);
 			return () => unsubscribe && unsubscribe();
+			// eslint-disable-next-line
 		}, [chatId]);
 
 		useEffect(() => {
@@ -50,8 +52,10 @@ const CurrentChat: React.FC<Props> = observer(
 					Object.keys(messages).map((key: string) => (
 						<MessageItem
 							key={key}
+							messageId={key}
 							message={messages[key]}
 							uid={user.uid}
+							chatId={chatId}
 						/>
 					))}
 			</Flex>
@@ -59,47 +63,67 @@ const CurrentChat: React.FC<Props> = observer(
 	}
 );
 
-const MessageItem: React.FC<{ message: Message; uid: string }> = observer(
-	({ message, uid }) => {
-		const { isSmallScreen } = userStore;
-		const { users } = communityStore;
-		const { sender, text } = message;
-		return (
+const MessageItem: React.FC<{
+	messageId: string;
+	message: Message;
+	uid: string;
+	chatId: string | null;
+}> = observer(({ messageId, message, uid, chatId }) => {
+	const { isSmallScreen } = userStore;
+	const { users } = communityStore;
+	const { sender, text } = message;
+
+	const isMyMessage = useMemo(() => uid === sender, [uid, sender]);
+
+	return (
+		<Flex
+			vertical
+			align={isMyMessage ? 'end' : 'start'}
+			style={{
+				inlineSize: '100%',
+			}}
+		>
 			<Flex
-				vertical
-				align={uid === sender ? 'end' : 'start'}
-				style={{
-					inlineSize: '100%',
-				}}
+				align='end'
+				gap={isSmallScreen ? 2 : 4}
+				style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
 			>
 				<Flex
-					align='end'
+					vertical
 					gap={isSmallScreen ? 2 : 4}
-					style={{ flexDirection: uid === sender ? 'row' : 'row-reverse' }}
 				>
+					<TextArea
+						size={isSmallScreen ? 'small' : 'middle'}
+						autoSize
+						style={{ pointerEvents: 'none', inlineSize: 'min-content' }}
+						value={text}
+					/>
 					<Flex
-						vertical
-						gap={isSmallScreen ? 2 : 4}
+						justify='space-between'
+						style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
 					>
-						<TextArea
-							size={isSmallScreen ? 'small' : 'middle'}
-							autoSize
-							style={{ pointerEvents: 'none', inlineSize: 'min-content' }}
-							value={text}
-						/>
-						<Flex
-							justify='space-between'
-							style={{ flexDirection: uid === sender ? 'row' : 'row-reverse' }}
-						>
-							<Tag>{dayjs(message.sentAt).format('HH:mm')}</Tag>
-							<Tag>{users[sender].nickname}</Tag>
-						</Flex>
+						<Tag>
+							<Flex gap={isSmallScreen ? 2 : 4}>
+								{dayjs(message.sentAt).format('HH:mm')}
+								{isMyMessage &&
+									MyIconWithTooltip(
+										'',
+										isSmallScreen,
+										DeleteOutlined,
+										false,
+										() => deleteMessage(chatId, messageId),
+										undefined,
+										true
+									)}
+							</Flex>
+						</Tag>
+						<Tag>{users[sender].nickname}</Tag>
 					</Flex>
-					{MyImage(users[uid]?.image, isSmallScreen)}
 				</Flex>
+				{MyImage(users[uid]?.image, isSmallScreen)}
 			</Flex>
-		);
-	}
-);
+		</Flex>
+	);
+});
 
 export default CurrentChat;

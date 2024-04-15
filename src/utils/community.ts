@@ -216,7 +216,11 @@ export const getChatMessages = (
 	}
 };
 
-export const sendMessage = async(uid: string, chatId: string, text: string) => {
+export const sendMessage = async (
+	uid: string,
+	chatId: string,
+	text: string
+) => {
 	const message: Message = {
 		sender: uid,
 		text: text,
@@ -245,7 +249,7 @@ export const editMessage = (
 	}
 };
 
-export const deleteMessage = (chatId: string, messageId: string) => {
+export const deleteMessage = (chatId: string | null, messageId: string) => {
 	try {
 		remove(ref(database, `chats/${chatId}/messages/${messageId}`));
 	} catch (error) {

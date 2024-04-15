@@ -36,7 +36,7 @@ const ChatInput: React.FC<Props> = observer(
 					);
 				return '';
 			});
-		}, [user.uid, chatId, message]);
+		}, [user.uid, chatId, message, scrollbarsRef]);
 
 		return (
 			<Flex style={{ position: 'relative' }}>

@@ -248,7 +248,8 @@ export const MyIconWithTooltip = (
 	>,
 	light: boolean,
 	onClick?: () => void,
-	placement?: TooltipPlacement
+	placement?: TooltipPlacement,
+	small?: boolean
 ) => (
 	<Tooltip
 		placement={placement}
@@ -257,7 +258,15 @@ export const MyIconWithTooltip = (
 	>
 		<Icon
 			onClick={onClick}
-			style={{ scale: isSmallScreen ? '1' : '1.25' }}
+			style={{
+				scale: small
+					? isSmallScreen
+						? '.75'
+						: '1'
+					: isSmallScreen
+					? '1'
+					: '1.25',
+			}}
 		/>
 	</Tooltip>
 );

@@ -30,7 +30,10 @@ const ChatInput: React.FC<Props> = observer(
 
 		const send = useCallback(() => {
 			setMessage((prevMessage: string) => {
-				prevMessage && sendMessage(user.uid, chatId, message);
+				prevMessage &&
+					sendMessage(user.uid, chatId, message).then(() =>
+						scrollbarsRef.current?.scrollToBottom()
+					);
 				return '';
 			});
 		}, [user.uid, chatId, message]);

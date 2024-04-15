@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { configure } from 'mobx';
-import { User } from 'settings/interfaces';
+import { Chat, User } from 'settings/interfaces';
 
 configure({
 	enforceActions: 'never',
@@ -12,6 +12,11 @@ class CommunityStore {
 	friendRequests: { [key: string]: true } = {};
 	sentFriendRequests: { [key: string]: true } = {};
 	chats: { [key: string]: true } = {};
+	messages: Chat['messages'] | null = null;
+
+	setMessages = (messages: typeof this.messages) => {
+		this.messages = messages;
+	};
 
 	setChats = (chats: typeof this.chats) => {
 		this.chats = chats;

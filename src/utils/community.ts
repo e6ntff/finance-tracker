@@ -216,7 +216,7 @@ export const getChatMessages = (
 	}
 };
 
-export const sendMessage = (uid: string, chatId: string, text: string) => {
+export const sendMessage = async(uid: string, chatId: string, text: string) => {
 	const message: Message = {
 		sender: uid,
 		text: text,

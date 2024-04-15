@@ -5,7 +5,7 @@ import ChatListHeader from 'components/ChatListHeader';
 import CurrentChat from 'components/CurrentChat';
 import CurrentChatHeader from 'components/CurrentChatHeader';
 import { observer } from 'mobx-react-lite';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Scrollbars, { positionValues } from 'react-custom-scrollbars';
 import { userStore } from 'utils/userStore';
 
@@ -18,10 +18,16 @@ const Chats: React.FC = observer(() => {
 	const [stuckToBottom, setStuckToBottom] = useState<boolean>(true);
 	const [hasNewMessages, setHasNewMessages] = useState<boolean>(false);
 
-	const onUpdate = (values: positionValues) => {
-		setStuckToBottom(values.top >= 0.999);
-		values.top >= 0.999 && setHasNewMessages(false);
-	};
+	const onUpdate = useCallback(
+		(values: positionValues) => {
+			console.log(values);
+			const flag =
+				values.top >= 0.999 || values.clientHeight === values.scrollHeight;
+			setStuckToBottom(flag);
+			flag && setHasNewMessages(false);
+		},
+		[setStuckToBottom, setHasNewMessages]
+	);
 
 	return (
 		<Flex style={{ blockSize: '75dvh' }}>

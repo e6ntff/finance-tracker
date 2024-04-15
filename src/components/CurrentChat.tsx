@@ -1,4 +1,4 @@
-import { Avatar, Flex, Tag } from 'antd';
+import { Flex, Tag } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { Unsubscribe } from 'firebase/database';
 import { observer } from 'mobx-react-lite';
@@ -9,6 +9,7 @@ import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Scrollbars from 'react-custom-scrollbars';
+import { MyImage } from './Items';
 
 interface Props {
 	chatId: string | null;
@@ -20,13 +21,12 @@ interface Props {
 const CurrentChat: React.FC<Props> = observer(
 	({ chatId, scrollbarsRef, stuck, setHasNewMessages }) => {
 		const { user, isSmallScreen } = userStore;
-
-		const [messages, setMessages] = useState<Chat['messages'] | null>(null);
+		const { messages, setMessages } = communityStore;
 
 		useEffect(() => {
 			let unsubscribe: Unsubscribe | undefined = () => {};
+			setMessages(null);
 			if (chatId) unsubscribe = getChatMessages(chatId, setMessages);
-
 			return () => unsubscribe && unsubscribe();
 		}, [chatId]);
 
@@ -47,9 +47,10 @@ const CurrentChat: React.FC<Props> = observer(
 				gap={isSmallScreen ? 8 : 16}
 			>
 				{messages &&
-					Object.values(messages).map((message: Message) => (
+					Object.keys(messages).map((key: string) => (
 						<MessageItem
-							message={message}
+							key={key}
+							message={messages[key]}
 							uid={user.uid}
 						/>
 					))}
@@ -94,7 +95,7 @@ const MessageItem: React.FC<{ message: Message; uid: string }> = observer(
 							<Tag>{users[sender].nickname}</Tag>
 						</Flex>
 					</Flex>
-					<Avatar size={isSmallScreen ? 'small' : 'default'}></Avatar>
+					{MyImage(users[uid]?.image, isSmallScreen)}
 				</Flex>
 			</Flex>
 		);

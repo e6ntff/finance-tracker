@@ -94,7 +94,7 @@ export const MyTitle = (
 export const MyImage = (
 	image: string | undefined,
 	isSmallScreen: boolean,
-	language: language,
+	language?: language,
 	toggleOpened?: () => void
 ) =>
 	image ? (
@@ -146,7 +146,7 @@ export const MyImage = (
 			/>
 		</Tooltip>
 	) : (
-		<Tooltip title={languages.noImage[language]}>
+		<Tooltip title={language ? languages.noImage[language] : ''}>
 			<Avatar
 				style={{ cursor: 'pointer' }}
 				onClick={toggleOpened}

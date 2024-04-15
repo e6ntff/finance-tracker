@@ -414,6 +414,9 @@ const languages: { [key: string]: any } = {
 	removeFriend: { en: 'Remove', ru: 'Удалить' },
 	alreadyFriends: { en: `You're friends`, ru: 'Вы друзья' },
 	searchFriends: { en: 'Search friends', ru: 'Искать друзей' },
+	createChat: { en: 'Create chat', ru: 'Создать чат' },
+	deleteChat: { en: 'Delete chat', ru: 'Удалить чат' },
+	inviteToChat: { en: 'Invite friends to chat', ru: 'Пригласить друзей в чат' },
 };
 
 export default languages;

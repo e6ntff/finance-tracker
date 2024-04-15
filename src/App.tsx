@@ -25,6 +25,7 @@ import goalStore from 'utils/GoalStore';
 import { communityStore } from 'utils/communityStore';
 import NicknameModal from 'components/NicknameModal';
 import {
+	getChats,
 	getFriendRequests,
 	getFriends,
 	getSentFriendRequests,
@@ -46,8 +47,13 @@ const App: React.FC = observer(() => {
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
 	const { setUserGoals } = goalStore;
-	const { setUsers, setFriends, setFriendRequests, setSentFriendRequests } =
-		communityStore;
+	const {
+		setUsers,
+		setFriends,
+		setFriendRequests,
+		setSentFriendRequests,
+		setChats,
+	} = communityStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency, language } = userOptions;
@@ -84,6 +90,7 @@ const App: React.FC = observer(() => {
 			getFriends(user.uid, setFriends);
 			getFriendRequests(user.uid, setFriendRequests);
 			getSentFriendRequests(user.uid, setSentFriendRequests);
+			getChats(user.uid, setChats);
 		}
 		// eslint-disable-next-line
 	}, [user.uid]);
@@ -188,7 +195,7 @@ const App: React.FC = observer(() => {
 												padding: paddingLG,
 												margin: 'auto',
 												inlineSize: `${logged ? '100%' : 'max-content'}`,
-												blockSize: 'min-content',
+												blockSize: '100%',
 												borderRadius: '0.5em',
 											}}
 										>

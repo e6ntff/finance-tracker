@@ -23,7 +23,7 @@ import { TooltipPlacement } from 'antd/es/tooltip';
 
 const getTitleComponents = (
 	title: string,
-	type: ListType,
+	type: ListType | null,
 	isInOverlaps: boolean,
 	isSmallScreen: boolean,
 	editable: any,
@@ -33,7 +33,7 @@ const getTitleComponents = (
 		<>&nbsp;</>
 	) : (
 		<Typography.Text
-			type={type === 'expense' ? 'danger' : 'success'}
+			type={type ? (type === 'expense' ? 'danger' : 'success') : undefined}
 			style={{ fontSize: isSmallScreen ? '1em' : '1.25em' }}
 			key={index || 0}
 			editable={editable}
@@ -47,7 +47,7 @@ const getTitleComponents = (
 
 export const MyTitle = (
 	title: string,
-	type: ListType,
+	type: ListType | null,
 	isSmallScreen: boolean,
 	language: language,
 	editable: any,

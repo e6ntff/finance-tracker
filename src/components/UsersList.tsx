@@ -96,7 +96,7 @@ const UsersList: React.FC = observer(() => {
 			<List style={{ inlineSize: '100%' }}>
 				{Object.keys(list).map((key: string) => (
 					<Item key={key}>
-						<Col span={20}>{users[key].nickname}</Col>
+						<Col span={20}>{users[key]?.nickname}</Col>
 						{icon(key)}
 					</Item>
 				))}

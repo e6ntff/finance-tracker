@@ -11,6 +11,11 @@ class CommunityStore {
 	friends: { [key: string]: true } = {};
 	friendRequests: { [key: string]: true } = {};
 	sentFriendRequests: { [key: string]: true } = {};
+	chats: { [key: string]: true } = {};
+
+	setChats = (chats: typeof this.chats) => {
+		this.chats = chats;
+	};
 
 	setUsers = (users: typeof this.users) => {
 		this.users = users;

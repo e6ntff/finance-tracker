@@ -126,3 +126,20 @@ export interface Goal {
 }
 
 export type UserMode = 'requests' | 'myRequests' | 'friends';
+
+export interface Chat {
+	info: {
+		title: string;
+		createdAt: number;
+		members: { [key: string]: true };
+		lastMessage?: Message;
+	};
+	messages?: { [key: string]: Message };
+}
+
+export interface Message {
+	sender: string;
+	sentAt: number;
+	editedAt?: number;
+	text: string;
+}

@@ -1,4 +1,4 @@
-import { Flex, Tag } from 'antd';
+import { Flex } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { Unsubscribe } from 'firebase/database';
 import { observer } from 'mobx-react-lite';
@@ -9,7 +9,7 @@ import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyIconWithTooltip, MyImage } from './Items';
+import { MyIconWithTooltip, MyImage, MyTitle } from './Items';
 import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
@@ -71,9 +71,45 @@ const MessageItem: React.FC<{
 }> = observer(({ messageId, message, uid, chatId }) => {
 	const { isSmallScreen } = userStore;
 	const { users } = communityStore;
-	const { sender, text } = message;
+	const { sender, text, sentAt } = message;
 
 	const isMyMessage = useMemo(() => uid === sender, [uid, sender]);
+
+	const deleteMessageIcon = useMemo(
+		() =>
+			MyIconWithTooltip(
+				'',
+				isSmallScreen,
+				DeleteOutlined,
+				false,
+				() => deleteMessage(chatId, messageId),
+				undefined,
+				undefined,
+				true
+			),
+		[isSmallScreen, chatId, messageId]
+	);
+
+	const messageArea = useMemo(
+		() => (
+			<Flex
+				vertical
+				align='end'
+			>
+				{MyTitle(users[sender].nickname, null, isSmallScreen)}
+				<TextArea
+					variant='filled'
+					size={isSmallScreen ? 'small' : 'middle'}
+					autoSize
+					showCount={{ formatter: () => dayjs(sentAt).format('HH:mm') }}
+					style={{ pointerEvents: 'none' }}
+					value={text}
+					prefix='sd'
+				/>
+			</Flex>
+		),
+		[isSmallScreen, text, sentAt, users, sender]
+	);
 
 	return (
 		<Flex
@@ -92,32 +128,12 @@ const MessageItem: React.FC<{
 					vertical
 					gap={isSmallScreen ? 2 : 4}
 				>
-					<TextArea
-						size={isSmallScreen ? 'small' : 'middle'}
-						autoSize
-						style={{ pointerEvents: 'none', inlineSize: 'min-content' }}
-						value={text}
-					/>
+					{messageArea}
 					<Flex
 						justify='space-between'
 						style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
 					>
-						<Tag>
-							<Flex gap={isSmallScreen ? 2 : 4}>
-								{dayjs(message.sentAt).format('HH:mm')}
-								{isMyMessage &&
-									MyIconWithTooltip(
-										'',
-										isSmallScreen,
-										DeleteOutlined,
-										false,
-										() => deleteMessage(chatId, messageId),
-										undefined,
-										true
-									)}
-							</Flex>
-						</Tag>
-						<Tag>{users[sender].nickname}</Tag>
+						{isMyMessage && deleteMessageIcon}
 					</Flex>
 				</Flex>
 				{MyImage(users[uid]?.image, isSmallScreen)}

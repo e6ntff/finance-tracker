@@ -2,7 +2,7 @@ import { ArrowDownOutlined, SendOutlined } from '@ant-design/icons';
 import { Badge, Flex } from 'antd';
 import Search from 'antd/es/input/Search';
 import { observer } from 'mobx-react-lite';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { sendMessage } from 'utils/community';
 import { userStore } from 'utils/userStore';
 import { MyIconWithTooltip } from './Items';
@@ -38,21 +38,20 @@ const ChatInput: React.FC<Props> = observer(
 			});
 		}, [user.uid, chatId, message, scrollbarsRef]);
 
-		return (
-			<Flex style={{ position: 'relative' }}>
-				{!stuck && (
-					<Flex style={{ position: 'absolute', right: '0', bottom: '4em' }}>
-						<Badge dot={hasNewMessages}>
-							{MyIconWithTooltip(
-								'',
-								isSmallScreen,
-								ArrowDownOutlined,
-								false,
-								scrollbarsRef.current?.scrollToBottom
-							)}
-						</Badge>
-					</Flex>
-				)}
+		const scrollDownArrow = useMemo(
+			() =>
+				MyIconWithTooltip(
+					'',
+					isSmallScreen,
+					ArrowDownOutlined,
+					false,
+					scrollbarsRef.current?.scrollToBottom
+				),
+			[isSmallScreen, scrollbarsRef]
+		);
+
+		const chatInput = useMemo(
+			() => (
 				<Search
 					value={message}
 					onChange={handleChange}
@@ -61,6 +60,18 @@ const ChatInput: React.FC<Props> = observer(
 					size='large'
 					onSearch={send}
 				/>
+			),
+			[message, handleChange, send]
+		);
+
+		return (
+			<Flex style={{ position: 'relative' }}>
+				{!stuck && (
+					<Flex style={{ position: 'absolute', right: '0', bottom: '4em' }}>
+						<Badge dot={hasNewMessages}>{scrollDownArrow}</Badge>
+					</Flex>
+				)}
+				{chatInput}
 			</Flex>
 		);
 	}

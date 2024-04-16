@@ -15,6 +15,7 @@ const languages: { [key: string]: any } = {
 	community: { en: 'Community', ru: 'Сообщество' },
 	friends: { en: 'Friends', ru: 'Друзья' },
 	chats: { en: 'Chats', ru: 'Чаты' },
+	profile: { en: 'Profile', ru: 'Профиль' },
 	trash: {
 		en: 'Trash',
 		ru: 'Корзина',
@@ -415,8 +416,8 @@ const languages: { [key: string]: any } = {
 	alreadyFriends: { en: `You're friends`, ru: 'Вы друзья' },
 	searchFriends: { en: 'Search friends', ru: 'Искать друзей' },
 	createChat: { en: 'Create chat', ru: 'Создать чат' },
-	deleteChat: { en: 'Delete chat', ru: 'Удалить чат' },
-	inviteToChat: { en: 'Invite friends to chat', ru: 'Пригласить друзей в чат' },
+	deleteChatConfirm: { en: 'Delete chat?', ru: 'Удалить чат?' },
+	exitChatConfirm: { en: 'Exit chat?', ru: 'Покинуть чат?' },
 };
 
 export default languages;

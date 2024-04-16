@@ -19,7 +19,7 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Search from 'antd/es/input/Search';
 import uniqid from 'uniqid';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
-import { TooltipPlacement } from 'antd/es/tooltip';
+import { TooltipPlacement, TooltipProps } from 'antd/es/tooltip';
 
 const getTitleComponents = (
 	title: string,
@@ -49,8 +49,8 @@ export const MyTitle = (
 	title: string,
 	type: ListType | null,
 	isSmallScreen: boolean,
-	language: language,
-	editable: any,
+	language?: language,
+	editable?: any,
 	overlaps?: number[][]
 ) => {
 	const markedTitles: React.ReactNode[] = overlaps
@@ -69,7 +69,7 @@ export const MyTitle = (
 		  })
 		: [
 				getTitleComponents(
-					title || languages.noTitle[language],
+					title || (language && languages.noTitle[language]),
 					type,
 					false,
 					isSmallScreen,
@@ -80,9 +80,8 @@ export const MyTitle = (
 	return (
 		<Flex
 			key={uniqid()}
-			justify='center'
 			style={{
-				inlineSize: '100%',
+				inlineSize: 'min-content',
 				opacity: !title ? '.5' : '1',
 			}}
 		>
@@ -249,9 +248,11 @@ export const MyIconWithTooltip = (
 	light: boolean,
 	onClick?: () => void,
 	placement?: TooltipPlacement,
+	trigger?: TooltipProps['trigger'],
 	small?: boolean
 ) => (
 	<Tooltip
+		trigger={trigger}
 		placement={placement}
 		title={title}
 		color={light ? '#0005' : undefined}

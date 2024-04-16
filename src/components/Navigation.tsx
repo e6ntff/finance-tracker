@@ -6,19 +6,16 @@ import { observer } from 'mobx-react-lite';
 import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import {
-	CommentOutlined,
 	DeleteOutlined,
 	FolderOpenOutlined,
 	GlobalOutlined,
 	LineChartOutlined,
 	PushpinOutlined,
-	TeamOutlined,
 	UnorderedListOutlined,
 } from '@ant-design/icons';
 import { optionsStore } from 'utils/optionsStore';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
-import { communityStore } from 'utils/communityStore';
 
 const Navigation: React.FC = observer(() => {
 	const location = useLocation();
@@ -27,7 +24,6 @@ const Navigation: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
 	const { list } = listStore;
 	const { categories } = categoryStore;
-	const { friendRequests } = communityStore;
 
 	const { language } = userOptions;
 
@@ -112,42 +108,6 @@ const Navigation: React.FC = observer(() => {
 			key: paths.community,
 			title: '',
 			icon: <GlobalOutlined />,
-			children: [
-				{
-					label: (
-						<NavLink to={paths.community + paths.friends}>
-							{!isSmallScreen && languages.friends[language]}
-						</NavLink>
-					),
-					key: paths.community + paths.friends,
-					title: '',
-					icon: (
-						<Badge
-							size='small'
-							count={Object.keys(friendRequests).length}
-						>
-							<TeamOutlined />,
-						</Badge>
-					),
-				},
-				{
-					label: (
-						<NavLink to={paths.community + paths.chats}>
-							{!isSmallScreen && languages.chats[language]}
-						</NavLink>
-					),
-					key: paths.community + paths.chats,
-					title: '',
-					icon: (
-						<Badge
-							size='small'
-							count={Object.keys([]).length}
-						>
-							<CommentOutlined />,
-						</Badge>
-					),
-				},
-			],
 		},
 	];
 

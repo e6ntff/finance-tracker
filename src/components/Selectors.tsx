@@ -1,4 +1,4 @@
-import { Divider, Flex, Pagination } from 'antd';
+import { Divider, Flex, Pagination, Segmented, Tooltip } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, {
 	ChangeEvent,
@@ -13,15 +13,24 @@ import React, {
 import NewItemButton from './NewItemButton';
 import YearSlider from './YearSlider';
 import CategoriesSelect from './CategoriesSelect';
-import SortSelect from './SortSelect';
-import ModeSelect from './ModeSelect';
 import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import { MyIconWithTooltip, MySearch } from './Items';
-import { ReloadOutlined } from '@ant-design/icons';
+import {
+	CalendarOutlined,
+	DollarOutlined,
+	FontColorsOutlined,
+	MenuOutlined,
+	ReloadOutlined,
+	SortAscendingOutlined,
+	SortDescendingOutlined,
+	TableOutlined,
+} from '@ant-design/icons';
 import languages from 'settings/languages';
 import TypeSelect from './TypeSelect';
+import { SegmentedOptions } from 'antd/es/segmented';
+import { Mode, Sort } from 'settings/interfaces';
 
 interface Props {
 	total: number;
@@ -158,3 +167,120 @@ const Selectors: React.FC<Props> = observer(
 );
 
 export default memo(Selectors);
+
+const ModeSelect: React.FC = observer(() => {
+	const { isSmallScreen } = userStore;
+	const { listOptions, handleModeChanging, userOptions } = optionsStore;
+
+	const { language } = userOptions;
+
+	const options: SegmentedOptions<Mode> = useMemo(
+		() => [
+			{
+				label: (
+					<Tooltip title={languages.layout.list[language]}>
+						<MenuOutlined />
+					</Tooltip>
+				),
+				value: 'list',
+				disabled: isSmallScreen,
+			},
+			{
+				label: (
+					<Tooltip title={languages.layout.grid[language]}>
+						<TableOutlined />
+					</Tooltip>
+				),
+				value: 'grid',
+			},
+		],
+		[language, isSmallScreen]
+	);
+
+	return (
+		<Flex
+			gap={8}
+			style={{ alignSelf: 'start' }}
+		>
+			<Segmented
+				size={isSmallScreen ? 'small' : 'middle'}
+				value={listOptions.mode}
+				onChange={handleModeChanging}
+				options={options}
+			/>
+		</Flex>
+	);
+});
+
+const SortSelect: React.FC = observer(() => {
+	const { isSmallScreen } = userStore;
+	const {
+		setIsSortingReversed,
+		listOptions,
+		userOptions,
+		handleSortAlgorithmChanging,
+	} = optionsStore;
+
+	const { isSortingReversed } = listOptions;
+	const { language } = userOptions;
+
+	const toggleIsSortingReversed = useCallback(
+		() => setIsSortingReversed(!isSortingReversed),
+		[setIsSortingReversed, isSortingReversed]
+	);
+
+	const sortingIcon = useMemo(
+		() =>
+			isSortingReversed ? (
+				<SortDescendingOutlined onClick={toggleIsSortingReversed} />
+			) : (
+				<SortAscendingOutlined onClick={toggleIsSortingReversed} />
+			),
+		[isSortingReversed, toggleIsSortingReversed]
+	);
+
+	const options: SegmentedOptions<Sort> = useMemo(
+		() => [
+			{
+				label: (
+					<Tooltip title={languages.sort.byDate[language]}>
+						<CalendarOutlined />
+					</Tooltip>
+				),
+				value: 'date',
+			},
+			{
+				label: (
+					<Tooltip title={languages.sort.byTitle[language]}>
+						<FontColorsOutlined />
+					</Tooltip>
+				),
+				value: 'title',
+			},
+			{
+				label: (
+					<Tooltip title={languages.sort.byPrice[language]}>
+						<DollarOutlined />
+					</Tooltip>
+				),
+				value: 'price',
+			},
+		],
+		[language]
+	);
+
+	return (
+		<Flex
+			gap={8}
+			style={{ alignSelf: 'start' }}
+		>
+			<Tooltip title={languages.sort.reverse[language]}>{sortingIcon}</Tooltip>
+			<Segmented
+				size={isSmallScreen ? 'small' : 'middle'}
+				value={listOptions.sortingAlgorithm}
+				onChange={handleSortAlgorithmChanging}
+				options={options}
+			/>
+		</Flex>
+	);
+});

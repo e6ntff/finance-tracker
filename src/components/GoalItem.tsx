@@ -7,7 +7,13 @@ import {
 	Typography,
 } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useMemo,
+	useState,
+} from 'react';
 import {
 	MyDate,
 	MyIconWithTooltip,
@@ -79,7 +85,7 @@ const GoalItem: React.FC<Props> = observer(
 			setLastDeletedGoalIds([...lastDeletedGoalIds, initialGoalId]);
 		}, [setLastDeletedGoalIds, initialGoalId, lastDeletedGoalIds]);
 
-		const GoalBody = () => {
+		const GoalBody = useMemo(() => {
 			const started = date.start < dayjs().valueOf();
 
 			const percent = started
@@ -111,34 +117,40 @@ const GoalItem: React.FC<Props> = observer(
 				.find((time: [number, string]) => time[0] > 0)
 				?.join('');
 
-			const datePicker = () => {
-				return (
-					<Flex
-						align='center'
-						gap={4}
-					>
-						<DatePicker
-							onChange={(value: dayjs.Dayjs) => {
-								handleDateChange(value, 'start', setCurrentGoal);
-							}}
-							value={dayjs(date.start)}
-							size={isSmallScreen ? 'small' : 'middle'}
-							minDate={constants.startDate}
-							maxDate={constants.endDate}
-						/>
-						<Typography.Text strong>-</Typography.Text>
-						<DatePicker
-							onChange={(value: dayjs.Dayjs) => {
-								handleDateChange(value, 'end', setCurrentGoal);
-							}}
-							value={dayjs(date.end)}
-							size={isSmallScreen ? 'small' : 'middle'}
-							minDate={dayjs(date.start)}
-							maxDate={constants.endDate}
-						/>
-					</Flex>
-				);
-			};
+			const datePicker = (
+				<Flex
+					align='center'
+					gap={4}
+				>
+					<DatePicker
+						onChange={(value: dayjs.Dayjs) => {
+							handleDateChange(value, 'start', setCurrentGoal);
+						}}
+						value={dayjs(date.start)}
+						size={isSmallScreen ? 'small' : 'middle'}
+						minDate={constants.startDate}
+						maxDate={constants.endDate}
+					/>
+					<Typography.Text strong>-</Typography.Text>
+					<DatePicker
+						onChange={(value: dayjs.Dayjs) => {
+							handleDateChange(value, 'end', setCurrentGoal);
+						}}
+						value={dayjs(date.end)}
+						size={isSmallScreen ? 'small' : 'middle'}
+						minDate={dayjs(date.start)}
+						maxDate={constants.endDate}
+					/>
+				</Flex>
+			);
+
+			const progress = (
+				<Progress
+					size={isSmallScreen ? 'small' : 'default'}
+					percent={(money.collected.USD / money.total.USD) * 100}
+					format={(percent) => `${Math.round(percent as number)}%`}
+				/>
+			);
 
 			return (
 				<Flex
@@ -151,14 +163,10 @@ const GoalItem: React.FC<Props> = observer(
 						gap={8}
 						style={{ inlineSize: '100%' }}
 					>
-						<Progress
-							size={isSmallScreen ? 'small' : 'default'}
-							percent={(money.collected.USD / money.total.USD) * 100}
-							format={(percent) => `${Math.round(percent as number)}%`}
-						/>
+						{progress}
 						<Flex>
 							{isEditMode
-								? datePicker()
+								? datePicker
 								: MyDate(date.start, isSmallScreen, date.end)}
 						</Flex>
 					</Flex>
@@ -171,7 +179,7 @@ const GoalItem: React.FC<Props> = observer(
 					/>
 				</Flex>
 			);
-		};
+		}, [createdAt, date, handleDateChange, isEditMode, isSmallScreen, money]);
 
 		const ActionsJSX = (
 			<Flex justify='space-evenly'>
@@ -253,7 +261,7 @@ const GoalItem: React.FC<Props> = observer(
 					inlineSize: '100%',
 				}}
 			>
-				<GoalBody />
+				{GoalBody}
 			</Card>
 		);
 	}

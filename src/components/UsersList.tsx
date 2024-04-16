@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import UserModeSelect from './UserModeSelect';
 import { UserMode } from 'settings/interfaces';
 import { communityStore } from 'utils/communityStore';
-import { Col, Flex, List } from 'antd';
+import { Col, Flex, List, Popconfirm } from 'antd';
 import { userStore } from 'utils/userStore';
 import Item from 'antd/es/list/Item';
 import { MyIconWithTooltip } from './Items';
@@ -20,6 +20,7 @@ import languages from 'settings/languages';
 const UsersList: React.FC = observer(() => {
 	const { isSmallScreen, user } = userStore;
 	const { userOptions } = optionsStore;
+	const { language } = userOptions;
 	const { friends, friendRequests, sentFriendRequests, users } = communityStore;
 
 	const [mode, setMode] = useState<UserMode>('friends');
@@ -35,52 +36,53 @@ const UsersList: React.FC = observer(() => {
 			if (mode === 'friends')
 				return (
 					<Col span={1}>
-						{MyIconWithTooltip(
-							languages.removeFriend[userOptions.language],
-							isSmallScreen,
-							UserDeleteOutlined,
-							false,
-							() => removeFriend(user.uid, key)
-						)}
+						<Popconfirm
+							title={languages.removeFriendConfirm[language]}
+							onConfirm={() => removeFriend(user.uid, key)}
+						>
+							{MyIconWithTooltip('', isSmallScreen, UserDeleteOutlined, false)}
+						</Popconfirm>
 					</Col>
 				);
 			else if (mode === 'requests')
 				return (
 					<>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								languages.acceptRequest[userOptions.language],
-								isSmallScreen,
-								UserAddOutlined,
-								false,
-								() => acceptRequest(user.uid, key)
-							)}
+							<Popconfirm
+								title={languages.declineRequestConfirm[language]}
+								onConfirm={() => acceptRequest(user.uid, key)}
+							>
+								{MyIconWithTooltip('', isSmallScreen, UserAddOutlined, false)}
+							</Popconfirm>
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								languages.declineRequest[userOptions.language],
-								isSmallScreen,
-								UserDeleteOutlined,
-								false,
-								() => declineRequest(user.uid, key)
-							)}
+							<Popconfirm
+								title={languages.declineRequestConfirm[language]}
+								onConfirm={() => declineRequest(user.uid, key)}
+							>
+								{MyIconWithTooltip(
+									'',
+									isSmallScreen,
+									UserDeleteOutlined,
+									false
+								)}
+							</Popconfirm>
 						</Col>
 					</>
 				);
 			else if (mode === 'myRequests')
 				return (
 					<Col span={1}>
-						{MyIconWithTooltip(
-							languages.cancelRequest[userOptions.language],
-							isSmallScreen,
-							UserDeleteOutlined,
-							false,
-							() => cancelRequest(user.uid, key)
-						)}
+						<Popconfirm
+							title={languages.cancelRequestConfirm[language]}
+							onConfirm={() => cancelRequest(user.uid, key)}
+						>
+							{MyIconWithTooltip('', isSmallScreen, UserDeleteOutlined, false)}
+						</Popconfirm>
 					</Col>
 				);
 		},
-		[user.uid, isSmallScreen, mode, userOptions.language]
+		[user.uid, isSmallScreen, mode, language]
 	);
 
 	return (

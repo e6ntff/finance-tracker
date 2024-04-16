@@ -189,10 +189,15 @@ export const deleteChat = (
 	}
 };
 
-export const exitFromChat = (uid: string, chatId: string) => {
+export const exitFromChat = (
+	uid: string,
+	chatId: string,
+	members: { [key: string]: true }
+) => {
 	try {
-		remove(ref(database, `chats/${chatId}/members/${uid}`));
+		remove(ref(database, `chats/${chatId}/info/members/${uid}`));
 		remove(ref(database, `users/${uid}/chats/${chatId}`));
+		Object.keys(members).length === 1 && deleteChat(chatId, members);
 	} catch (error) {
 		alert(error);
 	}

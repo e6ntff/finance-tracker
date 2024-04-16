@@ -11,7 +11,12 @@ import React, {
 import { MyIcon, MyTitle, addFriendToChatSelect, tooltipTitle } from './Items';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
-import { deleteChat, getChatInfo, inviteFriendsToChat } from 'utils/community';
+import {
+	deleteChat,
+	exitFromChat,
+	getChatInfo,
+	inviteFriendsToChat,
+} from 'utils/community';
 import { Chat } from 'settings/interfaces';
 import {
 	ArrowLeftOutlined,
@@ -33,7 +38,7 @@ interface Props {
 const CurrentChatHeader: React.FC<Props> = observer(
 	({ chatId, setCurrentChatId, setSelected }) => {
 		const { userOptions } = optionsStore;
-		const { isSmallScreen } = userStore;
+		const { isSmallScreen, user } = userStore;
 		const { friends, users } = communityStore;
 
 		const { language } = userOptions;
@@ -76,6 +81,15 @@ const CurrentChatHeader: React.FC<Props> = observer(
 			setCurrentChatId(null);
 			deleteChat(chatId, chatInfo?.members as Chat['info']['members']);
 		}, [chatId, chatInfo, setCurrentChatId]);
+
+		const handleExit = useCallback(() => {
+			setCurrentChatId(null);
+			exitFromChat(
+				user.uid,
+				chatId,
+				chatInfo?.members as Chat['info']['members']
+			);
+		}, [user.uid, chatId, chatInfo, setCurrentChatId]);
 
 		const chatTitle = useMemo(
 			() =>
@@ -149,7 +163,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 					</Popconfirm>
 					<Popconfirm
 						title={languages.exitChatConfirm[language]}
-						onConfirm={handleDeleting}
+						onConfirm={handleExit}
 					>
 						{MyIcon(LogoutOutlined, isSmallScreen, false)}
 					</Popconfirm>
@@ -174,6 +188,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 				moreIcons,
 				chatInfo,
 				users,
+				handleExit,
 			]
 		);
 

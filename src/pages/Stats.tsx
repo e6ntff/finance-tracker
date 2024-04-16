@@ -59,7 +59,6 @@ const Stats: React.FC = observer(() => {
 	const DiagramsJSX = (
 		<Flex
 			vertical
-			gap={16}
 			align='stretch'
 			style={{ inlineSize: '100%' }}
 		>
@@ -93,7 +92,6 @@ const Stats: React.FC = observer(() => {
 	) : Object.keys(list).length ? (
 		<Flex
 			vertical
-			gap={32}
 			align='start'
 		>
 			<StatsCard

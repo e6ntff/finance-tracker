@@ -66,7 +66,7 @@ const DiagramPie: React.FC = observer(() => {
 	return (
 		<Flex
 			style={{
-				inlineSize: isSmallScreen ? 'unset' : '40%',
+				inlineSize: isSmallScreen ? 'unset' : '35%',
 			}}
 		>
 			<Pie

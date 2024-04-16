@@ -255,7 +255,8 @@ export const MyIcon = (
 		trigger={trigger}
 		placement={placement}
 		title={title}
-		color={light ? '#0005' : undefined}
+		color={light ? '#0000' : undefined}
+		overlayInnerStyle={{ padding: light ? '0' : '' }}
 	>
 		<Icon
 			onClick={onClick}

@@ -18,6 +18,8 @@ const Chats: React.FC = observer(() => {
 	const [stuckToBottom, setStuckToBottom] = useState<boolean>(true);
 	const [hasNewMessages, setHasNewMessages] = useState<boolean>(false);
 
+	const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
+
 	const onUpdate = useCallback(
 		(values: positionValues) => {
 			const flag =
@@ -63,6 +65,7 @@ const Chats: React.FC = observer(() => {
 						style={{ inlineSize: isSmallScreen ? '100%' : '75%' }}
 					>
 						<CurrentChatHeader
+							setSelected={setSelectedMessages}
 							chatId={currentChatId}
 							setCurrentChatId={setCurrentChatId}
 						/>
@@ -77,6 +80,8 @@ const Chats: React.FC = observer(() => {
 								scrollbarsRef={scrollbarsRef}
 								stuck={stuckToBottom}
 								setHasNewMessages={setHasNewMessages}
+								selected={selectedMessages}
+								setSelected={setSelectedMessages}
 							/>
 						</Scrollbars>
 						{currentChatId && (
@@ -98,6 +103,7 @@ const Chats: React.FC = observer(() => {
 			currentChatId,
 			hasNewMessages,
 			isSmallScreen,
+			selectedMessages,
 			onUpdate,
 		]
 	);

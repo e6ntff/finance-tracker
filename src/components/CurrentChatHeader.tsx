@@ -1,4 +1,4 @@
-import { Flex, Popconfirm, Select } from 'antd';
+import { Flex, Popconfirm } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, {
 	Dispatch,
@@ -8,7 +8,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { MyIcon, MyTitle } from './Items';
+import { MyIcon, MyTitle, addFriendToChatSelect, tooltipTitle } from './Items';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 import { deleteChat, getChatInfo, inviteFriendsToChat } from 'utils/community';
@@ -16,6 +16,7 @@ import { Chat } from 'settings/interfaces';
 import {
 	ArrowLeftOutlined,
 	DeleteOutlined,
+	InfoCircleOutlined,
 	LogoutOutlined,
 	MoreOutlined,
 	PlusOutlined,
@@ -26,10 +27,11 @@ import { communityStore } from 'utils/communityStore';
 interface Props {
 	chatId: string;
 	setCurrentChatId: Dispatch<SetStateAction<string | null>>;
+	setSelected: Dispatch<SetStateAction<string[]>>;
 }
 
 const CurrentChatHeader: React.FC<Props> = observer(
-	({ chatId, setCurrentChatId }) => {
+	({ chatId, setCurrentChatId, setSelected }) => {
 		const { userOptions } = optionsStore;
 		const { isSmallScreen } = userStore;
 		const { friends, users } = communityStore;
@@ -49,7 +51,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		const handleChange = useCallback(
 			(
-				_: null,
+				_: null | string[],
 				option:
 					| {
 							value: string;
@@ -75,30 +77,6 @@ const CurrentChatHeader: React.FC<Props> = observer(
 			deleteChat(chatId, chatInfo?.members as Chat['info']['members']);
 		}, [chatId, chatInfo, setCurrentChatId]);
 
-		const addFriendToChatSelect = useMemo(
-			() => (
-				<Select
-					size={isSmallScreen ? 'small' : 'middle'}
-					labelInValue
-					onChange={handleChange}
-					showSearch
-					value={null}
-					style={{ inlineSize: isSmallScreen ? '10em' : '15em' }}
-					options={Object.keys(friends)
-						.filter(
-							(key: string) =>
-								chatInfo.members &&
-								!Object.keys(chatInfo?.members).includes(key)
-						)
-						.map((key: string) => ({
-							value: key,
-							label: users[key].nickname,
-						}))}
-				/>
-			),
-			[isSmallScreen, handleChange, chatInfo, users, friends]
-		);
-
 		const chatTitle = useMemo(
 			() =>
 				MyTitle(
@@ -115,9 +93,32 @@ const CurrentChatHeader: React.FC<Props> = observer(
 		const goBackArrow = useMemo(
 			() =>
 				MyIcon(ArrowLeftOutlined, isSmallScreen, false, () =>
-					setCurrentChatId(null)
+					setSelected((prevSelected: string[]) => {
+						if (prevSelected.length) {
+							return [];
+						}
+						setCurrentChatId(null);
+						return [];
+					})
 				),
-			[isSmallScreen, setCurrentChatId]
+			[isSmallScreen, setCurrentChatId, setSelected]
+		);
+
+		const moreIcons = useMemo(
+			() => (
+				<Flex>
+					{MyIcon(
+						InfoCircleOutlined,
+						isSmallScreen,
+						false,
+						undefined,
+						tooltipTitle(chatInfo.createdAt, undefined, language),
+						false,
+						'left'
+					)}
+				</Flex>
+			),
+			[chatInfo, isSmallScreen, language]
 		);
 
 		const icons = useMemo(
@@ -126,10 +127,17 @@ const CurrentChatHeader: React.FC<Props> = observer(
 					{MyIcon(
 						PlusOutlined,
 						isSmallScreen,
-						true,
-						undefined,
-						addFriendToChatSelect,
 						false,
+						undefined,
+						addFriendToChatSelect(
+							isSmallScreen,
+							handleChange,
+							friends,
+							users,
+							null,
+							chatInfo
+						),
+						true,
 						'bottom',
 						'click'
 					)}
@@ -150,14 +158,23 @@ const CurrentChatHeader: React.FC<Props> = observer(
 						isSmallScreen,
 						false,
 						undefined,
-						<></>,
+						moreIcons,
 						false,
 						'bottom',
 						'contextMenu'
 					)}
 				</Flex>
 			),
-			[isSmallScreen, language, handleDeleting, addFriendToChatSelect]
+			[
+				isSmallScreen,
+				language,
+				handleDeleting,
+				friends,
+				handleChange,
+				moreIcons,
+				chatInfo,
+				users,
+			]
 		);
 
 		return (

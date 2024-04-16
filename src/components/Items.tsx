@@ -5,12 +5,20 @@ import {
 	Checkbox,
 	Flex,
 	Image,
+	Select,
 	Statistic,
 	Tag,
 	Tooltip,
 	Typography,
 } from 'antd';
-import { ListType, category, currencies, language } from 'settings/interfaces';
+import {
+	Chat,
+	ListType,
+	User,
+	category,
+	currencies,
+	language,
+} from 'settings/interfaces';
 import languages from 'settings/languages';
 import dayjs from 'dayjs';
 import { getSymbolAndPrice } from 'utils/utils';
@@ -256,7 +264,7 @@ export const MyIcon = (
 		placement={placement}
 		title={title}
 		color={light ? '#0000' : undefined}
-		overlayInnerStyle={{ padding: light ? '0' : '' }}
+		overlayInnerStyle={{ padding: light ? '0' : '', boxShadow: 'none' }}
 	>
 		<Icon
 			onClick={onClick}
@@ -357,4 +365,47 @@ export const tooltipTitle = (
 			</>
 		);
 	}
+};
+
+export const addFriendToChatSelect = (
+	isSmallScreen: boolean,
+	handleChange: (
+		value: null | string[],
+		option:
+			| {
+					value: string;
+					label: any;
+			  }
+			| {
+					value: string;
+					label: any;
+			  }[]
+	) => void,
+	friends: { [key: string]: true },
+	users: { [key: string]: User },
+	value: string[] | null,
+	chatInfo?: Chat['info']
+) => {
+	const friendsToShow = chatInfo
+		? Object.keys(friends).filter(
+				(key: string) =>
+					chatInfo?.members && !Object.keys(chatInfo?.members).includes(key)
+		  )
+		: Object.keys(friends);
+
+	return (
+		<Select
+			mode='multiple'
+			size={isSmallScreen ? 'small' : 'middle'}
+			labelInValue
+			onChange={handleChange}
+			showSearch
+			value={value}
+			style={{ inlineSize: isSmallScreen ? '10em' : '15em' }}
+			options={friendsToShow.map((key: string) => ({
+				value: key,
+				label: users[key].nickname,
+			}))}
+		/>
+	);
 };

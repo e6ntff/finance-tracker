@@ -32,24 +32,22 @@ const UserSelect: React.FC = observer(() => {
 									? CheckOutlined
 									: UserDeleteOutlined,
 								isSmallScreen,
-								false,
-								() => {
-									!Object.keys(friends).includes(key) &&
-										cancelRequest(user.uid, key);
-								},
-								Object.keys(friends).includes(key)
-									? languages.alreadyFriends[userOptions.language]
-									: languages.cancelRequest[userOptions.language]
+								{
+									onClick: () => {
+										!Object.keys(friends).includes(key) &&
+											cancelRequest(user.uid, key);
+									},
+									title: Object.keys(friends).includes(key)
+										? languages.alreadyFriends[userOptions.language]
+										: languages.cancelRequest[userOptions.language],
+								}
 						  )
-						: MyIcon(
-								UserAddOutlined,
-								isSmallScreen,
-								false,
-								() => {
+						: MyIcon(UserAddOutlined, isSmallScreen, {
+								onClick: () => {
 									sendRequest(user.uid, key, friendRequests);
 								},
-								languages.sendRequest[userOptions.language]
-						  )}
+								title: languages.sendRequest[userOptions.language],
+						  })}
 				</Flex>
 			);
 		},

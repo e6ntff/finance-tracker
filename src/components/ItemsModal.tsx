@@ -78,24 +78,25 @@ const ItemsModal: React.FC<Props> = observer(
 									</Flex>
 								</Col>
 								<Col span={2}>
-									{MyIcon(
-										ExportOutlined,
-										isSmallScreen,
-										true,
-										undefined,
-										<ListItem
-											initialItem={{ id: key, overlaps: [] as number[][] }}
-											mode='grid'
-										/>
-									)}
+									{MyIcon(ExportOutlined, isSmallScreen, {
+										light: true,
+										title: (
+											<ListItem
+												initialItem={{ id: key, overlaps: [] as number[][] }}
+												mode='grid'
+											/>
+										),
+									})}
 								</Col>
 								<Col span={2}>
 									{MyIcon(
 										DeleteOutlined,
 										isSmallScreen,
-										false,
-										() => deleteCategoryFromItem(key),
-										languages.delete[language]
+
+										{
+											onClick: () => deleteCategoryFromItem(key),
+											title: languages.delete[language],
+										}
 									)}
 								</Col>
 							</Item>

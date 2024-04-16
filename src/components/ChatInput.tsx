@@ -40,12 +40,9 @@ const ChatInput: React.FC<Props> = observer(
 
 		const scrollDownArrow = useMemo(
 			() =>
-				MyIcon(
-					ArrowDownOutlined,
-					isSmallScreen,
-					false,
-					scrollbarsRef.current?.scrollToBottom
-				),
+				MyIcon(ArrowDownOutlined, isSmallScreen, {
+					onClick: scrollbarsRef.current?.scrollToBottom,
+				}),
 			[isSmallScreen, scrollbarsRef]
 		);
 

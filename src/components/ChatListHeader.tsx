@@ -78,14 +78,14 @@ const ChatListHeader: React.FC = observer(() => {
 				</Form.Item>
 				<Flex justify='space-between'>
 					<Form.Item>
-						{MyIcon(CloseOutlined, isSmallScreen, false, () =>
-							setNewChat({ title: '', users: [] })
-						)}
+						{MyIcon(CloseOutlined, isSmallScreen, {
+							onClick: () => setNewChat({ title: '', users: [] }),
+						})}
 					</Form.Item>
 					<Form.Item>
-						{MyIcon(CheckOutlined, isSmallScreen, false, () =>
-							createChat(user.uid, newChat.title, newChat.users)
-						)}
+						{MyIcon(CheckOutlined, isSmallScreen, {
+							onClick: () => createChat(user.uid, newChat.title, newChat.users),
+						})}
 					</Form.Item>
 				</Flex>
 			</Form>
@@ -105,16 +105,12 @@ const ChatListHeader: React.FC = observer(() => {
 	return (
 		<Flex justify='space-between'>
 			{MyTitle(languages.chats[language], null, isSmallScreen, language, false)}
-			{MyIcon(
-				PlusOutlined,
-				isSmallScreen,
-				false,
-				undefined,
-				addChatForm,
-				true,
-				'bottom',
-				'click'
-			)}
+			{MyIcon(PlusOutlined, isSmallScreen, {
+				title: addChatForm,
+				light: true,
+				placement: 'bottom',
+				trigger: 'click',
+			})}
 		</Flex>
 	);
 });

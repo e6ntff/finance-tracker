@@ -40,7 +40,7 @@ const UsersList: React.FC = observer(() => {
 							title={languages.removeFriendConfirm[language]}
 							onConfirm={() => removeFriend(user.uid, key)}
 						>
-							{MyIcon(UserDeleteOutlined, isSmallScreen, false)}
+							{MyIcon(UserDeleteOutlined, isSmallScreen, {})}
 						</Popconfirm>
 					</Col>
 				);
@@ -52,7 +52,7 @@ const UsersList: React.FC = observer(() => {
 								title={languages.declineRequestConfirm[language]}
 								onConfirm={() => acceptRequest(user.uid, key)}
 							>
-								{MyIcon(UserAddOutlined, isSmallScreen, false)}
+								{MyIcon(UserAddOutlined, isSmallScreen, {})}
 							</Popconfirm>
 						</Col>
 						<Col span={1}>
@@ -60,7 +60,7 @@ const UsersList: React.FC = observer(() => {
 								title={languages.declineRequestConfirm[language]}
 								onConfirm={() => declineRequest(user.uid, key)}
 							>
-								{MyIcon(UserDeleteOutlined, isSmallScreen, false)}
+								{MyIcon(UserDeleteOutlined, isSmallScreen, {})}
 							</Popconfirm>
 						</Col>
 					</>
@@ -72,7 +72,7 @@ const UsersList: React.FC = observer(() => {
 							title={languages.cancelRequestConfirm[language]}
 							onConfirm={() => cancelRequest(user.uid, key)}
 						>
-							{MyIcon(UserDeleteOutlined, isSmallScreen, false)}
+							{MyIcon(UserDeleteOutlined, isSmallScreen, {})}
 						</Popconfirm>
 					</Col>
 				);

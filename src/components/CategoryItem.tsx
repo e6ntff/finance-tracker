@@ -154,21 +154,16 @@ const CategoryItem: React.FC<Props> = observer(
 				align='center'
 				justify='space-evenly'
 			>
-				{MyIcon(
-					InfoCircleOutlined,
-					isSmallScreen,
-					false,
-					() => itemsWithCurrentCategory.length && setIsModalOpened(true),
-					tooltipTitle
-				)}
+				{MyIcon(InfoCircleOutlined, isSmallScreen, {
+					onClick: () =>
+						itemsWithCurrentCategory.length && setIsModalOpened(true),
+					title: tooltipTitle,
+				})}
 				{ColorPickerJSX}
-				{MyIcon(
-					DeleteOutlined,
-					isSmallScreen,
-					false,
-					deleteCategory,
-					languages.delete[userOptions.language]
-				)}
+				{MyIcon(DeleteOutlined, isSmallScreen, {
+					onClick: deleteCategory,
+					title: languages.delete[userOptions.language],
+				})}
 			</Flex>
 		);
 

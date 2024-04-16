@@ -78,13 +78,10 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 	);
 
 	const DeleteJSX = (callback: () => void) =>
-		MyIcon(
-			DeleteOutlined,
-			isSmallScreen,
-			false,
-			callback,
-			languages.delete[userOptions.language]
-		);
+		MyIcon(DeleteOutlined, isSmallScreen, {
+			onClick: callback,
+			title: languages.delete[userOptions.language],
+		});
 
 	const CheckboxJSX = (
 		key: string,
@@ -135,36 +132,28 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIcon(
-								ExportOutlined,
-								isSmallScreen,
-								true,
-								undefined,
-								<CategoryItem
-									initialCategoryId={id}
-									disabled
-								/>
-							)}
+							{MyIcon(ExportOutlined, isSmallScreen, {
+								small: true,
+								title: (
+									<CategoryItem
+										initialCategoryId={id}
+										disabled
+									/>
+								),
+							})}
 						</Col>
 						<Col span={1}>
-							{MyIcon(
-								InfoCircleOutlined,
-								isSmallScreen,
-								false,
-								undefined,
-								`${languages.deletedAt[language]}: ${dayjs(
+							{MyIcon(InfoCircleOutlined, isSmallScreen, {
+								title: `${languages.deletedAt[language]}: ${dayjs(
 									currentCategory?.deletedAt
-								).format('HH:mm:ss DD.MM.YY')}`
-							)}
+								).format('HH:mm:ss DD.MM.YY')}`,
+							})}
 						</Col>
 						<Col span={1}>
-							{MyIcon(
-								UndoOutlined,
-								isSmallScreen,
-								false,
-								() => restoreCategory(id),
-								languages.restore[language]
-							)}
+							{MyIcon(UndoOutlined, isSmallScreen, {
+								onClick: () => restoreCategory(id),
+								title: languages.restore[language],
+							})}
 						</Col>
 						<Col span={1}>{DeleteJSX(() => deleteCategory(id))}</Col>
 					</Item>

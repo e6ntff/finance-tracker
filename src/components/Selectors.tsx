@@ -132,13 +132,10 @@ const Selectors: React.FC<Props> = observer(
 							<SortSelect />
 							{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
 							{isSettingsChanged &&
-								MyIcon(
-									ReloadOutlined,
-									false,
-									false,
-									resetAll,
-									languages.reset[userOptions.language]
-								)}
+								MyIcon(ReloadOutlined, false, {
+									onClick: resetAll,
+									title: languages.reset[userOptions.language],
+								})}
 						</Flex>
 					</Flex>
 					<YearSlider

@@ -107,28 +107,18 @@ const ListItem: React.FC<Props> = observer(
 					handleSelection,
 					deleteAll
 				)}
-				{MyIcon(
-					DeleteOutlined,
-					isSmallScreen,
-					false,
-					deleteItem,
-					languages.delete[language]
-				)}
+				{MyIcon(DeleteOutlined, isSmallScreen, {
+					onClick: deleteItem,
+					title: languages.delete[language],
+				})}
 				{MyPrice(price, type, isSmallScreen, currency)}
-				{MyIcon(
-					EditOutlined,
-					isSmallScreen,
-					false,
-					toggleIsModalOpened,
-					languages.edit[language]
-				)}
-				{MyIcon(
-					InfoCircleOutlined,
-					isSmallScreen,
-					false,
-					undefined,
-					tooltipTitle(createdAt, updatedAt, language)
-				)}
+				{MyIcon(EditOutlined, isSmallScreen, {
+					onClick: toggleIsModalOpened,
+					title: languages.edit[language],
+				})}
+				{MyIcon(InfoCircleOutlined, isSmallScreen, {
+					title: tooltipTitle(createdAt, updatedAt, language),
+				})}
 			</Flex>
 		);
 
@@ -173,31 +163,21 @@ const ListItem: React.FC<Props> = observer(
 						<Col span={4}>{MyCategory(categories[categoryId])}</Col>
 						<Col span={4}>{MyPrice(price, type, isSmallScreen, currency)}</Col>
 						<Col span={1}>
-							{MyIcon(
-								EditOutlined,
-								isSmallScreen,
-								false,
-								toggleIsModalOpened,
-								languages.edit[language]
-							)}
+							{MyIcon(EditOutlined, isSmallScreen, {
+								onClick: toggleIsModalOpened,
+								title: languages.edit[language],
+							})}
 						</Col>
 						<Col span={1}>
-							{MyIcon(
-								DeleteOutlined,
-								isSmallScreen,
-								false,
-								deleteItem,
-								languages.delete[language]
-							)}
+							{MyIcon(DeleteOutlined, isSmallScreen, {
+								onClick: deleteItem,
+								title: languages.delete[language],
+							})}
 						</Col>
 						<Col span={1}>
-							{MyIcon(
-								InfoCircleOutlined,
-								isSmallScreen,
-								false,
-								undefined,
-								tooltipTitle(createdAt, updatedAt, language)
-							)}
+							{MyIcon(InfoCircleOutlined, isSmallScreen, {
+								title: tooltipTitle(createdAt, updatedAt, language),
+							})}
 						</Col>
 					</Item>
 				) : (

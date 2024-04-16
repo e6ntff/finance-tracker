@@ -106,44 +106,27 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		const goBackArrow = useMemo(
 			() =>
-				MyIcon(ArrowLeftOutlined, isSmallScreen, false, () =>
-					setSelected((prevSelected: string[]) => {
-						if (prevSelected.length) {
+				MyIcon(ArrowLeftOutlined, isSmallScreen, {
+					onClick: () =>
+						setSelected((prevSelected: string[]) => {
+							if (prevSelected.length) {
+								return [];
+							}
+							setCurrentChatId(null);
 							return [];
-						}
-						setCurrentChatId(null);
-						return [];
-					})
-				),
+						}),
+				}),
 			[isSmallScreen, setCurrentChatId, setSelected]
-		);
-
-		const moreIcons = useMemo(
-			() => (
-				<Flex>
-					{MyIcon(
-						InfoCircleOutlined,
-						isSmallScreen,
-						false,
-						undefined,
-						tooltipTitle(chatInfo.createdAt, undefined, language),
-						false,
-						'left'
-					)}
-				</Flex>
-			),
-			[chatInfo, isSmallScreen, language]
 		);
 
 		const icons = useMemo(
 			() => (
-				<Flex gap={isSmallScreen ? 8 : 16}>
-					{MyIcon(
-						PlusOutlined,
-						isSmallScreen,
-						false,
-						undefined,
-						addFriendToChatSelect(
+				<Flex
+					vertical
+					gap={isSmallScreen ? 4 : 8}
+				>
+					{MyIcon(PlusOutlined, isSmallScreen, {
+						title: addFriendToChatSelect(
 							isSmallScreen,
 							handleChange,
 							friends,
@@ -151,45 +134,51 @@ const CurrentChatHeader: React.FC<Props> = observer(
 							null,
 							chatInfo
 						),
-						true,
-						'bottom',
-						'click'
-					)}
-					<Popconfirm
-						title={languages.deleteChatConfirm[language]}
-						onConfirm={handleDeleting}
-					>
-						{MyIcon(DeleteOutlined, isSmallScreen, false)}
-					</Popconfirm>
+						light: true,
+						avatar: true,
+						placement: 'left',
+						trigger: 'click',
+					})}
 					<Popconfirm
 						title={languages.exitChatConfirm[language]}
 						onConfirm={handleExit}
 					>
-						{MyIcon(LogoutOutlined, isSmallScreen, false)}
+						{MyIcon(LogoutOutlined, isSmallScreen, { avatar: true })}
 					</Popconfirm>
-					{MyIcon(
-						MoreOutlined,
-						isSmallScreen,
-						false,
-						undefined,
-						moreIcons,
-						false,
-						'bottom',
-						'contextMenu'
-					)}
+					<Popconfirm
+						title={languages.deleteChatConfirm[language]}
+						onConfirm={handleDeleting}
+					>
+						{MyIcon(DeleteOutlined, isSmallScreen, { avatar: true })}
+					</Popconfirm>
+					{MyIcon(InfoCircleOutlined, isSmallScreen, {
+						title: tooltipTitle(chatInfo.createdAt, undefined, language),
+						placement: 'left',
+						avatar: true,
+					})}
 				</Flex>
 			),
 			[
+				chatInfo,
 				isSmallScreen,
 				language,
 				handleDeleting,
 				friends,
 				handleChange,
-				moreIcons,
-				chatInfo,
 				users,
 				handleExit,
 			]
+		);
+
+		const moreIcon = useMemo(
+			() =>
+				MyIcon(MoreOutlined, isSmallScreen, {
+					title: icons,
+					light: true,
+					placement: 'bottom',
+					trigger: 'click',
+				}),
+			[isSmallScreen, icons]
 		);
 
 		return (
@@ -199,7 +188,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 			>
 				{goBackArrow}
 				{chatTitle}
-				{chatId && chatInfo && icons}
+				{chatId && chatInfo && moreIcon}
 			</Flex>
 		);
 	}

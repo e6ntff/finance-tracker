@@ -62,13 +62,10 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 				]}
 			/>
 			{isSmallScreen &&
-				MyIcon(
-					SearchOutlined,
-					isSmallScreen,
-					false,
-					openModal,
-					languages.searchFriends[userOptions.language]
-				)}
+				MyIcon(SearchOutlined, isSmallScreen, {
+					onClick: openModal,
+					title: languages.searchFriends[userOptions.language],
+				})}
 			<Drawer
 				open={isModalOpened}
 				onClose={closeModal}

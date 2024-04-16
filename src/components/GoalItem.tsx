@@ -177,13 +177,10 @@ const GoalItem: React.FC<Props> = observer(
 
 		const ActionsJSX = (
 			<Flex justify='space-evenly'>
-				{MyIcon(
-					DeleteOutlined,
-					isSmallScreen,
-					false,
-					deleteGoal,
-					languages.delete[language]
-				)}
+				{MyIcon(DeleteOutlined, isSmallScreen, {
+					onClick: deleteGoal,
+					title: languages.delete[language],
+				})}
 				{isEditMode ? (
 					<Flex
 						gap={8}
@@ -218,13 +215,9 @@ const GoalItem: React.FC<Props> = observer(
 						money.total
 					)
 				)}
-				{MyIcon(
-					InfoCircleOutlined,
-					isSmallScreen,
-					false,
-					undefined,
-					tooltipTitle(createdAt, updatedAt, language)
-				)}
+				{MyIcon(InfoCircleOutlined, isSmallScreen, {
+					title: tooltipTitle(createdAt, updatedAt, language),
+				})}
 			</Flex>
 		);
 
@@ -245,9 +238,10 @@ const GoalItem: React.FC<Props> = observer(
 				extra={MyIcon(
 					isEditMode ? CheckOutlined : EditOutlined,
 					isSmallScreen,
-					false,
-					toggleMode,
-					languages.edit[language]
+					{
+						onClick: toggleMode,
+						title: languages.edit[language],
+					}
 				)}
 				styles={{ actions: { alignItems: 'center' } }}
 				actions={[ActionsJSX]}

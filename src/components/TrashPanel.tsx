@@ -83,13 +83,13 @@ const TrashPanel: React.FC<Props> = observer(
 					title={languages.deleteAllConfirm[language]}
 					onConfirm={deleteAll}
 				>
-					{MyIcon(DeleteOutlined, isSmallScreen, false)}
+					{MyIcon(DeleteOutlined, isSmallScreen, {})}
 				</Popconfirm>
 				<Popconfirm
 					title={languages.restoreAllConfirm[language]}
 					onConfirm={restoreAll}
 				>
-					{MyIcon(UndoOutlined, isSmallScreen, false)}
+					{MyIcon(UndoOutlined, isSmallScreen, {})}
 				</Popconfirm>
 				{isSmallScreen && (
 					<Segmented

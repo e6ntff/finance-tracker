@@ -115,9 +115,10 @@ const MessageItem: React.FC<{
 
 		const deleteMessageIcon = useMemo(
 			() =>
-				MyIcon(DeleteOutlined, isSmallScreen, true, () =>
-					deleteMessage(chatId, messageId)
-				),
+				MyIcon(DeleteOutlined, isSmallScreen, {
+					small: true,
+					onClick: () => deleteMessage(chatId, messageId),
+				}),
 			[isSmallScreen, chatId, messageId]
 		);
 

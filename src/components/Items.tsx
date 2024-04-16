@@ -252,34 +252,49 @@ export const MyIcon = (
 		Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>
 	>,
 	isSmallScreen: boolean,
-	small?: boolean,
-	onClick?: () => void,
-	title?: string | React.JSX.Element,
-	light?: boolean,
-	placement?: TooltipPlacement,
-	trigger?: TooltipProps['trigger']
-) => (
-	<Tooltip
-		trigger={trigger}
-		placement={placement}
-		title={title}
-		color={light ? '#0000' : undefined}
-		overlayInnerStyle={{ padding: light ? '0' : '', boxShadow: 'none' }}
-	>
-		<Icon
-			onClick={onClick}
-			style={{
-				scale: small
-					? isSmallScreen
-						? '.75'
-						: '1'
-					: isSmallScreen
-					? '1'
-					: '1.25',
-			}}
-		/>
-	</Tooltip>
-);
+	extra: {
+		onClick?: () => void;
+		small?: boolean;
+		title?: string | React.JSX.Element;
+		light?: boolean;
+		placement?: TooltipPlacement;
+		trigger?: TooltipProps['trigger'];
+		avatar?: boolean;
+	}
+) => {
+	const { onClick, small, title, light, placement, trigger, avatar } = extra;
+	return (
+		<Tooltip
+			trigger={trigger}
+			placement={placement}
+			title={title}
+			color={light ? '#0000' : undefined}
+			overlayInnerStyle={{ padding: light ? '0' : '', boxShadow: 'none' }}
+		>
+			{avatar ? (
+				<Avatar
+					style={{ cursor: 'pointer' }}
+					size={isSmallScreen ? 'small' : 'default'}
+					onClick={onClick}
+					icon={<Icon />}
+				/>
+			) : (
+				<Icon
+					onClick={onClick}
+					style={{
+						scale: small
+							? isSmallScreen
+								? '.75'
+								: '1'
+							: isSmallScreen
+							? '1'
+							: '1.25',
+					}}
+				/>
+			)}
+		</Tooltip>
+	);
+};
 
 export const MyCheckbox = (
 	selected: boolean = false,

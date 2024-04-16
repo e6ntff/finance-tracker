@@ -61,6 +61,8 @@ const App: React.FC = observer(() => {
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
+		window.addEventListener('contextmenu', (event) => event.preventDefault());
+
 		const handleResize = () => {
 			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
 		};

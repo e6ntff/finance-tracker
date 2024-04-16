@@ -9,7 +9,7 @@ import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import constants from 'settings/constants';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyIconWithTooltip, MyTitle } from './Items';
+import { MyIcon, MyTitle } from './Items';
 import { DeleteOutlined, ExportOutlined } from '@ant-design/icons';
 import ListItem from './ListItem';
 
@@ -78,23 +78,24 @@ const ItemsModal: React.FC<Props> = observer(
 									</Flex>
 								</Col>
 								<Col span={2}>
-									{MyIconWithTooltip(
+									{MyIcon(
+										ExportOutlined,
+										isSmallScreen,
+										true,
+										undefined,
 										<ListItem
 											initialItem={{ id: key, overlaps: [] as number[][] }}
 											mode='grid'
-										/>,
-										isSmallScreen,
-										ExportOutlined,
-										true
+										/>
 									)}
 								</Col>
 								<Col span={2}>
-									{MyIconWithTooltip(
-										languages.delete[language],
-										isSmallScreen,
+									{MyIcon(
 										DeleteOutlined,
+										isSmallScreen,
 										false,
-										() => deleteCategoryFromItem(key)
+										() => deleteCategoryFromItem(key),
+										languages.delete[language]
 									)}
 								</Col>
 							</Item>

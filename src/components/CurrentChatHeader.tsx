@@ -8,7 +8,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { MyIconWithTooltip, MyTitle } from './Items';
+import { MyIcon, MyTitle } from './Items';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 import { deleteChat, getChatInfo, inviteFriendsToChat } from 'utils/community';
@@ -17,6 +17,7 @@ import {
 	ArrowLeftOutlined,
 	DeleteOutlined,
 	LogoutOutlined,
+	MoreOutlined,
 	PlusOutlined,
 } from '@ant-design/icons';
 import languages from 'settings/languages';
@@ -113,7 +114,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		const goBackArrow = useMemo(
 			() =>
-				MyIconWithTooltip('', isSmallScreen, ArrowLeftOutlined, false, () =>
+				MyIcon(ArrowLeftOutlined, isSmallScreen, false, () =>
 					setCurrentChatId(null)
 				),
 			[isSmallScreen, setCurrentChatId]
@@ -122,12 +123,13 @@ const CurrentChatHeader: React.FC<Props> = observer(
 		const icons = useMemo(
 			() => (
 				<Flex gap={isSmallScreen ? 8 : 16}>
-					{MyIconWithTooltip(
-						addFriendToChatSelect,
-						isSmallScreen,
+					{MyIcon(
 						PlusOutlined,
+						isSmallScreen,
 						true,
 						undefined,
+						addFriendToChatSelect,
+						false,
 						'bottom',
 						'click'
 					)}
@@ -135,14 +137,24 @@ const CurrentChatHeader: React.FC<Props> = observer(
 						title={languages.deleteChatConfirm[language]}
 						onConfirm={handleDeleting}
 					>
-						{MyIconWithTooltip('', isSmallScreen, DeleteOutlined, false)}
+						{MyIcon(DeleteOutlined, isSmallScreen, false)}
 					</Popconfirm>
 					<Popconfirm
 						title={languages.exitChatConfirm[language]}
 						onConfirm={handleDeleting}
 					>
-						{MyIconWithTooltip('', isSmallScreen, LogoutOutlined, false)}
+						{MyIcon(LogoutOutlined, isSmallScreen, false)}
 					</Popconfirm>
+					{MyIcon(
+						MoreOutlined,
+						isSmallScreen,
+						false,
+						undefined,
+						<></>,
+						false,
+						'bottom',
+						'contextMenu'
+					)}
 				</Flex>
 			),
 			[isSmallScreen, language, handleDeleting, addFriendToChatSelect]

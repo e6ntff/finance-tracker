@@ -5,7 +5,7 @@ import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
 import { UserMode } from 'settings/interfaces';
-import { MyIconWithTooltip } from './Items';
+import { MyIcon } from './Items';
 import { SearchOutlined } from '@ant-design/icons';
 import UserSelect from './UserSelect';
 import { communityStore } from 'utils/communityStore';
@@ -62,12 +62,12 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 				]}
 			/>
 			{isSmallScreen &&
-				MyIconWithTooltip(
-					languages.searchFriends[userOptions.language],
-					isSmallScreen,
+				MyIcon(
 					SearchOutlined,
+					isSmallScreen,
 					false,
-					openModal
+					openModal,
+					languages.searchFriends[userOptions.language]
 				)}
 			<Drawer
 				open={isModalOpened}

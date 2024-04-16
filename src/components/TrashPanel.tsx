@@ -19,7 +19,7 @@ import { categoryStore } from 'utils/categoryStore';
 import { listStore } from 'utils/listStore';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
-import { MyIconWithTooltip, MySearch } from './Items';
+import { MyIcon, MySearch } from './Items';
 
 interface Props {
 	query: string;
@@ -83,11 +83,11 @@ const TrashPanel: React.FC<Props> = observer(
 					title={languages.deleteAllConfirm[language]}
 					onConfirm={deleteAll}
 				>
-					{MyIconWithTooltip(
-						languages.deleteAll[language],
-						isSmallScreen,
+					{MyIcon(
 						DeleteOutlined,
-						false
+						isSmallScreen,
+						false,
+						languages.deleteAll[language]
 					)}
 				</Popconfirm>
 
@@ -95,11 +95,11 @@ const TrashPanel: React.FC<Props> = observer(
 					title={languages.restoreAllConfirm[language]}
 					onConfirm={restoreAll}
 				>
-					{MyIconWithTooltip(
-						languages.restoreAll[language],
-						isSmallScreen,
+					{MyIcon(
 						UndoOutlined,
-						false
+						isSmallScreen,
+						false,
+						languages.restoreAll[language]
 					)}
 				</Popconfirm>
 				{isSmallScreen && (

@@ -52,10 +52,12 @@ const Chats: React.FC = observer(() => {
 		() =>
 			currentChatId && (
 				<>
-					<Divider
-						type='vertical'
-						style={{ height: 'unset', margin: 0 }}
-					/>
+					{!isSmallScreen && (
+						<Divider
+							type='vertical'
+							style={{ height: 'unset', margin: 0 }}
+						/>
+					)}
 					<Flex
 						vertical
 						style={{ inlineSize: isSmallScreen ? '100%' : '75%' }}

@@ -12,7 +12,7 @@ import {
 	UndoOutlined,
 } from '@ant-design/icons';
 import { categoryStore } from 'utils/categoryStore';
-import { MyCheckbox, MyIconWithTooltip, MyTitle } from './Items';
+import { MyCheckbox, MyIcon, MyTitle } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { ItemWithSearch } from 'settings/interfaces';
 import { search } from 'utils/utils';
@@ -78,12 +78,12 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 	);
 
 	const DeleteJSX = (callback: () => void) =>
-		MyIconWithTooltip(
-			languages.delete[userOptions.language],
-			isSmallScreen,
+		MyIcon(
 			DeleteOutlined,
+			isSmallScreen,
 			false,
-			callback
+			callback,
+			languages.delete[userOptions.language]
 		);
 
 	const CheckboxJSX = (
@@ -135,33 +135,35 @@ const DeletedCategories: React.FC<Props> = observer(({ query }) => {
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
+							{MyIcon(
+								ExportOutlined,
+								isSmallScreen,
+								true,
+								undefined,
 								<CategoryItem
 									initialCategoryId={id}
 									disabled
-								/>,
-								isSmallScreen,
-								ExportOutlined,
-								true
+								/>
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
+							{MyIcon(
+								InfoCircleOutlined,
+								isSmallScreen,
+								false,
+								undefined,
 								`${languages.deletedAt[language]}: ${dayjs(
 									currentCategory?.deletedAt
-								).format('HH:mm:ss DD.MM.YY')}`,
-								isSmallScreen,
-								InfoCircleOutlined,
-								false
+								).format('HH:mm:ss DD.MM.YY')}`
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								languages.restore[language],
-								isSmallScreen,
+							{MyIcon(
 								UndoOutlined,
+								isSmallScreen,
 								false,
-								() => restoreCategory(id)
+								() => restoreCategory(id),
+								languages.restore[language]
 							)}
 						</Col>
 						<Col span={1}>{DeleteJSX(() => deleteCategory(id))}</Col>

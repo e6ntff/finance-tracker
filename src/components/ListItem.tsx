@@ -14,7 +14,7 @@ import {
 	MyCategory,
 	MyCheckbox,
 	MyDate,
-	MyIconWithTooltip,
+	MyIcon,
 	MyImage,
 	MyPrice,
 	MyTitle,
@@ -107,26 +107,27 @@ const ListItem: React.FC<Props> = observer(
 					handleSelection,
 					deleteAll
 				)}
-				{MyIconWithTooltip(
-					languages.delete[language],
-					isSmallScreen,
+				{MyIcon(
 					DeleteOutlined,
+					isSmallScreen,
 					false,
-					deleteItem
+					deleteItem,
+					languages.delete[language]
 				)}
 				{MyPrice(price, type, isSmallScreen, currency)}
-				{MyIconWithTooltip(
-					languages.edit[language],
-					isSmallScreen,
+				{MyIcon(
 					EditOutlined,
-					false,
-					toggleIsModalOpened
-				)}
-				{MyIconWithTooltip(
-					tooltipTitle(createdAt, updatedAt, language),
 					isSmallScreen,
+					false,
+					toggleIsModalOpened,
+					languages.edit[language]
+				)}
+				{MyIcon(
 					InfoCircleOutlined,
-					false
+					isSmallScreen,
+					false,
+					undefined,
+					tooltipTitle(createdAt, updatedAt, language)
 				)}
 			</Flex>
 		);
@@ -172,29 +173,30 @@ const ListItem: React.FC<Props> = observer(
 						<Col span={4}>{MyCategory(categories[categoryId])}</Col>
 						<Col span={4}>{MyPrice(price, type, isSmallScreen, currency)}</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								languages.edit[language],
-								isSmallScreen,
+							{MyIcon(
 								EditOutlined,
+								isSmallScreen,
 								false,
-								toggleIsModalOpened
+								toggleIsModalOpened,
+								languages.edit[language]
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								languages.delete[language],
-								isSmallScreen,
+							{MyIcon(
 								DeleteOutlined,
+								isSmallScreen,
 								false,
-								deleteItem
+								deleteItem,
+								languages.delete[language]
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								tooltipTitle(createdAt, updatedAt, language),
-								isSmallScreen,
+							{MyIcon(
 								InfoCircleOutlined,
-								false
+								isSmallScreen,
+								false,
+								undefined,
+								tooltipTitle(createdAt, updatedAt, language)
 							)}
 						</Col>
 					</Item>

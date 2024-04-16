@@ -14,13 +14,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import {
-	MyDate,
-	MyIconWithTooltip,
-	MyPrice,
-	MyTitle,
-	tooltipTitle,
-} from './Items';
+import { MyDate, MyIcon, MyPrice, MyTitle, tooltipTitle } from './Items';
 import languages from 'settings/languages';
 import dayjs from 'dayjs';
 import { optionsStore } from 'utils/optionsStore';
@@ -183,12 +177,12 @@ const GoalItem: React.FC<Props> = observer(
 
 		const ActionsJSX = (
 			<Flex justify='space-evenly'>
-				{MyIconWithTooltip(
-					languages.delete[language],
-					isSmallScreen,
+				{MyIcon(
 					DeleteOutlined,
+					isSmallScreen,
 					false,
-					deleteGoal
+					deleteGoal,
+					languages.delete[language]
 				)}
 				{isEditMode ? (
 					<Flex
@@ -224,12 +218,12 @@ const GoalItem: React.FC<Props> = observer(
 						money.total
 					)
 				)}
-				{MyIconWithTooltip(
-					tooltipTitle(createdAt, updatedAt, language),
-					isSmallScreen,
+				{MyIcon(
 					InfoCircleOutlined,
+					isSmallScreen,
 					false,
-					undefined
+					undefined,
+					tooltipTitle(createdAt, updatedAt, language)
 				)}
 			</Flex>
 		);
@@ -248,12 +242,12 @@ const GoalItem: React.FC<Props> = observer(
 						  }
 						: false
 				)}
-				extra={MyIconWithTooltip(
-					languages.edit[language],
-					isSmallScreen,
+				extra={MyIcon(
 					isEditMode ? CheckOutlined : EditOutlined,
+					isSmallScreen,
 					false,
-					toggleMode
+					toggleMode,
+					languages.edit[language]
 				)}
 				styles={{ actions: { alignItems: 'center' } }}
 				actions={[ActionsJSX]}

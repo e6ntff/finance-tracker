@@ -14,7 +14,7 @@ const Community: React.FC = observer(() => {
 
 	const { language } = userOptions;
 
-	const [activeKey, setActiveKey] = useState<string>('0');
+	const [activeKey, setActiveKey] = useState<string>('1');
 
 	// const items: TabPaneProps[] = useMemo(() => , []);
 

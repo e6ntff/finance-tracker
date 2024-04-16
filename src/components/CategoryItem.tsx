@@ -9,7 +9,7 @@ import { userStore } from 'utils/userStore';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import ItemsModal from './ItemsModal';
-import { MyIconWithTooltip, MyImage, MyTitle } from './Items';
+import { MyIcon, MyImage, MyTitle } from './Items';
 import {
 	DeleteOutlined,
 	FallOutlined,
@@ -154,20 +154,20 @@ const CategoryItem: React.FC<Props> = observer(
 				align='center'
 				justify='space-evenly'
 			>
-				{MyIconWithTooltip(
-					tooltipTitle,
-					isSmallScreen,
+				{MyIcon(
 					InfoCircleOutlined,
+					isSmallScreen,
 					false,
-					() => itemsWithCurrentCategory.length && setIsModalOpened(true)
+					() => itemsWithCurrentCategory.length && setIsModalOpened(true),
+					tooltipTitle
 				)}
 				{ColorPickerJSX}
-				{MyIconWithTooltip(
-					languages.delete[userOptions.language],
-					isSmallScreen,
+				{MyIcon(
 					DeleteOutlined,
+					isSmallScreen,
 					false,
-					deleteCategory
+					deleteCategory,
+					languages.delete[userOptions.language]
 				)}
 			</Flex>
 		);

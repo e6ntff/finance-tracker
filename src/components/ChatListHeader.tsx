@@ -1,7 +1,7 @@
 import { Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { MyIconWithTooltip, MyTitle } from './Items';
+import { MyIcon, MyTitle } from './Items';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
@@ -21,12 +21,12 @@ const ChatListHeader: React.FC = observer(() => {
 				userOptions.language,
 				false
 			)}
-			{MyIconWithTooltip(
-				languages.createChat[userOptions.language],
-				isSmallScreen,
+			{MyIcon(
 				PlusOutlined,
+				isSmallScreen,
 				false,
-				() => createChat(user.uid, `chat`)
+				() => createChat(user.uid, `chat`),
+				languages.createChat[userOptions.language]
 			)}
 		</Flex>
 	);

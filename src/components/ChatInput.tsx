@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { sendMessage } from 'utils/community';
 import { userStore } from 'utils/userStore';
-import { MyIconWithTooltip } from './Items';
+import { MyIcon } from './Items';
 import Scrollbars from 'react-custom-scrollbars';
 
 interface Props {
@@ -40,10 +40,9 @@ const ChatInput: React.FC<Props> = observer(
 
 		const scrollDownArrow = useMemo(
 			() =>
-				MyIconWithTooltip(
-					'',
-					isSmallScreen,
+				MyIcon(
 					ArrowDownOutlined,
+					isSmallScreen,
 					false,
 					scrollbarsRef.current?.scrollToBottom
 				),

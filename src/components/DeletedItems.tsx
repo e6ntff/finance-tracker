@@ -12,7 +12,7 @@ import {
 	InfoCircleOutlined,
 	UndoOutlined,
 } from '@ant-design/icons';
-import { MyCheckbox, MyIconWithTooltip, MyTitle } from './Items';
+import { MyCheckbox, MyIcon, MyTitle } from './Items';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { ItemWithSearch } from 'settings/interfaces';
 import { search } from 'utils/utils';
@@ -75,12 +75,12 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 	);
 
 	const DeleteJSX = (callback: () => void) =>
-		MyIconWithTooltip(
-			languages.delete[userOptions.language],
-			isSmallScreen,
+		MyIcon(
 			DeleteOutlined,
+			isSmallScreen,
 			false,
-			callback
+			callback,
+			languages.delete[userOptions.language]
 		);
 
 	const CheckboxJSX = (
@@ -132,35 +132,37 @@ const DeletedItems: React.FC<Props> = observer(({ query }) => {
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
+							{MyIcon(
+								ExportOutlined,
+								isSmallScreen,
+								true,
+								undefined,
 								<ListItem
 									initialItem={{ id, overlaps }}
 									mode='grid'
 									selected={selectedItemIds.includes(id)}
 									disabled
-								/>,
-								isSmallScreen,
-								ExportOutlined,
-								true
+								/>
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
+							{MyIcon(
+								InfoCircleOutlined,
+								isSmallScreen,
+								false,
+								undefined,
 								`${languages.deletedAt[language]}: ${dayjs(
 									currentItem?.deletedAt
-								).format('HH:mm:ss DD.MM.YY')}`,
-								isSmallScreen,
-								InfoCircleOutlined,
-								false
+								).format('HH:mm:ss DD.MM.YY')}`
 							)}
 						</Col>
 						<Col span={1}>
-							{MyIconWithTooltip(
-								languages.restore[language],
-								isSmallScreen,
+							{MyIcon(
 								UndoOutlined,
+								isSmallScreen,
 								false,
-								() => restoreItem(id)
+								() => restoreItem(id),
+								languages.restore[language]
 							)}
 						</Col>
 						<Col span={1}>{DeleteJSX(() => deleteItem(id))}</Col>

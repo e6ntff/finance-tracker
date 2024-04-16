@@ -6,7 +6,7 @@ import { communityStore } from 'utils/communityStore';
 import { Col, Flex, List, Popconfirm } from 'antd';
 import { userStore } from 'utils/userStore';
 import Item from 'antd/es/list/Item';
-import { MyIconWithTooltip } from './Items';
+import { MyIcon } from './Items';
 import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
 import {
 	acceptRequest,
@@ -40,7 +40,7 @@ const UsersList: React.FC = observer(() => {
 							title={languages.removeFriendConfirm[language]}
 							onConfirm={() => removeFriend(user.uid, key)}
 						>
-							{MyIconWithTooltip('', isSmallScreen, UserDeleteOutlined, false)}
+							{MyIcon(UserDeleteOutlined, isSmallScreen, false)}
 						</Popconfirm>
 					</Col>
 				);
@@ -52,7 +52,7 @@ const UsersList: React.FC = observer(() => {
 								title={languages.declineRequestConfirm[language]}
 								onConfirm={() => acceptRequest(user.uid, key)}
 							>
-								{MyIconWithTooltip('', isSmallScreen, UserAddOutlined, false)}
+								{MyIcon(UserAddOutlined, isSmallScreen, false)}
 							</Popconfirm>
 						</Col>
 						<Col span={1}>
@@ -60,12 +60,7 @@ const UsersList: React.FC = observer(() => {
 								title={languages.declineRequestConfirm[language]}
 								onConfirm={() => declineRequest(user.uid, key)}
 							>
-								{MyIconWithTooltip(
-									'',
-									isSmallScreen,
-									UserDeleteOutlined,
-									false
-								)}
+								{MyIcon(UserDeleteOutlined, isSmallScreen, false)}
 							</Popconfirm>
 						</Col>
 					</>
@@ -77,7 +72,7 @@ const UsersList: React.FC = observer(() => {
 							title={languages.cancelRequestConfirm[language]}
 							onConfirm={() => cancelRequest(user.uid, key)}
 						>
-							{MyIconWithTooltip('', isSmallScreen, UserDeleteOutlined, false)}
+							{MyIcon(UserDeleteOutlined, isSmallScreen, false)}
 						</Popconfirm>
 					</Col>
 				);

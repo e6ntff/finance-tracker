@@ -16,7 +16,7 @@ import CategoriesSelect from './CategoriesSelect';
 import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
-import { MyIconWithTooltip, MySearch } from './Items';
+import { MyIcon, MySearch } from './Items';
 import {
 	CalendarOutlined,
 	DollarOutlined,
@@ -132,12 +132,12 @@ const Selectors: React.FC<Props> = observer(
 							<SortSelect />
 							{MySearch(handleSearch, query, isSearchLoading, isSmallScreen)}
 							{isSettingsChanged &&
-								MyIconWithTooltip(
-									languages.reset[userOptions.language],
-									false,
+								MyIcon(
 									ReloadOutlined,
 									false,
-									resetAll
+									false,
+									resetAll,
+									languages.reset[userOptions.language]
 								)}
 						</Flex>
 					</Flex>

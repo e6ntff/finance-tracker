@@ -239,17 +239,17 @@ export const MyPrice = (
 	</Flex>
 );
 
-export const MyIconWithTooltip = (
-	title: string | React.JSX.Element,
-	isSmallScreen: boolean,
+export const MyIcon = (
 	Icon: ComponentType<
 		Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>
 	>,
-	light: boolean,
+	isSmallScreen: boolean,
+	small?: boolean,
 	onClick?: () => void,
+	title?: string | React.JSX.Element,
+	light?: boolean,
 	placement?: TooltipPlacement,
-	trigger?: TooltipProps['trigger'],
-	small?: boolean
+	trigger?: TooltipProps['trigger']
 ) => (
 	<Tooltip
 		trigger={trigger}

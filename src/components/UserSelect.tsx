@@ -9,7 +9,7 @@ import React, { useCallback, useState } from 'react';
 import { cancelRequest, sendRequest } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
-import { MyIconWithTooltip } from './Items';
+import { MyIcon } from './Items';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 
@@ -27,28 +27,28 @@ const UserSelect: React.FC = observer(() => {
 					{users[key]?.nickname}
 					{Object.keys(sentFriendRequests).includes(key) ||
 					Object.keys(friends).includes(key)
-						? MyIconWithTooltip(
-								Object.keys(friends).includes(key)
-									? languages.alreadyFriends[userOptions.language]
-									: languages.cancelRequest[userOptions.language],
-								isSmallScreen,
+						? MyIcon(
 								Object.keys(friends).includes(key)
 									? CheckOutlined
 									: UserDeleteOutlined,
+								isSmallScreen,
 								false,
 								() => {
 									!Object.keys(friends).includes(key) &&
 										cancelRequest(user.uid, key);
-								}
+								},
+								Object.keys(friends).includes(key)
+									? languages.alreadyFriends[userOptions.language]
+									: languages.cancelRequest[userOptions.language]
 						  )
-						: MyIconWithTooltip(
-								languages.sendRequest[userOptions.language],
-								isSmallScreen,
+						: MyIcon(
 								UserAddOutlined,
+								isSmallScreen,
 								false,
 								() => {
 									sendRequest(user.uid, key, friendRequests);
-								}
+								},
+								languages.sendRequest[userOptions.language]
 						  )}
 				</Flex>
 			);

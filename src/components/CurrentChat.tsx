@@ -9,7 +9,7 @@ import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyIconWithTooltip, MyImage, MyTitle } from './Items';
+import { MyIcon, MyImage, MyTitle } from './Items';
 import { DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
@@ -77,15 +77,8 @@ const MessageItem: React.FC<{
 
 	const deleteMessageIcon = useMemo(
 		() =>
-			MyIconWithTooltip(
-				'',
-				isSmallScreen,
-				DeleteOutlined,
-				false,
-				() => deleteMessage(chatId, messageId),
-				undefined,
-				undefined,
-				true
+			MyIcon(DeleteOutlined, isSmallScreen, true, () =>
+				deleteMessage(chatId, messageId)
 			),
 		[isSmallScreen, chatId, messageId]
 	);

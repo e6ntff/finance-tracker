@@ -3,10 +3,11 @@ import { database } from './firebase';
 import { Chat, Message, User } from 'settings/interfaces';
 import uniqid from 'uniqid';
 import dayjs from 'dayjs';
+import constants from 'settings/constants';
 
-export const updateUser = (uid: string, user: User) => {
+export const updateUser = (uid: string, user?: User) => {
 	try {
-		set(ref(database, `users/${uid}`), user);
+		set(ref(database, `users/${uid}`), user || constants.emptyUser);
 	} catch (error) {
 		alert(error);
 	}
@@ -53,62 +54,6 @@ export const declineRequest = (uid: string, toDecline: string) => {
 	try {
 		remove(ref(database, `users/${uid}/friendRequests/${toDecline}`));
 		remove(ref(database, `users/${toDecline}/sentFriendRequests/${uid}`));
-	} catch (error) {
-		alert(error);
-	}
-};
-
-export const getSentFriendRequests = (
-	uid: string,
-	setSentFriendRequests: (arg0: { [key: string]: true }) => void
-) => {
-	try {
-		onValue(ref(database, `users/${uid}/sentFriendRequests`), (snapshot) => {
-			const data = snapshot.val();
-			setSentFriendRequests(data || {});
-		});
-	} catch (error) {
-		alert(error);
-	}
-};
-
-export const getFriendRequests = (
-	uid: string,
-	setFriendRequests: (arg0: { [key: string]: true }) => void
-) => {
-	try {
-		onValue(ref(database, `users/${uid}/friendRequests`), (snapshot) => {
-			const data = snapshot.val();
-			setFriendRequests(data || {});
-		});
-	} catch (error) {
-		alert(error);
-	}
-};
-
-export const getFriends = (
-	uid: string,
-	setFriends: (arg0: { [key: string]: true }) => void
-) => {
-	try {
-		onValue(ref(database, `users/${uid}/friends`), (snapshot) => {
-			const data = snapshot.val();
-			setFriends(data || {});
-		});
-	} catch (error) {
-		alert(error);
-	}
-};
-
-export const getChats = (
-	uid: string,
-	setChats: (arg0: { [key: string]: true }) => void
-) => {
-	try {
-		onValue(ref(database, `users/${uid}/chats`), (snapshot) => {
-			const data = snapshot.val();
-			setChats(data || {});
-		});
 	} catch (error) {
 		alert(error);
 	}
@@ -162,14 +107,72 @@ export const inviteFriendsToChat = (
 };
 
 export const getChatInfo = (
-	chatId: string,
+	chatId: string | null,
 	setChatInfo: (info: Chat['info']) => void
 ) => {
 	try {
 		onValue(ref(database, `chats/${chatId}/info`), (snapshot) => {
-			const data = snapshot.val();
-			setChatInfo(data || {});
+			const data = snapshot.val() || {};
+			setChatInfo(data);
 		});
+	} catch (error) {
+		alert(error);
+	}
+};
+
+export const getAllUsers = (setUsers: (users: string[]) => void) => {
+	try {
+		onValue(ref(database, `users/`), (snapshot) => {
+			const data = snapshot.val();
+			setUsers(Object.keys(data) || {});
+		});
+	} catch (error) {
+		alert(error);
+	}
+};
+
+export const getMyUser = (
+	id: string | null,
+	setUserInfo: (info: User) => void
+) => {
+	try {
+		onValue(ref(database, `users/${id}`), (snapshot) => {
+			const data = snapshot.val();
+			setUserInfo(data);
+		});
+	} catch (error) {
+		alert(error);
+	}
+};
+
+export const getUserInfo = (
+	id: string | null,
+	setUserInfo: (info: User['info']) => void
+) => {
+	try {
+		console.log(id);
+		onValue(ref(database, `users/${id}/info`), (snapshot) => {
+			const data = snapshot.val();
+			setUserInfo(data || {});
+		});
+	} catch (error) {
+		alert(error);
+	}
+};
+
+export const getUsersInfo = (
+	ids: Chat['info']['members'],
+	setUsersInfo: (info: { [key: string]: User['info'] }) => void
+) => {
+	try {
+		const info: { [key: string]: User['info'] } = {};
+		Object.keys(ids).forEach((id: string) => {
+			onValue(ref(database, `users/${id}/info`), (snapshot) => {
+				const data = snapshot.val();
+				info[id] = data;
+			});
+		});
+		setUsersInfo(info);
 	} catch (error) {
 		alert(error);
 	}

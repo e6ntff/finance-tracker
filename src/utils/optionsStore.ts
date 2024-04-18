@@ -1,5 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import {
+	CommunityOptions,
 	ListOptions,
 	ListType,
 	Mode,
@@ -15,6 +16,7 @@ import {
 	defaultListOptions,
 	defaultStatsOptions,
 	defaultUserOptions,
+	initialCommunityOptions,
 	initialListOptions,
 	initialStatsOptions,
 	initialUserOptions,
@@ -35,6 +37,14 @@ class OptionsStore {
 	debouncedListOptions: ListOptions = this.listOptions;
 	statsOptions: StatsOptions = initialStatsOptions;
 	userOptions: UserOptions = initialUserOptions;
+	communityOptions: CommunityOptions = initialCommunityOptions;
+
+	setLastSelectedChatId = (chatId: string | null) => {
+		this.setCommunityOptions({
+			...this.communityOptions,
+			lastSelectedChatId: chatId,
+		});
+	};
 
 	setListOptions = (options: ListOptions) => {
 		this.listOptions = options;
@@ -46,6 +56,10 @@ class OptionsStore {
 
 	setStatsOptions = (options: StatsOptions) => {
 		this.statsOptions = options;
+	};
+
+	setCommunityOptions = (options: CommunityOptions) => {
+		this.communityOptions = options;
 	};
 
 	setDebouncedListOptions = debounce(
@@ -182,6 +196,16 @@ reaction(
 		sessionStorage.setItem(
 			'userOptions',
 			JSON.stringify(optionsStore.userOptions)
+		);
+	}
+);
+
+reaction(
+	() => optionsStore.communityOptions,
+	() => {
+		sessionStorage.setItem(
+			'communityOptions',
+			JSON.stringify(optionsStore.communityOptions)
 		);
 	}
 );

@@ -26,11 +26,11 @@ export interface ExpenseItem {
 }
 
 export interface User {
-	nickname: string;
-	createdAt: number;
-	image?: string;
-	friends?: { [key: string]: '' };
-	friendRequests?: { [key: string]: '' };
+	info: { nickname: string; createdAt: number; image: string };
+	friends: { [key: string]: true };
+	friendRequests: { [key: string]: true };
+	sentFriendRequests: { [key: string]: true };
+	chats: { [key: string]: true };
 }
 
 export interface currencies {
@@ -90,6 +90,10 @@ export interface UserOptions {
 	currency: currency;
 	theme: Theme;
 	themeAlgorithm: ThemeAlgorithm;
+}
+
+export interface CommunityOptions {
+	lastSelectedChatId: string | null;
 }
 
 export interface Status {

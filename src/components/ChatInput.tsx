@@ -17,7 +17,7 @@ interface Props {
 
 const ChatInput: React.FC<Props> = observer(
 	({ chatId, scrollbarsRef, stuck, hasNewMessages }) => {
-		const { user, isSmallScreen } = userStore;
+		const { UID, isSmallScreen } = userStore;
 
 		const [message, setMessage] = useState<string>('');
 
@@ -31,12 +31,12 @@ const ChatInput: React.FC<Props> = observer(
 		const send = useCallback(() => {
 			setMessage((prevMessage: string) => {
 				prevMessage &&
-					sendMessage(user.uid, chatId, message).then(() =>
+					sendMessage(UID, chatId, message).then(() =>
 						scrollbarsRef.current?.scrollToBottom()
 					);
 				return '';
 			});
-		}, [user.uid, chatId, message, scrollbarsRef]);
+		}, [UID, chatId, message, scrollbarsRef]);
 
 		const scrollDownArrow = useMemo(
 			() =>
@@ -61,7 +61,12 @@ const ChatInput: React.FC<Props> = observer(
 		);
 
 		return (
-			<Flex style={{ position: 'relative' }}>
+			<Flex
+				style={{
+					position: 'relative',
+					paddingInline: isSmallScreen ? '.5em' : '1em',
+				}}
+			>
 				{!stuck && (
 					<Flex style={{ position: 'absolute', right: '0', bottom: '4em' }}>
 						<Badge dot={hasNewMessages}>{scrollDownArrow}</Badge>

@@ -33,6 +33,13 @@ const constants = {
 		categories: { '0': defaultCategory },
 		goals: {},
 	},
+	emptyUser: {
+		info: { nickname: '', createdAt: dayjs().valueOf(), image: '' },
+		friends: {},
+		friendRequests: {},
+		sentFriendRequests: {},
+		chats: {},
+	},
 	emptyItem: {
 		type: 'expense' as ListType,
 		title: '',

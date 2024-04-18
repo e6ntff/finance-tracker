@@ -22,38 +22,23 @@ import Notification from 'components/Notification';
 import DeleteNotification from 'components/DeleteNotification';
 import languages from 'settings/languages';
 import goalStore from 'utils/GoalStore';
-import { communityStore } from 'utils/communityStore';
 import NicknameModal from 'components/NicknameModal';
-import {
-	getChats,
-	getFriendRequests,
-	getFriends,
-	getSentFriendRequests,
-} from 'utils/community';
 
 const auth = getAuth(app);
 
 const App: React.FC = observer(() => {
 	const {
-		user,
 		logged,
 		isSmallScreen,
 		setIsSmallScreen,
 		setCurrencyRates,
-		setUser,
+		setUID,
 		setLoading,
 		setStatus,
 	} = userStore;
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
 	const { setUserGoals } = goalStore;
-	const {
-		setUsers,
-		setFriends,
-		setFriendRequests,
-		setSentFriendRequests,
-		setChats,
-	} = communityStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency, language } = userOptions;
@@ -88,16 +73,6 @@ const App: React.FC = observer(() => {
 	}, []);
 
 	useEffect(() => {
-		if (user.uid) {
-			getFriends(user.uid, setFriends);
-			getFriendRequests(user.uid, setFriendRequests);
-			getSentFriendRequests(user.uid, setSentFriendRequests);
-			getChats(user.uid, setChats);
-		}
-		// eslint-disable-next-line
-	}, [user.uid]);
-
-	useEffect(() => {
 		if (logged) setIsLoaded(true);
 		const loadingTimer = setTimeout(() => {
 			setIsLoaded(true);
@@ -114,7 +89,7 @@ const App: React.FC = observer(() => {
 		);
 
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-			setUser(JSON.parse(JSON.stringify(authUser)) || {});
+			setUID(authUser?.uid || '');
 			if (authUser && authUser.uid) {
 				getData(
 					authUser.uid,
@@ -122,7 +97,6 @@ const App: React.FC = observer(() => {
 					setUserList,
 					setUserCategories,
 					setUserGoals,
-					setUsers,
 					setLoading
 				);
 			}
@@ -130,7 +104,7 @@ const App: React.FC = observer(() => {
 
 		return () => unsubscribe();
 		// eslint-disable-next-line
-	}, [setCurrency, setCurrencyRates, setUser, setTheme]);
+	}, [setCurrency, setCurrencyRates, setTheme]);
 
 	const { paddingLG, borderRadiusLG } = theme.useToken().token;
 

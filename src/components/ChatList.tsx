@@ -8,12 +8,12 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
-import { Chat } from 'settings/interfaces';
-import { getChatInfo } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { MyTitle } from './Items';
 import { userStore } from 'utils/userStore';
 import { optionsStore } from 'utils/optionsStore';
+import { Chat } from 'settings/interfaces';
+import { getChatInfo } from 'utils/community';
 
 interface Props {
 	selectedChatId: string | null;
@@ -22,18 +22,19 @@ interface Props {
 
 const ChatList: React.FC<Props> = observer(
 	({ selectedChatId, setCurrentChatId }) => {
-		const { chats } = communityStore;
+		const { user } = communityStore;
 
 		return (
 			<List>
-				{Object.keys(chats).map((key: string) => (
-					<ChatListItem
-						key={key}
-						id={key}
-						selected={selectedChatId === key}
-						setCurrentChatId={setCurrentChatId}
-					/>
-				))}
+				{user.chats &&
+					Object.keys(user.chats).map((key: string) => (
+						<ChatListItem
+							key={key}
+							id={key}
+							selected={selectedChatId === key}
+							setCurrentChatId={setCurrentChatId}
+						/>
+					))}
 			</List>
 		);
 	}
@@ -49,12 +50,12 @@ const ChatListItem: React.FC<ItemProps> = observer(
 	({ id, selected, setCurrentChatId }) => {
 		const { isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
-		const [chatInfo, setChatInfo] = useState<Chat['info']>();
+
+		const [chatInfo, setChatInfo] = useState<Chat['info'] | null>(null);
 
 		useEffect(() => {
 			getChatInfo(id, setChatInfo);
-			// eslint-disable-next-line
-		}, []);
+		}, [id]);
 
 		const handleSelection = useCallback(() => {
 			setCurrentChatId(id);

@@ -12,7 +12,7 @@ configure({
 
 class UserStore {
 	communityStore;
-	user: any = {};
+	UID: string = '';
 	currencyRates: currencies = { RUB: 0, USD: 0, EUR: 0 };
 	isSmallScreen: boolean = window.innerWidth < constants.windowBreakpoint;
 	logged: boolean = false;
@@ -29,8 +29,7 @@ class UserStore {
 	};
 
 	setIsTourStarted = (value: boolean) => {
-		if (this.communityStore.users[this.user?.uid]?.nickname)
-			this.isTourStarted = value;
+		if (this.communityStore.user.info.nickname) this.isTourStarted = value;
 	};
 
 	setTourRefs = (refs: React.MutableRefObject<null>[]) => {
@@ -38,13 +37,8 @@ class UserStore {
 	};
 
 	saveData = () => {
-		if (this.user.uid) {
-			saveData(
-				this.user.uid,
-				this.setStatus,
-				this.setIsDataChanged,
-				this.allData
-			);
+		if (this.UID) {
+			saveData(this.UID, this.setStatus, this.setIsDataChanged, this.allData);
 		}
 	};
 
@@ -79,9 +73,9 @@ class UserStore {
 		this.logged = value;
 	};
 
-	setUser = (user: any) => {
-		this.user = user;
-		if (user.uid) {
+	setUID = (UID: string) => {
+		this.UID = UID;
+		if (UID) {
 			this.setLogged(true);
 		}
 	};

@@ -2,34 +2,34 @@ import { Input, Modal } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { userStore } from 'utils/userStore';
-import dayjs from 'dayjs';
 import { updateUser } from 'utils/community';
+import { communityStore } from 'utils/communityStore';
 
 const NicknameModal: React.FC = observer(() => {
 	const {
 		isNicknameModalOpened,
 		setIsTourStarted,
-		user,
+		UID,
 		setIsNicknameModalOpened,
 		setLogged,
 	} = userStore;
 
+	const { user } = communityStore;
+
 	const [nickname, setNickname] = useState<string>('');
 
 	const handleSubmit = useCallback(() => {
-		updateUser(user.uid, {
-			nickname: nickname,
-			createdAt: dayjs().valueOf(),
-		});
+		updateUser(UID, { ...user, info: { ...user.info, nickname: nickname } });
 		setIsNicknameModalOpened(false);
 		setLogged(true);
 		setIsTourStarted(true);
 	}, [
 		setIsNicknameModalOpened,
 		nickname,
-		user.uid,
+		UID,
 		setLogged,
 		setIsTourStarted,
+		user,
 	]);
 
 	return (

@@ -11,9 +11,11 @@ import { communityStore } from 'utils/communityStore';
 
 const ChatListHeader: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
-	const { isSmallScreen, user } = userStore;
+	const { isSmallScreen, UID } = userStore;
 	const { language } = userOptions;
-	const { friends, users } = communityStore;
+	const { usersInfo, user } = communityStore;
+
+	const { friends } = user;
 
 	const [newChat, setNewChat] = useState<{ title: string; users: string[] }>({
 		title: '',
@@ -72,7 +74,7 @@ const ChatListHeader: React.FC = observer(() => {
 						isSmallScreen,
 						handleUsersChange,
 						friends,
-						users,
+						usersInfo,
 						newChat.users
 					)}
 				</Form.Item>
@@ -84,7 +86,10 @@ const ChatListHeader: React.FC = observer(() => {
 					</Form.Item>
 					<Form.Item>
 						{MyIcon(CheckOutlined, isSmallScreen, {
-							onClick: () => createChat(user.uid, newChat.title, newChat.users),
+							onClick: () => {
+								createChat(UID, newChat.title, newChat.users);
+								setNewChat({ title: '', users: [] });
+							},
 						})}
 					</Form.Item>
 				</Flex>
@@ -92,13 +97,13 @@ const ChatListHeader: React.FC = observer(() => {
 		),
 		[
 			isSmallScreen,
-			friends,
+			usersInfo,
 			handleTitleChange,
 			handleUsersChange,
 			newChat,
 			language,
-			user.uid,
-			users,
+			friends,
+			UID,
 		]
 	);
 
@@ -108,7 +113,7 @@ const ChatListHeader: React.FC = observer(() => {
 			{MyIcon(PlusOutlined, isSmallScreen, {
 				title: addChatForm,
 				light: true,
-				placement: 'bottom',
+				placement: 'bottomLeft',
 				trigger: 'click',
 			})}
 		</Flex>

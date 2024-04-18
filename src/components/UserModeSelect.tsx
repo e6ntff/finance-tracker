@@ -18,7 +18,9 @@ interface Props {
 const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
-	const { friendRequests } = communityStore;
+	const { user } = communityStore;
+
+	const { friendRequests } = user;
 
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 

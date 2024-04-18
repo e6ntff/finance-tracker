@@ -397,7 +397,7 @@ export const addFriendToChatSelect = (
 			  }[]
 	) => void,
 	friends: { [key: string]: true },
-	users: { [key: string]: User },
+	usersInfo: { [key: string]: User['info'] },
 	value: string[] | null,
 	chatInfo?: Chat['info']
 ) => {
@@ -419,7 +419,7 @@ export const addFriendToChatSelect = (
 			style={{ inlineSize: isSmallScreen ? '10em' : '15em' }}
 			options={friendsToShow.map((key: string) => ({
 				value: key,
-				label: users[key].nickname,
+				label: usersInfo[key]?.nickname,
 			}))}
 		/>
 	);

@@ -17,7 +17,6 @@ import {
 	getChatInfo,
 	inviteFriendsToChat,
 } from 'utils/community';
-import { Chat } from 'settings/interfaces';
 import {
 	ArrowLeftOutlined,
 	DeleteOutlined,
@@ -28,6 +27,7 @@ import {
 } from '@ant-design/icons';
 import languages from 'settings/languages';
 import { communityStore } from 'utils/communityStore';
+import { Chat } from 'settings/interfaces';
 
 interface Props {
 	chatId: string;
@@ -38,20 +38,17 @@ interface Props {
 const CurrentChatHeader: React.FC<Props> = observer(
 	({ chatId, setCurrentChatId, setSelected }) => {
 		const { userOptions } = optionsStore;
-		const { isSmallScreen, user } = userStore;
-		const { friends, users } = communityStore;
+		const { isSmallScreen, UID } = userStore;
+		const { usersInfo, user } = communityStore;
+
+		const [chatInfo, setChatInfo] = useState<Chat['info']>();
+
+		const { friends } = user;
 
 		const { language } = userOptions;
 
-		const [chatInfo, setChatInfo] = useState<Chat['info']>({
-			title: '',
-			createdAt: 0,
-			members: {},
-		});
-
 		useEffect(() => {
-			chatId && getChatInfo(chatId, setChatInfo);
-			// eslint-disable-next-line
+			getChatInfo(chatId, setChatInfo);
 		}, [chatId]);
 
 		const handleChange = useCallback(
@@ -79,22 +76,18 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		const handleDeleting = useCallback(() => {
 			setCurrentChatId(null);
-			deleteChat(chatId, chatInfo?.members as Chat['info']['members']);
+			chatInfo && chatInfo && deleteChat(chatId, chatInfo?.members);
 		}, [chatId, chatInfo, setCurrentChatId]);
 
 		const handleExit = useCallback(() => {
 			setCurrentChatId(null);
-			exitFromChat(
-				user.uid,
-				chatId,
-				chatInfo?.members as Chat['info']['members']
-			);
-		}, [user.uid, chatId, chatInfo, setCurrentChatId]);
+			chatInfo && exitFromChat(UID, chatId, chatInfo?.members);
+		}, [UID, chatId, chatInfo, setCurrentChatId]);
 
 		const chatTitle = useMemo(
 			() =>
 				MyTitle(
-					chatInfo?.title as string,
+					chatInfo?.title || '',
 					null,
 					isSmallScreen,
 					language,
@@ -121,39 +114,38 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		const icons = useMemo(
 			() => (
-				<Flex
-					vertical
-					gap={isSmallScreen ? 4 : 8}
-				>
+				<Flex gap={isSmallScreen ? 4 : 8}>
 					{MyIcon(PlusOutlined, isSmallScreen, {
 						title: addFriendToChatSelect(
 							isSmallScreen,
 							handleChange,
 							friends,
-							users,
+							usersInfo,
 							null,
 							chatInfo
 						),
 						light: true,
 						avatar: true,
-						placement: 'left',
+						placement: 'bottom',
 						trigger: 'click',
 					})}
 					<Popconfirm
+						placement='bottom'
 						title={languages.exitChatConfirm[language]}
 						onConfirm={handleExit}
 					>
 						{MyIcon(LogoutOutlined, isSmallScreen, { avatar: true })}
 					</Popconfirm>
 					<Popconfirm
+						placement='bottom'
 						title={languages.deleteChatConfirm[language]}
 						onConfirm={handleDeleting}
 					>
 						{MyIcon(DeleteOutlined, isSmallScreen, { avatar: true })}
 					</Popconfirm>
 					{MyIcon(InfoCircleOutlined, isSmallScreen, {
-						title: tooltipTitle(chatInfo.createdAt, undefined, language),
-						placement: 'left',
+						title: tooltipTitle(chatInfo?.createdAt, undefined, language),
+						placement: 'bottom',
 						avatar: true,
 					})}
 				</Flex>
@@ -163,10 +155,10 @@ const CurrentChatHeader: React.FC<Props> = observer(
 				isSmallScreen,
 				language,
 				handleDeleting,
-				friends,
 				handleChange,
-				users,
 				handleExit,
+				friends,
+				usersInfo,
 			]
 		);
 
@@ -175,7 +167,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 				MyIcon(MoreOutlined, isSmallScreen, {
 					title: icons,
 					light: true,
-					placement: 'bottom',
+					placement: 'left',
 					trigger: 'click',
 				}),
 			[isSmallScreen, icons]
@@ -183,7 +175,10 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		return (
 			<Flex
-				style={{ inlineSize: '100%' }}
+				style={{
+					inlineSize: '100%',
+					paddingInline: isSmallScreen ? '.5em' : '1em',
+				}}
 				justify='space-between'
 			>
 				{goBackArrow}

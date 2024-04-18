@@ -1,5 +1,6 @@
 import constants from './constants';
 import {
+	CommunityOptions,
 	ListOptions,
 	Mode,
 	Sort,
@@ -43,4 +44,13 @@ export const defaultUserOptions: UserOptions = {
 
 export const initialUserOptions: UserOptions = JSON.parse(
 	sessionStorage.getItem('userOptions') || JSON.stringify(defaultUserOptions)
+);
+
+export const defaultCommunityOptions: CommunityOptions = {
+	lastSelectedChatId: null,
+};
+
+export const initialCommunityOptions: CommunityOptions = JSON.parse(
+	sessionStorage.getItem('communityOptions') ||
+		JSON.stringify(defaultCommunityOptions)
 );

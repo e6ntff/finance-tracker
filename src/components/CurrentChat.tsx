@@ -8,9 +8,15 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useState,
 } from 'react';
-import { Message } from 'settings/interfaces';
-import { deleteMessage, getChatMessages } from 'utils/community';
+import { Chat, Message, User } from 'settings/interfaces';
+import {
+	deleteMessage,
+	getChatInfo,
+	getChatMessages,
+	getUsersInfo,
+} from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
@@ -36,8 +42,22 @@ const CurrentChat: React.FC<Props> = observer(
 		setSelected,
 		selected,
 	}) => {
-		const { user, isSmallScreen } = userStore;
+		const { isSmallScreen } = userStore;
 		const { messages, setMessages } = communityStore;
+
+		const [chatInfo, setChatInfo] = useState<Chat['info'] | null>(null);
+
+		const [currentChatMembersInfo, setCurrentChatMembersInfo] = useState<{
+			[key: string]: User['info'];
+		}>({});
+
+		useEffect(() => {
+			getChatInfo(chatId, setChatInfo);
+		}, [chatId]);
+
+		useEffect(() => {
+			chatInfo && getUsersInfo(chatInfo?.members, setCurrentChatMembersInfo);
+		}, [chatInfo?.members, chatInfo]);
 
 		const selectMessage = useCallback(
 			(key: string) => () => {
@@ -85,8 +105,8 @@ const CurrentChat: React.FC<Props> = observer(
 							key={key}
 							messageId={key}
 							message={messages[key]}
-							uid={user.uid}
 							chatId={chatId}
+							senderInfo={currentChatMembersInfo[messages[key].sender]}
 							selected={selected.includes(key)}
 							select={selectMessage(key)}
 							deselect={deselectMessage(key)}
@@ -97,21 +117,22 @@ const CurrentChat: React.FC<Props> = observer(
 	}
 );
 
-const MessageItem: React.FC<{
+interface ItemProps {
 	messageId: string;
 	message: Message;
-	uid: string;
 	chatId: string | null;
+	senderInfo: User['info'];
 	selected: boolean;
 	select: () => void;
 	deselect: () => void;
-}> = observer(
-	({ messageId, message, uid, chatId, selected, select, deselect }) => {
-		const { isSmallScreen } = userStore;
-		const { users } = communityStore;
+}
+
+const MessageItem: React.FC<ItemProps> = observer(
+	({ messageId, message, chatId, senderInfo, selected, select, deselect }) => {
+		const { isSmallScreen, UID } = userStore;
 		const { sender, text, sentAt } = message;
 
-		const isMyMessage = useMemo(() => uid === sender, [uid, sender]);
+		const isMyMessage = useMemo(() => UID === sender, [UID, sender]);
 
 		const deleteMessageIcon = useMemo(
 			() =>
@@ -128,7 +149,7 @@ const MessageItem: React.FC<{
 					vertical
 					align={isMyMessage ? 'end' : 'start'}
 				>
-					{MyTitle(users[sender].nickname, null, isSmallScreen)}
+					{MyTitle(senderInfo?.nickname, null, isSmallScreen)}
 					<TextArea
 						variant='filled'
 						size={isSmallScreen ? 'small' : 'middle'}
@@ -144,7 +165,7 @@ const MessageItem: React.FC<{
 					/>
 				</Flex>
 			),
-			[isSmallScreen, text, sentAt, users, sender, isMyMessage, selected]
+			[isSmallScreen, text, sentAt, isMyMessage, selected, senderInfo]
 		);
 
 		return (
@@ -173,7 +194,7 @@ const MessageItem: React.FC<{
 							{isMyMessage && deleteMessageIcon}
 						</Flex>
 					</Flex>
-					{MyImage(users[uid]?.image, isSmallScreen)}
+					{MyImage(senderInfo?.image, isSmallScreen)}
 				</Flex>
 			</Flex>
 		);

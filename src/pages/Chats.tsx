@@ -5,20 +5,37 @@ import ChatListHeader from 'components/ChatListHeader';
 import CurrentChat from 'components/CurrentChat';
 import CurrentChatHeader from 'components/CurrentChatHeader';
 import { observer } from 'mobx-react-lite';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import Scrollbars, { positionValues } from 'react-custom-scrollbars';
+import { optionsStore } from 'utils/optionsStore';
 import { userStore } from 'utils/userStore';
 
 const Chats: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
+	const { communityOptions, setLastSelectedChatId } = optionsStore;
+
+	const { lastSelectedChatId } = communityOptions;
 
 	const scrollbarsRef = useRef<Scrollbars | null>(null);
 
-	const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+	const [currentChatId, setCurrentChatId] = useState<string | null>(
+		lastSelectedChatId
+	);
 	const [stuckToBottom, setStuckToBottom] = useState<boolean>(true);
 	const [hasNewMessages, setHasNewMessages] = useState<boolean>(false);
 
 	const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
+
+	useEffect(() => {
+		setLastSelectedChatId(currentChatId);
+		// eslint-disable-next-line
+	}, [currentChatId]);
 
 	const onUpdate = useCallback(
 		(values: positionValues) => {

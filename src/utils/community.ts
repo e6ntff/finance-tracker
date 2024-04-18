@@ -150,7 +150,6 @@ export const getUserInfo = (
 	setUserInfo: (info: User['info']) => void
 ) => {
 	try {
-		console.log(id);
 		onValue(ref(database, `users/${id}/info`), (snapshot) => {
 			const data = snapshot.val();
 			setUserInfo(data || {});

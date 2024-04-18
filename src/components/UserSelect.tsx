@@ -66,8 +66,6 @@ const UserItem: React.FC<ItemProps> = observer(({ id }) => {
 		// eslint-disable-next-line
 	}, []);
 
-	console.log(userInfo);
-
 	return (
 		<Flex justify='space-between'>
 			{userInfo?.nickname}
@@ -84,7 +82,7 @@ const UserItem: React.FC<ItemProps> = observer(({ id }) => {
 							},
 							title: Object.keys(friends).includes(id)
 								? languages.alreadyFriends[language]
-								: languages.cancelRequest[language],
+								: languages.cancelRequestConfirm[language],
 						}
 				  )
 				: MyIcon(UserAddOutlined, isSmallScreen, {

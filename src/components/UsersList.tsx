@@ -91,7 +91,7 @@ const UserItem: React.FC<ItemProps> = observer(({ id, mode }) => {
 					<>
 						<Col span={1}>
 							<Popconfirm
-								title={languages.declineRequestConfirm[language]}
+								title={languages.acceptRequestConfirm[language]}
 								onConfirm={() => acceptRequest(UID, key)}
 							>
 								{MyIcon(UserAddOutlined, isSmallScreen, {})}

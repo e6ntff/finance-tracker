@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.4395b1f2.css","mappings":"AAAA,iBAGC,SACA,UAGD,UAEC,kBAGD,MAEC,gBADA,gBACA","sources":["index.scss"],"sourcesContent":["*,\r\n*::before,\r\n*::after {\r\n\tmargin: 0;\r\n\tpadding: 0;\r\n}\r\n\r\nhtml,\r\nbody {\r\n\tblock-size: 100dvh;\r\n}\r\n\r\n#root {\r\n\tinline-size: 100%;\r\n\tblock-size: 100%;\r\n}\r\n"],"names":[],"sourceRoot":""}

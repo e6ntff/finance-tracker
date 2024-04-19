@@ -14,7 +14,6 @@ import {
 import {
 	Chat,
 	ListType,
-	User,
 	category,
 	currencies,
 	language,
@@ -54,15 +53,15 @@ const getTitleComponents = (
 };
 
 export const MyTitle = (
-	title: string,
+	title: string | undefined,
 	type: ListType | null,
 	isSmallScreen: boolean,
 	language?: language,
 	editable?: any,
 	overlaps?: number[][]
 ) => {
-	const markedTitles: React.ReactNode[] = overlaps
-		? title.split('').map((char, index) => {
+	const markedTitles: React.ReactNode[] | undefined = overlaps
+		? title?.split('').map((char, index) => {
 				const isInOverlaps = overlaps.some(
 					([start, end]) => index >= start && index <= end
 				);
@@ -397,7 +396,6 @@ export const addFriendToChatSelect = (
 			  }[]
 	) => void,
 	friends: { [key: string]: true },
-	usersInfo: { [key: string]: User['info'] },
 	value: string[] | null,
 	chatInfo?: Chat['info']
 ) => {
@@ -419,7 +417,8 @@ export const addFriendToChatSelect = (
 			style={{ inlineSize: isSmallScreen ? '10em' : '15em' }}
 			options={friendsToShow.map((key: string) => ({
 				value: key,
-				label: usersInfo[key]?.nickname,
+				// label: usersInfo[key]?.nickname,
+				label: key,
 			}))}
 		/>
 	);

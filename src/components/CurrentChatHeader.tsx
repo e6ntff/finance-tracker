@@ -39,7 +39,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 	({ chatId, setCurrentChatId, setSelected }) => {
 		const { userOptions } = optionsStore;
 		const { isSmallScreen, UID } = userStore;
-		const { usersInfo, user } = communityStore;
+		const { user } = communityStore;
 
 		const [chatInfo, setChatInfo] = useState<Chat['info']>();
 
@@ -120,7 +120,6 @@ const CurrentChatHeader: React.FC<Props> = observer(
 							isSmallScreen,
 							handleChange,
 							friends,
-							usersInfo,
 							null,
 							chatInfo
 						),
@@ -158,7 +157,6 @@ const CurrentChatHeader: React.FC<Props> = observer(
 				handleChange,
 				handleExit,
 				friends,
-				usersInfo,
 			]
 		);
 

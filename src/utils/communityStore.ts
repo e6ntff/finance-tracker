@@ -9,12 +9,7 @@ configure({
 
 class CommunityStore {
 	user: User = constants.emptyUser;
-	usersInfo: { [key: string]: User['info'] } = {};
-	messages: Chat['messages'] | null = null;
-
-	setUsersInfo = (info: typeof this.usersInfo) => {
-		this.usersInfo = info;
-	};
+	messages: Chat['messages'] = {};
 
 	setMessages = (messages: typeof this.messages) => {
 		this.messages = messages;

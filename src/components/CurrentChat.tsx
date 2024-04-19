@@ -10,13 +10,8 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { Chat, Message, User } from 'settings/interfaces';
-import {
-	deleteMessage,
-	getChatInfo,
-	getChatMessages,
-	getUsersInfo,
-} from 'utils/community';
+import { Message, User } from 'settings/interfaces';
+import { deleteMessage, getChatMessages, getUsersInfo } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
@@ -45,19 +40,24 @@ const CurrentChat: React.FC<Props> = observer(
 		const { isSmallScreen } = userStore;
 		const { messages, setMessages } = communityStore;
 
-		const [chatInfo, setChatInfo] = useState<Chat['info'] | null>(null);
-
 		const [currentChatMembersInfo, setCurrentChatMembersInfo] = useState<{
 			[key: string]: User['info'];
 		}>({});
 
 		useEffect(() => {
-			getChatInfo(chatId, setChatInfo);
-		}, [chatId]);
-
-		useEffect(() => {
-			chatInfo && getUsersInfo(chatInfo?.members, setCurrentChatMembersInfo);
-		}, [chatInfo?.members, chatInfo]);
+			if (messages) {
+				const members: { [key: string]: true } = Object.keys(messages).reduce(
+					(acc: { [key: string]: true }, key: string) => {
+						if (acc[messages[key].sender] === undefined) {
+							acc[messages[key].sender] = true;
+						}
+						return acc;
+					},
+					{}
+				);
+				getUsersInfo(members, setCurrentChatMembersInfo);
+			}
+		}, [messages]);
 
 		const selectMessage = useCallback(
 			(key: string) => () => {
@@ -75,9 +75,15 @@ const CurrentChat: React.FC<Props> = observer(
 			[setSelected]
 		);
 
+		const removeMessage = useCallback(
+			(chatId: string | null, messageId: string) => () =>
+				deleteMessage(chatId, messageId),
+			[]
+		);
+
 		useEffect(() => {
 			let unsubscribe: Unsubscribe | undefined = () => {};
-			setMessages(null);
+			setMessages({});
 			if (chatId) unsubscribe = getChatMessages(chatId, setMessages);
 			return () => unsubscribe && unsubscribe();
 			// eslint-disable-next-line
@@ -103,13 +109,12 @@ const CurrentChat: React.FC<Props> = observer(
 					Object.keys(messages).map((key: string) => (
 						<MessageItem
 							key={key}
-							messageId={key}
 							message={messages[key]}
-							chatId={chatId}
-							senderInfo={currentChatMembersInfo[messages[key].sender]}
+							memberInfo={currentChatMembersInfo[messages[key].sender]}
 							selected={selected.includes(key)}
 							select={selectMessage(key)}
 							deselect={deselectMessage(key)}
+							remove={removeMessage(chatId, key)}
 						/>
 					))}
 			</Flex>
@@ -118,17 +123,16 @@ const CurrentChat: React.FC<Props> = observer(
 );
 
 interface ItemProps {
-	messageId: string;
 	message: Message;
-	chatId: string | null;
-	senderInfo: User['info'];
+	memberInfo: User['info'];
 	selected: boolean;
 	select: () => void;
 	deselect: () => void;
+	remove: () => void;
 }
 
 const MessageItem: React.FC<ItemProps> = observer(
-	({ messageId, message, chatId, senderInfo, selected, select, deselect }) => {
+	({ message, memberInfo, selected, select, deselect, remove }) => {
 		const { isSmallScreen, UID } = userStore;
 		const { sender, text, sentAt } = message;
 
@@ -138,9 +142,9 @@ const MessageItem: React.FC<ItemProps> = observer(
 			() =>
 				MyIcon(DeleteOutlined, isSmallScreen, {
 					small: true,
-					onClick: () => deleteMessage(chatId, messageId),
+					onClick: () => remove,
 				}),
-			[isSmallScreen, chatId, messageId]
+			[isSmallScreen, remove]
 		);
 
 		const messageArea = useMemo(
@@ -149,7 +153,7 @@ const MessageItem: React.FC<ItemProps> = observer(
 					vertical
 					align={isMyMessage ? 'end' : 'start'}
 				>
-					{MyTitle(senderInfo?.nickname, null, isSmallScreen)}
+					{MyTitle(memberInfo?.nickname, null, isSmallScreen)}
 					<TextArea
 						variant='filled'
 						size={isSmallScreen ? 'small' : 'middle'}
@@ -165,7 +169,7 @@ const MessageItem: React.FC<ItemProps> = observer(
 					/>
 				</Flex>
 			),
-			[isSmallScreen, text, sentAt, isMyMessage, selected, senderInfo]
+			[isSmallScreen, text, sentAt, isMyMessage, selected, memberInfo]
 		);
 
 		return (
@@ -194,7 +198,7 @@ const MessageItem: React.FC<ItemProps> = observer(
 							{isMyMessage && deleteMessageIcon}
 						</Flex>
 					</Flex>
-					{MyImage(senderInfo?.image, isSmallScreen)}
+					{MyImage(memberInfo?.image, isSmallScreen)}
 				</Flex>
 			</Flex>
 		);

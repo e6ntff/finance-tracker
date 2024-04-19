@@ -9,7 +9,7 @@ export const updateUser = (uid: string, user?: User) => {
 	try {
 		set(ref(database, `users/${uid}`), user || constants.emptyUser);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -26,7 +26,7 @@ export const sendRequest = (
 			set(ref(database, `users/${uid}/sentFriendRequests/${toSend}`), true);
 		}
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -35,7 +35,7 @@ export const cancelRequest = (uid: string, toCancel: string) => {
 		remove(ref(database, `users/${toCancel}/friendRequests/${uid}`));
 		remove(ref(database, `users/${uid}/sentFriendRequests/${toCancel}`));
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -46,7 +46,7 @@ export const acceptRequest = (uid: string, toAccept: string) => {
 		set(ref(database, `users/${uid}/friends/${toAccept}`), true);
 		set(ref(database, `users/${toAccept}/friends/${uid}`), true);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -55,7 +55,7 @@ export const declineRequest = (uid: string, toDecline: string) => {
 		remove(ref(database, `users/${uid}/friendRequests/${toDecline}`));
 		remove(ref(database, `users/${toDecline}/sentFriendRequests/${uid}`));
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -64,7 +64,7 @@ export const removeFriend = (uid: string, toDelete: string) => {
 		remove(ref(database, `users/${uid}/friends/${toDelete}`));
 		remove(ref(database, `users/${toDelete}/friends/${uid}`));
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -88,7 +88,7 @@ export const createChat = (uid: string, title: string, users?: string[]) => {
 			set(ref(database, `users/${user}/chats/${chatId}`), true);
 		});
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -102,7 +102,7 @@ export const inviteFriendsToChat = (
 			set(ref(database, `users/${id}/chats/${chatId}`), true);
 		});
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -116,7 +116,7 @@ export const getChatInfo = (
 			setChatInfo(data);
 		});
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -127,7 +127,7 @@ export const getAllUsers = (setUsers: (users: string[]) => void) => {
 			setUsers(Object.keys(data) || {});
 		});
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -141,7 +141,7 @@ export const getMyUser = (
 			setUserInfo(data);
 		});
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -155,7 +155,7 @@ export const getUserInfo = (
 			setUserInfo(data || {});
 		});
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -173,7 +173,7 @@ export const getUsersInfo = (
 		});
 		setUsersInfo(info);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -187,7 +187,7 @@ export const deleteChat = (
 			remove(ref(database, `users/${id}/chats/${chatId}`))
 		);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -201,7 +201,7 @@ export const exitFromChat = (
 		remove(ref(database, `users/${uid}/chats/${chatId}`));
 		Object.keys(members).length === 1 && deleteChat(chatId, members);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -219,7 +219,7 @@ export const getChatMessages = (
 		);
 		return unsubscribe;
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -236,7 +236,7 @@ export const sendMessage = async (
 	try {
 		set(ref(database, `chats/${chatId}/messages/${uniqid()}`), message);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -252,7 +252,7 @@ export const editMessage = (
 			dayjs().valueOf()
 		);
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };
 
@@ -260,6 +260,6 @@ export const deleteMessage = (chatId: string | null, messageId: string) => {
 	try {
 		remove(ref(database, `chats/${chatId}/messages/${messageId}`));
 	} catch (error) {
-		alert(error);
+		console.error(error);
 	}
 };

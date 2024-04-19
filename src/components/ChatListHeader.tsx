@@ -13,7 +13,7 @@ const ChatListHeader: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
 	const { isSmallScreen, UID } = userStore;
 	const { language } = userOptions;
-	const { usersInfo, user } = communityStore;
+	const { user } = communityStore;
 
 	const { friends } = user;
 
@@ -74,7 +74,6 @@ const ChatListHeader: React.FC = observer(() => {
 						isSmallScreen,
 						handleUsersChange,
 						friends,
-						usersInfo,
 						newChat.users
 					)}
 				</Form.Item>
@@ -97,7 +96,6 @@ const ChatListHeader: React.FC = observer(() => {
 		),
 		[
 			isSmallScreen,
-			usersInfo,
 			handleTitleChange,
 			handleUsersChange,
 			newChat,

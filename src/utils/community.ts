@@ -246,7 +246,6 @@ export const deleteMessage = (chatId: string | null, messageId: string) => {
 };
 
 export const setOnline = (id: string, value: boolean) => {
-	console.log(id);
 	try {
 		id && set(ref(database, `users/${id}/online`), value);
 	} catch (error) {

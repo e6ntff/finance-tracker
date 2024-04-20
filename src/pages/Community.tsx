@@ -55,7 +55,7 @@ const Community: React.FC = observer(() => {
 					children: <Friends />,
 				},
 			]}
-		></Tabs>
+		/>
 	);
 });
 

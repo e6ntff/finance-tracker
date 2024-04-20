@@ -10,7 +10,7 @@ import Scrollbars from 'react-custom-scrollbars';
 import { communityStore } from 'utils/communityStore';
 
 interface Props {
-	chatId: string;
+	chatId: string | null;
 	scrollbarsRef: React.MutableRefObject<Scrollbars | null>;
 	stuck: boolean;
 	hasNewMessages: boolean;
@@ -34,16 +34,17 @@ const ChatInput: React.FC<Props> = observer(
 		);
 
 		const send = useCallback(() => {
-			sendMessage(id, chatId, message).then(() => {
-				scrollbarsRef.current?.scrollToBottom();
-				setMessage('');
-			});
+			chatId &&
+				sendMessage(id, chatId, message).then(() => {
+					scrollbarsRef.current?.scrollToBottom();
+					setMessage('');
+				});
 		}, [id, chatId, message, scrollbarsRef]);
 
 		const scrollDownArrow = useMemo(
 			() =>
 				MyIcon(ArrowDownOutlined, isSmallScreen, {
-					onClick: scrollbarsRef.current?.scrollToBottom,
+					onClick: () => scrollbarsRef.current?.scrollToBottom(),
 				}),
 			[isSmallScreen, scrollbarsRef]
 		);

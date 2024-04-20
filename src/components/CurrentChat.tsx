@@ -1,4 +1,4 @@
-import { Flex } from 'antd';
+import { Divider, Flex } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { Unsubscribe } from 'firebase/database';
 import { observer } from 'mobx-react-lite';
@@ -9,6 +9,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
 import { Message } from 'settings/interfaces';
@@ -16,7 +17,7 @@ import { deleteMessage, editMessage, getChatMessages } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
-import Scrollbars from 'react-custom-scrollbars';
+import Scrollbars, { positionValues } from 'react-custom-scrollbars';
 import { MyIcon, MyTitle } from './Items';
 import {
 	CheckOutlined,
@@ -25,97 +26,134 @@ import {
 	EditOutlined,
 	HeartFilled,
 } from '@ant-design/icons';
+import ChatInput from './ChatInput';
+import CurrentChatHeader from './CurrentChatHeader';
 
 interface Props {
-	chatId: string | null;
-	scrollbarsRef: React.MutableRefObject<Scrollbars | null>;
-	stuck: boolean;
-	setHasNewMessages: Dispatch<SetStateAction<boolean>>;
-	selected: string[];
-	setSelected: Dispatch<SetStateAction<string[]>>;
+	chatId: string;
+	setChatId: Dispatch<SetStateAction<string | null>>;
 }
 
-const CurrentChat: React.FC<Props> = observer(
-	({
-		chatId,
-		scrollbarsRef,
-		stuck,
-		setHasNewMessages,
-		setSelected,
-		selected,
-	}) => {
-		const { isSmallScreen } = userStore;
-		const { messages, setMessages, onlineFriends } = communityStore;
+const CurrentChat: React.FC<Props> = observer(({ chatId, setChatId }) => {
+	const { isSmallScreen } = userStore;
+	const { messages, setMessages, onlineFriends } = communityStore;
 
-		const select = useCallback(
-			(key: string) => () => {
-				setSelected((prevSelected: string[]) => [...prevSelected, key]);
-			},
-			[setSelected]
-		);
+	const scrollbarsRef = useRef<Scrollbars | null>(null);
 
-		const deselect = useCallback(
-			(key: string) => () => {
-				setSelected((prevSelected: string[]) =>
-					prevSelected.filter((item: string) => item !== key)
-				);
-			},
-			[setSelected]
-		);
+	const [stuckToBottom, setStuckToBottom] = useState<boolean>(true);
+	const [hasNewMessages, setHasNewMessages] = useState<boolean>(false);
 
-		const edit = useCallback(
-			(chatId: string | null, messageId: string) => (text: string) =>
-				editMessage(chatId, messageId, text),
-			[]
-		);
+	const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
 
-		const remove = useCallback(
-			(chatId: string | null, messageId: string) => () =>
-				deleteMessage(chatId, messageId),
-			[]
-		);
+	const onUpdate = useCallback(
+		(values: positionValues) => {
+			const stuck =
+				values.top >= 0.99 || values.clientHeight === values.scrollHeight;
+			setStuckToBottom(stuck);
+			stuck && setHasNewMessages(false);
+		},
+		[setStuckToBottom, setHasNewMessages]
+	);
 
-		useEffect(() => {
-			let unsubscribe: Unsubscribe | undefined = () => {};
-			setMessages({});
-			if (chatId) unsubscribe = getChatMessages(chatId, setMessages);
-			return () => unsubscribe && unsubscribe();
-			// eslint-disable-next-line
-		}, [chatId]);
+	const select = useCallback(
+		(key: string) => () => {
+			setSelectedMessages((prevSelected: string[]) => [...prevSelected, key]);
+		},
+		[setSelectedMessages]
+	);
 
-		useEffect(() => {
-			scrollbarsRef.current?.scrollToBottom();
-			// eslint-disable-next-line
-		}, [messages === null]);
+	const deselect = useCallback(
+		(key: string) => () => {
+			setSelectedMessages((prevSelected: string[]) =>
+				prevSelected.filter((item: string) => item !== key)
+			);
+		},
+		[setSelectedMessages]
+	);
 
-		useEffect(() => {
-			setHasNewMessages(true);
-			stuck && scrollbarsRef.current?.scrollToBottom();
-			// eslint-disable-next-line
-		}, [messages]);
+	const edit = useCallback(
+		(chatId: string | null, messageId: string) => (text: string) =>
+			editMessage(chatId, messageId, text),
+		[]
+	);
 
-		return (
+	const remove = useCallback(
+		(chatId: string | null, messageId: string) => () =>
+			deleteMessage(chatId, messageId),
+		[]
+	);
+
+	useEffect(() => {
+		let unsubscribe: Unsubscribe | undefined = () => {};
+		setMessages({});
+		if (chatId) unsubscribe = getChatMessages(chatId, setMessages);
+		return () => unsubscribe && unsubscribe();
+		// eslint-disable-next-line
+	}, [chatId]);
+
+	useEffect(() => {
+		scrollbarsRef.current?.scrollToBottom();
+		// eslint-disable-next-line
+	}, [messages === null]);
+
+	useEffect(() => {
+		setHasNewMessages(true);
+		stuckToBottom && scrollbarsRef.current?.scrollToBottom();
+		// eslint-disable-next-line
+	}, [messages]);
+
+	return (
+		<>
+			{!isSmallScreen && (
+				<Divider
+					type='vertical'
+					style={{ height: 'unset', margin: 0 }}
+				/>
+			)}
 			<Flex
 				vertical
-				gap={isSmallScreen ? 8 : 16}
+				style={{ inlineSize: isSmallScreen ? '100%' : '75%', padding: '1em' }}
 			>
-				{messages &&
-					Object.keys(messages).map((key: string) => (
-						<MessageItem
-							key={key}
-							message={messages[key]}
-							selected={selected.includes(key)}
-							online={onlineFriends[messages[key].sender]}
-							select={select(key)}
-							deselect={deselect(key)}
-							edit={edit(chatId, key)}
-							remove={remove(chatId, key)}
-						/>
-					))}
+				<CurrentChatHeader
+					setSelected={setSelectedMessages}
+					chatId={chatId}
+					setCurrentChatId={setChatId}
+				/>
+				<Divider />
+				<Scrollbars
+					onUpdate={onUpdate}
+					autoHide
+					ref={scrollbarsRef}
+				>
+					<Flex
+						vertical
+						gap={isSmallScreen ? 8 : 16}
+					>
+						{messages &&
+							Object.keys(messages).map((key: string) => (
+								<MessageItem
+									key={key}
+									message={messages[key]}
+									selected={selectedMessages.includes(key)}
+									online={onlineFriends[messages[key].sender]}
+									select={select(key)}
+									deselect={deselect(key)}
+									edit={edit(chatId, key)}
+									remove={remove(chatId, key)}
+								/>
+							))}
+					</Flex>
+				</Scrollbars>
+				<ChatInput
+					chatId={chatId}
+					scrollbarsRef={scrollbarsRef}
+					stuck={stuckToBottom}
+					hasNewMessages={hasNewMessages}
+				/>
 			</Flex>
-		);
-	}
-);
+		</>
+	);
+});
 
 interface ItemProps {
 	message: Message;
@@ -151,8 +189,8 @@ const MessageItem: React.FC<ItemProps> = observer(
 
 		const exitEditModeWithSubmit = useCallback(() => {
 			setEditMode(false);
-			edit(currentText);
-		}, [setEditMode, currentText, edit]);
+			currentText !== text && edit(currentText);
+		}, [setEditMode, currentText, edit, text]);
 
 		const { myUser } = communityStore;
 
@@ -167,32 +205,44 @@ const MessageItem: React.FC<ItemProps> = observer(
 			[setCurrentText]
 		);
 
+		const submitIcon = useMemo(
+			() =>
+				MyIcon(CheckOutlined, isSmallScreen, {
+					small: true,
+					onClick: exitEditModeWithSubmit,
+				}),
+			[exitEditModeWithSubmit, isSmallScreen]
+		);
+
+		const cancelIcon = useMemo(
+			() =>
+				MyIcon(CloseOutlined, isSmallScreen, {
+					small: true,
+					onClick: exitEditModeWithCancel,
+				}),
+			[exitEditModeWithCancel, isSmallScreen]
+		);
+
+		const editIcon = useMemo(
+			() =>
+				MyIcon(EditOutlined, isSmallScreen, {
+					small: true,
+					onClick: enterEditMode,
+				}),
+			[enterEditMode, isSmallScreen]
+		);
+
 		const editMessageIcons = useMemo(
 			() =>
 				editMode ? (
 					<Flex>
-						{MyIcon(CheckOutlined, isSmallScreen, {
-							small: true,
-							onClick: exitEditModeWithSubmit,
-						})}
-						{MyIcon(CloseOutlined, isSmallScreen, {
-							small: true,
-							onClick: exitEditModeWithCancel,
-						})}
+						{submitIcon}
+						{cancelIcon}
 					</Flex>
 				) : (
-					MyIcon(EditOutlined, isSmallScreen, {
-						small: true,
-						onClick: enterEditMode,
-					})
+					editIcon
 				),
-			[
-				editMode,
-				isSmallScreen,
-				exitEditModeWithCancel,
-				enterEditMode,
-				exitEditModeWithSubmit,
-			]
+			[editMode, submitIcon, cancelIcon, editIcon]
 		);
 
 		const deleteMessageIcon = useMemo(
@@ -204,6 +254,18 @@ const MessageItem: React.FC<ItemProps> = observer(
 			[isSmallScreen, remove]
 		);
 
+		const onlineDot = useMemo(
+			() => (
+				<HeartFilled
+					style={{
+						color: '#f00',
+						fontSize: isSmallScreen ? '.33em' : '.5em',
+					}}
+				/>
+			),
+			[isSmallScreen]
+		);
+
 		const titleWithDot = useMemo(
 			() => (
 				<Flex
@@ -211,18 +273,21 @@ const MessageItem: React.FC<ItemProps> = observer(
 					gap={isSmallScreen ? 2 : 4}
 					style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
 				>
-					{online && (
-						<HeartFilled
-							style={{
-								color: '#f00',
-								fontSize: isSmallScreen ? '.33em' : '.5em',
-							}}
-						/>
-					)}
+					{online && onlineDot}
 					{MyTitle(sender, null, isSmallScreen)}
 				</Flex>
 			),
-			[sender, isSmallScreen, isMyMessage, online]
+			[sender, isSmallScreen, isMyMessage, onlineDot, online]
+		);
+
+		const icons = useMemo(
+			() => (
+				<Flex>
+					{editMessageIcons}
+					{!editMode && deleteMessageIcon}
+				</Flex>
+			),
+			[editMessageIcons, deleteMessageIcon, editMode]
 		);
 
 		const messageArea = useMemo(
@@ -278,17 +343,7 @@ const MessageItem: React.FC<ItemProps> = observer(
 						gap={isSmallScreen ? 2 : 4}
 					>
 						{messageArea}
-						<Flex
-							justify='space-between'
-							style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
-						>
-							{isMyMessage && (
-								<Flex>
-									{editMessageIcons}
-									{deleteMessageIcon}
-								</Flex>
-							)}
-						</Flex>
+						{isMyMessage && icons}
 					</Flex>
 				</Flex>
 			</Flex>

@@ -1,4 +1,4 @@
-import { CommentOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { CommentOutlined, TeamOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
@@ -7,24 +7,25 @@ import { optionsStore } from 'utils/optionsStore';
 import Chats from './Chats';
 import Friends from './Friends';
 import { userStore } from 'utils/userStore';
-import { getMyUser } from 'utils/community';
+import { getMyUserId, getMyUserUser } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 
 const Community: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
 	const { isSmallScreen, UID } = userStore;
-	const { setUser } = communityStore;
+	const { setUserUser, setUserId } = communityStore;
 
 	const { language } = userOptions;
 
-	const [activeKey, setActiveKey] = useState<string>('1');
+	const [activeKey, setActiveKey] = useState<string>('0');
 
 	useEffect(() => {
 		if (UID) {
-			getMyUser(UID, setUser);
+			getMyUserId(UID, setUserId).then((id: string) =>
+				getMyUserUser(id, setUserUser)
+			);
 		}
-		// eslint-disable-next-line
-	}, [UID]);
+	}, [UID, setUserId, setUserUser]);
 
 	return (
 		<Tabs
@@ -36,18 +37,12 @@ const Community: React.FC = observer(() => {
 			items={[
 				{
 					key: '0',
-					label: languages.profile[language],
-					icon: <UserOutlined />,
-					children: <></>,
-				},
-				{
-					key: '1',
 					label: languages.chats[language],
 					icon: <CommentOutlined />,
 					children: <Chats />,
 				},
 				{
-					key: '2',
+					key: '1',
 					label: languages.friends[language],
 					icon: <TeamOutlined />,
 					children: <Friends />,

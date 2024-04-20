@@ -11,11 +11,11 @@ import { communityStore } from 'utils/communityStore';
 
 const ChatListHeader: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
-	const { isSmallScreen, UID } = userStore;
+	const { isSmallScreen } = userStore;
 	const { language } = userOptions;
-	const { user } = communityStore;
+	const { myUser } = communityStore;
 
-	const { friends } = user;
+	const { user, id } = myUser;
 
 	const [newChat, setNewChat] = useState<{ title: string; users: string[] }>({
 		title: '',
@@ -73,7 +73,7 @@ const ChatListHeader: React.FC = observer(() => {
 					{addFriendToChatSelect(
 						isSmallScreen,
 						handleUsersChange,
-						friends,
+						user?.friends,
 						newChat.users
 					)}
 				</Form.Item>
@@ -86,7 +86,7 @@ const ChatListHeader: React.FC = observer(() => {
 					<Form.Item>
 						{MyIcon(CheckOutlined, isSmallScreen, {
 							onClick: () => {
-								createChat(UID, newChat.title, newChat.users);
+								createChat(id, newChat.title, newChat.users);
 								setNewChat({ title: '', users: [] });
 							},
 						})}
@@ -100,8 +100,8 @@ const ChatListHeader: React.FC = observer(() => {
 			handleUsersChange,
 			newChat,
 			language,
-			friends,
-			UID,
+			user?.friends,
+			id,
 		]
 	);
 

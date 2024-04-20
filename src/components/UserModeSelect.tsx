@@ -18,9 +18,9 @@ interface Props {
 const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
-	const { user } = communityStore;
+	const { myUser } = communityStore;
 
-	const { friendRequests } = user;
+	const { user } = myUser;
 
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
@@ -46,7 +46,7 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 						label: (
 							<Badge
 								size='small'
-								count={Object.keys(friendRequests).length}
+								count={Object.keys(user?.friendRequests).length}
 							>
 								{languages.requests[userOptions.language]}
 							</Badge>

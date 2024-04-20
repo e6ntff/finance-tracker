@@ -38,12 +38,12 @@ interface Props {
 const CurrentChatHeader: React.FC<Props> = observer(
 	({ chatId, setCurrentChatId, setSelected }) => {
 		const { userOptions } = optionsStore;
-		const { isSmallScreen, UID } = userStore;
-		const { user } = communityStore;
+		const { isSmallScreen } = userStore;
+		const { myUser } = communityStore;
 
 		const [chatInfo, setChatInfo] = useState<Chat['info']>();
 
-		const { friends } = user;
+		const { user, id } = myUser;
 
 		const { language } = userOptions;
 
@@ -81,8 +81,8 @@ const CurrentChatHeader: React.FC<Props> = observer(
 
 		const handleExit = useCallback(() => {
 			setCurrentChatId(null);
-			chatInfo && exitFromChat(UID, chatId, chatInfo?.members);
-		}, [UID, chatId, chatInfo, setCurrentChatId]);
+			chatInfo && exitFromChat(id, chatId, chatInfo?.members);
+		}, [chatId, chatInfo, setCurrentChatId, id]);
 
 		const chatTitle = useMemo(
 			() =>
@@ -119,7 +119,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 						title: addFriendToChatSelect(
 							isSmallScreen,
 							handleChange,
-							friends,
+							user?.friends,
 							null,
 							chatInfo
 						),
@@ -156,7 +156,7 @@ const CurrentChatHeader: React.FC<Props> = observer(
 				handleDeleting,
 				handleChange,
 				handleExit,
-				friends,
+				user?.friends,
 			]
 		);
 

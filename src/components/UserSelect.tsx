@@ -6,21 +6,17 @@ import {
 import { Flex, Select } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import {
-	cancelRequest,
-	getAllUsers,
-	getUserInfo,
-	sendRequest,
-} from 'utils/community';
+import { cancelRequest, getAllUsers, sendRequest } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import { MyIcon } from './Items';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
-import { User } from 'settings/interfaces';
 
 const UserSelect: React.FC = observer(() => {
-	const { isSmallScreen, UID } = userStore;
+	const { isSmallScreen } = userStore;
+
+	const { myUser } = communityStore;
 
 	const [users, setUsers] = useState<string[]>([]);
 
@@ -36,10 +32,10 @@ const UserSelect: React.FC = observer(() => {
 			value={null}
 			style={{ inlineSize: isSmallScreen ? '100%' : '50%' }}
 			options={users
-				.filter((key: string) => key !== UID)
+				.filter((key: string) => key !== myUser.id)
 				.map((key: string) => ({
 					value: key,
-					label: <UserItem id={key} />,
+					label: <UserItem userId={key} />,
 				}))}
 		/>
 	);
@@ -48,46 +44,40 @@ const UserSelect: React.FC = observer(() => {
 export default UserSelect;
 
 interface ItemProps {
-	id: string;
+	userId: string;
 }
 
-const UserItem: React.FC<ItemProps> = observer(({ id }) => {
+const UserItem: React.FC<ItemProps> = observer(({ userId }) => {
 	const { isSmallScreen, UID } = userStore;
 	const { userOptions } = optionsStore;
 	const { language } = userOptions;
-	const { user } = communityStore;
+	const { myUser } = communityStore;
 
-	const { sentFriendRequests, friends, friendRequests } = user;
-
-	const [userInfo, setUserInfo] = useState<User['info'] | null>(null);
-
-	useEffect(() => {
-		getUserInfo(id, setUserInfo);
-		// eslint-disable-next-line
-	}, []);
+	const { id, user } = myUser;
 
 	return (
 		<Flex justify='space-between'>
-			{userInfo?.nickname}
-			{Object.keys(sentFriendRequests).includes(id) ||
-			Object.keys(friends).includes(id)
+			{userId}
+			{Object.keys(user?.sentFriendRequests).includes(id) ||
+			Object.keys(user?.friends).includes(id)
 				? MyIcon(
-						Object.keys(friends).includes(id)
+						Object.keys(user?.friends).includes(id)
 							? CheckOutlined
 							: UserDeleteOutlined,
 						isSmallScreen,
 						{
 							onClick: () => {
-								!Object.keys(friends).includes(id) && cancelRequest(UID, id);
+								!Object.keys(user?.friends).includes(id) &&
+									cancelRequest(UID, id);
 							},
-							title: Object.keys(friends).includes(id)
+							title: Object.keys(user?.friends).includes(id)
 								? languages.alreadyFriends[language]
 								: languages.cancelRequestConfirm[language],
 						}
 				  )
 				: MyIcon(UserAddOutlined, isSmallScreen, {
 						onClick: () => {
-							sendRequest(UID, id, friendRequests);
+							sendRequest(id, userId, user?.friendRequests);
 						},
 						title: languages.sendRequest[language],
 				  })}

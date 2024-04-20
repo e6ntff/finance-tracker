@@ -26,7 +26,6 @@ export interface ExpenseItem {
 }
 
 export interface User {
-	info: { nickname: string; createdAt: number; image: string };
 	friends: { [key: string]: true };
 	friendRequests: { [key: string]: true };
 	sentFriendRequests: { [key: string]: true };
@@ -138,7 +137,7 @@ export interface Chat {
 		members: { [key: string]: true };
 		lastMessage?: Message;
 	};
-	messages?: { [key: string]: Message };
+	messages: { [key: string]: Message };
 }
 
 export interface Message {

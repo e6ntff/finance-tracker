@@ -29,7 +29,7 @@ class UserStore {
 	};
 
 	setIsTourStarted = (value: boolean) => {
-		if (this.communityStore.user.info.nickname) this.isTourStarted = value;
+		if (this.communityStore.myUser.id) this.isTourStarted = value;
 	};
 
 	setTourRefs = (refs: React.MutableRefObject<null>[]) => {

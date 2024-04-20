@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import { configure } from 'mobx';
-import constants from 'settings/constants';
 import { Chat, User } from 'settings/interfaces';
 
 configure({
@@ -8,25 +7,45 @@ configure({
 });
 
 class CommunityStore {
-	user: User = constants.emptyUser;
+	myUser: {
+		id: string;
+		user: User;
+	} = {
+		id: '',
+		user: {
+			friends: {},
+			friendRequests: {},
+			sentFriendRequests: {},
+			chats: {},
+		},
+	};
 	messages: Chat['messages'] = {};
 
 	setMessages = (messages: typeof this.messages) => {
 		this.messages = messages;
 	};
 
-	setUser = (user: typeof this.user) => {
-		this.user = {
-			info: {
-				nickname: user.info.nickname || '',
-				createdAt: user.info.createdAt || 0,
-				image: user.info.image || '',
-			},
-			friends: user.friends || {},
-			friendRequests: user.friendRequests || {},
-			sentFriendRequests: user.sentFriendRequests || {},
-			chats: user.chats || {},
-		};
+	setUserUser = (user: typeof this.myUser.user) => {
+		if (user) {
+			this.myUser = {
+				...this.myUser,
+				user: {
+					friends: user?.friends || {},
+					friendRequests: user?.friendRequests || {},
+					sentFriendRequests: user?.sentFriendRequests || {},
+					chats: user?.chats || {},
+				},
+			};
+		}
+	};
+
+	setUserId = (id: typeof this.myUser.id) => {
+		if (id) {
+			this.myUser = {
+				...this.myUser,
+				id: id,
+			};
+		}
 	};
 
 	constructor() {

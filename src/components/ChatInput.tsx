@@ -7,6 +7,7 @@ import { sendMessage } from 'utils/community';
 import { userStore } from 'utils/userStore';
 import { MyIcon } from './Items';
 import Scrollbars from 'react-custom-scrollbars';
+import { communityStore } from 'utils/communityStore';
 
 interface Props {
 	chatId: string;
@@ -17,7 +18,11 @@ interface Props {
 
 const ChatInput: React.FC<Props> = observer(
 	({ chatId, scrollbarsRef, stuck, hasNewMessages }) => {
-		const { UID, isSmallScreen } = userStore;
+		const { isSmallScreen } = userStore;
+
+		const { myUser } = communityStore;
+
+		const { id } = myUser;
 
 		const [message, setMessage] = useState<string>('');
 
@@ -29,14 +34,11 @@ const ChatInput: React.FC<Props> = observer(
 		);
 
 		const send = useCallback(() => {
-			setMessage((prevMessage: string) => {
-				prevMessage &&
-					sendMessage(UID, chatId, message).then(() =>
-						scrollbarsRef.current?.scrollToBottom()
-					);
-				return '';
+			sendMessage(id, chatId, message).then(() => {
+				scrollbarsRef.current?.scrollToBottom();
+				setMessage('');
 			});
-		}, [UID, chatId, message, scrollbarsRef]);
+		}, [id, chatId, message, scrollbarsRef]);
 
 		const scrollDownArrow = useMemo(
 			() =>
@@ -51,7 +53,6 @@ const ChatInput: React.FC<Props> = observer(
 				<Search
 					value={message}
 					onChange={handleChange}
-					allowClear
 					enterButton={<SendOutlined />}
 					size='large'
 					onSearch={send}

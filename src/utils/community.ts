@@ -3,74 +3,73 @@ import { database } from './firebase';
 import { Chat, Message, User } from 'settings/interfaces';
 import uniqid from 'uniqid';
 import dayjs from 'dayjs';
-import constants from 'settings/constants';
 
-export const updateUser = (uid: string, user?: User) => {
+export const updateUser = (UID: string, id: string) => {
 	try {
-		set(ref(database, `users/${uid}`), user || constants.emptyUser);
+		set(ref(database, `pairs/${UID}`), id);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
 export const sendRequest = (
-	uid: string,
+	id: string,
 	toSend: string,
 	friendRequests: { [key: string]: true }
 ) => {
 	try {
 		if (Object.keys(friendRequests).includes(toSend)) {
-			acceptRequest(uid, toSend);
+			acceptRequest(id, toSend);
 		} else {
-			set(ref(database, `users/${toSend}/friendRequests/${uid}`), true);
-			set(ref(database, `users/${uid}/sentFriendRequests/${toSend}`), true);
+			set(ref(database, `users/${toSend}/friendRequests/${id}`), true);
+			set(ref(database, `users/${id}/sentFriendRequests/${toSend}`), true);
 		}
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const cancelRequest = (uid: string, toCancel: string) => {
+export const cancelRequest = (id: string, toCancel: string) => {
 	try {
-		remove(ref(database, `users/${toCancel}/friendRequests/${uid}`));
-		remove(ref(database, `users/${uid}/sentFriendRequests/${toCancel}`));
+		remove(ref(database, `users/${toCancel}/friendRequests/${id}`));
+		remove(ref(database, `users/${id}/sentFriendRequests/${toCancel}`));
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const acceptRequest = (uid: string, toAccept: string) => {
+export const acceptRequest = (id: string, toAccept: string) => {
 	try {
-		remove(ref(database, `users/${uid}/friendRequests/${toAccept}`));
-		remove(ref(database, `users/${toAccept}/sentFriendRequests/${uid}`));
-		set(ref(database, `users/${uid}/friends/${toAccept}`), true);
-		set(ref(database, `users/${toAccept}/friends/${uid}`), true);
+		remove(ref(database, `users/${id}/friendRequests/${toAccept}`));
+		remove(ref(database, `users/${toAccept}/sentFriendRequests/${id}`));
+		set(ref(database, `users/${id}/friends/${toAccept}`), true);
+		set(ref(database, `users/${toAccept}/friends/${id}`), true);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const declineRequest = (uid: string, toDecline: string) => {
+export const declineRequest = (id: string, toDecline: string) => {
 	try {
-		remove(ref(database, `users/${uid}/friendRequests/${toDecline}`));
-		remove(ref(database, `users/${toDecline}/sentFriendRequests/${uid}`));
+		remove(ref(database, `users/${id}/friendRequests/${toDecline}`));
+		remove(ref(database, `users/${toDecline}/sentFriendRequests/${id}`));
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const removeFriend = (uid: string, toDelete: string) => {
+export const removeFriend = (id: string, toDelete: string) => {
 	try {
-		remove(ref(database, `users/${uid}/friends/${toDelete}`));
-		remove(ref(database, `users/${toDelete}/friends/${uid}`));
+		remove(ref(database, `users/${id}/friends/${toDelete}`));
+		remove(ref(database, `users/${toDelete}/friends/${id}`));
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const createChat = (uid: string, title: string, users?: string[]) => {
+export const createChat = (id: string, title: string, users?: string[]) => {
 	try {
-		const usersToAdd = users ? [...users, uid] : [uid];
+		const usersToAdd = users ? [...users, id] : [id];
 		const chatId: string = uniqid();
 		const chatInfo: Chat['info'] = {
 			title: title,
@@ -122,56 +121,40 @@ export const getChatInfo = (
 
 export const getAllUsers = (setUsers: (users: string[]) => void) => {
 	try {
-		onValue(ref(database, `users/`), (snapshot) => {
+		onValue(ref(database, `pairs/`), (snapshot) => {
 			const data = snapshot.val();
-			setUsers(Object.keys(data) || {});
+			setUsers(data ? Object.values(data) : []);
 		});
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-export const getMyUser = (
-	id: string | null,
-	setUserInfo: (info: User) => void
+export const getMyUserId: (
+	UID: string,
+	setUserId: (id: string) => void
+) => Promise<string> = (UID: string, setUserId: (id: string) => void) =>
+	new Promise((res) => {
+		try {
+			onValue(ref(database, `pairs/${UID}`), (snapshot) => {
+				const data = snapshot.val();
+				setUserId(data);
+				res(data as string);
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	});
+
+export const getMyUserUser = (
+	id: string,
+	setUserUser: (user: User) => void
 ) => {
 	try {
 		onValue(ref(database, `users/${id}`), (snapshot) => {
 			const data = snapshot.val();
-			setUserInfo(data);
+			setUserUser(data);
 		});
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-export const getUserInfo = (
-	id: string | null,
-	setUserInfo: (info: User['info']) => void
-) => {
-	try {
-		onValue(ref(database, `users/${id}/info`), (snapshot) => {
-			const data = snapshot.val();
-			setUserInfo(data || {});
-		});
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-export const getUsersInfo = (
-	ids: Chat['info']['members'],
-	setUsersInfo: (info: { [key: string]: User['info'] }) => void
-) => {
-	try {
-		const info: { [key: string]: User['info'] } = {};
-		Object.keys(ids).forEach((id: string) => {
-			onValue(ref(database, `users/${id}/info`), (snapshot) => {
-				const data = snapshot.val();
-				info[id] = data;
-			});
-		});
-		setUsersInfo(info);
 	} catch (error) {
 		console.error(error);
 	}
@@ -192,13 +175,13 @@ export const deleteChat = (
 };
 
 export const exitFromChat = (
-	uid: string,
+	id: string,
 	chatId: string,
 	members: { [key: string]: true }
 ) => {
 	try {
-		remove(ref(database, `chats/${chatId}/info/members/${uid}`));
-		remove(ref(database, `users/${uid}/chats/${chatId}`));
+		remove(ref(database, `chats/${chatId}/info/members/${id}`));
+		remove(ref(database, `users/${id}/chats/${chatId}`));
 		Object.keys(members).length === 1 && deleteChat(chatId, members);
 	} catch (error) {
 		console.error(error);
@@ -223,25 +206,22 @@ export const getChatMessages = (
 	}
 };
 
-export const sendMessage = async (
-	uid: string,
-	chatId: string,
-	text: string
-) => {
+export const sendMessage = async (id: string, chatId: string, text: string) => {
 	const message: Message = {
-		sender: uid,
+		sender: id,
 		text: text,
 		sentAt: dayjs().valueOf(),
 	};
 	try {
-		set(ref(database, `chats/${chatId}/messages/${uniqid()}`), message);
+		text !== '' &&
+			set(ref(database, `chats/${chatId}/messages/${uniqid()}`), message);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
 export const editMessage = (
-	chatId: string,
+	chatId: string | null,
 	messageId: string,
 	text: string
 ) => {

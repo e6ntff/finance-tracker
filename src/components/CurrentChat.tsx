@@ -3,6 +3,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { Unsubscribe } from 'firebase/database';
 import { observer } from 'mobx-react-lite';
 import React, {
+	ChangeEvent,
 	Dispatch,
 	SetStateAction,
 	useCallback,
@@ -10,14 +11,19 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { Message, User } from 'settings/interfaces';
-import { deleteMessage, getChatMessages, getUsersInfo } from 'utils/community';
+import { Message } from 'settings/interfaces';
+import { deleteMessage, editMessage, getChatMessages } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
 import Scrollbars from 'react-custom-scrollbars';
-import { MyIcon, MyImage, MyTitle } from './Items';
-import { DeleteOutlined } from '@ant-design/icons';
+import { MyIcon, MyTitle } from './Items';
+import {
+	CheckOutlined,
+	CloseOutlined,
+	DeleteOutlined,
+	EditOutlined,
+} from '@ant-design/icons';
 
 interface Props {
 	chatId: string | null;
@@ -40,33 +46,14 @@ const CurrentChat: React.FC<Props> = observer(
 		const { isSmallScreen } = userStore;
 		const { messages, setMessages } = communityStore;
 
-		const [currentChatMembersInfo, setCurrentChatMembersInfo] = useState<{
-			[key: string]: User['info'];
-		}>({});
-
-		useEffect(() => {
-			if (messages) {
-				const members: { [key: string]: true } = Object.keys(messages).reduce(
-					(acc: { [key: string]: true }, key: string) => {
-						if (acc[messages[key].sender] === undefined) {
-							acc[messages[key].sender] = true;
-						}
-						return acc;
-					},
-					{}
-				);
-				getUsersInfo(members, setCurrentChatMembersInfo);
-			}
-		}, [messages]);
-
-		const selectMessage = useCallback(
+		const select = useCallback(
 			(key: string) => () => {
 				setSelected((prevSelected: string[]) => [...prevSelected, key]);
 			},
 			[setSelected]
 		);
 
-		const deselectMessage = useCallback(
+		const deselect = useCallback(
 			(key: string) => () => {
 				setSelected((prevSelected: string[]) =>
 					prevSelected.filter((item: string) => item !== key)
@@ -75,7 +62,13 @@ const CurrentChat: React.FC<Props> = observer(
 			[setSelected]
 		);
 
-		const removeMessage = useCallback(
+		const edit = useCallback(
+			(chatId: string | null, messageId: string) => (text: string) =>
+				editMessage(chatId, messageId, text),
+			[]
+		);
+
+		const remove = useCallback(
 			(chatId: string | null, messageId: string) => () =>
 				deleteMessage(chatId, messageId),
 			[]
@@ -110,11 +103,11 @@ const CurrentChat: React.FC<Props> = observer(
 						<MessageItem
 							key={key}
 							message={messages[key]}
-							memberInfo={currentChatMembersInfo[messages[key].sender]}
 							selected={selected.includes(key)}
-							select={selectMessage(key)}
-							deselect={deselectMessage(key)}
-							remove={removeMessage(chatId, key)}
+							select={select(key)}
+							deselect={deselect(key)}
+							edit={edit(chatId, key)}
+							remove={remove(chatId, key)}
 						/>
 					))}
 			</Flex>
@@ -124,25 +117,86 @@ const CurrentChat: React.FC<Props> = observer(
 
 interface ItemProps {
 	message: Message;
-	memberInfo: User['info'];
 	selected: boolean;
 	select: () => void;
 	deselect: () => void;
+	edit: (text: string) => void;
 	remove: () => void;
 }
 
 const MessageItem: React.FC<ItemProps> = observer(
-	({ message, memberInfo, selected, select, deselect, remove }) => {
-		const { isSmallScreen, UID } = userStore;
+	({ message, selected, select, deselect, edit, remove }) => {
+		const { isSmallScreen } = userStore;
 		const { sender, text, sentAt } = message;
 
-		const isMyMessage = useMemo(() => UID === sender, [UID, sender]);
+		const [editMode, setEditMode] = useState<boolean>(false);
+
+		const [currentText, setCurrentText] = useState<string>(text);
+
+		useEffect(() => {
+			setCurrentText(text);
+		}, [text]);
+
+		const enterEditMode = useCallback(() => {
+			setEditMode(true);
+		}, [setEditMode]);
+
+		const exitEditModeWithCancel = useCallback(() => {
+			setEditMode(false);
+			setCurrentText(text);
+		}, [setEditMode, text]);
+
+		const exitEditModeWithSubmit = useCallback(() => {
+			setEditMode(false);
+			edit(currentText);
+		}, [setEditMode, currentText, edit]);
+
+		const { myUser } = communityStore;
+
+		const { id } = myUser;
+
+		const isMyMessage = useMemo(() => id === sender, [id, sender]);
+
+		const handleChange = useCallback(
+			(event: ChangeEvent<HTMLTextAreaElement>) => {
+				setCurrentText(event.target.value);
+			},
+			[setCurrentText]
+		);
+
+		const editMessageIcons = useMemo(
+			() =>
+				editMode ? (
+					<Flex>
+						{MyIcon(CheckOutlined, isSmallScreen, {
+							small: true,
+							onClick: exitEditModeWithSubmit,
+						})}
+						{MyIcon(CloseOutlined, isSmallScreen, {
+							small: true,
+							onClick: exitEditModeWithCancel,
+						})}
+					</Flex>
+				) : (
+					MyIcon(EditOutlined, isSmallScreen, {
+						small: true,
+						onClick: enterEditMode,
+					})
+				),
+			[
+				editMode,
+				isSmallScreen,
+				exitEditModeWithCancel,
+				enterEditMode,
+				exitEditModeWithSubmit,
+			]
+		);
 
 		const deleteMessageIcon = useMemo(
 			() =>
 				MyIcon(DeleteOutlined, isSmallScreen, {
 					small: true,
-					onClick: () => remove,
+					onClick: remove,
 				}),
 			[isSmallScreen, remove]
 		);
@@ -153,23 +207,32 @@ const MessageItem: React.FC<ItemProps> = observer(
 					vertical
 					align={isMyMessage ? 'end' : 'start'}
 				>
-					{MyTitle(memberInfo?.nickname, null, isSmallScreen)}
+					{MyTitle(sender, null, isSmallScreen)}
 					<TextArea
-						variant='filled'
+						variant={editMode ? 'outlined' : 'filled'}
 						size={isSmallScreen ? 'small' : 'middle'}
 						autoSize
-						minLength={5}
 						showCount={{ formatter: () => dayjs(sentAt).format('HH:mm') }}
+						styles={{ count: { marginInlineEnd: 'auto' } }}
 						style={{
-							pointerEvents: 'none',
+							pointerEvents: editMode ? 'auto' : 'none',
 							background: selected ? '#0003' : '',
 						}}
-						value={text}
-						prefix='sd'
+						value={currentText}
+						onChange={handleChange}
 					/>
 				</Flex>
 			),
-			[isSmallScreen, text, sentAt, isMyMessage, selected, memberInfo]
+			[
+				editMode,
+				isSmallScreen,
+				sentAt,
+				isMyMessage,
+				selected,
+				sender,
+				currentText,
+				handleChange,
+			]
 		);
 
 		return (
@@ -195,10 +258,14 @@ const MessageItem: React.FC<ItemProps> = observer(
 							justify='space-between'
 							style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
 						>
-							{isMyMessage && deleteMessageIcon}
+							{isMyMessage && (
+								<Flex>
+									{editMessageIcons}
+									{deleteMessageIcon}
+								</Flex>
+							)}
 						</Flex>
 					</Flex>
-					{MyImage(memberInfo?.image, isSmallScreen)}
 				</Flex>
 			</Flex>
 		);

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import UserModeSelect from './UserModeSelect';
-import { User, UserMode } from 'settings/interfaces';
+import { UserMode } from 'settings/interfaces';
 import { communityStore } from 'utils/communityStore';
 import { Col, Flex, List, Popconfirm } from 'antd';
 import { userStore } from 'utils/userStore';
@@ -12,7 +12,6 @@ import {
 	acceptRequest,
 	cancelRequest,
 	declineRequest,
-	getUserInfo,
 	removeFriend,
 } from 'utils/community';
 import { optionsStore } from 'utils/optionsStore';
@@ -20,18 +19,18 @@ import languages from 'settings/languages';
 
 const UsersList: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
-	const { user } = communityStore;
-
-	const { friends, friendRequests, sentFriendRequests } = user;
+	const { myUser } = communityStore;
 
 	const [mode, setMode] = useState<UserMode>('friends');
 
+	const { user } = myUser;
+
 	const list = useMemo(() => {
-		if (mode === 'friends') return friends;
-		else if (mode === 'requests') return friendRequests;
-		else if (mode === 'myRequests') return sentFriendRequests;
+		if (mode === 'friends') return user?.friends;
+		else if (mode === 'requests') return user?.friendRequests;
+		else if (mode === 'myRequests') return user?.sentFriendRequests;
 		return {};
-	}, [mode, friends, friendRequests, sentFriendRequests]);
+	}, [mode, user?.friends, user?.friendRequests, user?.sentFriendRequests]);
 
 	return (
 		<Flex
@@ -48,7 +47,7 @@ const UsersList: React.FC = observer(() => {
 					Object.keys(list).map((key: string) => (
 						<UserItem
 							key={key}
-							id={key}
+							userId={key}
 							mode={mode}
 						/>
 					))}
@@ -58,20 +57,17 @@ const UsersList: React.FC = observer(() => {
 });
 
 interface ItemProps {
-	id: string;
+	userId: string;
 	mode: UserMode;
 }
 
-const UserItem: React.FC<ItemProps> = observer(({ id, mode }) => {
-	const { isSmallScreen, UID } = userStore;
+const UserItem: React.FC<ItemProps> = observer(({ userId, mode }) => {
+	const { isSmallScreen } = userStore;
 	const { userOptions } = optionsStore;
 	const { language } = userOptions;
+	const { myUser } = communityStore;
 
-	const [userInfo, setUserInfo] = useState<User['info'] | null>(null);
-
-	useEffect(() => {
-		getUserInfo(id, setUserInfo);
-	}, [id]);
+	const { id } = myUser;
 
 	const icon = useCallback(
 		(key: string) => {
@@ -80,7 +76,7 @@ const UserItem: React.FC<ItemProps> = observer(({ id, mode }) => {
 					<Col span={1}>
 						<Popconfirm
 							title={languages.removeFriendConfirm[language]}
-							onConfirm={() => removeFriend(UID, key)}
+							onConfirm={() => removeFriend(id, key)}
 						>
 							{MyIcon(UserDeleteOutlined, isSmallScreen, {})}
 						</Popconfirm>
@@ -92,7 +88,7 @@ const UserItem: React.FC<ItemProps> = observer(({ id, mode }) => {
 						<Col span={1}>
 							<Popconfirm
 								title={languages.acceptRequestConfirm[language]}
-								onConfirm={() => acceptRequest(UID, key)}
+								onConfirm={() => acceptRequest(id, key)}
 							>
 								{MyIcon(UserAddOutlined, isSmallScreen, {})}
 							</Popconfirm>
@@ -100,7 +96,7 @@ const UserItem: React.FC<ItemProps> = observer(({ id, mode }) => {
 						<Col span={1}>
 							<Popconfirm
 								title={languages.declineRequestConfirm[language]}
-								onConfirm={() => declineRequest(UID, key)}
+								onConfirm={() => declineRequest(id, key)}
 							>
 								{MyIcon(UserDeleteOutlined, isSmallScreen, {})}
 							</Popconfirm>
@@ -112,19 +108,19 @@ const UserItem: React.FC<ItemProps> = observer(({ id, mode }) => {
 					<Col span={1}>
 						<Popconfirm
 							title={languages.cancelRequestConfirm[language]}
-							onConfirm={() => cancelRequest(UID, key)}
+							onConfirm={() => cancelRequest(id, key)}
 						>
 							{MyIcon(UserDeleteOutlined, isSmallScreen, {})}
 						</Popconfirm>
 					</Col>
 				);
 		},
-		[UID, isSmallScreen, mode, language]
+		[isSmallScreen, mode, language, id]
 	);
 	return (
 		<Item>
-			<Col span={20}>{userInfo?.nickname}</Col>
-			{icon(id)}
+			<Col span={20}>{userId}</Col>
+			{icon(userId)}
 		</Item>
 	);
 });

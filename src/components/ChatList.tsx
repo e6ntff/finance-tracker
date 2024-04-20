@@ -22,12 +22,14 @@ interface Props {
 
 const ChatList: React.FC<Props> = observer(
 	({ selectedChatId, setCurrentChatId }) => {
-		const { user } = communityStore;
+		const { myUser } = communityStore;
+
+		const { user } = myUser;
 
 		return (
 			<List>
-				{user.chats &&
-					Object.keys(user.chats).map((key: string) => (
+				{user?.chats &&
+					Object.keys(user?.chats).map((key: string) => (
 						<ChatListItem
 							key={key}
 							id={key}

@@ -5,38 +5,52 @@ import {
 } from '@ant-design/icons';
 import { Flex, Select } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { cancelRequest, getAllUsers, sendRequest } from 'utils/community';
+import React, { useCallback, useState } from 'react';
+import { cancelRequest, findUser, sendRequest } from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import { MyIcon } from './Items';
 import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
+import { debounce } from 'lodash';
+import constants from 'settings/constants';
 
 const UserSelect: React.FC = observer(() => {
 	const { isSmallScreen } = userStore;
 
 	const { myUser } = communityStore;
 
-	const [users, setUsers] = useState<string[]>([]);
+	const [userId, setUser] = useState<string | null>(null);
 
-	useEffect(() => {
-		getAllUsers(setUsers);
+	const handleSearch = useCallback((id: string) => {
+		findUser(id)
+			.then(() => setUser(id))
+			.catch(() => setUser(null));
 	}, []);
+
+	const debouncedHandleSearch = debounce(
+		handleSearch,
+		constants.optionsDebounceDelay
+	);
 
 	return (
 		<Select
 			size={isSmallScreen ? 'small' : 'middle'}
 			labelInValue
 			showSearch
+			onSearch={debouncedHandleSearch}
 			value={null}
 			style={{ inlineSize: isSmallScreen ? '100%' : '50%' }}
-			options={users
-				.filter((key: string) => key !== myUser.id)
-				.map((key: string) => ({
-					value: key,
-					label: <UserItem userId={key} />,
-				}))}
+			options={
+				userId !== myUser.id && userId
+					? [
+							{
+								value: userId,
+								label: <UserItem userId={userId} />,
+							},
+					  ]
+					: []
+			}
 		/>
 	);
 });

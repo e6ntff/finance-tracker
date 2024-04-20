@@ -7,25 +7,14 @@ import { optionsStore } from 'utils/optionsStore';
 import Chats from './Chats';
 import Friends from './Friends';
 import { userStore } from 'utils/userStore';
-import { getMyUserId, getMyUserUser } from 'utils/community';
-import { communityStore } from 'utils/communityStore';
 
 const Community: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
 	const { isSmallScreen, UID } = userStore;
-	const { setUserUser, setUserId } = communityStore;
 
 	const { language } = userOptions;
 
 	const [activeKey, setActiveKey] = useState<string>('0');
-
-	useEffect(() => {
-		if (UID) {
-			getMyUserId(UID, setUserId).then((id: string) =>
-				getMyUserUser(id, setUserUser)
-			);
-		}
-	}, [UID, setUserId, setUserUser]);
 
 	return (
 		<Tabs

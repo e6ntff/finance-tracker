@@ -119,16 +119,17 @@ export const getChatInfo = (
 	}
 };
 
-export const getAllUsers = (setUsers: (users: string[]) => void) => {
-	try {
-		onValue(ref(database, `pairs/`), (snapshot) => {
-			const data = snapshot.val();
-			setUsers(data ? Object.values(data) : []);
-		});
-	} catch (error) {
-		console.error(error);
-	}
-};
+export const findUser: (id: string) => Promise<void> = (id: string) =>
+	new Promise((res, rej) => {
+		try {
+			onValue(ref(database, `users/${id}`), (snapshot) => {
+				const data = snapshot.val();
+				data ? res() : rej();
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	});
 
 export const getMyUserId: (
 	UID: string,
@@ -239,6 +240,15 @@ export const editMessage = (
 export const deleteMessage = (chatId: string | null, messageId: string) => {
 	try {
 		remove(ref(database, `chats/${chatId}/messages/${messageId}`));
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const setOnline = (id: string, value: boolean) => {
+	console.log(id);
+	try {
+		id && set(ref(database, `users/${id}/online`), value);
 	} catch (error) {
 		console.error(error);
 	}

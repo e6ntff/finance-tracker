@@ -9,6 +9,8 @@ import { categoryStore } from 'utils/categoryStore';
 import { Button } from 'antd';
 import { optionsStore } from 'utils/optionsStore';
 import languages from 'settings/languages';
+import { setOnline } from 'utils/community';
+import { communityStore } from 'utils/communityStore';
 
 interface Props {
 	close: () => void;
@@ -19,6 +21,8 @@ const LogOutButton: React.FC<Props> = observer(({ close }) => {
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
 	const { resetOptions, userOptions } = optionsStore;
+	const { myUser } = communityStore;
+
 	const auth = getAuth(app);
 
 	const logOut = useCallback(async () => {
@@ -29,12 +33,14 @@ const LogOutButton: React.FC<Props> = observer(({ close }) => {
 			setUserList({});
 			setUserCategories({ 0: constants.defaultCategory });
 			resetOptions();
+			setOnline(myUser.id, false);
 			close();
 			sessionStorage.clear();
 		} catch (error: any) {
 			alert(error.message);
 		}
 	}, [
+		myUser.id,
 		auth,
 		setUserCategories,
 		setUserList,

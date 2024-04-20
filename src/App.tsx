@@ -23,6 +23,8 @@ import DeleteNotification from 'components/DeleteNotification';
 import languages from 'settings/languages';
 import goalStore from 'utils/GoalStore';
 import NicknameModal from 'components/NicknameModal';
+import { getMyUserId, getMyUserUser, setOnline } from 'utils/community';
+import { communityStore } from 'utils/communityStore';
 
 const auth = getAuth(app);
 
@@ -33,12 +35,14 @@ const App: React.FC = observer(() => {
 		setIsSmallScreen,
 		setCurrencyRates,
 		setUID,
+		UID,
 		setLoading,
 		setStatus,
 	} = userStore;
 	const { setUserList } = listStore;
 	const { setUserCategories } = categoryStore;
 	const { setUserGoals } = goalStore;
+	const { myUser, setUserId, setUserUser } = communityStore;
 	const { userOptions, setCurrency, setTheme } = optionsStore;
 
 	const { themeAlgorithm, currency, language } = userOptions;
@@ -46,7 +50,22 @@ const App: React.FC = observer(() => {
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
+		if (UID) {
+			getMyUserId(UID, setUserId).then((id: string) => {
+				getMyUserUser(id, setUserUser);
+				setOnline(id, true);
+			});
+		}
+	}, [UID, setUserId, setUserUser]);
+
+	useEffect(() => {
 		window.addEventListener('contextmenu', (event) => event.preventDefault());
+
+		const handleUserOffline = () => {
+			setOnline(myUser.id, false);
+		};
+
+		window.addEventListener('beforeunload', handleUserOffline);
 
 		const handleResize = () => {
 			setIsSmallScreen(window.innerWidth < constants.windowBreakpoint);
@@ -91,14 +110,16 @@ const App: React.FC = observer(() => {
 		const unsubscribe = onAuthStateChanged(auth, (authUser) => {
 			setUID(authUser?.uid || '');
 			if (authUser && authUser.uid) {
-				getData(
-					authUser.uid,
-					setStatus,
-					setUserList,
-					setUserCategories,
-					setUserGoals,
-					setLoading
-				);
+				setStatus({ status: 'loading' });
+				getData(authUser.uid, setUserList, setUserCategories, setUserGoals)
+					.then(() => {
+						setLoading(false);
+						setOnline(myUser.id, true);
+						setStatus({ status: 'success' });
+					})
+					.catch((error) => {
+						setStatus({ status: 'error', text: error.message });
+					});
 			}
 		});
 

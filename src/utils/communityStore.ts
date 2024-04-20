@@ -19,7 +19,16 @@ class CommunityStore {
 			chats: {},
 		},
 	};
+	onlineFriends: { [key: string]: boolean } = {};
 	messages: Chat['messages'] = {};
+
+	setOnlineFriend = (id: string, value: boolean) => {
+		this.onlineFriends[id] = value;
+	};
+
+	clearOnlineFriends = () => {
+		this.onlineFriends = {};
+	};
 
 	setMessages = (messages: typeof this.messages) => {
 		this.messages = messages;

@@ -1,4 +1,4 @@
-import { ExpenseItem, Goal, Status, category } from 'settings/interfaces';
+import { ExpenseItem, Goal, category } from 'settings/interfaces';
 import { onValue, ref } from 'firebase/database';
 import { database } from './firebase';
 

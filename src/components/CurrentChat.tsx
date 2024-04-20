@@ -23,6 +23,7 @@ import {
 	CloseOutlined,
 	DeleteOutlined,
 	EditOutlined,
+	HeartFilled,
 } from '@ant-design/icons';
 
 interface Props {
@@ -44,7 +45,7 @@ const CurrentChat: React.FC<Props> = observer(
 		selected,
 	}) => {
 		const { isSmallScreen } = userStore;
-		const { messages, setMessages } = communityStore;
+		const { messages, setMessages, onlineFriends } = communityStore;
 
 		const select = useCallback(
 			(key: string) => () => {
@@ -104,6 +105,7 @@ const CurrentChat: React.FC<Props> = observer(
 							key={key}
 							message={messages[key]}
 							selected={selected.includes(key)}
+							online={onlineFriends[messages[key].sender]}
 							select={select(key)}
 							deselect={deselect(key)}
 							edit={edit(chatId, key)}
@@ -118,6 +120,7 @@ const CurrentChat: React.FC<Props> = observer(
 interface ItemProps {
 	message: Message;
 	selected: boolean;
+	online: boolean;
 	select: () => void;
 	deselect: () => void;
 	edit: (text: string) => void;
@@ -125,7 +128,7 @@ interface ItemProps {
 }
 
 const MessageItem: React.FC<ItemProps> = observer(
-	({ message, selected, select, deselect, edit, remove }) => {
+	({ message, selected, online, select, deselect, edit, remove }) => {
 		const { isSmallScreen } = userStore;
 		const { sender, text, sentAt } = message;
 
@@ -201,13 +204,34 @@ const MessageItem: React.FC<ItemProps> = observer(
 			[isSmallScreen, remove]
 		);
 
+		const titleWithDot = useMemo(
+			() => (
+				<Flex
+					align='center'
+					gap={isSmallScreen ? 2 : 4}
+					style={{ flexDirection: isMyMessage ? 'row' : 'row-reverse' }}
+				>
+					{online && (
+						<HeartFilled
+							style={{
+								color: '#f00',
+								fontSize: isSmallScreen ? '.33em' : '.5em',
+							}}
+						/>
+					)}
+					{MyTitle(sender, null, isSmallScreen)}
+				</Flex>
+			),
+			[sender, isSmallScreen, isMyMessage, online]
+		);
+
 		const messageArea = useMemo(
 			() => (
 				<Flex
 					vertical
 					align={isMyMessage ? 'end' : 'start'}
 				>
-					{MyTitle(sender, null, isSmallScreen)}
+					{titleWithDot}
 					<TextArea
 						variant={editMode ? 'outlined' : 'filled'}
 						size={isSmallScreen ? 'small' : 'middle'}
@@ -229,9 +253,9 @@ const MessageItem: React.FC<ItemProps> = observer(
 				sentAt,
 				isMyMessage,
 				selected,
-				sender,
 				currentText,
 				handleChange,
+				titleWithDot,
 			]
 		);
 

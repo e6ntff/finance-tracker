@@ -7,14 +7,32 @@ import { optionsStore } from 'utils/optionsStore';
 import Chats from './Chats';
 import Friends from './Friends';
 import { userStore } from 'utils/userStore';
+import { communityStore } from 'utils/communityStore';
+import { checkOnline } from 'utils/community';
+import { Unsubscribe } from 'firebase/auth';
 
 const Community: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
-	const { isSmallScreen, UID } = userStore;
+	const { isSmallScreen } = userStore;
+	const { myUser, setOnlineFriend, clearOnlineFriends } = communityStore;
 
 	const { language } = userOptions;
 
 	const [activeKey, setActiveKey] = useState<string>('0');
+
+	useEffect(() => {
+		const unsubscribes: (Unsubscribe | undefined)[] = [];
+		Object.keys(myUser.user.friends).forEach((id: string) => {
+			unsubscribes.push(checkOnline(id, setOnlineFriend));
+		});
+
+		return () => {
+			unsubscribes.forEach(
+				(unsubscribe: Unsubscribe | undefined) => unsubscribe && unsubscribe()
+			);
+			clearOnlineFriends();
+		};
+	}, [clearOnlineFriends, setOnlineFriend, myUser.user.friends]);
 
 	return (
 		<Tabs

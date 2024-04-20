@@ -253,3 +253,21 @@ export const setOnline = (id: string, value: boolean) => {
 		console.error(error);
 	}
 };
+
+export const checkOnline = (
+	id: string,
+	setOnline: (id: string, online: boolean) => void
+) => {
+	try {
+		const unsubscribe = onValue(
+			ref(database, `users/${id}/online`),
+			(snapshot) => {
+				const data = snapshot.val();
+				data ? setOnline(id, true) : setOnline(id, false);
+			}
+		);
+		return unsubscribe;
+	} catch (error) {
+		console.error(error);
+	}
+};

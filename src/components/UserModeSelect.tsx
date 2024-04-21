@@ -22,6 +22,8 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 
 	const { user } = myUser;
 
+	const { language } = userOptions;
+
 	const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
 	const openModal = useCallback(() => {
@@ -48,17 +50,17 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 								size='small'
 								count={Object.keys(user?.friendRequests).length}
 							>
-								{languages.requests[userOptions.language]}
+								{languages.requests[language]}
 							</Badge>
 						),
 						value: 'requests',
 					},
 					{
-						label: languages.myRequests[userOptions.language],
+						label: languages.myRequests[language],
 						value: 'myRequests',
 					},
 					{
-						label: languages.friends[userOptions.language],
+						label: languages.friends[language],
 						value: 'friends',
 					},
 				]}
@@ -66,7 +68,7 @@ const UserModeSelect: React.FC<Props> = observer(({ value, onChange }) => {
 			{isSmallScreen &&
 				MyIcon(SearchOutlined, isSmallScreen, {
 					onClick: openModal,
-					title: languages.searchFriends[userOptions.language],
+					title: languages.searchFriends[language],
 				})}
 			<Drawer
 				open={isModalOpened}

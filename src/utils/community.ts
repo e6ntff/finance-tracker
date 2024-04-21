@@ -212,6 +212,7 @@ export const sendMessage = async (id: string, chatId: string, text: string) => {
 		sender: id,
 		text: text,
 		sentAt: dayjs().valueOf(),
+		seenBy: {},
 	};
 	try {
 		text !== '' &&
@@ -266,6 +267,20 @@ export const checkOnline = (
 			}
 		);
 		return unsubscribe;
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+export const viewMessage = (chatId: string, messageId: string, id: string) => {
+	try {
+		chatId &&
+			messageId &&
+			id &&
+			set(
+				ref(database, `chats/${chatId}/messages/${messageId}/seenBy/${id}`),
+				true
+			);
 	} catch (error) {
 		console.error(error);
 	}

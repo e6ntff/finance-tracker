@@ -4,7 +4,7 @@ import { ListType } from './interfaces';
 const pageSizeOptions = [20, 40, 80];
 
 const defaultCategory = {
-	type: 'all' as ListType,
+	type: 'expense' as ListType,
 	color: '#cccccc',
 	name: '-',
 	deleted: false,

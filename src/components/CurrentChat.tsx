@@ -13,7 +13,12 @@ import React, {
 	useState,
 } from 'react';
 import { Message } from 'settings/interfaces';
-import { deleteMessage, editMessage, getChatMessages } from 'utils/community';
+import {
+	deleteMessage,
+	editMessage,
+	getChatMessages,
+	viewMessage,
+} from 'utils/community';
 import { communityStore } from 'utils/communityStore';
 import { userStore } from 'utils/userStore';
 import dayjs from 'dayjs';
@@ -24,10 +29,12 @@ import {
 	CloseOutlined,
 	DeleteOutlined,
 	EditOutlined,
+	EyeOutlined,
 	HeartFilled,
 } from '@ant-design/icons';
 import ChatInput from './ChatInput';
 import CurrentChatHeader from './CurrentChatHeader';
+import { useInView } from 'react-intersection-observer';
 
 interface Props {
 	chatId: string;
@@ -36,7 +43,9 @@ interface Props {
 
 const CurrentChat: React.FC<Props> = observer(({ chatId, setChatId }) => {
 	const { isSmallScreen } = userStore;
-	const { messages, setMessages, onlineFriends } = communityStore;
+	const { messages, setMessages, onlineFriends, myUser } = communityStore;
+
+	const { id } = myUser;
 
 	const scrollbarsRef = useRef<Scrollbars | null>(null);
 
@@ -71,16 +80,22 @@ const CurrentChat: React.FC<Props> = observer(({ chatId, setChatId }) => {
 		[setSelectedMessages]
 	);
 
+	const view = useCallback(
+		(messageId: string) => () => {
+			viewMessage(chatId, messageId, id);
+		},
+		[chatId, id]
+	);
+
 	const edit = useCallback(
-		(chatId: string | null, messageId: string) => (text: string) =>
+		(messageId: string) => (text: string) =>
 			editMessage(chatId, messageId, text),
-		[]
+		[chatId]
 	);
 
 	const remove = useCallback(
-		(chatId: string | null, messageId: string) => () =>
-			deleteMessage(chatId, messageId),
-		[]
+		(messageId: string) => () => deleteMessage(chatId, messageId),
+		[chatId]
 	);
 
 	useEffect(() => {
@@ -138,8 +153,9 @@ const CurrentChat: React.FC<Props> = observer(({ chatId, setChatId }) => {
 									online={onlineFriends[messages[key].sender]}
 									select={select(key)}
 									deselect={deselect(key)}
-									edit={edit(chatId, key)}
-									remove={remove(chatId, key)}
+									view={view(key)}
+									edit={edit(key)}
+									remove={remove(key)}
 								/>
 							))}
 					</Flex>
@@ -161,18 +177,32 @@ interface ItemProps {
 	online: boolean;
 	select: () => void;
 	deselect: () => void;
+	view: () => void;
 	edit: (text: string) => void;
 	remove: () => void;
 }
 
 const MessageItem: React.FC<ItemProps> = observer(
-	({ message, selected, online, select, deselect, edit, remove }) => {
+	({ message, selected, online, select, deselect, view, edit, remove }) => {
 		const { isSmallScreen } = userStore;
 		const { sender, text, sentAt } = message;
+
+		const { myUser } = communityStore;
+
+		const { id } = myUser;
 
 		const [editMode, setEditMode] = useState<boolean>(false);
 
 		const [currentText, setCurrentText] = useState<string>(text);
+
+		const { ref, inView } = useInView();
+
+		const isMyMessage = useMemo(() => id === sender, [id, sender]);
+
+		useEffect(() => {
+			inView && !isMyMessage && view();
+			// eslint-disable-next-line
+		}, [inView, isMyMessage]);
 
 		useEffect(() => {
 			setCurrentText(text);
@@ -191,12 +221,6 @@ const MessageItem: React.FC<ItemProps> = observer(
 			setEditMode(false);
 			currentText !== text && edit(currentText);
 		}, [setEditMode, currentText, edit, text]);
-
-		const { myUser } = communityStore;
-
-		const { id } = myUser;
-
-		const isMyMessage = useMemo(() => id === sender, [id, sender]);
 
 		const handleChange = useCallback(
 			(event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -254,6 +278,22 @@ const MessageItem: React.FC<ItemProps> = observer(
 			[isSmallScreen, remove]
 		);
 
+		const seenByIcon = useMemo(() => {
+			const members =
+				message.seenBy &&
+				Object.keys(message.seenBy).map((item: string) => (
+					<p key={item}>{item}</p>
+				));
+
+			if (!message.seenBy) return <></>;
+
+			return MyIcon(EyeOutlined, isSmallScreen, {
+				small: true,
+				title: <Flex vertical>{members}</Flex>,
+				placement: 'left',
+			});
+		}, [message.seenBy, isSmallScreen]);
+
 		const onlineDot = useMemo(
 			() => (
 				<HeartFilled
@@ -283,16 +323,18 @@ const MessageItem: React.FC<ItemProps> = observer(
 		const icons = useMemo(
 			() => (
 				<Flex>
+					{!editMode && seenByIcon}
 					{editMessageIcons}
 					{!editMode && deleteMessageIcon}
 				</Flex>
 			),
-			[editMessageIcons, deleteMessageIcon, editMode]
+			[editMessageIcons, deleteMessageIcon, editMode, seenByIcon]
 		);
 
 		const messageArea = useMemo(
 			() => (
 				<Flex
+					ref={ref}
 					vertical
 					align={isMyMessage ? 'end' : 'start'}
 				>
@@ -321,6 +363,7 @@ const MessageItem: React.FC<ItemProps> = observer(
 				currentText,
 				handleChange,
 				titleWithDot,
+				ref,
 			]
 		);
 

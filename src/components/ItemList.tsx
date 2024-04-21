@@ -43,7 +43,6 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 	);
 
 	const [options, setOptions] = useState<ListOptions>(listOptions);
-	console.log(options.isSortingReversed);
 	// eslint-disable-next-line
 	const debouncedSetOptions = debounce(
 		setOptions,

@@ -145,4 +145,5 @@ export interface Message {
 	sentAt: number;
 	editedAt?: number;
 	text: string;
+	seenBy: { [key: string]: true };
 }

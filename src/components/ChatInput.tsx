@@ -10,7 +10,7 @@ import Scrollbars from 'react-custom-scrollbars';
 import { communityStore } from 'utils/communityStore';
 
 interface Props {
-	chatId: string | null;
+	chatId: string;
 	scrollbarsRef: React.MutableRefObject<Scrollbars | null>;
 	stuck: boolean;
 	hasNewMessages: boolean;
@@ -20,7 +20,7 @@ const ChatInput: React.FC<Props> = observer(
 	({ chatId, scrollbarsRef, stuck, hasNewMessages }) => {
 		const { isSmallScreen } = userStore;
 
-		const { myUser } = communityStore;
+		const { myUser, updates } = communityStore;
 
 		const { id } = myUser;
 
@@ -71,7 +71,7 @@ const ChatInput: React.FC<Props> = observer(
 			>
 				{!stuck && (
 					<Flex style={{ position: 'absolute', right: '0', bottom: '4em' }}>
-						<Badge dot={hasNewMessages}>{scrollDownArrow}</Badge>
+						<Badge count={updates.chat}>{scrollDownArrow}</Badge>
 					</Flex>
 				)}
 				{chatInput}

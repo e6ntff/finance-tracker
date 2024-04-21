@@ -21,6 +21,15 @@ class CommunityStore {
 	};
 	onlineFriends: { [key: string]: boolean } = {};
 	messages: Chat['messages'] = {};
+	updates: { chat: number; friends: number } = { chat: 0, friends: 0 };
+
+	setChatUpdates = (value: number) => {
+		this.updates = { ...this.updates, chat: value };
+	};
+
+	setFriendsUpdates = (value: number) => {
+		this.updates = { ...this.updates, friends: value };
+	};
 
 	setOnlineFriend = (id: string, value: boolean) => {
 		this.onlineFriends[id] = value;

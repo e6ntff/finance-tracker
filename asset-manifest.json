@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/finance-tracker/static/css/main.4395b1f2.css",
-    "main.js": "/finance-tracker/static/js/main.6a0a643f.js",
-    "static/js/405.1ad3619a.chunk.js": "/finance-tracker/static/js/405.1ad3619a.chunk.js",
+    "main.js": "/finance-tracker/static/js/main.69538cbd.js",
+    "static/js/405.995cb13f.chunk.js": "/finance-tracker/static/js/405.995cb13f.chunk.js",
     "static/js/766.ee3de673.chunk.js": "/finance-tracker/static/js/766.ee3de673.chunk.js",
     "static/js/196.d2ae7fe5.chunk.js": "/finance-tracker/static/js/196.d2ae7fe5.chunk.js",
     "static/js/737.b50fd04a.chunk.js": "/finance-tracker/static/js/737.b50fd04a.chunk.js",
     "static/js/324.8fa195ab.chunk.js": "/finance-tracker/static/js/324.8fa195ab.chunk.js",
     "static/js/305.c3f87604.chunk.js": "/finance-tracker/static/js/305.c3f87604.chunk.js",
-    "static/js/732.d15123db.chunk.js": "/finance-tracker/static/js/732.d15123db.chunk.js",
+    "static/js/732.55c48ac6.chunk.js": "/finance-tracker/static/js/732.55c48ac6.chunk.js",
     "static/js/145.5f0eb54c.chunk.js": "/finance-tracker/static/js/145.5f0eb54c.chunk.js",
     "static/js/408.4ddc1a09.chunk.js": "/finance-tracker/static/js/408.4ddc1a09.chunk.js",
     "static/js/450.d33a3a94.chunk.js": "/finance-tracker/static/js/450.d33a3a94.chunk.js",
@@ -19,18 +19,18 @@
     "static/js/925.799f7475.chunk.js": "/finance-tracker/static/js/925.799f7475.chunk.js",
     "static/js/22.50238cca.chunk.js": "/finance-tracker/static/js/22.50238cca.chunk.js",
     "static/js/428.46ff98cf.chunk.js": "/finance-tracker/static/js/428.46ff98cf.chunk.js",
-    "static/js/161.b6aa8262.chunk.js": "/finance-tracker/static/js/161.b6aa8262.chunk.js",
+    "static/js/76.b07ca37b.chunk.js": "/finance-tracker/static/js/76.b07ca37b.chunk.js",
     "static/js/650.f607e3eb.chunk.js": "/finance-tracker/static/js/650.f607e3eb.chunk.js",
     "index.html": "/finance-tracker/index.html",
     "main.4395b1f2.css.map": "/finance-tracker/static/css/main.4395b1f2.css.map",
-    "main.6a0a643f.js.map": "/finance-tracker/static/js/main.6a0a643f.js.map",
-    "405.1ad3619a.chunk.js.map": "/finance-tracker/static/js/405.1ad3619a.chunk.js.map",
+    "main.69538cbd.js.map": "/finance-tracker/static/js/main.69538cbd.js.map",
+    "405.995cb13f.chunk.js.map": "/finance-tracker/static/js/405.995cb13f.chunk.js.map",
     "766.ee3de673.chunk.js.map": "/finance-tracker/static/js/766.ee3de673.chunk.js.map",
     "196.d2ae7fe5.chunk.js.map": "/finance-tracker/static/js/196.d2ae7fe5.chunk.js.map",
     "737.b50fd04a.chunk.js.map": "/finance-tracker/static/js/737.b50fd04a.chunk.js.map",
     "324.8fa195ab.chunk.js.map": "/finance-tracker/static/js/324.8fa195ab.chunk.js.map",
     "305.c3f87604.chunk.js.map": "/finance-tracker/static/js/305.c3f87604.chunk.js.map",
-    "732.d15123db.chunk.js.map": "/finance-tracker/static/js/732.d15123db.chunk.js.map",
+    "732.55c48ac6.chunk.js.map": "/finance-tracker/static/js/732.55c48ac6.chunk.js.map",
     "145.5f0eb54c.chunk.js.map": "/finance-tracker/static/js/145.5f0eb54c.chunk.js.map",
     "408.4ddc1a09.chunk.js.map": "/finance-tracker/static/js/408.4ddc1a09.chunk.js.map",
     "450.d33a3a94.chunk.js.map": "/finance-tracker/static/js/450.d33a3a94.chunk.js.map",
@@ -41,11 +41,11 @@
     "925.799f7475.chunk.js.map": "/finance-tracker/static/js/925.799f7475.chunk.js.map",
     "22.50238cca.chunk.js.map": "/finance-tracker/static/js/22.50238cca.chunk.js.map",
     "428.46ff98cf.chunk.js.map": "/finance-tracker/static/js/428.46ff98cf.chunk.js.map",
-    "161.b6aa8262.chunk.js.map": "/finance-tracker/static/js/161.b6aa8262.chunk.js.map",
+    "76.b07ca37b.chunk.js.map": "/finance-tracker/static/js/76.b07ca37b.chunk.js.map",
     "650.f607e3eb.chunk.js.map": "/finance-tracker/static/js/650.f607e3eb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4395b1f2.css",
-    "static/js/main.6a0a643f.js"
+    "static/js/main.69538cbd.js"
   ]
 }

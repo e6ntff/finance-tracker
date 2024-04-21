@@ -405,6 +405,8 @@ const languages: { [key: string]: any } = {
 			},
 		},
 	],
+	nickname: { en: 'Nickname', ru: 'Имя' },
+	nicknameInUse: { en: 'Nickname is already in use', ru: 'Имя занято' },
 	newGoal: { en: 'New Goal', ru: 'Новая цель' },
 	sendRequest: { en: 'Send Request', ru: 'Пригласить' },
 	requests: { en: 'Requests', ru: 'Приглашения' },

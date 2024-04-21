@@ -17,10 +17,10 @@ const RandomizeButton: React.FC = observer(() => {
 	const { language } = userOptions;
 
 	const addRandomData = useCallback(() => {
-		const itemsValue = { expense: 500, income: 100 };
-		const categoriesValue = { expense: 15, income: 5 };
-		const deletedItemsValue = { expense: 50, income: 10 };
-		const deletedCategoriesValue = { expense: 3, income: 1 };
+		const itemsValue = { expense: 200, income: 50 };
+		const categoriesValue = { expense: 5, income: 5 };
+		const deletedItemsValue = { expense: 20, income: 5 };
+		const deletedCategoriesValue = { expense: 2, income: 2 };
 
 		const data = getRandomData(
 			itemsValue,

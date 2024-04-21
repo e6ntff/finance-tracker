@@ -45,6 +45,9 @@ const YearSlider: React.FC<Props> = observer(({ range, type, setRange }) => {
 		const dates = Object.values(list)
 			.filter((item: ExpenseItem) => item.type === type || type === 'all')
 			.map((item: ExpenseItem) => item.date);
+
+		if (!dates.length) return [dayjs().valueOf(), dayjs().valueOf()];
+
 		return [Math.min(...dates), Math.max(...dates)];
 	}, [list, type]);
 

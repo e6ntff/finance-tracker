@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { listStore } from 'utils/listStore';
 import { Empty, Flex } from 'antd';
@@ -12,6 +12,8 @@ import YearSlider from 'components/YearSlider';
 import { Interval } from 'settings/interfaces';
 import LargeSpin from 'components/LargeSpin';
 import StatsCard from 'components/StatsCard';
+import { debounce } from 'lodash';
+import constants from 'settings/constants';
 
 dayjs.extend(isBetween);
 
@@ -51,10 +53,20 @@ const Stats: React.FC = observer(() => {
 		}
 	}, [range]);
 
-	const isRangeChanged = useMemo(
-		() => range[0] !== defaultRange[0] || range[1] !== defaultRange[1],
-		[range, defaultRange]
+	const [isRangeChanged, setIsRangeChanged] = useState<boolean>(false);
+	
+	// eslint-disable-next-line
+	const debouncedSetIsRangeChanged = useCallback(
+		debounce(setIsRangeChanged, constants.optionsDebounceDelay),
+		[setIsRangeChanged]
 	);
+
+	useEffect(() => {
+		const isChanged =
+			range[0] !== defaultRange[0] || range[1] !== defaultRange[1];
+		console.log();
+		debouncedSetIsRangeChanged(isChanged);
+	}, [range, defaultRange, debouncedSetIsRangeChanged]);
 
 	const DiagramsJSX = (
 		<Flex

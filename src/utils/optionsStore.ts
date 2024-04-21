@@ -22,8 +22,6 @@ import {
 	initialUserOptions,
 } from 'settings/options';
 import { configure } from 'mobx';
-import { debounce } from 'lodash';
-import constants from 'settings/constants';
 
 configure({
 	enforceActions: 'never',
@@ -34,7 +32,6 @@ const { defaultAlgorithm, darkAlgorithm } = theme;
 class OptionsStore {
 	defaultRange: number[] = [];
 	listOptions: ListOptions = initialListOptions;
-	debouncedListOptions: ListOptions = this.listOptions;
 	statsOptions: StatsOptions = initialStatsOptions;
 	userOptions: UserOptions = initialUserOptions;
 	communityOptions: CommunityOptions = initialCommunityOptions;
@@ -62,19 +59,8 @@ class OptionsStore {
 		this.communityOptions = options;
 	};
 
-	setDebouncedListOptions = debounce(
-		(options: ListOptions) => this.setListOptions(options),
-		constants.optionsDebounceDelay
-	);
-
-	setListOptionsWithDebounce = (options: ListOptions) => {
-		this.listOptions = options;
-
-		this.setDebouncedListOptions(options);
-	};
-
 	resetOptions = () => {
-		this.setListOptionsWithDebounce(defaultListOptions);
+		this.setListOptions(defaultListOptions);
 		this.setStatsOptions(defaultStatsOptions);
 		this.setUserOptions(defaultUserOptions);
 	};
@@ -110,7 +96,7 @@ class OptionsStore {
 	};
 
 	setRange = (values: number[]) => {
-		this.setListOptionsWithDebounce({ ...this.listOptions, range: values });
+		this.setListOptions({ ...this.listOptions, range: values });
 	};
 
 	setDefaultRange = (values: number[]) => {
@@ -118,7 +104,7 @@ class OptionsStore {
 	};
 
 	handleSortAlgorithmChanging = (value: Sort) => {
-		this.setListOptionsWithDebounce({
+		this.setListOptions({
 			...this.listOptions,
 			sortingAlgorithm: value,
 			isSortingReversed: false,
@@ -126,11 +112,11 @@ class OptionsStore {
 	};
 
 	handleModeChanging = (value: Mode) => {
-		this.setListOptionsWithDebounce({ ...this.listOptions, mode: value });
+		this.setListOptions({ ...this.listOptions, mode: value });
 	};
 
 	resetListOptions = () => {
-		this.setListOptionsWithDebounce({
+		this.setListOptions({
 			...defaultListOptions,
 			mode: this.listOptions.mode,
 			range: this.defaultRange,
@@ -138,21 +124,21 @@ class OptionsStore {
 	};
 
 	setIsSortingReversed = (value: boolean) => {
-		this.setListOptionsWithDebounce({
+		this.setListOptions({
 			...this.listOptions,
 			isSortingReversed: value,
 		});
 	};
 
 	handleCategoriesToFilterChange = (values: string[]) => {
-		this.setListOptionsWithDebounce({
+		this.setListOptions({
 			...this.listOptions,
 			categoriesToFilterIds: values,
 		});
 	};
 
 	handlePageChanging = (value: number, size: number) => {
-		this.setListOptionsWithDebounce({
+		this.setListOptions({
 			...this.listOptions,
 			currentPage: value,
 			pageSize: size,

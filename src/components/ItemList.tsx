@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ListItem from './ListItem';
 import { ItemWithSearch, ListOptions } from '../settings/interfaces';
 import { observer } from 'mobx-react-lite';
@@ -10,6 +10,7 @@ import LargeSpin from './LargeSpin';
 import { listStore } from 'utils/listStore';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { debounce } from 'lodash';
+import constants from 'settings/constants';
 
 interface Props {
 	filteredListIds: ItemWithSearch[];
@@ -41,30 +42,50 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 		[setSelectedItemIds]
 	);
 
-	const debouncedOptions: ListOptions =
-		debounce(() => listOptions)() || listOptions;
+	const [options, setOptions] = useState<ListOptions>(listOptions);
+	console.log(options.isSortingReversed);
+	// eslint-disable-next-line
+	const debouncedSetOptions = debounce(
+		setOptions,
+		constants.optionsDebounceDelay
+	);
+
+	useEffect(() => {
+		debouncedSetOptions(listOptions);
+		// eslint-disable-next-line
+	}, [listOptions]);
 
 	const listToShowOnCurrentPageIds = useMemo(
 		() =>
-			getListToShowOnCurrentPageIds(debouncedOptions, filteredListIds).filter(
+			getListToShowOnCurrentPageIds(options, filteredListIds).filter(
 				(value: ItemWithSearch) => !lastDeletedItemIds.includes(value.id)
 			),
-		[filteredListIds, debouncedOptions, lastDeletedItemIds]
+		[filteredListIds, options, lastDeletedItemIds]
 	);
 
-	const Items = listToShowOnCurrentPageIds.map((value: ItemWithSearch) => (
-		<ListItem
-			key={value.id}
-			mode={debouncedOptions.mode}
-			deleteAll={deleteSelectedItems}
-			handleSelection={handleSelection(value.id)}
-			initialItem={value}
-			selected={selectedItemIds.includes(value.id)}
-			transparent={
-				selectedItemIds.length !== 0 && !selectedItemIds.includes(value.id)
-			}
-		/>
-	));
+	const items = useMemo(
+		() =>
+			listToShowOnCurrentPageIds.map((value: ItemWithSearch) => (
+				<ListItem
+					key={value.id}
+					mode={options.mode}
+					deleteAll={deleteSelectedItems}
+					handleSelection={handleSelection(value.id)}
+					initialItem={value}
+					selected={selectedItemIds.includes(value.id)}
+					transparent={
+						selectedItemIds.length !== 0 && !selectedItemIds.includes(value.id)
+					}
+				/>
+			)),
+		[
+			listToShowOnCurrentPageIds,
+			options.mode,
+			deleteSelectedItems,
+			handleSelection,
+			selectedItemIds,
+		]
+	);
 
 	return loading ? (
 		<LargeSpin />
@@ -73,12 +94,12 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			image={Empty.PRESENTED_IMAGE_SIMPLE}
 			description={''}
 		/>
-	) : debouncedOptions.mode === 'list' ? (
+	) : options.mode === 'list' ? (
 		<Flex
 			style={{ inlineSize: '100%' }}
 			ref={tourRefs[1]}
 		>
-			<List style={{ inlineSize: '100%' }}>{Items}</List>
+			<List style={{ inlineSize: '100%' }}>{items}</List>
 		</Flex>
 	) : (
 		<Flex
@@ -87,7 +108,7 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			justify='center'
 			gap={isSmallScreen ? 8 : 16}
 		>
-			{Items}
+			{items}
 		</Flex>
 	);
 });

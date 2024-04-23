@@ -8,13 +8,8 @@ import languages from 'settings/languages';
 import { optionsStore } from 'utils/optionsStore';
 
 const NicknameModal: React.FC = observer(() => {
-	const {
-		isNicknameModalOpened,
-		setIsTourStarted,
-		setIsNicknameModalOpened,
-		setLogged,
-		UID,
-	} = userStore;
+	const { isNicknameModalOpened, setIsNicknameModalOpened, setLogged, UID } =
+		userStore;
 
 	const { userOptions } = optionsStore;
 
@@ -53,9 +48,8 @@ const NicknameModal: React.FC = observer(() => {
 				updateUser(UID, nickname);
 				setIsNicknameModalOpened(false);
 				setLogged(true);
-				setIsTourStarted(true);
 			});
-	}, [setIsNicknameModalOpened, nickname, setLogged, setIsTourStarted, UID]);
+	}, [setIsNicknameModalOpened, nickname, setLogged, UID]);
 
 	return (
 		<Modal

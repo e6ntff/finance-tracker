@@ -19,7 +19,7 @@ dayjs.extend(isBetween);
 
 const Stats: React.FC = observer(() => {
 	const { list } = listStore;
-	const { isSmallScreen, loading, tourRefs } = userStore;
+	const { isSmallScreen, loading } = userStore;
 	const { statsOptions, defaultRange, setStatsRange } = optionsStore;
 
 	const { range, type } = statsOptions;
@@ -54,7 +54,7 @@ const Stats: React.FC = observer(() => {
 	}, [range]);
 
 	const [isRangeChanged, setIsRangeChanged] = useState<boolean>(false);
-	
+
 	// eslint-disable-next-line
 	const debouncedSetIsRangeChanged = useCallback(
 		debounce(setIsRangeChanged, constants.optionsDebounceDelay),
@@ -74,10 +74,7 @@ const Stats: React.FC = observer(() => {
 			align='stretch'
 			style={{ inlineSize: '100%' }}
 		>
-			<Flex
-				ref={tourRefs[8]}
-				style={{ inlineSize: '100%' }}
-			>
+			<Flex style={{ inlineSize: '100%' }}>
 				<YearSlider
 					range={range}
 					type={type}
@@ -85,7 +82,6 @@ const Stats: React.FC = observer(() => {
 				/>
 			</Flex>
 			<Flex
-				ref={tourRefs[7]}
 				align='center'
 				justify='space-between'
 				vertical={isSmallScreen}

@@ -33,7 +33,7 @@ const TrashPanel: React.FC<Props> = observer(
 	({ query, setQuery, debouncedQuery, isExpenses, setIsExpenses }) => {
 		const { deleteItem, restoreItem, list } = listStore;
 		const { categories, deleteCategory, restoreCategory } = categoryStore;
-		const { isSmallScreen, tourRefs } = userStore;
+		const { isSmallScreen } = userStore;
 		const { userOptions } = optionsStore;
 
 		const { language } = userOptions;
@@ -76,7 +76,6 @@ const TrashPanel: React.FC<Props> = observer(
 			<Flex
 				align='center'
 				gap={16}
-				ref={tourRefs[5]}
 				style={{ inlineSize: '100%' }}
 			>
 				<Popconfirm

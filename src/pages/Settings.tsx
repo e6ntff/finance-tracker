@@ -10,8 +10,6 @@ import { BulbFilled, BulbOutlined } from '@ant-design/icons';
 import { listStore } from 'utils/listStore';
 import { categoryStore } from 'utils/categoryStore';
 import constants from 'settings/constants';
-import { useNavigate } from 'react-router-dom';
-import tour from 'settings/tour';
 import RandomizeButton from 'components/RandomizeButton';
 import LogOutButton from 'components/LogOutButton';
 import Links from 'components/Links';
@@ -21,9 +19,8 @@ interface Props {
 }
 
 const Settings: React.FC<Props> = observer(({ close }) => {
-	const navigate = useNavigate();
 	const { userOptions, setCurrency, setTheme } = optionsStore;
-	const { isSmallScreen, tourRefs, setIsTourStarted } = userStore;
+	const { isSmallScreen } = userStore;
 	const { setUserList, list } = listStore;
 	const { setUserCategories, categories } = categoryStore;
 
@@ -40,25 +37,13 @@ const Settings: React.FC<Props> = observer(({ close }) => {
 		[list, categories]
 	);
 
-	const startTour = useCallback(() => {
-		setIsTourStarted(true);
-		close();
-		navigate(tour[0].page);
-	}, [setIsTourStarted, close, navigate]);
-
 	return (
-		<Flex
-			justify='center'
-			ref={tourRefs[6]}
-		>
+		<Flex justify='center'>
 			<Form
 				size={isSmallScreen ? 'small' : 'middle'}
 				layout='vertical'
 				style={{ inlineSize: '50%' }}
 			>
-				<Form.Item>
-					<Button onClick={startTour}>{languages.runTour[language]}</Button>
-				</Form.Item>
 				<Form.Item label={languages.theme[language]}>
 					<Segmented
 						size={isSmallScreen ? 'small' : 'middle'}

@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import Settings from 'pages/Settings';
 import React, { useCallback, useState } from 'react';
 import { optionsStore } from 'utils/optionsStore';
-import AppTour from './AppTour';
 
 const SettingsPanel: React.FC = observer(() => {
 	const { userOptions } = optionsStore;
@@ -32,10 +31,6 @@ const SettingsPanel: React.FC = observer(() => {
 				type={userOptions.theme === 'default' ? 'default' : 'primary'}
 				onClick={openMenu}
 				icon={<SettingOutlined />}
-			/>
-			<AppTour
-				open={openMenu}
-				close={closeMenu}
 			/>
 		</>
 	);

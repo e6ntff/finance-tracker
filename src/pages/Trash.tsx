@@ -10,7 +10,7 @@ import constants from 'settings/constants';
 import { userStore } from 'utils/userStore';
 
 const Trash: React.FC = observer(() => {
-	const { isSmallScreen, tourRefs } = userStore;
+	const { isSmallScreen } = userStore;
 
 	const [query, setQuery] = useState<string>('');
 	const [debouncedQuery, setDebouncedQuery] = useState<string>('');
@@ -45,7 +45,6 @@ const Trash: React.FC = observer(() => {
 				setIsExpenses={setIsExpenses}
 			/>
 			<Flex
-				ref={tourRefs[4]}
 				gap={isSmallScreen ? 16 : 32}
 				style={{ inlineSize: '100%' }}
 			>

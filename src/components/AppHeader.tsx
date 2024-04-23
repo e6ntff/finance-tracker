@@ -7,7 +7,7 @@ import SyncIcon from './SyncIcon';
 import RatesTicker from './RatesTicker';
 
 const AppHeader: React.FC = observer(() => {
-	const { isSmallScreen, tourRefs } = userStore;
+	const { isSmallScreen } = userStore;
 
 	return (
 		<Flex
@@ -27,7 +27,6 @@ const AppHeader: React.FC = observer(() => {
 				</Flex>
 			)}
 			<Flex
-				ref={tourRefs[9]}
 				gap={isSmallScreen ? 8 : 16}
 				justify='space-between'
 				align='center'

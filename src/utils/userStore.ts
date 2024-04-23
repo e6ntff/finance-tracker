@@ -20,20 +20,10 @@ class UserStore {
 	notificationStatus: Status = { status: 'success' };
 	isDataChanged: boolean = false;
 	allData: AllData = constants.defaultData;
-	tourRefs: React.MutableRefObject<null>[] = [];
-	isTourStarted: boolean = false;
 	isNicknameModalOpened: boolean = false;
 
 	setIsNicknameModalOpened = (value: boolean) => {
 		this.isNicknameModalOpened = value;
-	};
-
-	setIsTourStarted = (value: boolean) => {
-		if (this.communityStore.myUser.id) this.isTourStarted = value;
-	};
-
-	setTourRefs = (refs: React.MutableRefObject<null>[]) => {
-		this.tourRefs = refs;
 	};
 
 	saveData = () => {

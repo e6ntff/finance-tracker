@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
-	const { loading, isSmallScreen, tourRefs } = userStore;
+	const { loading, isSmallScreen } = userStore;
 	const { listOptions } = optionsStore;
 	const { lastDeletedItemIds, setLastDeletedItemIds } = listStore;
 
@@ -94,15 +94,11 @@ const ItemList: React.FC<Props> = observer(({ filteredListIds }) => {
 			description={''}
 		/>
 	) : options.mode === 'list' ? (
-		<Flex
-			style={{ inlineSize: '100%' }}
-			ref={tourRefs[1]}
-		>
+		<Flex style={{ inlineSize: '100%' }}>
 			<List style={{ inlineSize: '100%' }}>{items}</List>
 		</Flex>
 	) : (
 		<Flex
-			ref={tourRefs[1]}
 			wrap='wrap'
 			justify='center'
 			gap={isSmallScreen ? 8 : 16}

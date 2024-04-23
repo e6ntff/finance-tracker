@@ -41,7 +41,7 @@ interface Props {
 
 const Selectors: React.FC<Props> = observer(
 	({ total, query, setQuery, debouncedQuery }) => {
-		const { isSmallScreen, loading, tourRefs } = userStore;
+		const { isSmallScreen, loading } = userStore;
 		const {
 			listOptions,
 			userOptions,
@@ -106,7 +106,6 @@ const Selectors: React.FC<Props> = observer(
 
 		return (
 			<Flex
-				ref={tourRefs[2]}
 				vertical
 				style={{ inlineSize: '100%' }}
 			>
